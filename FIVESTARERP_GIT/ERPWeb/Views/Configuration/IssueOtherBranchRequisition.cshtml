@@ -1,0 +1,180 @@
+﻿@model ERPBO.Configuration.ViewModels.TransferInfoViewModel
+@{
+    ViewBag.Title = "Issue Branch Requisition";
+}
+<div class="row" style="margin-top:-15px">
+    <div class="col-md-12">
+        <div class="card card-gray-dark">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-center text-bold">
+                            Issue Other Branch Pending Requisition
+                        </h5>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row text-sm">
+    <div class="col-md-12" style="margin-top:-10px">
+        <div class="card card-navy">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6 class="card-title">
+                            Requisition Information
+                        </h6>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <select class="form-control form-control-sm" id="ddlAction">
+                                <option value="Send" selected>Send</option>
+                            </select>
+                            <div class="input-group-append" style="cursor:pointer">
+                                <a id="btnSubmit" href="#" title="Submit Requisition" style="background-color:darkblue" class="input-group-text">
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" style="margin-top:-15px">
+                    <div class="col-md-12">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="hdfRequisitionId" value="@Model.TransferInfoId" />
+                        <input type="hidden" id="hdfRequisitionCode" value="@Model.TransferCode" />
+                        <input type="hidden" id="hdfModelId" value="@Model.DescriptionId" />
+                        <input type="hidden" id="hdfBranchId" value="@Model.BranchId" />
+                        <table class="table table-bordered table-sm table-responsive-lg text-bold text-sm" id="tblInfo">
+                            <tbody>
+                                <tr>
+                                    <td class="alert-primary" style="width:10%">Req Code</td>
+                                    <td style="width:15%; background-color:#e1dada">@Model.TransferCode</td>
+                                    <td class="alert-primary" style="width:10%">Branch</td>
+                                    <td style="width:15%; background-color:#e1dada">@Model.BranchName</td>
+                                    <td class="alert-primary" style="width:12%">Model</td>
+                                    <td style="width:16%; background-color:#e1dada">@Model.ModelName</td>
+                                    <td class="alert-primary" style="width:10%">StateStatus</td>
+                                    <td style="width:12%; background-color:#e1dada">@Model.StateStatus</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        @{Html.RenderAction("IssuOtherBranchRequsitionDetails", new { @requisitionId = Model.TransferInfoId });}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top:-10px">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-12">
+
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var hdfRequisitionId = $("#hdfRequisitionId");
+        var hdfRequisitionCode = $("#hdfRequisitionCode");
+        var ddlAction = $("#ddlAction");
+        var hdfModelId = $("#hdfModelId");
+        var hdfBranchId = $("#hdfBranchId");
+
+        //.issueQty
+
+        $(document).on( '.issueQty', function (e) {
+            e.preventDefault();
+            var qty = $(this).val();
+            var reqQty = $(this).parent().parents('tr').children('td').eq(6).html();
+            if (qty > reqQty) {
+                $(this).val('0');
+            }
+        })
+
+        function validateSubmit() {
+            var isValid = true;
+            if (ddlAction.val() === "") {
+                isValid = false;
+                bootbox.alert("Please select a Action before submit");
+            }
+            if ($(".tblDataDetail tbody tr").length == 0) {
+                isValid = false;
+                bootbox.alert("Requistion details not found");
+            }
+            return isValid;
+        }
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+
+            if (validateSubmit()) {
+                bootbox.confirm("Are you sure you want to save this requisition with " + ddlAction.val() + " status", function (result) {
+                    if (result) {
+                        disable("#btnSubmit")
+                        var info = { TransferInfoId: TryParseInt(hdfRequisitionId.val(), 0), TransferCode: hdfRequisitionCode.val(), StateStatus: ddlAction.val(), DescriptionId: TryParseInt(hdfModelId.val(), 0), BranchId: TryParseInt(hdfBranchId.val(),0) };
+                        var details = []; details.length = 0;
+
+                        $.each($(".tblDataDetail tbody tr"), function (index, item) {
+                            var tds = $(this).children('td');
+                            details.push({
+                                TransferDetailId: tds.eq(1).html(),
+                                PartsId: tds.eq(2).html(),
+                                Quantity: tds.eq(5).html(),
+                                IssueQty: tds.eq(6).children('input[type="number"]').val()
+                            })
+                        })
+
+                        info.TransferDetails = details;
+
+                        console.log("Requisition Information");
+                        console.log(info);
+                        var data = JSON.stringify({ model: info });
+                        //return console.log(data)
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Configuration/UpdateReqStatusAndStockOutWarehouse', data, getToken())).then(function (res, status) {
+                            console.log(res);
+                            console.log(status);
+                            if (res === true && status === "success") {
+                                $('.toastrDefaultSuccess').trigger('click');
+                                 setTimeout(function () {
+                                    redirectPage('@Url.Action("RecevieStockFromTransfer")');
+                                }, 1000);
+                            }
+                            else {
+                                $('.toastrDefaultError').trigger('click');
+                            }
+                            enable("#btnSubmit");
+                        }).fail(function (error) {
+                            console.log(error);
+                            enable("#btnSubmit");
+                        })
+
+                    }// confirm
+                })// bootbox
+            }// submit
+        })
+
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+
+
+    </script>
+}

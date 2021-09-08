@@ -1,0 +1,1004 @@
+﻿@model ERPBO.FrontDesk.ViewModels.JobOrderViewModel
+@{
+    ViewBag.Title = "Create Job Order";
+    long jobOrderId = (long)ViewBag.JobOrderId;
+    string toDay = DateTime.Now.ToString("dd MMM yyyy");
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-4 text-left">
+                        <a href="/FrontDesk/GetJobOrders" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-center">Create Job Order</h4>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="/FrontDesk/GetJobOrders" class="btn btn-outline-danger btn-sm float-lg-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row text-sm">
+    <div class="col-md-12">
+        <div class="card card-secondary shadow">
+            <form id="frmJobOrder">
+                @Html.AntiForgeryToken()
+                @Html.Hidden("customerId")
+                @Html.Hidden("jobOrderId")
+                <div class="card-body shadow">
+                    <div class="row" style="border-bottom:1px solid #cecece">
+                        <div class="col-md-2">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control form-control-sm" placeholder="Search IMEI No" id="txtSearchIMEI" />
+                                <div class="input-group-append" style="cursor:pointer">
+                                    <a id="SearchIMEI" href="#" class="input-group-text">
+                                        <i class="fas fa-search"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control form-control-sm" placeholder="Search JobOrder" id="txtSearchJobOrder" />
+                                <div class="input-group-append" style="cursor:pointer">
+                                    <a id="searchJobOrder" href="#" class="input-group-text">
+                                        <i class="fas fa-search"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control form-control-sm" placeholder="Search Mobile No" id="txtSearchCustomer" />
+                                <div class="input-group-append" style="cursor:pointer">
+                                    <a id="searchCustomer" href="#" class="input-group-text">
+                                        <i class="fas fa-search"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group input-group-sm ">
+                                <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptJobEntryDate" placeholder="Job Entry Date" />
+                                <div class="input-group-prepend cursor-pointer remove-date dptJobEntryDate" style="cursor:pointer">
+                                    <span class="input-group-text">&#10008;</span>
+                                </div>
+                            </div>
+                            <span class="error hide require-JobentryDate font-weight-bold">Jobentrydate No is required !</span>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" id="btnCustomer" class="btn btn-sm btn-primary" title="If the Customer is not exist with this Mobile No then please add here"><i class="fas fa-plus"> </i> </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" id="btnSubmit" class="btn btn-sm btn-success float-right" title="Submit the form for save"><i class="fas fa-paper-plane"></i> Place Job Order </button>
+                        </div>
+                    </div>
+                    <div class="row text-sm">
+                        <div class="col-md-3">
+                            <label for="txtCustomer" class="control-label font-weight-bold">Customer Name<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            <input type="text" class="form-control form-control-sm" id="txtCustomer" />
+                            <span class="error hide require-customer font-weight-bold">Customer name is required !</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txtMobileNumber" class="control-label font-weight-bold">Mobile Number<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            <input type="text" class="form-control form-control-sm" id="txtMobileNumber" />
+                            <span class="error hide require-mobile font-weight-bold">Mobile No is required !</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txtAddress" class="control-label font-weight-bold">Address<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            <textarea id="txtAddress" class="form-control form-control-sm" cols="10" rows="1"></textarea>
+                            <span class="error hide require-address font-weight-bold">Mobile No is required !</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddlCustomerType" class="control-label font-weight-bold">Customer Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlCustomerType", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, "--Select CustomerType--", new { @class = "form-control form-control-sm ctrl-changed" })
+                            <span class="error hide require-customerType font-weight-bold">Customer Type is required !</span>
+                        </div>
+                    </div>
+                    <div class="row text-sm">
+                        <div class="col-md-3">
+                            <label for="ddlDescriptions" class="control-label font-weight-bold">Model<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlDescriptions", (IEnumerable<SelectListItem>)ViewBag.ddlDescriptions, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                            <span class="error hide require-modelName font-weight-bold">Model is required !</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddlPhoneTypes" class="control-label font-weight-bold">Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlPhoneTypes", (IEnumerable<SelectListItem>)ViewBag.ddlPhoneTypes, "--Select Types--", new { @class = "form-control form-control-sm ctrl-changed" })
+                            <span class="error hide require-Type font-weight-bold">Mobile Type is required !</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txtIMEI" class="control-label font-weight-bold">IMEI1<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="15" class="form-control form-control-sm" id="txtIMEI" placeholder="Input IMEI1" />
+                            <span class="error hide require-IMEI font-weight-bold">Mobile IMEI1 is required !</span>
+                            <span class="error hide require-len-IMEI font-weight-bold">Must Input 15 digit IMEI !</span>
+                            <span class="error hide duplicate-IMEI font-weight-bold">Already This IMEI Job Pending !</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txtIMEI2" class="control-label font-weight-bold">IMEI2</label>
+                            <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="15" class="form-control form-control-sm" id="txtIMEI2" placeholder="Input IMEI2" />
+                            <span class="error hide require-IMEI2 font-weight-bold">Mobile IMEI2 is required !</span>
+                            <span class="error hide require-len-IMEI2 font-weight-bold">Must Input 15 digit IMEI !</span>
+                            <span class="error hide duplicate-IMEI2 font-weight-bold">Already This IMEI2 Job Pending !</span>
+                        </div>
+                    </div>
+                    <div class="row text-sm">
+                        <div class="col-md-3">
+                            <label for="ddlModelColor" class="control-label font-weight-bold">Color</label>
+                            @Html.DropDownList("ddlModelColor", (IEnumerable<SelectListItem>)ViewBag.ddlModelColor, "--Select Color--", new { @class = "form-control form-control-sm ctrl-changed" })
+                            <span class="error hide require-ModelColor font-weight-bold">Mobile ModelColor is required !</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddlProblems" class="control-label font-weight-bold">Symptom<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlProblems", (IEnumerable<SelectListItem>)ViewBag.ddlProblems, "--Select Symptom--", new { @class = "form-control form-control-sm select2 select2-danger", @multiple = "multiple" })
+                            <span class="error hide require-problem font-weight-bold">Symptom is required !</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddlAccessories" class="control-label font-weight-bold">Accessories<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlAccessories", (IEnumerable<SelectListItem>)ViewBag.ddlAccessories, "--Select Accessories--", new { @class = "form-control form-control-sm select2 select2-danger", @multiple = "multiple" })
+                            <span class="error hide require-accessories font-weight-bold">Accessories is required !</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="ddlJobOrderType" class="control-label font-weight-bold">JobOrder Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlJobOrderType", (IEnumerable<SelectListItem>)ViewBag.ddlJobOrderType, "Select JobOrder Type", new { @class = "form-control form-control-sm ddlJobOrderType" })
+                            <span class="error hide require-type font-weight-bold">JobOrderType is required !</span>
+                        </div>
+                    </div>
+                    <div class="row text-sm">
+                        <div class="col-md-3">
+                            <label for="txtCourierName" class="control-label font-weight-bold">CourierName</label>
+                            <input type="text" class="form-control form-control-sm disabled" id="txtCourierName" />
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txtCourierNumber" class="control-label font-weight-bold">CourierNumber</label>
+                            <input type="text" class="form-control form-control-sm disabled" id="txtCourierNumber" />
+                        </div>
+                        <div class="col-md-3">
+                            <label for="txtApproxBill" class="control-label font-weight-bold">ApproxBill</label>
+                            <input type="text" class="form-control form-control-sm disabled" id="txtApproxBill" />
+                        </div>
+                        <div class="col-md-3 hide">
+                            <label for="txtReferenceNumber" class="control-label font-weight-bold">ReferencesNumber</label>
+                            <input type="text" class="form-control form-control-sm disabled" id="txtReferenceNumber" />
+                        </div>
+                        <div class="col-md-3">
+                            <label for="dptProbabilyDate" class="control-label font-weight-bold">Probabily Date</label>
+                            <div class="input-group input-group-sm ">
+                                <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptProbabilyDate" placeholder="Job Probabily Date" />
+                                <div class="input-group-prepend cursor-pointer remove-date dptProbabilyDate" style="cursor:pointer">
+                                    <span class="input-group-text">&#10008;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-sm">
+                        <div class="col-md-3">
+                            <label for="txtRemarks" class="control-label font-weight-bold">Remarks</label>
+                            <input type="text" class="form-control form-control-sm" id="txtRemarks" />
+                        </div>
+                        <div class="col-md-2">
+                            <label for="ddlJobSource" class="control-label font-weight-bold">Source<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlJobSource", (IEnumerable<SelectListItem>)ViewBag.ddlJobSource, "--Select Source--", new { @class = "form-control form-control-sm ctrl-changed" })
+                            <span class="error hide require-Source font-weight-bold">Source is required !</span>
+                        </div>
+                        <div class="col-md-3" id="warrantydate">
+                            <label class="control-label font-weight-bold">Warranty Start Date</label>
+                            <div class="input-group input-group-sm ">
+                                <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptWarrantyDate" placeholder="Select Warranty Start Date" />
+                                <div class="input-group-prepend cursor-pointer remove-date dptWarrantyDate" style="cursor:pointer">
+                                    <span class="input-group-text">&#10008;</span>
+                                </div>
+                            </div>
+                            <span class="error hide require-warranty font-weight-bold">Warranty is required !</span>
+                            <span class="error hide not-warranty font-weight-bold">Warranty is not available !</span>
+                        </div>
+                        <div class="col-md-3" id="chkWarrantyPaper">
+                            <label for="" style="visibility:hidden;">Enclosed</label>
+                            <div class="form-control form-control-sm clearfix">
+                                <b>Warrenty Paper?</b>
+                                <input type="radio" name="Enclosed" id="enclosedYes" /><b> Yes</b>
+                                <input type="radio" name="Enclosed" id="enclosedNo" checked /><b> No</b>
+                            </div>
+                        </div>
+                        <div class="col-md-3" id="chkHandset">
+                            <label for="" style="visibility:hidden;">HandSet</label>
+                            <div class="form-control form-control-sm clearfix">
+                                <b>HandSet?</b>
+                                <input type="checkbox" name="HandSet" id="handsetDOA" /><b> DOA</b>
+                                <input type="checkbox" name="HandSet" id="handsetDAP" /><b> DAP</b>
+                            </div>
+                        </div>
+                        <div class="col-md-3" id="divCustomerSupport">
+                            <label for="ddlCustomerSupport" class="control-label font-weight-bold">Customer Support</label>
+                            @Html.DropDownList("ddlCustomerSupport", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerSupport, "--Select Types--", new { @class = "form-control form-control-sm ctrl-changed" })
+                            <span class="error hide require-CustomerSupport font-weight-bold">Type is required !</span>
+                        </div>
+                        <div class="col-md-3" id="divCustomerSupportIMEI1">
+                            <label for="txtCustomerSupportIMEI1" class="control-label font-weight-bold">CS Handset IMEI1<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="15" class="form-control form-control-sm" id="txtCustomerSupportIMEI1" placeholder="Input IMEI1" />
+                            <span class="error hide require-CustomerSupportIMEI1 font-weight-bold">Mobile IMEI1 is required !</span>
+                            <span class="error hide require-lenCustomerSupportIMEI font-weight-bold">Must Input 15 digit IMEI !</span>
+                            <span class="error hide duplicate-invalidCustomerSupportIMEI1 font-weight-bold">Invalid IMEI !</span>
+                            <span class="error hide duplicate-pendingCustomerSupportIMEI1 font-weight-bold">Already This IMEI Handset Pending !</span>
+                        </div>
+                    </div>
+                    <div class="row text-sm">
+                        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalCustomer" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <h4 id="modalHeading" class="modal-title"><span id="spanModalHead">Add New Customer</span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCustomer">
+                    <input type="hidden" name="Id" id="hdfCustomerId" />
+                    <input type="hidden" name="jobOrderId" id="hdfJobOrderId" value="@jobOrderId" />
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtCustomerName" class="control-label font-weight-bold">Name</label>
+                            <input type="text" name="txtCustomerName" value="" id="txtCustomerName" class="form-control form-control-sm" />
+                            <span class="error hide required-customerName font-weight-bold">Input Customer Name!</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtCustomerAddress" class="control-label font-weight-bold">Address</label>
+                            <input type="text" name="txtCustomerAddress" value="" id="txtCustomerAddress" class="form-control form-control-sm" />
+                            <span class="error hide required-custaddress font-weight-bold">Input Address!</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtCustomerPhone" class="control-label font-weight-bold">Phone Number</label>
+                            <input type="text" name="txtCustomerPhone" value="" id="txtCustomerPhone" class="form-control form-control-sm" />
+                            <span class="error hide required-custphone font-weight-bold">Input Address!</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtCustomerRemarks" class="control-label font-weight-bold">Remarks</label>
+                            <input type="text" name="txtCustomerRemarks" value="" id="txtCustomerRemarks" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer btn-light">
+                <div class="col-md-6">
+                    <div id="msg1" class="alert alert-success hide float-left">
+                        Data has been saved Successful!
+                    </div>
+                    <div id="msg2" class="alert alert-danger hide float-left">
+                        Data has been failed to save!
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
+                <button type="submit" class="btn btn-sm btn-success float-right" id="btnSubmitCustomer"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        var ddlAccessories = $("#ddlAccessories");
+        var txtSearchCustomer = $("#txtSearchCustomer");
+        var txtCustomer = $("#txtCustomer");
+        var txtMobileNumber = $("#txtMobileNumber");
+        var txtAddress = $("#txtAddress");
+        var ddlDescriptions = $("#ddlDescriptions");
+        var ddlAccessories = $("#ddlAccessories");
+        var ddlProblems = $("#ddlProblems");
+        var chkIsWarrentyAvailable = $("#chkIsWarrentyAvailable");
+        var rdnEnclosedYes = $("#enclosedYes");
+        var rdnEnclosedNo = $("#enclosedNo");
+        var customerId = $("#customerId");
+
+        //
+        var txtIMEI = $("#txtIMEI");
+        var ddlPhoneTypes = $("#ddlPhoneTypes");
+        var ddlModelColor = $("#ddlModelColor");
+        var dptWarrantyDate = $("#dptWarrantyDate");
+        var txtRemarks = $("#txtRemarks");
+        var txtReferenceNumber = $("#txtReferenceNumber");
+        var jobOrderId = $("#jobOrderId");
+        var txtSearchIMEI = $("#txtSearchIMEI");
+        var dptWarrantyEndDate = $("#dptWarrantyEndDate");
+        var dptJobEntryDate = $("#dptJobEntryDate");
+        var txtIMEI2 = $("#txtIMEI2");
+        var hdfJobOrderId = $("#hdfJobOrderId");
+        var chkWarrantyPaper = $("#chkWarrantyPaper");
+        var ddlJobOrderType = $("#ddlJobOrderType");
+        var ddlCustomerType = $("#ddlCustomerType");
+        var txtCourierNumber = $("#txtCourierNumber");
+        var txtCourierName = $("#txtCourierName");
+        var txtApproxBill = $("#txtApproxBill");
+        var txtSearchJobOrder = $("#txtSearchJobOrder");
+        var chkHandset = $("#chkHandset");
+        var handsetDOA = $("#handsetDOA");
+        var handsetDAP = $("#handsetDAP");
+        var ddlCustomerSupport = $("#ddlCustomerSupport");
+        var txtCustomerSupportIMEI1 = $("#txtCustomerSupportIMEI1");
+        var ddlJobSource = $("#ddlJobSource");
+        var dptProbabilyDate = $("#dptProbabilyDate");
+
+        $(document).ready(function () {
+            var date = new Date();
+            //var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            //$('#dptJobEntryDate').datepicker('setDate', today);
+            ////$('#dptJobEntryDate').()
+            ////alert(date.getDate());
+            $('#warrantydate').hide();
+            $('#chkWarrantyPaper').hide();
+            $('#chkHandset').hide();
+            $("#divCustomerSupportIMEI1").hide();
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+            dptWarrantyDate.prop('readonly', true);
+            dptWarrantyEndDate.prop('readonly', true);
+            dptJobEntryDate.prop('readonly', true);
+            dptProbabilyDate.prop('readonly', true);
+            dptWarrantyDate.css("background-color", "#fff");
+            dptWarrantyEndDate.css("background-color", "#fff");
+            dptJobEntryDate.css("background-color", "#fff");
+            dptProbabilyDate.css("background-color", "#fff");
+            $('#dptWarrantyDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+            $('#dptWarrantyEndDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+           
+            $('#dptJobEntryDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+            $('#dptProbabilyDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+
+            if (TryParseInt(hdfJobOrderId.val(), 0) <= 0) {
+                var thisDate = date.getDate() + ' ' + getMonthName(date.getMonth() + 1, "MM") + " " + date.getFullYear();
+                $('#dptJobEntryDate').val(thisDate)
+                $('#dptJobEntryDate').trigger('change');
+            }
+            
+            loadData();
+
+        })
+        //show/hide
+        $('#ddlCustomerSupport').change(function () {
+            if ($('#ddlCustomerSupport').val() == 'Handset') {
+                $("#divCustomerSupportIMEI1").show();
+            }
+            else {
+                $("#divCustomerSupportIMEI1").hide();
+            }
+        });
+
+        $(document).ready(function () {
+            $('#dptWarrantyDate').change(function () {
+                if ($('#dptWarrantyDate').val() != "") {
+                    var days = getDayDiff($('#dptWarrantyDate').val());
+                    if (days >= 365) {
+                        bootbox.alert('Warrenty not available');
+                    }
+                }
+            })
+
+            function getDayDiff(date) {
+                var start = new Date(date),
+                    end = new Date(),
+                    diff = new Date(end - start),
+                    days = diff / 1000 / 60 / 60 / 24;
+                //alert(Math.round(days));
+                return Math.round(days);
+            }
+        });
+
+        //function getDateFromJson(jsonVal) {
+        //    var StartDateServer = jsonVal;
+        //    var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+        //    var day = ("0" + parsedDate.getDate()).slice(-2);
+        //    var month = ("0" + (parsedDate.getMonth() + 1)).slice(-2);
+        //    return parsedDate.getFullYear() + "-" + (month) + "-" + (day);
+        //}
+        //Data Edit Item
+        function loadData() {
+            if (TryParseInt(hdfJobOrderId.val(), 0) > 0) {
+                //alert('JobOrder Found');
+                var id = $(this).attr("data-edit-item");
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/FrontDesk/GetJobOrderById', JSON.stringify({ jobOrderId: TryParseInt(hdfJobOrderId.val(), 0) }), getToken())).then(function (res, status) {
+                    console.log(res);
+                    console.log(status);
+                    if (res != null) {
+                        var jobOrder = res.jobOrder;
+                        console.log(jobOrder);
+
+                        hdfJobOrderId.val(jobOrder.JodOrderId);
+                        txtCustomer.val(jobOrder.CustomerName);
+                        txtMobileNumber.val(jobOrder.MobileNo);
+                        txtAddress.val(jobOrder.Address);
+                        txtIMEI.val(jobOrder.IMEI);
+                        txtIMEI2.val(jobOrder.IMEI2);
+                        ddlPhoneTypes.val(jobOrder.Type);
+                        ddlModelColor.val(jobOrder.ModelColor);
+                        ddlModelColor.trigger('change');
+                        ddlJobOrderType.val(jobOrder.JobOrderType);
+                        ddlJobOrderType.trigger('change');
+                        ddlCustomerType.val(jobOrder.CustomerType);
+                        ddlCustomerType.trigger('change');
+                        ddlJobSource.val(jobOrder.JobSource);
+                        ddlJobSource.trigger('change');
+                        //chkIsWarrentyAvailable.prop("checked", jobOrder.IsWarrantyAvailable);
+                        if (jobOrder.IsWarrantyPaperEnclosed) {
+                            rdnEnclosedYes.prop("checked", true);
+                        }
+                        else {
+                            rdnEnclosedNo.prop("checked", true);
+                        }
+                        txtRemarks.val(jobOrder.Remarks);
+                        txtReferenceNumber.val(jobOrder.ReferenceNumber);
+                        if (ddlJobOrderType.val() == "Warrenty") {
+                            dptWarrantyDate.val(getDateFromJson(jobOrder.WarrantyDate));
+                        }
+                        
+
+                        //dptWarrantyEndDate.val(getDateFromJson(jobOrder.WarrantyEndDate));
+                        
+
+                        console.log('res.jorderAccessories');
+                        console.log(res.jorderAccessories);
+                        ddlAccessories.val(res.jorderAccessories);
+                        ddlAccessories.trigger('change');
+                        ddlProblems.val(res.jobOrderProblems);
+                        ddlProblems.trigger('change');
+                        ddlDescriptions.val(jobOrder.DescriptionId);
+                        ddlDescriptions.trigger('change');
+                        txtCourierName.val(jobOrder.CourierName);
+                        txtCourierNumber.val(jobOrder.CourierNumber);
+                        txtApproxBill.val(jobOrder.ApproxBill);
+                        dptJobEntryDate.val(getDateFromJson(jobOrder.EntryDate));
+                        dptProbabilyDate.val(getDateFromJson(jobOrder.ProbablyDate));
+                    }
+                    else {
+                       // alert("No data found..")
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                })
+            }
+            else {
+               // alert('JobOrder not Found');
+               
+            }
+        }
+
+        $(document).on('click', 'div.remove-date', function () {
+            if ($(this).hasClass("dptWarrantyDate")) {
+                if (dptWarrantyDate.val() !== '') {
+                    dptWarrantyDate.val('');
+                }
+            }
+            if ($(this).hasClass("dptWarrantyEndDate")) {
+                if (dptWarrantyEndDate.val() !== '') {
+                    dptWarrantyEndDate.val('');
+                }
+            }
+            if ($(this).hasClass("dptJobEntryDate")) {
+                if (dptJobEntryDate.val() !== '') {
+                    dptJobEntryDate.val('');
+                }
+            }
+            if ($(this).hasClass("dptProbabilyDate")) {
+                if (dptProbabilyDate.val() !== '') {
+                    dptProbabilyDate.val('');
+                }
+            }
+        })
+
+        
+        $("#btnReset").click(function (e) {
+            e.preventDefault();
+            clearDropdown("ddlPhoneTypes");
+            clearDropdown("ddlModelColor");
+            clearDropdown("ddlAccessories");
+            clearDropdown("ddlPhoneTypes");
+            clearDropdown("ddlDescriptions");
+            clearDropdown("ddlCustomerType");
+            clearDropdown("ddlProblems");
+            txtCustomer.val('');
+            txtMobileNumber.val('');
+            txtAddress.val('');
+            txtRemarks.val('');
+            txtMobileNumber.val('');
+            txtAddress.val('');
+            txtSearchIMEI.val('');
+            txtReferenceNumber.val('');
+            txtIMEI2.val('');
+            txtIMEI.val('');
+        })
+
+
+        //show or hide
+        $(document).ready(function () {
+            $('#ddlJobOrderType').change(function () {
+                if ($('#ddlJobOrderType').val() == 'Warrenty') {
+                    $('#warrantydate').show();
+                    $('#chkWarrantyPaper').show();
+                    $('#chkHandset').hide();
+                }
+                else {
+                    $('#warrantydate').hide();
+                    $('#chkWarrantyPaper').hide();
+                    $('#chkHandset').hide();
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            //ddlAccessories
+            customerId.val('0');
+            $("#ddlAccessories").attr("data-placeholder", "Select Accessories");
+            $("#ddlProblems").attr("data-placeholder", "Select Symptom");
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+            //disable("#txtCustomer");
+           // disable("#txtMobileNumber");
+           // disable("#txtAddress");
+            disable("#txtReferenceNumber");
+        })
+
+        
+        ///
+        $("#searchCustomer").click(function (e) {
+            e.preventDefault();
+            if ($.trim(txtSearchCustomer.val()) !== "") {
+                getCustomer($.trim(txtSearchCustomer.val()));
+            }
+        })
+        function getCustomer(mobileNo) {
+            var data = JSON.stringify({ mobileNo: mobileNo });
+            $.when(postReqWithData(dataType.applicationJson, dataType.json, type.post, '/Common2/GetCustomerByMobileNo', data)).then(function (res, status) {
+                if (status === "success") {
+                    if (res.CustomerId > 0) {
+                        txtCustomer.val(res.CustomerName);
+                        txtMobileNumber.val(res.CustomerPhone);
+                        txtAddress.val(res.CustomerAddress);
+                        customerId.val(res.CustomerId);
+                    }
+                    else {
+                        bootbox.alert('Customer is not found');
+                    }
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+        //Get Serch By IMEI1
+        $("#SearchIMEI").click(function (e) {
+            e.preventDefault();
+            if ($.trim(txtSearchIMEI.val()) !== "") {
+                getIMEI($.trim(txtSearchIMEI.val()));
+            }
+        })
+        function getIMEI(imei) {
+            var data = JSON.stringify({ imei: imei });
+            $.when(postReqWithData(dataType.applicationJson, dataType.json, type.post, '/Common2/GetReferencesByIMEI', data)).then(function (res, status) {
+                if (status === "success") {
+                    if (res.JodOrderId > 0) {
+                        txtIMEI.val(res.IMEI);
+                        txtReferenceNumber.val(res.ReferenceNumber);
+                        txtIMEI2.val(res.IMEI2);
+                        ddlPhoneTypes.val(res.Type);
+                        ddlPhoneTypes.trigger('change');
+                        ddlModelColor.val(res.ModelColor);
+                        ddlModelColor.trigger('change');
+                        ddlJobOrderType.val(res.JobOrderType);
+                        ddlJobOrderType.trigger('change');
+                        ddlCustomerType.val(res.CustomerType);
+                        ddlCustomerType.trigger('change');
+                        txtRemarks.val(res.Remarks);
+                        if (ddlJobOrderType.val() == "Warrenty") {
+                            dptWarrantyDate.val(getDateFromJson(res.WarrantyDate));
+                        }
+                        ddlDescriptions.val(res.DescriptionId);
+                        ddlDescriptions.trigger('change');
+                        txtCustomer.val(res.CustomerName);
+                        txtAddress.val(res.Address);
+                        txtMobileNumber.val(res.MobileNo);
+                        txtCourierName.val(res.CourierName);
+                        txtCourierNumber.val(res.CourierNumber);
+                        txtApproxBill.val(res.ApproxBill);
+                        ddlJobSource.val(res.JobSource);
+                        ddlJobSource.trigger('change');
+                        dptProbabilyDate.val(getDateFromJson(res.ProbablyDate));
+
+                    }
+                    else {
+                       bootbox.alert('IMEI is not found');
+                    }
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+        //end
+
+       
+
+        //Get Serch By JobOrder
+        $("#searchJobOrder").click(function (e) {
+            e.preventDefault();
+            if ($.trim(txtSearchJobOrder.val()) !== "") {
+                getJobOrder($.trim(txtSearchJobOrder.val()));
+            }
+        })
+        function getJobOrder(jobOrder) {
+            var data = JSON.stringify({ jobOrder: jobOrder });
+            $.when(postReqWithData(dataType.applicationJson, dataType.json, type.post, '/Common2/GetReferencesByJobOrder', data)).then(function (res, status) {
+                if (status === "success") {
+                    if (res.JodOrderId > 0) {
+                        txtIMEI.val(res.IMEI);
+                        txtReferenceNumber.val(res.ReferenceNumber);
+                        txtIMEI2.val(res.IMEI2);
+                        ddlPhoneTypes.val(res.Type);
+                        ddlPhoneTypes.trigger('change');
+                        ddlModelColor.val(res.ModelColor);
+                        ddlModelColor.trigger('change');
+                        ddlJobOrderType.val(res.JobOrderType);
+                        ddlJobOrderType.trigger('change');
+                        ddlCustomerType.val(res.CustomerType);
+                        ddlCustomerType.trigger('change');
+                        txtRemarks.val(res.Remarks);
+                        if (ddlJobOrderType.val() == "Warrenty") {
+                            dptWarrantyDate.val(getDateFromJson(res.WarrantyDate));
+                        }
+                        ddlDescriptions.val(res.DescriptionId);
+                        ddlDescriptions.trigger('change');
+                        txtCustomer.val(res.CustomerName);
+                        txtAddress.val(res.Address);
+                        txtMobileNumber.val(res.MobileNo);
+                        txtCourierName.val(res.CourierName);
+                        txtCourierNumber.val(res.CourierNumber);
+                        txtApproxBill.val(res.ApproxBill);
+                        ddlJobSource.val(res.JobSource);
+                        ddlJobSource.trigger('change');
+                        dptProbabilyDate.val(getDateFromJson(res.ProbablyDate));
+
+                    }
+                    else {
+                        bootbox.alert('JobOrder Not Found');
+                    }
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+        //end
+
+
+        
+        
+        function validateForm() {
+            var isValid = true;
+            $(".error").addClass('hide');
+
+            if (txtCustomer.val() === "") {
+                $(".require-customer").removeClass("hide");
+                isValid = false;
+            }
+            if (txtMobileNumber.val() === "") {
+                $(".require-mobile").removeClass("hide");
+                isValid = false;
+            }
+            if (txtAddress.val() === "") {
+                $(".require-address").removeClass("hide");
+                isValid = false;
+            }
+            if (ddlCustomerType.val() === "") {
+                $(".require-customerType").removeClass("hide");
+                isValid = false;
+            }
+            if (ddlDescriptions.val() === "") {
+                $(".require-modelName").removeClass("hide"); 
+                isValid = false;
+            }
+            if (txtIMEI.val().length !== 15) {
+                $(".require-len-IMEI").removeClass("hide");
+                isValid = false;
+            }
+            
+            if (txtIMEI.val() === "") {
+                $(".require-IMEI").removeClass("hide");
+                isValid = false;
+            }
+            else {
+
+                if (ajaxBooleanChecker(JSON.stringify({ iMEI: txtIMEI.val().trim(), jobOrdeId: hdfJobOrderId.val() }), '/Common2/IsIMEIExistWithRunningJobOrder', getToken()) == true) {
+                    $(".duplicate-IMEI").removeClass("hide");
+                    isValid = false;
+                }
+            }
+            
+            if (ddlPhoneTypes.val() === "") {
+                $(".require-Type").removeClass("hide");
+                isValid = false;
+            }
+            if (ddlJobOrderType.val() === "") {
+                $(".require-type").removeClass("hide");
+                isValid = false;
+            }
+            if (dptJobEntryDate.val() === "") {
+                $(".require-JobentryDate").removeClass("hide");
+                isValid = false;
+            }
+            if (chkIsWarrentyAvailable.is(":checked")) {
+
+                if ($('#dptWarrantyDate').val() === "") {
+                    isValid = false;
+                    $(".require-warranty").removeClass("hide");
+                }
+                else {
+                    var days = getDayDiff($('#dptWarrantyDate').val());
+                    if (days >= 365) {
+                        isValid = false;
+                        $(".not-warranty").removeClass("hide");
+                    }
+                }
+            }
+            if (ddlProblems.val().length === 0) {
+                $(".require-problem").removeClass("hide");
+                isValid = false;
+            }
+            if (ddlAccessories.val().length === 0) {
+                $(".require-accessories").removeClass("hide");
+                isValid = false;
+            }
+            if (ddlCustomerSupport.val() === "Handset") {
+                if (txtCustomerSupportIMEI1.val().length !== 15) {
+                    $(".require-lenCustomerSupportIMEI").removeClass("hide");
+                    isValid = false;
+                } else {
+                    if (ajaxBooleanChecker(JSON.stringify({ imei: txtCustomerSupportIMEI1.val().trim() }), '/Common2/IsHandsetCustomerPending', getToken()) == true) {
+                        $(".duplicate-pendingCustomerSupportIMEI1").removeClass("hide");
+                        isValid = false;
+                    }
+                }
+                if (txtCustomerSupportIMEI1.val() === "") {
+                    $(".require-CustomerSupportIMEI1").removeClass("hide");
+                    isValid = false;
+                }
+                else {
+                    if (ajaxBooleanChecker(JSON.stringify({ imei: txtCustomerSupportIMEI1.val().trim() }), '/Common2/IsHandsetStockCheck', getToken()) == true) {
+                        $(".duplicate-invalidCustomerSupportIMEI1").removeClass("hide");
+                        isValid = false;
+                    }
+                }
+            }
+            if (ddlJobSource.val() === "") {
+                $(".require-Source").removeClass("hide");
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            if (validateForm()) {
+                bootbox.confirm("Are you sure you want to save?", function (result) {
+                    if (result === true) {
+                        disable("#btnSubmit");
+                        var entryDate = null;
+                        if (dptJobEntryDate.val().trim() != "") {
+                            entryDate = new Date(dptJobEntryDate.val());
+                            
+                        }
+
+                        var jobOrder = { JodOrderId: TryParseInt(hdfJobOrderId.val(), 0), CustomerId: TryParseInt(customerId.val(), 0), CustomerName: txtCustomer.val(), IMEI: txtIMEI.val(), Type: ddlPhoneTypes.val(), ModelColor: ddlModelColor.val(), MobileNo: txtMobileNumber.val(), Address: txtAddress.val(), DescriptionId: TryParseInt(ddlDescriptions.val(), 0), IsWarrantyAvailable: chkIsWarrentyAvailable.is(":checked"), IsHandset: handsetDOA.is(":checked"), IsWarrantyPaperEnclosed: rdnEnclosedYes.is(":checked"), WarrantyDate: dptWarrantyDate.val(), ReferenceNumber: txtReferenceNumber.val(), WarrantyEndDate: dptWarrantyEndDate.val(), IMEI2: txtIMEI2.val(), EntryDate: entryDate, Remarks: txtRemarks.val(), JobOrderType: ddlJobOrderType.val(), CustomerType: ddlCustomerType.val(), CourierName: txtCourierName.val(), CourierNumber: txtCourierNumber.val(), ApproxBill: txtApproxBill.val(), CustomerSupportStatus: ddlCustomerSupport.val(), CSIMEI1: txtCustomerSupportIMEI1.val(), JobSource: ddlJobSource.val(), ProbablyDate: dptProbabilyDate.val() };
+
+                        var aryAccessories = []; aryAccessories.length = 0;
+                        var accessories = ddlAccessories.val();
+                        for (var i = 0; i < accessories.length; i++) {
+                            aryAccessories.push({
+                                AccessoriesId: accessories[i]
+                            });
+                        }
+
+                        var aryProblems = []; aryProblems.length = 0;
+                        var problems = ddlProblems.val();
+                        for (var i = 0; i < problems.length; i++) {
+                            aryProblems.push({
+                                ProblemId: problems[i]
+                            });
+                        }
+
+                        var data = JSON.stringify({ jobOrder: jobOrder, jobOrderAccessories: aryAccessories, jobOrderProblems: aryProblems });
+                        console.log(data);
+                        //return console.log(data);
+
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/FrontDesk/SaveJobOrder', data, getToken())).then(function (res, status) {
+                            if (res.IsSuccess === true && status === "success") {
+                                $('.toastrDefaultSuccess').trigger('click');
+                                //download(res.file, res.FileName, "application/pdf"); // Download
+                                var pdfWindow = window.open("", "_blank")
+                                console.log(res.File);
+                                pdfWindow.document.write("<embed  width='100%' height='100%' src='" + res.file + "'></embed >");
+                                setTimeout(function () {
+                                    redirectPage('@Url.Action("GetJobOrders")');
+                                }, 1000);
+
+                            }
+                            else {
+                                $('.toastrDefaultError').trigger('click');
+                            }
+                            enable("#btnSubmit");
+                        }).fail(function (error) {
+                            console.log(error);
+                            $('.toastrDefaultError').trigger('click');
+                            enable("#btnSubmit");
+                        });
+                    }
+                });
+            }
+        });
+        
+         
+        $("#btnReset").click(function (e) {
+            e.preventDefault();
+
+            $("#txtSearchCustomer").val('');
+            txtCustomer.val("");
+            txtMobileNumber.val("");
+            txtAddress.val("");
+            customerId.val('0');
+            txtIMEI.val("");
+            ddlPhoneTypes.val("");
+            txtModelColor.val("");
+            txtRemarks.val("");
+            txtWarrantyDate.val("");
+            dptProbabilyDate.val("");
+            txtCourierName.val("");
+            txtCourierNumber.val("");
+            txtApproxBill.val("");
+
+            ddlDescriptions.val("");
+            ddlDescriptions.trigger("change");
+            ddlAccessories.val([]);
+            ddlAccessories.trigger("change");
+            ddlProblems.val([]);
+            ddlProblems.trigger("change");;
+            chkIsWarrentyAvailable.prop("checked", false);
+            rdnEnclosedNo.prop("checked", true);
+
+            clearCtrl();
+        })
+
+        // Add Customer
+        var hdfCustomerId = $("#hdfCustomerId");
+        var txtCustomerName = $("#txtCustomerName");
+        var txtCustomerAddress = $("#txtCustomerAddress");
+        var txtCustomerPhone = $("#txtCustomerPhone");
+        var txtCustomerRemarks = $("#txtCustomerRemarks");
+
+        function OpenModal() {
+            clearCtrl();
+            $("#spanModalHead").text('Add New Customer');
+            $("#spanSaveText").text('Save');
+            $("#modalCustomer").modal("show");
+            $(".error").addClass("hide");
+        }
+
+        $("#btnCustomer").click(function (e) {
+            e.preventDefault();
+            clearCtrl();
+            OpenModal();
+        })
+
+        function validateCustomer() {
+            $(".error").addClass("hide");
+            var isValid = true;
+            if ($.trim(txtCustomerName.val()) == "") {
+                $(".required-customerName").removeClass("hide");
+                isValid = false;
+            }
+            if ($.trim(txtCustomerAddress.val()) == "") {
+                $(".required-custaddress").removeClass("hide");
+                isValid = false;
+            }
+            if ($.trim(txtCustomerPhone.val()) == "") {
+                $(".required-custphone").removeClass("hide");
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        $("#btnSubmitCustomer").click(function (e) {
+            e.preventDefault();
+            $(".error").addClass("hide");
+            if (validateCustomer() == true) {
+                disable("#btnSubmitCustomer");
+                var data = JSON.stringify({
+                    CustomerId: TryParseInt(hdfCustomerId.val(), 0),
+                    CustomerName: txtCustomerName.val(),
+                    CustomerAddress: txtCustomerAddress.val(),
+                    CustomerPhone: $.trim(txtCustomerPhone.val()),
+                    Remarks: txtCustomerRemarks.val()
+                });
+
+                console.log(data);
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Configuration/SaveCustomer', data, getToken())).then(function (res, status) {
+                    console.log(status);
+                    console.log(res);
+                    if (res == true) {
+                        message("#msg1");
+                        getCustomer($.trim(txtCustomerPhone.val()));
+                        setTimeout(function () {
+                            $("#modalCustomer").modal("toggle");
+                        }, 1000);
+                    }
+                    else {
+                        message("#msg2");
+                    }
+                    enable("#btnSubmitCustomer");
+                }).fail(function (err) {
+                    console.log(err);
+                    enable("#btnSubmitCustomer");
+                });
+            }
+
+        })
+
+        function clearCtrl() {
+            hdfCustomerId.val('0');
+            txtCustomerName.val('');
+            txtCustomerAddress.val('');
+            txtCustomerPhone.val('');
+            txtCustomerRemarks.val('');
+        }
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+
+    </script>
+}
+
+

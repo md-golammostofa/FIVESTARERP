@@ -1,0 +1,235 @@
+﻿
+@{
+    ViewBag.Title = "List Of Faulty Items & Returned Goods";
+    var privilege = (ERPBO.Common.UserPrivilege)ViewBag.UserPrivilege;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3">
+                @if (privilege != null && privilege.Detail)
+                {
+                    <a href="/Production/GetProductionFaultyOrReturnItemDetailList" class="float-left btn btn-sm btn-outline-secondary" title="Details View">
+                        <i class="fas fa-eye"></i> Go To Details View
+                    </a>
+                }
+            </div>
+            <div class="col-md-6 text-center">
+                <h4><b style="color:darkblue">List Of Faulty Items & Returned Goods</b></h4>
+            </div>
+            <div class="col-md-3">
+                @if (privilege != null && privilege.Add)
+                {
+                    <a href="/Production/CreateFaultyGoodReturn" class="btn btn-outline-primary btn-sm float-right" id="btnAddNew">
+                        <i class="fa fa-plus"></i> Faulty & Goods Return
+                    </a>
+                }
+            </div>
+        </div>
+        <hr />
+    </div>
+    <div class="col-md-12">
+        <h5 class="text-cyan"><b>Search By</b></h5>
+        <div class="row">
+            <div class="col-md-3">
+                <label class="col-form-label">Return Type</label>
+                @Html.DropDownList("ddlReturnType", (IEnumerable<SelectListItem>)ViewBag.ReturnType, "Select Return Type", new { @class = "form-control form-control-sm ctrl-changed" })
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label">Faulty Case</label>
+                @Html.DropDownList("ddlFaultyCase", (IEnumerable<SelectListItem>)ViewBag.FaultyCase, "Select Faulty Case", new { @class = "form-control form-control-sm ctrl-changed" })
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label">Return/Faulty Code</label>
+                <input type="text" id="txtCode" class="form-control form-control-sm" placeholder="Enter Code Here" />
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label">Floor</label>
+                @Html.DropDownList("ddlLines", (IEnumerable<SelectListItem>)ViewBag.ListOfLine, "Select Line", new { @class = "form-control form-control-sm ctrl-changed" })
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label class="col-form-label">Model Name</label>
+                @Html.DropDownList("ddlModelName", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "Select Model", new { @class = "form-control form-control-sm ctrl-changed select2 select2-danger" })
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label">Warehouse Name</label>
+                @Html.DropDownList("ddlWarehouse", (IEnumerable<SelectListItem>)ViewBag.ListOfWarehouse, "Select Warehouse", new { @class = "form-control form-control-sm ctrl-changed" })
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label">From Date</label>
+                <div class="input-group input-group-sm ">
+                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptFromDate" />
+                    <div class="input-group-prepend cursor-pointer remove-date dptFromDate" style="cursor:pointer">
+                        <span class="input-group-text">&#10008;</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label">To Date</label>
+                <div class="input-group input-group-sm ">
+                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptToDate" />
+                    <div class="input-group-prepend remove-date dptToDate" style="cursor:pointer">
+                        <span class="input-group-text">&#10008;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label class="col-form-label">State Status</label>
+                @Html.DropDownList("ddlStatus", (IEnumerable<SelectListItem>)ViewBag.Status, "Select Status", new { @class = "form-control form-control-sm ctrl-changed" })
+            </div>
+        </div>
+        <hr />
+    </div>
+    <div class="col-md-12 mt-2" id="dataContainer">
+        @{Html.RenderAction("GetItemReturnList", new { @flag = "view" });}
+    </div>
+    <div class="modal fade" id="modalReturnDetails" role="dialog" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header alert-primary">
+                    <input type="hidden" id="hdfReturnInfoId" />
+                    <input type="hidden" id="hdfRowIndex" />
+                    <h4 id="modalHeading" class="modal-title">
+                        Details Of Faulty Items / Returned Goods
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="dataContainer1">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        var txtCode = $("#txtCode");
+        var ddlReturnType = $("#ddlReturnType");
+        var ddlFaultyCase = $("#ddlFaultyCase");
+        var ddlLines = $("#ddlLines");
+        var ddlWarehouse = $("#ddlWarehouse");
+        var ddlStatus = $("#ddlStatus");
+        var dptFromDate = $("#dptFromDate");
+        var dptToDate = $("#dptToDate");
+        var hdfReturnInfoId = $("#hdfReturnInfoId");
+        var hdfRowIndex = $("#hdfRowIndex");
+        var ddlModelName = $("#ddlModelName");
+        var pageNo = 1;
+
+        $(document).ready(function () {
+
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+
+            dptFromDate.prop('readonly', true);
+            dptToDate.prop('readonly', true);
+            dptFromDate.css("background-color", "#fff");
+            dptToDate.css("background-color", "#fff");
+            $('#dptFromDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+
+            });
+            $('#dptToDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+            });
+        })
+
+        txtCode.keyup(function () {
+            LoadDataTable();
+        })
+
+        $(document).on('change', '.ctrl-changed', function () {
+            LoadDataTable()
+        })
+
+        $(document).on('click', 'div.remove-date', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDate.val() !== '') {
+                    dptToDate.val('');
+                    LoadDataTable();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDate.val() !== '') {
+                    dptFromDate.val('');
+                    LoadDataTable();
+                }
+            }
+        })
+
+        function LoadDataTable() {
+            var data = { flag: "search", code: txtCode.val().trim(), lineId: TryParseInt(ddlLines.val(), 0), warehouseId: TryParseInt(ddlWarehouse.val(), 0), status: ddlStatus.val(), returnType: ddlReturnType.val(), faultyCase: ddlFaultyCase.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), modelId: TryParseInt(ddlModelName.val(), 0), page: pageNo };
+            console.log(data);
+
+            $.when(getReqWithData(dataType.html, type.post, '/Production/GetItemReturnList', data)).then(function (res, status) {
+                console.log(res);
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                consoleLog(error);
+            })
+        }
+
+        // Pagination
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).hasClass('current-page')) {
+                //alert('Page Clicked');
+                pageNo = $(this).attr('data-page-no');
+                //console.log('Page No');
+                //console.log(!isNaN(pageNo));
+                LoadDataTable();
+            }
+        })
+
+        function OpenModal() {
+            $("#dataContainer1").empty();
+            hdfReturnInfoId.val('0');
+            hdfRowIndex.val("");
+            $("#modalReturnDetails").modal("show");
+        }
+
+        $(document).on("click", "a.data-item-detail", function (e) {
+            e.preventDefault();
+            OpenModal();
+            var data = {
+                itemReturnInfoId: TryParseInt($(this).attr("data-item-detail"), 0)
+            };
+            var idx = $(this).parent().parents('tr').index();
+            $.when(getReqWithData('html', 'GET', '/Production/GetProductionItemReturnDetails', data)).then(function (res, status) {
+                if (status == "success") {
+                    OpenModal();
+                    hdfReturnInfoId.val(data.itemReturnInfoId);
+                    hdfRowIndex.val(idx)
+                    $("#dataContainer1").empty();
+                    $("#dataContainer1").append(res);
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        })
+    </script>
+}

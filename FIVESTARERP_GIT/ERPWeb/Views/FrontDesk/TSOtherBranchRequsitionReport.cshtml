@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "Requsition Report";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header">
+                <h4>Other Branch Requsition Report</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                @Html.AntiForgeryToken()
+                @using (Html.BeginForm("OtherBranchRequsitionReport", "ReportSS", FormMethod.Get, new { @target = "_blank" }))
+                {
+                    <div class="col-md-12 mb-2">
+                        <form method="get">
+                            <div class="row text-sm">
+                                <div class="col-md-2">
+                                    <label for="txtReqCode" class="control-label font-weight-bold">Requisition Code</label>
+                                    <input type="text" name="reqCode" id="txtReqCode" class="form-control form-control-sm" placeholder="Search By Requisition Code" onkeyup="tableFilter('#tblReqInfoData tbody tr',this)" />
+                                </div>
+                                <div class="col-md-4 hide">
+                                    <label for="ddlWarehouseName" class="control-label font-weight-bold">Warehouse Name</label>
+                                    @Html.DropDownList("ddlWarehouseName", (IEnumerable<SelectListItem>)ViewBag.ddlWarehouseName, "--Select ServicesWarehouse--", new { @class = "form-control form-control-sm ctrl-changed" })
+                                    <span class="error hide required-warehouseName font-weight-bold">Required Warehouse Name!</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="ddlTechnicalServicesName" class="control-label font-weight-bold">TSName</label>
+                                    @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select TSName--", new { @class = "form-control form-control-sm" })
+                                </div>
+                                <div class="col-md-1">
+                                    <label for="ddlStateStatus" class="control-label font-weight-bold">Status</label>
+                                    @Html.DropDownList("reqStatus", (IEnumerable<SelectListItem>)ViewBag.ddlStateStatus, "--Select Status--", new { @class = "form-control form-control-sm ctrl-changed" })
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="control-label font-weight-bold">From Date</label>
+                                    <div class="input-group input-group-sm ">
+                                        <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptFromDate" name="fromDate" />
+                                        <div class="input-group-prepend cursor-pointer remove-date dptFromDate" style="cursor:pointer">
+                                            <span class="input-group-text">&#10008;</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="control-label font-weight-bold">To Date</label>
+                                    <div class="input-group input-group-sm ">
+                                        <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptToDate" name="toDate" />
+                                        <div class="input-group-prepend remove-date dptToDate" style="cursor:pointer">
+                                            <span class="input-group-text">&#10008;</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <label for="rptType">Type</label>
+                                    <select name="rptType" id="rptType" class="form-control form-control-sm">
+                                        <option value="PDF">PDF</option>
+                                        <option value="EXCEL">EXCEL</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <label for="Download" style="visibility:hidden">Download</label>
+                                    <button type="submit" title="Download Report" class="btn btn-sm btn-outline-success"><i class="fas fa-download"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12 text-sm" id="dataContainer">
+                        @{Html.RenderAction("TSOtherBranchRequsitionReport", new { flag = "view" });}
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var hdfRequstionDetailForJobOrderId = $("#hdfRequstionDetailForJobOrderId");
+        var ddlWarehouseName = $("#ddlWarehouseName");
+        var txtReqCode = $("#txtReqCode");
+        var ddlStateStatus = $("#ddlStateStatus");
+        var dptFromDate = $("#dptFromDate");
+        var dptToDate = $("#dptToDate");
+        var hdfJobCodeId = $("#hdfJobCodeId");
+        var hdfRequsitionDetailId = $("#hdfRequsitionDetailId");
+        var hdfRowIndex = $("#hdfRowIndex");
+        var ddlTechnicalServicesName = $("#ddlTechnicalServicesName");
+        var pageNo = 1;
+
+        $(document).ready(function () {
+
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+            dptFromDate.prop('readonly', true);
+            dptToDate.prop('readonly', true);
+            dptFromDate.css("background-color", "#fff");
+            dptToDate.css("background-color", "#fff");
+            $('#dptFromDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+            $('#dptToDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+            $('.action').addClass('hide');
+        })
+
+        $(document).on('click', 'div.remove-date', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDate.val() !== '') {
+                    dptToDate.val('');
+                    LoadDataTable();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDate.val() !== '') {
+                    dptFromDate.val('');
+                    LoadDataTable();
+                }
+            }
+        })
+
+        txtReqCode.keyup(function () {
+            LoadDataTable();
+        })
+
+        $(document).on('change', '.ctrl-changed', function () {
+            LoadDataTable();
+        })
+        ddlTechnicalServicesName.change(function () {
+            LoadDataTable();
+        })
+
+        function LoadDataTable() {
+            var data = { reqCode: txtReqCode.val().trim(), warehouseId: TryParseInt(ddlWarehouseName.val(), 0), tsId: TryParseInt(ddlTechnicalServicesName.val(), 0), rstatus: ddlStateStatus.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), page: pageNo };
+
+            $.when(getReqWithData('html', 'GET', '/FrontDesk/AnotherBranchRequsitionPartialList', data)).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                        $('.action').addClass('hide');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+            pageNo = 1;
+        }
+        // Pagination
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).hasClass('current-page')) {
+                pageNo = $(this).attr('data-page-no');
+                LoadDataTable();
+            }
+        })
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>
+}

@@ -1,0 +1,1317 @@
+﻿@model IEnumerable<ERPBO.Inventory.ViewModels.WarehouseStockInfoViewModel>
+@{
+    /**/
+
+    ViewBag.Title = "Warehouse Stock Info";
+    var privilege = (ERPBO.Common.UserPrivilege)ViewBag.UserPrivilege;
+    string tab = (string)ViewBag.tab == null ? "" : ViewBag.tab;
+}
+
+<div class="row text-sm">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline card-tabs" style="margin-top:-20px">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-two-warehouseStockInfoList-tab" data-toggle="pill" href="#custom-tabs-two-warehouseStockInfoList" role="tab" aria-controls="custom-tabs-two-warehouseStockInfoList" aria-selected="true">Parts Stock In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-two-receivefinishgoods-tab" data-toggle="pill" href="#custom-tabs-two-receivefinishgoods" role="tab" aria-controls="custom-tabs-two-receivefinishgoods" aria-selected="true">Receiving Finish Handset</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-two-mobilestock-tab" data-toggle="pill" href="#custom-tabs-two-mobilestock" role="tab" aria-controls="custom-tabs-two-mobilestock" aria-selected="true">Handset Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-two-stockReturnList-tab" data-toggle="pill" href="#custom-tabs-two-stockReturnList" role="tab" aria-controls="custom-tabs-two-stockReturnList" aria-selected="true">Stock Return List</a>
+                    </li>
+                    <li class="nav-item hide">
+                        <a class="nav-link" id="custom-tabs-two-IQCItemReqInfoList-tab" data-toggle="pill" href="#custom-tabs-two-IQCItemReqInfoList" role="tab" aria-controls="custom-tabs-two-IQCItemReqInfoList" aria-selected="true">IQC REQ List</a>
+                    </li>
+                    <li class="nav-item hide">
+                        <a class="nav-link" id="custom-tabs-two-IQCItemReturnList-tab" data-toggle="pill" href="#custom-tabs-two-IQCItemReturnList" role="tab" aria-controls="custom-tabs-two-IQCItemReturnList" aria-selected="true">IQC Item Return List</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="custom-tabs-two-tabContent">
+                    @Html.AntiForgeryToken()
+                    <div class="tab-pane fade show active" id="custom-tabs-two-warehouseStockInfoList" role="tabpanel" aria-labelledby="custom-tabs-two-warehouseStockInfoList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <a href="/Inventory/GetWarehouseStockDetailInfoList" class="float-left btn btn-sm btn-outline-primary" title="Details View">
+                                                    <i class="fas fa-eye"></i> Go To Details View
+                                                </a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    Parts Stock Info List
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <a href="/Inventory/CreateStock" class="btn btn-outline-success btn-sm float-lg-right" id="btnAddNew"><i class="fa fa-plus"></i> Parts Stock-In</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h5>Search By</h5>
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button class="btn btn-outline-primary btn-sm float-lg-right" id="btnExcelImport" title="IMPORT"><i class="fas fa-plus"></i> IMPORT EXCEL</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-sm">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-2">
+                                                <label for="ddlWarehouse" class="control-label font-weight-bold">Warehouse Name</label>
+                                                @Html.DropDownList("ddlWarehouse", (IEnumerable<SelectListItem>)ViewBag.ddlWarehouse, "--Select Warehouse--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="ddlModelName" class="control-label font-weight-bold">Model Name</label>
+                                                @Html.DropDownList("ddlModelName", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlItemType" class="control-label font-weight-bold">Parts Type Name</label>
+                                                <select id="ddlItemType" class="form-control form-control-sm">
+                                                    <option value="">--Select Parts Type--</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlItem" class="control-label font-weight-bold">Parts Name</label>
+                                                <select id="ddlItem" class="form-control form-control-sm">
+                                                    <option value="">--Select Parts--</option>
+                                                </select>
+                                                <span class="error hide duplicate-itemName font-weight-bold">The Parts is already exist!</span>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold" for="txtLessOrEq">Qty(Less/Equal)</label>
+                                                <input type="number" id="txtLessOrEq" class="form-control form-control-sm" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <div class="text-center hide" id="loader1">
+                                                <h6 class="text-bold">Loading....</h6>
+                                            </div>
+                                            <div class="col-md-12" id="dataContainer1">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-receivefinishgoods" role="tabpanel" aria-labelledby="custom-tabs-two-receivefinishgoods-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    Receive Finish Goods
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h5>Search By</h5>
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-sm">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-2">
+                                                <label for="ddlWarehouseForReceiveFinishGoods" class="control-label font-weight-bold">Warehouse Name</label>
+                                                @Html.DropDownList("ddlWarehouseForReceiveFinishGoods", (IEnumerable<SelectListItem>)ViewBag.ddlWarehouse, "--Select Warehouse--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlModelNameForReceiveFinishGoods" class="control-label font-weight-bold">Model Name</label>
+                                                @Html.DropDownList("ddlModelNameForReceiveFinishGoods", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">State Status</label>
+                                                <select class="form-control form-control-sm" id="ddlReceiveFinishGoodsStatus">
+                                                    <option value="">--Select Status--</option>
+                                                    <option value="Send">Send</option>
+                                                    <option value="Receive">Receive</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label">From Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptFromDateReceiveFinishGoods" />
+                                                    <div class="input-group-prepend cursor-pointer remove-rfg-date dptFromDate" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label">To Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptToDateReceiveFinishGoods" />
+                                                    <div class="input-group-prepend remove-rfg-date dptToDate" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <div class="text-center hide" id="loader5">
+                                                <h6 class="text-bold">Loading....</h6>
+                                            </div>
+                                            <div class="col-md-12" id="dataContainer5">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-mobilestock" role="tabpanel" aria-labelledby="custom-tabs-two-mobilestock-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    Handset Stock List
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h5>Search By</h5>
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-sm">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-2">
+                                                <label for="txtIMEIForMobileStock" class="control-label font-weight-bold">IMEI</label>
+                                                <input type="text" id="txtIMEIForMobileStock" name="txtIMEIForMobileStock" class="form-control form-control-sm" placeholder="Search By IMEI"/>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="txtCartoonForMobileStock" class="control-label font-weight-bold">Cartoon</label>
+                                                <input type="text" id="txtCartoonForMobileStock" name="txtCartoonForMobileStock" class="form-control form-control-sm" placeholder="Search By Cartoon No"/>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlCategoriesForMobileStock" class="control-label font-weight-bold">Category</label>
+                                                @Html.DropDownList("ddlCategoriesForMobileStock", (IEnumerable<SelectListItem>)ViewBag.ddlCategories, "--Select Category--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlBrandsForMobileStock" class="control-label font-weight-bold">Brand</label>
+                                                @Html.DropDownList("ddlBrandsForMobileStock", (IEnumerable<SelectListItem>)ViewBag.ddlBrands, "--Select Brand--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlModelsForMobileStock" class="control-label font-weight-bold">Model</label>
+                                                <select id="ddlModelsForMobileStock" class="form-control form-control-sm">
+                                                    <option value="">--Select Model---</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlColorsForMobileStock" class="control-label font-weight-bold">Colors</label>
+                                                @Html.DropDownList("ddlColorsForMobileStock", (IEnumerable<SelectListItem>)ViewBag.ddlColors, "--Select Color--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="ddlStatusMobileStock" class="control-label font-weight-bold">State Status</label>
+                                                <select class="form-control form-control-sm" id="ddlStatusMobileStock">
+                                                    <option value="">--Select Status--</option>
+                                                    <option value="Stock-In">Stock-In</option>
+                                                    <option value="Stock-Out">Stock-Out</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="dptFromDateMobileStock" class="control-label">From Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptFromDateMobileStock" />
+                                                    <div class="input-group-prepend cursor-pointer remove-ms-date dptFromDate" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="dptToDateMobileStock" class="control-label">To Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptToDateMobileStock" />
+                                                    <div class="input-group-prepend remove-ms-date dptToDate" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <div class="text-center hide" id="loader6">
+                                                <h6 class="text-bold">Loading....</h6>
+                                            </div>
+                                            <div class="col-md-12" id="dataContainer6">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-stockReturnList" role="tabpanel" aria-labelledby="custom-tabs-two-stockReturnList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    Stock Return List
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <h6 class="card-title">
+                                            Search By
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="control-label font-weight-bold" for="txtReturnCode">Return Code</label>
+                                                <input type="text" id="txtReturnCode" class="form-control form-control-sm" placeholder="Search By Return Code" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold" for="ddlReturnStateStatus">State Status</label>
+                                                @Html.DropDownList("ddlReturnStateStatus", (IEnumerable<SelectListItem>)ViewBag.ddlReturnStateStatus, "--Select Status--", new { @class = "form-control form-control-sm ctrl-changed" })
+                                            </div>
+                                            <div class="col-md-2"></div>
+                                            <div class="col-md-2"></div>
+                                            <div class="col-md-3"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <div class="text-center hide" id="loader2">
+                                                <h6 class="text-bold">Loading....</h6>
+                                            </div>
+                                            <div class="col-md-12" id="dataContainer2">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-IQCItemReqInfoList" role="tabpanel" aria-labelledby="custom-tabs-two-IQCItemReqInfoList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    IQC REQ List
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        @*<h6 class="card-title">Search By</h6>*@
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h5>Search By</h5>
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button class="btn btn-outline-danger btn-sm float-lg-right" id="btnResetForIQCReq" title="RESET UI"><i class="fas fa-sync-alt"></i> </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-sm">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-2">
+                                                <label for="ddlWarehouseForIQCReq" class="control-label font-weight-bold">Warehouse Name</label>
+                                                @Html.DropDownList("ddlWarehouseForIQCReq", (IEnumerable<SelectListItem>)ViewBag.ddlWarehouse, "--Select Warehouse--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlModelNameForIQCReq" class="control-label font-weight-bold">Model Name</label>
+                                                @Html.DropDownList("ddlModelNameForIQCReq", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">State Status</label>
+                                                @Html.DropDownList("ddlStateStatus", (IEnumerable<SelectListItem>)ViewBag.ddlStateStatus, "--Select Status--", new { @class = "form-control form-control-sm ctrl-changed" })
+                                            </div>
+                                            @*<div class="col-md-2">
+                                                    <label class="control-label font-weight-bold">Qty(Less/Equal)</label>
+                                                    <input type="number" id="txtLessOrEq" class="form-control form-control-sm" />
+                                                </div>*@
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <div class="text-center hide" id="loader3">
+                                                <h6 class="text-bold">Loading....</h6>
+                                            </div>
+                                            <div class="col-md-12" id="dataContainer3">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-IQCItemReturnList" role="tabpanel" aria-labelledby="custom-tabs-two-IQCItemReturnList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    IQC Item Return List
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        @*<h6 class="card-title">Search By</h6>*@
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h5>Search By</h5>
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button class="btn btn-outline-danger btn-sm float-lg-right" id="btnResetForIQCReturn" title="RESET UI"><i class="fas fa-sync-alt"></i> </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-sm">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-2">
+                                                <label for="ddlWarehouseForIQCReturn" class="control-label font-weight-bold">Warehouse Name</label>
+                                                @Html.DropDownList("ddlWarehouseForIQCReturn", (IEnumerable<SelectListItem>)ViewBag.ddlWarehouse, "--Select Warehouse--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlModelNameForIQCReturn" class="control-label font-weight-bold">Model Name</label>
+                                                @Html.DropDownList("ddlModelNameForIQCReturn", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">State Status</label>
+                                                <select class="form-control form-control-sm ctrl-changed" id="ddlStateStatusForIQCReturn">
+                                                    <option value="">--Select Status--</option>
+                                                    <option value="Return">Return</option>
+                                                    <option value="Receive-Return">Reacive-Return</option>
+                                                </select>
+                                                @*@Html.DropDownList("ddlStateStatusForIQCReturn", (IEnumerable<SelectListItem>)ViewBag.ddlStateStatus, "--Select Status--", new { @class = "form-control form-control-sm ctrl-changed" })*@
+                                            </div>
+                                            @*<div class="col-md-2">
+                                                    <label class="control-label font-weight-bold">Qty(Less/Equal)</label>
+                                                    <input type="number" id="txtLessOrEq" class="form-control form-control-sm" />
+                                                </div>*@
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <div class="text-center hide" id="loader4">
+                                                <h6 class="text-bold">Loading....</h6>
+                                            </div>
+                                            <div class="col-md-12" id="dataContainer4">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalIQCReqDetails" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <input type="hidden" id="hdfInfoId" />
+                <input type="hidden" id="hdfRowIndex" />
+                <h4 id="modalHeading" class="modal-title">IQC Item Request Details</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="modelContainer1">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalExcelImport" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <h4 id="modalHeading" class="modal-title">IMPORT EXCEL</h4>
+                <div class="col-md-7">
+                    <a href="/Inventory/DownloadExcel" class="btn btn-outline-primary btn-sm float-lg-right" id="btnDemoExcel" title="DEMO"><i class="fas fa-plus"></i> Download EXCEL</a>
+                </div>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="modelContainer2">
+            </div>
+            <div class=" modal-footer btn-default">
+                <input type="submit" value="Upload" id="btnExcelSubmit" class="btn btn-primary float-right btnExcelSubmit" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="returnDetail" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <h4 id="modalHeading" class="modal-title">Stock Return Detail</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="modalDataContainer3">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSendDetails" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <input type="hidden" id="hdfSendInfoId" />
+                <h4 id="modalHeading" class="modal-title">Finish Goods Item Details</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body text-sm" id="modalContainer4">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+    <script type="text/javascript">
+
+        var hdfRowIndex = $("#hdfRowIndex");
+        var hdfInfoId = $("#hdfInfoId");
+
+        // Warehouse Stock
+        var ddlWarehouse = $("#ddlWarehouse");
+        var ddlItemType = $("#ddlItemType");
+        var ddlItem = $("#ddlItem");
+        var txtInQuantity = $("#txtInQuantity");
+        var txtRemarks = $("#txtRemarks");
+        var unitName = $("#unitName");
+        var txtLessOrEq = $("#txtLessOrEq");
+        var ddlModelName = $("#ddlModelName");
+        var pageNo = 1;
+
+        // Stock Return List //
+        var txtReturnCode = $("#txtReturnCode");
+        var ddlReturnStateStatus = $("#ddlReturnStateStatus");
+
+        // IQC Request List
+        var ddlWarehouseForIQCReq = $("#ddlWarehouseForIQCReq");
+        var ddlStateStatus = $("#ddlStateStatus");
+        var ddlModelNameForIQCReq = $("#ddlModelNameForIQCReq");
+
+        // IQC Return
+        var ddlWarehouseForIQCReturn = $("#ddlWarehouseForIQCReturn");
+        var ddlStateStatusForIQCReturn = $("#ddlStateStatusForIQCReturn");
+        var ddlModelNameForIQCReturn = $("#ddlModelNameForIQCReturn");
+
+        // Receive Finish Goods//
+        var ddlWarehouseForReceiveFinishGoods = $("#ddlWarehouseForReceiveFinishGoods");
+        var ddlModelNameForReceiveFinishGoods = $("#ddlModelNameForReceiveFinishGoods");
+        var ddlReceiveFinishGoodsStatus = $("#ddlReceiveFinishGoodsStatus");
+        var dptFromDateReceiveFinishGoods = $("#dptFromDateReceiveFinishGoods")
+        var dptToDateReceiveFinishGoods = $("#dptToDateReceiveFinishGoods");
+
+        //Mobile Stock //
+        var hdfSendInfoId = $("#hdfSendInfoId");
+        var txtIMEIForMobileStock = $("#txtIMEIForMobileStock");
+        var txtCartoonForMobileStock = $("#txtCartoonForMobileStock");
+        var ddlCategoriesForMobileStock = $("#ddlCategoriesForMobileStock");
+        var ddlBrandsForMobileStock = $("#ddlBrandsForMobileStock");
+        var ddlModelsForMobileStock = $("#ddlModelsForMobileStock");
+        var ddlColorsForMobileStock = $("#ddlColorsForMobileStock");
+        var ddlStatusMobileStock = $("#ddlStatusMobileStock");
+        var dptFromDateMobileStock = $("#dptFromDateMobileStock");
+        var dptToDateMobileStock = $("#dptToDateMobileStock");
+
+        $(document).ready(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+            $('#dptFromDateMobileStock').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+            $('#dptFromDateMobileStock').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+            $('#dptFromDateReceiveFinishGoods').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose:true
+            });
+            $('#dptToDateReceiveFinishGoods').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose:true
+            });
+            $("#btnReacive").hide();
+            if ('@tab' =="IQC") {
+                $("#custom-tabs-two-IQCItemReqInfoList-tab").trigger('click');
+            }
+            if ('@tab' == "IQCReturn") {
+                $("#custom-tabs-two-IQCItemReturnList-tab").trigger('click');
+            }
+            loadDataInitializer();
+        })
+
+        function loadDataInitializer() {
+            LoadDataTable();
+            LoadDataTableStockReturn();
+            LoadDataTableForIQCReq();
+            LoadDataTableForIQCReturn();
+            LoadReceiveFinishGoodsDataTable();
+            LoadMobileStockDataTable(); 
+        }
+
+        //#region Stock List
+        //casced dropdown load for itemtype
+        ddlWarehouse.change(function () {
+            $("#unitName").text('');
+            clearDropdown("ddlItemType");
+            clearDropdown("ddlItem");
+            if (ddlWarehouse.val() != "") {
+                LoadDropDown('/Common/GetItemTypeForDDL', 'POST', ddlItemType, JSON.stringify({ warehouseId: ddlWarehouse.val() }));
+            }
+            LoadDataTable();
+        })
+
+        //casced dropdown load for item
+        ddlItemType.change(function () {
+            $("#unitName").text('');
+            clearDropdown("ddlItem");
+            if (ddlItemType.val() != "") {
+                LoadDropDown('/Common/GetItemForDDL', 'POST', ddlItem, JSON.stringify({ itemTypeId: ddlItemType.val() }));
+            }
+            LoadDataTable();
+        })
+
+        ddlItem.change(function () {
+            LoadDataTable();
+        })
+
+        ddlModelName.change(function () {
+            LoadDataTable();
+        })
+
+        txtLessOrEq.keyup(function () {
+            LoadDataTable();
+        })
+
+        function LoadDataTable() {
+            $("#loader1").removeClass("hide");
+            var data = { flag: "search", warehouseId: TryParseInt(ddlWarehouse.val(), 0), modelId: TryParseInt(ddlModelName.val(), 0), itemTypeId: TryParseInt(ddlItemType.val(), 0), itemId: TryParseInt(ddlItem.val(), 0), lessOrEq: txtLessOrEq.val(), page: pageNo };
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetWarehouseStockInfoList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer1").fadeOut('500', function () {
+                        $("#dataContainer1").empty();
+                        $("#dataContainer1").append(res).fadeIn('500');
+
+                    });
+                }
+                $("#loader1").addClass("hide");
+            }).fail(function (error) {
+                console.log(error);
+                $("#loader1").addClass("hide");
+            });
+            pageNo = 1;
+        }
+
+        //#endregion
+
+        //#region Excel Implementation
+        function OpenModalExcel() {
+            $("#modelDataContainer").empty();
+            $("#modalExcelImport").modal("show");
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        }
+
+        $("#btnExcelImport").click(function (e) {
+            e.preventDefault();
+            $(".error").addClass("hide");
+            $.when(getReqWithData('html', 'GET', '/Inventory/CreateExcel', null)).then(function (res, status) {
+                if (status == "success") {
+                    OpenModalExcel();
+                    $("#modelContainer2").empty();
+                    $("#modelContainer2").append(res);
+                    $('.select2').select2();
+
+                    //Initialize Select2 Elements
+                    $('.select2bs4').select2({
+                        theme: 'bootstrap4'
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        })
+
+        function validateFileUpload() {
+            var isValid = true;
+            $(".error").addClass("hide");
+            if (TryParseInt($(".DescriptionId").val(), 0) <= 0) {
+                $(".req-xls-model").removeClass("hide");
+                isValid = false;
+            }
+            if (TryParseInt($(".SupplierId").val(), 0) <= 0) {
+                $(".req-xls-supplier").removeClass("hide");
+                isValid = false;
+            }
+            if ($(".BomItemId").val() =="") {
+                $(".req-xls-item").removeClass("hide");
+                isValid = false;
+            }
+            if (($(".FileUpload").prop('files')[0]) == null || ($(".FileUpload").prop('files')[0]) == undefined) {
+                $(".req-xls-file").removeClass("hide");
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        var FileUpload = $(".FileUpload");
+
+        $("#btnExcelSubmit").click(function (e) {
+            e.preventDefault();
+            if (validateFileUpload()) {
+                disable("#btnExcelSubmit");
+                var excelFile = $(".FileUpload").prop('files')[0];
+                var ddlModelNameForFileUpolad = TryParseInt($("#DescriptionId option:selected").val(), 0);
+                var ddlSupplierNameForFileUpolad = TryParseInt($("#SupplierId option:selected").val(), 0);
+                var ddlBomItemForFileUpload = $("#BomItemId option:selected").val();
+                var bomType = $("#ddlBomType option:selected").val();
+                var formData = new FormData();
+                formData.append("DescriptionId", ddlModelNameForFileUpolad);
+                formData.append("SupplierId", ddlSupplierNameForFileUpolad);
+                formData.append("BomItemId", ddlBomItemForFileUpload);
+                formData.append("BomType", bomType);
+                formData.append("FileUpload", excelFile);
+                //return console.log(formData);
+                console.log(formData);
+                $.when(postReqWithFile(dataType.json, type.post, '/Inventory/UploadExcel', formData, getToken())).then(function (res, status) {
+                    console.log(res);
+                    console.log(status);
+                    if (res.isSuccess === true && status === 'success') {
+                        toastrSuccessAlert(execuStatus.successSave);
+                        $("#modalExcelImport").modal("toggle").toggle("fast");
+                        if (res.text != '' && res.text != null) {
+                            toastr.info(res.text).fadeOut(10000);
+                        }
+                        //removeTableRow("#tblWarehouseStockInfo tbody", index);
+                        setTimeout(function () {
+                            LoadDataTable();
+                            @* redirectPage('@Url.Action("GetWarehouseStockInfoList")');*@
+                    }, 1500);
+                        enable("#btnExcelSubmit");
+                    }
+
+                    else {
+                        toastrErrorAlert(execuStatus.fail);
+                        enable("#btnExcelSubmit");
+                        if (res.text != '' && res.text != null) {
+                            toastr.info(res.text).fadeOut(10000);
+                        }
+                    }
+                }).fail(function (error) {
+                    consoleLog(error);
+                    enable("#btnExcelSubmit");
+                })    
+            }
+        })
+        //#endregion
+
+        // Pagination
+
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).hasClass('current-page')) {
+                //alert('Warehouse');
+                if ($(this).parent().parents('div').hasClass('warehouseStock')) {
+                    pageNo = $(this).attr('data-page-no');
+                    LoadDataTable();
+                }
+                else if ($(this).parent().parents('div').hasClass('IQCItemReturnInfoForWarehouse')) {
+                    pageNo = $(this).attr('data-page-no');
+                    LoadDataTableForIQCReturn();
+                }
+                else if ($(this).parent().parents('div').hasClass('IQCReqPage')) {
+                    pageNo = $(this).attr('data-page-no');
+                    LoadDataTableForIQCReq();
+                }
+                else if ($(this).parent().parents('div').hasClass('handSetStock')) {
+                    pageNo = $(this).attr('data-page-no');
+                    LoadMobileStockDataTable();
+                }
+            }
+        })
+
+        //#region Stock Return List
+        txtReturnCode.keyup(function () {
+            LoadDataTableStockReturn();
+        })
+
+        ddlReturnStateStatus.change(function () {
+            LoadDataTableStockReturn();
+        })
+
+        function LoadDataTableStockReturn() {
+            $("#loader2").removeClass("hide");
+            var data = { flag: "StockReturnList", returnCode: txtReturnCode.val(), status: ddlReturnStateStatus.val() };
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetWarehouseStockInfoList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer2").fadeOut('500', function () {
+                        $("#dataContainer2").empty();
+                        $("#dataContainer2").append(res).fadeIn('500');
+                        $(".flag").addClass('hide');
+                    });
+                }
+                $("#loader2").addClass("hide");
+            }).fail(function (error) {
+                console.log(error);
+                $("#loader2").addClass("hide");
+                });
+            pageNo = 1;
+        }
+
+        // Stock Return Detail //
+        $(document).on('click', '.data-item-return', function (e) {
+            e.preventDefault();
+            var id = $(this).attr("data-item-val");
+            var index = $(this).parent().parents('tr').index();
+            if (TryParseInt(id, 0) > 0) {
+                $("#modalDataContainer3").empty();
+                var data = { returnId: TryParseInt(id, 0) };
+                $.when(getReqWithData('html', 'GET', '/Inventory/GetStockReturnItemsDetail', data)).then(function (res, status) {
+                    console.log(status);
+                    if (status === "success") {
+                        hdfInfoId.val(id);
+                        hdfRowIndex.val(index);
+                        $("#modalDataContainer3").append(res);
+                        $("#returnDetail").modal("show");
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+
+                });
+            }
+        })
+
+        $(document).on('click', '.btnReceiveReturnStock', function (e) {
+            e.preventDefault();
+            var id = TryParseInt(hdfInfoId.val(), 0);
+            if (id > 0) {
+                disable(".btnReceiveReturnStock");
+                var data = JSON.stringify({ returnId: id, status: "Received" });
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/SaveStockReturnStatus', data, getToken())).then(function (res, status) {
+                    if (res == true) {
+                        $("#returnDetail").modal("toggle").toggle("fast");
+                        fnRemoveARowFromTbody(".tblStockReturnList", hdfRowIndex.val());
+                        toastrSuccessAlert("Return Stock has been received");
+                        setTimeout(function () {
+                            LoadDataTableStockReturn();
+                            LoadDataTable();
+                        }, 1000);
+
+                    }
+                    enable(".btnReceiveReturnStock");
+                }).fail(function (error) {
+                    console.log(error);
+                    toastrErrorAlert(execuStatus.fail);
+                    enable(".btnReceiveReturnStock");
+                })
+            }
+        })
+        //#endregion
+
+        //#region IQC Request List //
+        function OpenModal() {
+            $("#modelDataContainer").empty();
+            hdfInfoId.val('0');
+            hdfRowIndex.val("");
+            $("#modalIQCReqDetails").modal("show");
+        }
+
+        $(document).on("click", ".data-details", function (e) {
+            e.preventDefault();
+            var id = $(this).attr("data-details");
+            var data = {
+                reqInfoId: TryParseInt(id, 0)
+            };
+            var idx = $(this).parent().parents('tr').index();
+            console.log(data);
+            //return;
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetIQCItemReqDetailList', data)).then(function (res, status) {
+                if (status == "success") {
+                    OpenModal();
+                    hdfInfoId.val(data.reqInfoId);
+                    hdfRowIndex.val(idx);
+                    $("#modelContainer1").empty();
+                    $("#modelContainer1").append(res);
+                    $(".btnReacive").addClass('hide');
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        })
+
+        ddlWarehouseForIQCReq.change(function () {
+            LoadDataTableForIQCReq();
+        })
+
+        ddlModelNameForIQCReq.change(function () {
+            LoadDataTableForIQCReq();
+        })
+
+        ddlStateStatus.change(function () {
+            LoadDataTableForIQCReq();
+        })
+
+        function LoadDataTableForIQCReq() {
+            $("#loader3").removeClass("hide");
+            var data = { WarehouseId: TryParseInt(ddlWarehouseForIQCReq.val(), 0), modelId: TryParseInt(ddlModelNameForIQCReq.val(), 0), /*ItemTypeId: TryParseInt(ddlItemType.val(), 0), ItemId: TryParseInt(ddlItem.val(), 0), lessOrEq: txtLessOrEq.val(),*/stateStatus: ddlStateStatus.val(), page: pageNo };
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetIQCReqInfoListForWarehouse', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer3").fadeOut('500', function () {
+                        $("#dataContainer3").empty();
+                        $("#dataContainer3").append(res).fadeIn('500');
+                    });
+
+                }
+                $("#loader3").addClass("hide");
+            }).fail(function (error) {
+                console.log(error);
+                $("#loader3").addClass("hide");
+            });
+            pageNo = 1;
+        }
+
+        $("#btnResetForIQCReq").click(function (e) {
+            e.preventDefault();
+            ddlItem.val('');
+            ddlItem.trigger("change");
+            ddlWarehouseForIQCReq.val("");
+            ddlWarehouseForIQCReq.trigger("change");
+            ddlModelNameForIQCReq.val('');
+            ddlModelNameForIQCReq.trigger("change");
+            ddlStateStatus.val('');
+            ddlStateStatus.trigger("change");
+            $("#tblIQCReq tbody").empty();
+        })
+        //#endregion
+
+        //#region IQC Return List //
+        ddlWarehouseForIQCReturn.change(function () {
+
+            LoadDataTableForIQCReturn();
+        })
+
+        ddlModelNameForIQCReturn.change(function () {
+            LoadDataTableForIQCReturn();
+        })
+
+        ddlStateStatusForIQCReturn.change(function () { LoadDataTableForIQCReturn(); })
+
+        function LoadDataTableForIQCReturn() {
+            $("#loader4").removeClass("hide");
+            var data = { WarehouseId: TryParseInt(ddlWarehouseForIQCReturn.val(), 0), modelId: TryParseInt(ddlModelNameForIQCReturn.val(), 0), stateStatus: ddlStateStatusForIQCReturn.val(), page: pageNo };
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetIQCReturnDataInfoListForWarehouse', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer4").fadeOut('500', function () {
+                        $("#dataContainer4").empty();
+                        $("#dataContainer4").append(res).fadeIn('500');
+                    });
+                }
+                $("#loader4").addClass("hide");
+            }).fail(function (error) {
+                console.log(error);
+                $("#loader4").addClass("hide");
+            });
+            pageNo = 1;
+        }
+
+        $("#btnResetForIQCReturn").click(function (e) {
+            e.preventDefault();
+            ddlItem.val('');
+            ddlItem.trigger("change");
+            ddlWarehouseForIQCReturn.val("");
+            ddlWarehouseForIQCReturn.trigger("change");
+            ddlModelNameForIQCReturn.val('');
+            ddlModelNameForIQCReturn.trigger("change");
+            ddlStateStatusForIQCReturn.val('');
+            ddlStateStatusForIQCReturn.trigger("change");
+            $("#tblIQCItemReqInfoData tbody").empty();
+        })
+
+        $(document).on('click', ".btnReacive-Return", function (e) {
+            e.preventDefault();
+            fnIQCStockChange(hdfInfoId.val(), hdfRowIndex.val(), reqStatus.receive_return);
+        })
+
+        //#endregion
+
+        function fnIQCStockChange(id, index, status) {
+            if (id > 0) {
+                var data = JSON.stringify({ reqId: id, status: status });
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Inventory/SaveWarehouseStockInByIQCReturn', data, getToken())).then(function (res, status) {
+                    if (status == "success" && res === true) {
+                        toastrSuccessAlert(execuStatus.successSave);
+                        $("#modalIQCReqDetails").modal("toggle").toggle("fast");
+                        hdfInfoId.val('0');
+                        hdfRowIndex.val("");
+                        removeTableRow("#tblIQCItemReqInfoData tbody", index);
+                        setTimeout(function () {
+                            LoadDataTableForIQCReturn();
+                            //redirectPage('@Url.Action("GetWarehouseStockInfoList",new {tab="IQCReturn" })');
+                        }, 1500);
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                    $(".toastrDefaultError").trigger('click');
+                })
+            }
+        }
+
+        //#region Receive Finish Goods
+        ddlWarehouseForReceiveFinishGoods.change(function () {
+            LoadReceiveFinishGoodsDataTable();
+        })
+
+        ddlModelNameForReceiveFinishGoods.change(function () {
+            LoadReceiveFinishGoodsDataTable();
+        })
+
+        ddlReceiveFinishGoodsStatus.change(function () {
+            LoadReceiveFinishGoodsDataTable();
+        })
+
+        dptFromDateReceiveFinishGoods.change(function () {
+            LoadReceiveFinishGoodsDataTable();
+        })
+
+        dptToDateReceiveFinishGoods.change(function () {
+            LoadReceiveFinishGoodsDataTable();
+        })
+
+        $(document).on('click', 'div.remove-rfg-date', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDateReceiveFinishGoods.val() !== '') {
+                    dptToDateReceiveFinishGoods.val('');
+                    LoadReceiveFinishGoodsDataTable();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDateReceiveFinishGoods.val() !== '') {
+                    dptFromDateReceiveFinishGoods.val('');
+                    LoadReceiveFinishGoodsDataTable();
+                }
+            }
+        })
+
+        function LoadReceiveFinishGoodsDataTable() {
+            $("#loader5").removeClass("hide");
+            var data = { flag: "receivefinishGoods", warehouseId: TryParseInt(ddlWarehouseForReceiveFinishGoods.val(), 0), modelId: TryParseInt(ddlModelNameForReceiveFinishGoods.val(), 0), itemTypeId: 0, itemId: 0,fromDate:dptFromDateReceiveFinishGoods.val(),toDate:dptToDateReceiveFinishGoods.val(), page: pageNo };
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetWarehouseStockInfoList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer5").fadeOut('500', function () {
+                        $("#dataContainer5").empty();
+                        $("#dataContainer5").append(res).fadeIn('500');
+
+                    });
+                }
+                $("#loader5").addClass("hide");
+            }).fail(function (error) {
+                console.log(error);
+                $("#loader5").addClass("hide");
+            });
+            pageNo = 1;
+        }
+
+        function OpenFinishGoodsModal() {
+            $("#modalSendDetails").modal('show');
+            enable(".btnSubmitFinishGoods");
+            hdfSendInfoId.val('0')
+            hdfRowIndex.val('');
+        }
+
+        $(document).on('click', '.data-finishgoods-item', function (e) {
+            e.preventDefault();
+            var id = $(this).attr('data-finishgoods-item');
+            if (TryParseInt(id, 0) > 0) {
+                $.when(getReqWithData(dataType.html, type.get, '/Inventory/GetFinishGoodsSendItemDetail', { sendId: id })).then(function (res, status) {
+                    if (status === 'success') {
+                        $("#modalContainer4").empty();
+                        $("#modalContainer4").append(res);
+                        OpenFinishGoodsModal();
+                        hdfSendInfoId.val(id);
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                })
+            }
+        })
+
+        //btnSubmitFinishGoods
+        $(document).on('click', '.btnSubmitFinishGoods', function (e) {
+            e.preventDefault();
+            console.log('Submit');
+            if (TryParseInt(hdfSendInfoId.val(), 0) > 0) {
+                bootbox.confirm("Are you sure you want to Receive goods?", function (result) {
+                    if (result === true) {
+                        disable(".btnSubmitFinishGoods");
+                        var id = TryParseInt(hdfSendInfoId.val(), 0);
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/SaveFinishGoodsItems', JSON.stringify({ sendId: id }), getToken())).then(function (res, status) {
+                            if (res === true && status === 'success') {
+                                toastrSuccessAlert(execuStatus.successSave);
+                                $("#modalSendDetails").modal('toggle');
+                                LoadReceiveFinishGoodsDataTable();
+                            }
+                            else {
+                                toastrErrorAlert(execuStatus.fail);
+                            }
+                            enable(".btnSubmitFinishGoods");
+                        }).fail(function (error) {
+                            toastrErrorAlert(execuStatus.fail);
+                            enable(".btnSubmitFinishGoods");
+                        })
+                        
+                    }
+                })
+            }
+        })
+        //#endregion
+
+        //#region Mobile Stock
+        $(document).on('click', 'div.remove-ms-date', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDateMobileStock.val() !== '') {
+                    dptToDateMobileStock.val('');
+                    LoadMobileStockDataTable();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDateMobileStock.val() !== '') {
+                    dptFromDateMobileStock.val('');
+                    LoadMobileStockDataTable();
+                }
+            }
+        })
+        ddlCategoriesForMobileStock.change(function () {
+            LoadMobileStockDataTable();
+        })
+
+        ddlBrandsForMobileStock.change(function () {
+            clearDropdown("ddlModelsForMobileStock");
+            if (TryParseInt(ddlBrandsForMobileStock.val(),0) >0) {
+                var data = JSON.stringify({ brandId: ddlBrandsForMobileStock.val()});
+                LoadDropDown("/Common/GetModelsByBrand", type.post, ddlModelsForMobileStock, data);
+            }
+            LoadMobileStockDataTable();
+        })
+
+        ddlModelsForMobileStock.change(function () {
+            LoadMobileStockDataTable();
+        })
+
+        ddlColorsForMobileStock.change(function () {
+            LoadMobileStockDataTable();
+        })
+
+        txtIMEIForMobileStock.keyup(function () {
+            LoadMobileStockDataTable();
+        })
+
+        ddlStatusMobileStock.change(function () {
+            LoadMobileStockDataTable();
+        })
+
+        dptFromDateMobileStock.change(function () {
+            LoadMobileStockDataTable();
+        })
+
+        dptToDateMobileStock.change(function () {
+            LoadMobileStockDataTable();
+        })
+
+        txtCartoonForMobileStock.keyup(function () {
+            LoadMobileStockDataTable();
+        })
+
+        function LoadMobileStockDataTable() {
+            $("#loader6").removeClass("hide");
+            var data = { flag: "handsetStock", categoryId: TryParseInt(ddlCategoriesForMobileStock.val(), 0), brandId: TryParseInt(ddlBrandsForMobileStock.val(), 0), modelId: TryParseInt(ddlModelsForMobileStock.val(), 0), colorId: TryParseInt(ddlColorsForMobileStock.val(), 0),warehouseId:0,itemTypeId:0,itemId:0,status:ddlStatusMobileStock.val(),imei:$.trim(txtIMEIForMobileStock.val()),fromDate:dptFromDateMobileStock.val(),toDate:dptToDateMobileStock.val(),cartoonNo:$.trim(txtCartoonForMobileStock.val())};
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetWarehouseStockInfoList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer6").fadeOut('500', function () {
+                        $("#dataContainer6").empty();
+                        $("#dataContainer6").append(res).fadeIn('500');
+                    });
+                }
+                $("#loader6").addClass("hide");
+            }).fail(function (error) {
+                console.log(error);
+                $("#loader6").addClass("hide");
+            });
+            pageNo = 1;
+        }
+
+        //#endregion
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>
+}

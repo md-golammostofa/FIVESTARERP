@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ERPBO.Configuration.ViewModels.MobilePartViewModel>
+@{ 
+    var pagerData = (ERPWeb.Infrastructure.PagerData)ViewBag.PagerData;
+    int sl = pagerData.Serial;
+}
+<div class="row">
+    <div class="col-md-12 text-sm">
+        <table class="table table-bordered table-sm table-striped" id="tblMobilePartData">
+            <thead class="btn-dark">
+                <tr class="text-center">
+                    <th>#SL</th>
+                    <th class="hide"></th>
+                    <th>Parts Name</th>
+                    <th>Parts Code</th>
+                    <th>Remarks</th>
+                    <th>Entry Date</th>
+                    <th>Entry User</th>
+                    <th class="hide">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var part in Model)
+                {
+                    sl = sl + 1;
+                    string entryDate = part.EntryDate != null ? part.EntryDate.Value.ToString("dd-MMM-yyy") : "";
+                    <tr>
+                        <td class="text-center" width="10%">@sl</td>
+                        <td class="hide">@part.MobilePartId</td>
+                        <td>@part.MobilePartName</td>
+                        <td class="text-center">@part.MobilePartCode</td>
+                        <td class="text-center">@part.Remarks</td>
+                        <td>@entryDate</td>
+                        <td>@part.EntryUser</td>
+                        <td class="text-center hide">
+                            <a href="#" class="btn btn-outline-warning btn-sm data-edit-parts" title="Edit" data-edit-parts="@part.MobilePartId"><i class="fas fa-pencil-alt"></i> </a>
+                            <a href="#" class="btn btn-outline-danger btn-sm data-del-parts" title="Delete" data-del-parts="@part.MobilePartId"><i class="far fa-trash-alt"></i> </a>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="text-center empty-row">
+                        <td colspan="5">
+                            No Rows Found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-md-12 parts">
+    @Html.Partial("_Pagination", pagerData)
+</div>

@@ -1,0 +1,1634 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C075DEF3-A65B-4B86-90FA-DD698B139DB4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ERPDAL</RootNamespace>
+    <AssemblyName>ERPDAL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountsContextMigrations\202011110603211_Accounts_tblAccountsHead.cs" />
+    <Compile Include="AccountsContextMigrations\202011110603211_Accounts_tblAccountsHead.Designer.cs">
+      <DependentUpon>202011110603211_Accounts_tblAccountsHead.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\202011140845420_Accounts_AccountsHead3ColumnAdd.cs" />
+    <Compile Include="AccountsContextMigrations\202011140845420_Accounts_AccountsHead3ColumnAdd.Designer.cs">
+      <DependentUpon>202011140845420_Accounts_AccountsHead3ColumnAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\202011150512136_Accounts_tblJournal.cs" />
+    <Compile Include="AccountsContextMigrations\202011150512136_Accounts_tblJournal.Designer.cs">
+      <DependentUpon>202011150512136_Accounts_tblJournal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\202011151035336_Accounts_JournalDate.cs" />
+    <Compile Include="AccountsContextMigrations\202011151035336_Accounts_JournalDate.Designer.cs">
+      <DependentUpon>202011151035336_Accounts_JournalDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\202011210557038_Accounts_tblFinance.cs" />
+    <Compile Include="AccountsContextMigrations\202011210557038_Accounts_tblFinance.Designer.cs">
+      <DependentUpon>202011210557038_Accounts_tblFinance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\202011211137295_Accounts_tblFinanceYear.cs" />
+    <Compile Include="AccountsContextMigrations\202011211137295_Accounts_tblFinanceYear.Designer.cs">
+      <DependentUpon>202011211137295_Accounts_tblFinanceYear.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\202101280508536_Accounts_JournalNewColumnAdd.cs" />
+    <Compile Include="AccountsContextMigrations\202101280508536_Accounts_JournalNewColumnAdd.Designer.cs">
+      <DependentUpon>202101280508536_Accounts_JournalNewColumnAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\202101300750285_Accounts_ChequeBook.cs" />
+    <Compile Include="AccountsContextMigrations\202101300750285_Accounts_ChequeBook.Designer.cs">
+      <DependentUpon>202101300750285_Accounts_ChequeBook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\202101301225558_Accounts_Supplier&amp;Customers.cs" />
+    <Compile Include="AccountsContextMigrations\202101301225558_Accounts_Supplier&amp;Customers.Designer.cs">
+      <DependentUpon>202101301225558_Accounts_Supplier&amp;Customers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\202102010949473_Accounts_Account_CusandSuppAdd.cs" />
+    <Compile Include="AccountsContextMigrations\202102010949473_Accounts_Account_CusandSuppAdd.Designer.cs">
+      <DependentUpon>202102010949473_Accounts_Account_CusandSuppAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountsContextMigrations\Configuration.cs" />
+    <Compile Include="AccountsDAL\AccountsBaseRepository.cs" />
+    <Compile Include="AccountsDAL\AccountsDbContext.cs" />
+    <Compile Include="AccountsDAL\AccountsRepository.cs" />
+    <Compile Include="AccountsDAL\AccountsUnitOfWork.cs" />
+    <Compile Include="AccountsDAL\IAccountsUnitOfWork.cs" />
+    <Compile Include="ConfigurationContextMigrations\202005310415074_Configuration_DbInitialize.cs" />
+    <Compile Include="ConfigurationContextMigrations\202005310415074_Configuration_DbInitialize.Designer.cs">
+      <DependentUpon>202005310415074_Configuration_DbInitialize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202005310714228_Configuration_Changes.cs" />
+    <Compile Include="ConfigurationContextMigrations\202005310714228_Configuration_Changes.Designer.cs">
+      <DependentUpon>202005310714228_Configuration_Changes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006011340398_Configuration_DbtblCustomer.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006011340398_Configuration_DbtblCustomer.Designer.cs">
+      <DependentUpon>202006011340398_Configuration_DbtblCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006020530382_Configuration_DbtblTS.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006020530382_Configuration_DbtblTS.Designer.cs">
+      <DependentUpon>202006020530382_Configuration_DbtblTS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006020813036_Configuration_DbtblCS.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006020813036_Configuration_DbtblCS.Designer.cs">
+      <DependentUpon>202006020813036_Configuration_DbtblCS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006031001288_Configuration_DbtblServicesWarehouse.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006031001288_Configuration_DbtblServicesWarehouse.Designer.cs">
+      <DependentUpon>202006031001288_Configuration_DbtblServicesWarehouse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006040757239_Configuration_DbtblmobilePartStockInfo&amp;Detail.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006040757239_Configuration_DbtblmobilePartStockInfo&amp;Detail.Designer.cs">
+      <DependentUpon>202006040757239_Configuration_DbtblmobilePartStockInfo&amp;Detail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006080719517_Configuration_AddNewColumn.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006080719517_Configuration_AddNewColumn.Designer.cs">
+      <DependentUpon>202006080719517_Configuration_AddNewColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006080821407_Configuration_AddNColumn.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006080821407_Configuration_AddNColumn.Designer.cs">
+      <DependentUpon>202006080821407_Configuration_AddNColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006090618395_Configuration_DbAddTSTableColum.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006090618395_Configuration_DbAddTSTableColum.Designer.cs">
+      <DependentUpon>202006090618395_Configuration_DbAddTSTableColum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006101141523_Configuration_tblBranchAdd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006101141523_Configuration_tblBranchAdd.Designer.cs">
+      <DependentUpon>202006101141523_Configuration_tblBranchAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006130759207_Configuration_DbBranch.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006130759207_Configuration_DbBranch.Designer.cs">
+      <DependentUpon>202006130759207_Configuration_DbBranch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006140400238_Configuration_DbTransferInfo&amp;Details.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006140400238_Configuration_DbTransferInfo&amp;Details.Designer.cs">
+      <DependentUpon>202006140400238_Configuration_DbTransferInfo&amp;Details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006151329341_Configuration_DbnewColumnadd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006151329341_Configuration_DbnewColumnadd.designer.cs">
+      <DependentUpon>202006151329341_Configuration_DbnewColumnadd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006160532385_Configuration_DbnewColumnadd1.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006160532385_Configuration_DbnewColumnadd1.designer.cs">
+      <DependentUpon>202006160532385_Configuration_DbnewColumnadd1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006160538357_Configuration_RefNumStockDetail.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006160538357_Configuration_RefNumStockDetail.designer.cs">
+      <DependentUpon>202006160538357_Configuration_RefNumStockDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006220505196_Configuration_DbCostPriceAdd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006220505196_Configuration_DbCostPriceAdd.Designer.cs">
+      <DependentUpon>202006220505196_Configuration_DbCostPriceAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006220911484_Configuration_DbStockTransferCostPriceAdd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006220911484_Configuration_DbStockTransferCostPriceAdd.Designer.cs">
+      <DependentUpon>202006220911484_Configuration_DbStockTransferCostPriceAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006221650580_Configuration_DbStockTransferSellPriceAdd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006221650580_Configuration_DbStockTransferSellPriceAdd.Designer.cs">
+      <DependentUpon>202006221650580_Configuration_DbStockTransferSellPriceAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006230453271_Configuration_DbStockTransferSPrice&amp;CpriceAdd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006230453271_Configuration_DbStockTransferSPrice&amp;CpriceAdd.Designer.cs">
+      <DependentUpon>202006230453271_Configuration_DbStockTransferSPrice&amp;CpriceAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202006281203574_Configuration_DbCustomer&amp;TSBranchAdd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202006281203574_Configuration_DbCustomer&amp;TSBranchAdd.Designer.cs">
+      <DependentUpon>202006281203574_Configuration_DbCustomer&amp;TSBranchAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202007040639272_Configuration_tblFault&amp;ServiceAdd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202007040639272_Configuration_tblFault&amp;ServiceAdd.Designer.cs">
+      <DependentUpon>202007040639272_Configuration_tblFault&amp;ServiceAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202007050554097_Configuration_Repair.cs" />
+    <Compile Include="ConfigurationContextMigrations\202007050554097_Configuration_Repair.Designer.cs">
+      <DependentUpon>202007050554097_Configuration_Repair.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202007250501546_Configuration_WorkShopadd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202007250501546_Configuration_WorkShopadd.Designer.cs">
+      <DependentUpon>202007250501546_Configuration_WorkShopadd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202011240851488_Configuration_AddModelInMobilePartsStock.cs" />
+    <Compile Include="ConfigurationContextMigrations\202011240851488_Configuration_AddModelInMobilePartsStock.Designer.cs">
+      <DependentUpon>202011240851488_Configuration_AddModelInMobilePartsStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202011261215003_Configuration_add_prop_in_TransferInfo_Detail.cs" />
+    <Compile Include="ConfigurationContextMigrations\202011261215003_Configuration_add_prop_in_TransferInfo_Detail.Designer.cs">
+      <DependentUpon>202011261215003_Configuration_add_prop_in_TransferInfo_Detail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202011301326370_Configuration_add_tblFaultyStockInfo_And_Details.cs" />
+    <Compile Include="ConfigurationContextMigrations\202011301326370_Configuration_add_tblFaultyStockInfo_And_Details.Designer.cs">
+      <DependentUpon>202011301326370_Configuration_add_tblFaultyStockInfo_And_Details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202012030432147_Configuration_add_tblHandsetStock.cs" />
+    <Compile Include="ConfigurationContextMigrations\202012030432147_Configuration_add_tblHandsetStock.Designer.cs">
+      <DependentUpon>202012030432147_Configuration_add_tblHandsetStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202012031057078_Configuration_add_tblMissingStock.cs" />
+    <Compile Include="ConfigurationContextMigrations\202012031057078_Configuration_add_tblMissingStock.Designer.cs">
+      <DependentUpon>202012031057078_Configuration_add_tblMissingStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202012051200428_Configuration_add_tblStockTransferModelToModel.cs" />
+    <Compile Include="ConfigurationContextMigrations\202012051200428_Configuration_add_tblStockTransferModelToModel.Designer.cs">
+      <DependentUpon>202012051200428_Configuration_add_tblStockTransferModelToModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202012070759040_Configuration_add_prop_tblMissingStock.cs" />
+    <Compile Include="ConfigurationContextMigrations\202012070759040_Configuration_add_prop_tblMissingStock.Designer.cs">
+      <DependentUpon>202012070759040_Configuration_add_prop_tblMissingStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202012080526248_Configuration_add_prop_tblHandset.cs" />
+    <Compile Include="ConfigurationContextMigrations\202012080526248_Configuration_add_prop_tblHandset.Designer.cs">
+      <DependentUpon>202012080526248_Configuration_add_prop_tblHandset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202012101245161_Configuration_tblScrap.cs" />
+    <Compile Include="ConfigurationContextMigrations\202012101245161_Configuration_tblScrap.Designer.cs">
+      <DependentUpon>202012101245161_Configuration_tblScrap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202101121213172_Configuration_Handsetstock_IMEI1.cs" />
+    <Compile Include="ConfigurationContextMigrations\202101121213172_Configuration_Handsetstock_IMEI1.Designer.cs">
+      <DependentUpon>202101121213172_Configuration_Handsetstock_IMEI1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202103131038098_Configuration_DealerSS.cs" />
+    <Compile Include="ConfigurationContextMigrations\202103131038098_Configuration_DealerSS.Designer.cs">
+      <DependentUpon>202103131038098_Configuration_DealerSS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202103140951575_Configuration_ColorSS_ModelSS_BrandSS.cs" />
+    <Compile Include="ConfigurationContextMigrations\202103140951575_Configuration_ColorSS_ModelSS_BrandSS.Designer.cs">
+      <DependentUpon>202103140951575_Configuration_ColorSS_ModelSS_BrandSS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202105311036369_Configuration_HandsetStock_Flag.cs" />
+    <Compile Include="ConfigurationContextMigrations\202105311036369_Configuration_HandsetStock_Flag.Designer.cs">
+      <DependentUpon>202105311036369_Configuration_HandsetStock_Flag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202108241214446_Configuration_IssueQty.cs" />
+    <Compile Include="ConfigurationContextMigrations\202108241214446_Configuration_IssueQty.Designer.cs">
+      <DependentUpon>202108241214446_Configuration_IssueQty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\Configuration.cs" />
+    <Compile Include="ConfigurationDAL\ConfigurationBaseRepository.cs" />
+    <Compile Include="ConfigurationDAL\ConfigurationDbContext.cs" />
+    <Compile Include="ConfigurationDAL\ConfigurationRepository.cs" />
+    <Compile Include="ConfigurationDAL\ConfigurationUnitOfWork.cs" />
+    <Compile Include="ConfigurationDAL\IConfigurationUnitOfWork.cs" />
+    <Compile Include="ControlPanelContextMigrations\202006151000333_ControlPanel_AllEntities_16-May-2020.cs" />
+    <Compile Include="ControlPanelContextMigrations\202006151000333_ControlPanel_AllEntities_16-May-2020.Designer.cs">
+      <DependentUpon>202006151000333_ControlPanel_AllEntities_16-May-2020.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlPanelContextMigrations\202008050953442_ControlPanel_BranchAddress.cs" />
+    <Compile Include="ControlPanelContextMigrations\202008050953442_ControlPanel_BranchAddress.designer.cs">
+      <DependentUpon>202008050953442_ControlPanel_BranchAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlPanelContextMigrations\Configuration.cs" />
+    <Compile Include="ControlPanelDAL\ControlPanelDbContext.cs" />
+    <Compile Include="ControlPanelDAL\ControlPanelRepository.cs" />
+    <Compile Include="ControlPanelDAL\IControlPanelUnitOfWork.cs" />
+    <Compile Include="ControlPanelDAL\ControlPanelBaseRepository.cs" />
+    <Compile Include="ControlPanelDAL\ControlPanelUnitOfWork.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006030537280_FrontDesk_DbInitialize.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006030537280_FrontDesk_DbInitialize.Designer.cs">
+      <DependentUpon>202006030537280_FrontDesk_DbInitialize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006051058296_FrontDesk_AddNewColumnsInJobOrder.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006051058296_FrontDesk_AddNewColumnsInJobOrder.Designer.cs">
+      <DependentUpon>202006051058296_FrontDesk_AddNewColumnsInJobOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006051150370_FrontDesk_JobOrderCode.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006051150370_FrontDesk_JobOrderCode.Designer.cs">
+      <DependentUpon>202006051150370_FrontDesk_JobOrderCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006081153588_FrontDesk_AddTSToJobOrder.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006081153588_FrontDesk_AddTSToJobOrder.Designer.cs">
+      <DependentUpon>202006081153588_FrontDesk_AddTSToJobOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006170405450_FrontDesk_DbInitialize_17_June.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006170405450_FrontDesk_DbInitialize_17_June.Designer.cs">
+      <DependentUpon>202006170405450_FrontDesk_DbInitialize_17_June.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006170444383_FrontDesk_DbInitialize_17_June_FK.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006170444383_FrontDesk_DbInitialize_17_June_FK.Designer.cs">
+      <DependentUpon>202006170444383_FrontDesk_DbInitialize_17_June_FK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006210354566_FrontDesk_DbTechnicalServicesStock.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006210354566_FrontDesk_DbTechnicalServicesStock.Designer.cs">
+      <DependentUpon>202006210354566_FrontDesk_DbTechnicalServicesStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006211035293_FrontDesk_dbtblJoborderBranchId.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006211035293_FrontDesk_dbtblJoborderBranchId.Designer.cs">
+      <DependentUpon>202006211035293_FrontDesk_dbtblJoborderBranchId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006230943023_FrontDesk_DbCost&amp;SellPriceAdd.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006230943023_FrontDesk_DbCost&amp;SellPriceAdd.Designer.cs">
+      <DependentUpon>202006230943023_FrontDesk_DbCost&amp;SellPriceAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006240935074_FrontDesk_DbCost&amp;SellPriceForTS.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006240935074_FrontDesk_DbCost&amp;SellPriceForTS.Designer.cs">
+      <DependentUpon>202006240935074_FrontDesk_DbCost&amp;SellPriceForTS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006261446396_FrontDesk_JobOrderTS.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006261446396_FrontDesk_JobOrderTS.Designer.cs">
+      <DependentUpon>202006261446396_FrontDesk_JobOrderTS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006270654074_FrontDesk_DbJobOrderIMEIAdd.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006270654074_FrontDesk_DbJobOrderIMEIAdd.Designer.cs">
+      <DependentUpon>202006270654074_FrontDesk_DbJobOrderIMEIAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006271347045_FrontDesk_DbIMEI.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006271347045_FrontDesk_DbIMEI.Designer.cs">
+      <DependentUpon>202006271347045_FrontDesk_DbIMEI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202006290629225_FrontDesk_DbIMEI2AndEndDate.cs" />
+    <Compile Include="FrontDeskContextMigrations\202006290629225_FrontDesk_DbIMEI2AndEndDate.Designer.cs">
+      <DependentUpon>202006290629225_FrontDesk_DbIMEI2AndEndDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007041355321_FrontDesk_JobFault&amp;JobServiceAdd.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007041355321_FrontDesk_JobFault&amp;JobServiceAdd.Designer.cs">
+      <DependentUpon>202007041355321_FrontDesk_JobFault&amp;JobServiceAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007050555160_FrontDesk_JobOrderRepair.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007050555160_FrontDesk_JobOrderRepair.Designer.cs">
+      <DependentUpon>202007050555160_FrontDesk_JobOrderRepair.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007071332271_FrontDesk_TSRemarksJobOrder_tbl.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007071332271_FrontDesk_TSRemarksJobOrder_tbl.Designer.cs">
+      <DependentUpon>202007071332271_FrontDesk_TSRemarksJobOrder_tbl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007100417348_FrontDesk_ServicesStockReqIdAdd.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007100417348_FrontDesk_ServicesStockReqIdAdd.Designer.cs">
+      <DependentUpon>202007100417348_FrontDesk_ServicesStockReqIdAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007110708148_FrontDesk_JobOrderTsStateStatus.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007110708148_FrontDesk_JobOrderTsStateStatus.Designer.cs">
+      <DependentUpon>202007110708148_FrontDesk_JobOrderTsStateStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007111043364_FrontDesk_TSStockTSId&amp;StatusAdd.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007111043364_FrontDesk_TSStockTSId&amp;StatusAdd.Designer.cs">
+      <DependentUpon>202007111043364_FrontDesk_TSStockTSId&amp;StatusAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007120932152_FrontDesk_TsStockInfo&amp;Details.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007120932152_FrontDesk_TsStockInfo&amp;Details.Designer.cs">
+      <DependentUpon>202007120932152_FrontDesk_TsStockInfo&amp;Details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007130354481_FrontDesk_TsStockInfo&amp;DetailsRename.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007130354481_FrontDesk_TsStockInfo&amp;DetailsRename.Designer.cs">
+      <DependentUpon>202007130354481_FrontDesk_TsStockInfo&amp;DetailsRename.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007140852355_FrontDesk_jobOrderTsRepairStatus.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007140852355_FrontDesk_jobOrderTsRepairStatus.Designer.cs">
+      <DependentUpon>202007140852355_FrontDesk_jobOrderTsRepairStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007210307586_FrontDesk_JobCloseDate&amp;CUserId.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007210307586_FrontDesk_JobCloseDate&amp;CUserId.Designer.cs">
+      <DependentUpon>202007210307586_FrontDesk_JobCloseDate&amp;CUserId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007280556107_FrontDesk_InvoiceInfoDetails.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007280556107_FrontDesk_InvoiceInfoDetails.designer.cs">
+      <DependentUpon>202007280556107_FrontDesk_InvoiceInfoDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007290401146_FrontDesk_PartsName.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007290401146_FrontDesk_PartsName.designer.cs">
+      <DependentUpon>202007290401146_FrontDesk_PartsName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202007300348439_FrontDesk_CustomerType.cs" />
+    <Compile Include="FrontDeskContextMigrations\202007300348439_FrontDesk_CustomerType.designer.cs">
+      <DependentUpon>202007300348439_FrontDesk_CustomerType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202008101006208_FrontDesk_CourierAndApproxBill.cs" />
+    <Compile Include="FrontDeskContextMigrations\202008101006208_FrontDesk_CourierAndApproxBill.designer.cs">
+      <DependentUpon>202008101006208_FrontDesk_CourierAndApproxBill.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202008170933383_FrontDesk_JobTransferId.cs" />
+    <Compile Include="FrontDeskContextMigrations\202008170933383_FrontDesk_JobTransferId.Designer.cs">
+      <DependentUpon>202008170933383_FrontDesk_JobTransferId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202008170942350_FrontDesk_JobTransferBranchId.cs" />
+    <Compile Include="FrontDeskContextMigrations\202008170942350_FrontDesk_JobTransferBranchId.Designer.cs">
+      <DependentUpon>202008170942350_FrontDesk_JobTransferBranchId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202008230540117_FrontDesk_JobTransferDetail.cs" />
+    <Compile Include="FrontDeskContextMigrations\202008230540117_FrontDesk_JobTransferDetail.Designer.cs">
+      <DependentUpon>202008230540117_FrontDesk_JobTransferDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202008240517283_FrontDesk_RequsitionUserBranchId.cs" />
+    <Compile Include="FrontDeskContextMigrations\202008240517283_FrontDesk_RequsitionUserBranchId.Designer.cs">
+      <DependentUpon>202008240517283_FrontDesk_RequsitionUserBranchId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202008250346200_FrontDesk_JobOrderReturnDetail.cs" />
+    <Compile Include="FrontDeskContextMigrations\202008250346200_FrontDesk_JobOrderReturnDetail.Designer.cs">
+      <DependentUpon>202008250346200_FrontDesk_JobOrderReturnDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202008250811266_FrontDesk_JobOrder_IsReturn.cs" />
+    <Compile Include="FrontDeskContextMigrations\202008250811266_FrontDesk_JobOrder_IsReturn.Designer.cs">
+      <DependentUpon>202008250811266_FrontDesk_JobOrder_IsReturn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202010030940034_FrontDesk_InvoicetblColumnAdd.cs" />
+    <Compile Include="FrontDeskContextMigrations\202010030940034_FrontDesk_InvoicetblColumnAdd.Designer.cs">
+      <DependentUpon>202010030940034_FrontDesk_InvoicetblColumnAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202010040625137_FrontDesk_Column_InvoiceType.cs" />
+    <Compile Include="FrontDeskContextMigrations\202010040625137_FrontDesk_Column_InvoiceType.Designer.cs">
+      <DependentUpon>202010040625137_FrontDesk_Column_InvoiceType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202010111055005_FrontDesk_JobTransfer&amp;Return_Column_add.cs" />
+    <Compile Include="FrontDeskContextMigrations\202010111055005_FrontDesk_JobTransfer&amp;Return_Column_add.Designer.cs">
+      <DependentUpon>202010111055005_FrontDesk_JobTransfer&amp;Return_Column_add.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202010190548241_FrontDesk_JobLocation.cs" />
+    <Compile Include="FrontDeskContextMigrations\202010190548241_FrontDesk_JobLocation.Designer.cs">
+      <DependentUpon>202010190548241_FrontDesk_JobLocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202011090622355_FrontDesk_IsHandset_Columnadd.cs" />
+    <Compile Include="FrontDeskContextMigrations\202011090622355_FrontDesk_IsHandset_Columnadd.designer.cs">
+      <DependentUpon>202011090622355_FrontDesk_IsHandset_Columnadd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202012081024414_FrontDesk_add_prop_tblInvoiceDetail.cs" />
+    <Compile Include="FrontDeskContextMigrations\202012081024414_FrontDesk_add_prop_tblInvoiceDetail.Designer.cs">
+      <DependentUpon>202012081024414_FrontDesk_add_prop_tblInvoiceDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202012081117380_FrontDesk_edit_dataType_tblInvoiceDetail.cs" />
+    <Compile Include="FrontDeskContextMigrations\202012081117380_FrontDesk_edit_dataType_tblInvoiceDetail.Designer.cs">
+      <DependentUpon>202012081117380_FrontDesk_edit_dataType_tblInvoiceDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202012091102003_FrontDesk_add_tblFaultyStockAssignTS.cs" />
+    <Compile Include="FrontDeskContextMigrations\202012091102003_FrontDesk_add_tblFaultyStockAssignTS.Designer.cs">
+      <DependentUpon>202012091102003_FrontDesk_add_tblFaultyStockAssignTS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202012100730546_FrontDesk_add_prop_tblFaultyStockAssignTS.cs" />
+    <Compile Include="FrontDeskContextMigrations\202012100730546_FrontDesk_add_prop_tblFaultyStockAssignTS.Designer.cs">
+      <DependentUpon>202012100730546_FrontDesk_add_prop_tblFaultyStockAssignTS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202012270815534_FrontDesk_TSStockModelId.cs" />
+    <Compile Include="FrontDeskContextMigrations\202012270815534_FrontDesk_TSStockModelId.Designer.cs">
+      <DependentUpon>202012270815534_FrontDesk_TSStockModelId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202012270911021_FrontDesk_TSStockModelId_.cs" />
+    <Compile Include="FrontDeskContextMigrations\202012270911021_FrontDesk_TSStockModelId_.Designer.cs">
+      <DependentUpon>202012270911021_FrontDesk_TSStockModelId_.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202012270954243_FrontDesk_ReturnStock_ModelId.cs" />
+    <Compile Include="FrontDeskContextMigrations\202012270954243_FrontDesk_ReturnStock_ModelId.Designer.cs">
+      <DependentUpon>202012270954243_FrontDesk_ReturnStock_ModelId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202012280644223_FrontDesk_InvoiceInfo&amp;Details_ModelId.cs" />
+    <Compile Include="FrontDeskContextMigrations\202012280644223_FrontDesk_InvoiceInfo&amp;Details_ModelId.Designer.cs">
+      <DependentUpon>202012280644223_FrontDesk_InvoiceInfo&amp;Details_ModelId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202012300628165_FrontDesk_HandsetChangeTrace.cs" />
+    <Compile Include="FrontDeskContextMigrations\202012300628165_FrontDesk_HandsetChangeTrace.Designer.cs">
+      <DependentUpon>202012300628165_FrontDesk_HandsetChangeTrace.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202101021000515_FrontDesk_CallCenterRemarks&amp;CustomerApproval.cs" />
+    <Compile Include="FrontDeskContextMigrations\202101021000515_FrontDesk_CallCenterRemarks&amp;CustomerApproval.Designer.cs">
+      <DependentUpon>202101021000515_FrontDesk_CallCenterRemarks&amp;CustomerApproval.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202101040931394_FrontDesk_QCStatusAndQCRemarks.cs" />
+    <Compile Include="FrontDeskContextMigrations\202101040931394_FrontDesk_QCStatusAndQCRemarks.Designer.cs">
+      <DependentUpon>202101040931394_FrontDesk_QCStatusAndQCRemarks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202101070652509_FrontDesk_MultipleJobDelivey.cs" />
+    <Compile Include="FrontDeskContextMigrations\202101070652509_FrontDesk_MultipleJobDelivey.Designer.cs">
+      <DependentUpon>202101070652509_FrontDesk_MultipleJobDelivey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202102070515371_FrontDesk_QCTransferStatus.cs" />
+    <Compile Include="FrontDeskContextMigrations\202102070515371_FrontDesk_QCTransferStatus.Designer.cs">
+      <DependentUpon>202102070515371_FrontDesk_QCTransferStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202103290601365_FrontDesk_NewColumn.cs" />
+    <Compile Include="FrontDeskContextMigrations\202103290601365_FrontDesk_NewColumn.Designer.cs">
+      <DependentUpon>202103290601365_FrontDesk_NewColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202103310913128_FrontDesk_JobOrderCustomerSupport.cs" />
+    <Compile Include="FrontDeskContextMigrations\202103310913128_FrontDesk_JobOrderCustomerSupport.Designer.cs">
+      <DependentUpon>202103310913128_FrontDesk_JobOrderCustomerSupport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202103311121513_FrontDesk_JobOrderCustomerSupportTypeChange.cs" />
+    <Compile Include="FrontDeskContextMigrations\202103311121513_FrontDesk_JobOrderCustomerSupportTypeChange.Designer.cs">
+      <DependentUpon>202103311121513_FrontDesk_JobOrderCustomerSupportTypeChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202104050629469_FrontDesk_JobOrderMultipleCode.cs" />
+    <Compile Include="FrontDeskContextMigrations\202104050629469_FrontDesk_JobOrderMultipleCode.Designer.cs">
+      <DependentUpon>202104050629469_FrontDesk_JobOrderMultipleCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202105270833075_FrontDesk_QCPassFailDate.cs" />
+    <Compile Include="FrontDeskContextMigrations\202105270833075_FrontDesk_QCPassFailDate.Designer.cs">
+      <DependentUpon>202105270833075_FrontDesk_QCPassFailDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202109050525176_FrontDesk_ProbalyDate.cs" />
+    <Compile Include="FrontDeskContextMigrations\202109050525176_FrontDesk_ProbalyDate.Designer.cs">
+      <DependentUpon>202109050525176_FrontDesk_ProbalyDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\Configuration.cs" />
+    <Compile Include="FrontDeskDAL\FrontDeskDbContext.cs" />
+    <Compile Include="FrontDeskDAL\FrontDeskRepository.cs" />
+    <Compile Include="FrontDeskDAL\FrontDeskUnitOfWork.cs" />
+    <Compile Include="FrontDeskDAL\FrontDeskBaseRepository.cs" />
+    <Compile Include="FrontDeskDAL\IFrontDeskUnitOfWork.cs" />
+    <Compile Include="InventoryContextMigrations\202008121414323_Inventory_AllEntities_12-Aug-2020.cs" />
+    <Compile Include="InventoryContextMigrations\202008121414323_Inventory_AllEntities_12-Aug-2020.Designer.cs">
+      <DependentUpon>202008121414323_Inventory_AllEntities_12-Aug-2020.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202008130540525_Inventory_Add_Column_StockStatus_In_tblIQCReqDetailList.cs" />
+    <Compile Include="InventoryContextMigrations\202008130540525_Inventory_Add_Column_StockStatus_In_tblIQCReqDetailList.Designer.cs">
+      <DependentUpon>202008130540525_Inventory_Add_Column_StockStatus_In_tblIQCReqDetailList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202008131307164_Inventory_Add_Column_SomeColumn_In_tblIQCReqDetailList_tblIQCReqInfoList.cs" />
+    <Compile Include="InventoryContextMigrations\202008131307164_Inventory_Add_Column_SomeColumn_In_tblIQCReqDetailList_tblIQCReqInfoList.Designer.cs">
+      <DependentUpon>202008131307164_Inventory_Add_Column_SomeColumn_In_tblIQCReqDetailList_tblIQCReqInfoList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202008240549493_Inventory_AddTACInDescription.cs" />
+    <Compile Include="InventoryContextMigrations\202008240549493_Inventory_AddTACInDescription.Designer.cs">
+      <DependentUpon>202008240549493_Inventory_AddTACInDescription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202009210828003_Inventory_RenamingRepairStockToWarehouseFaultyStock.cs" />
+    <Compile Include="InventoryContextMigrations\202009210828003_Inventory_RenamingRepairStockToWarehouseFaultyStock.Designer.cs">
+      <DependentUpon>202009210828003_Inventory_RenamingRepairStockToWarehouseFaultyStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202010300235463_Inventory_Category.cs" />
+    <Compile Include="InventoryContextMigrations\202010300235463_Inventory_Category.Designer.cs">
+      <DependentUpon>202010300235463_Inventory_Category.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202010301333211_Inventory_BrandAndBrandCategories.cs" />
+    <Compile Include="InventoryContextMigrations\202010301333211_Inventory_BrandAndBrandCategories.Designer.cs">
+      <DependentUpon>202010301333211_Inventory_BrandAndBrandCategories.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202010301536534_Inventory_tblColor_AddCatAndBrandInModel_AddModelAndColorInItem.cs" />
+    <Compile Include="InventoryContextMigrations\202010301536534_Inventory_tblColor_AddCatAndBrandInModel_AddModelAndColorInItem.Designer.cs">
+      <DependentUpon>202010301536534_Inventory_tblColor_AddCatAndBrandInModel_AddModelAndColorInItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202010310607568_Inventory_UpdateDescription.cs" />
+    <Compile Include="InventoryContextMigrations\202010310607568_Inventory_UpdateDescription.Designer.cs">
+      <DependentUpon>202010310607568_Inventory_UpdateDescription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202011010430514_Inventory_ModelColor.cs" />
+    <Compile Include="InventoryContextMigrations\202011010430514_Inventory_ModelColor.Designer.cs">
+      <DependentUpon>202011010430514_Inventory_ModelColor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202011111200482_Inventory_AddCostPriceAndSalePriceAndFlagInModel.cs" />
+    <Compile Include="InventoryContextMigrations\202011111200482_Inventory_AddCostPriceAndSalePriceAndFlagInModel.Designer.cs">
+      <DependentUpon>202011111200482_Inventory_AddCostPriceAndSalePriceAndFlagInModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202011120949407_Inventory_Add_tbl_HandSetStock.cs" />
+    <Compile Include="InventoryContextMigrations\202011120949407_Inventory_Add_tbl_HandSetStock.Designer.cs">
+      <DependentUpon>202011120949407_Inventory_Add_tbl_HandSetStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202103180714505_Inventory_STransferModelToModel.cs" />
+    <Compile Include="InventoryContextMigrations\202103180714505_Inventory_STransferModelToModel.Designer.cs">
+      <DependentUpon>202103180714505_Inventory_STransferModelToModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202103231316087_Inventory_TransferCode.cs" />
+    <Compile Include="InventoryContextMigrations\202103231316087_Inventory_TransferCode.Designer.cs">
+      <DependentUpon>202103231316087_Inventory_TransferCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\Configuration.cs" />
+    <Compile Include="InventoryDAL\InventoryUnitOfWork.cs" />
+    <Compile Include="InventoryDAL\WarehouseRepository.cs" />
+    <Compile Include="ProductionContextMigrations\202006271621248_Production_AllEntities_27-Jun-2020.cs" />
+    <Compile Include="ProductionContextMigrations\202006271621248_Production_AllEntities_27-Jun-2020.Designer.cs">
+      <DependentUpon>202006271621248_Production_AllEntities_27-Jun-2020.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202006280621017_Production_AddUnitIdInFaulty.cs" />
+    <Compile Include="ProductionContextMigrations\202006280621017_Production_AddUnitIdInFaulty.Designer.cs">
+      <DependentUpon>202006280621017_Production_AddUnitIdInFaulty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202006280819262_Production_QRCodeTableUpdate.cs" />
+    <Compile Include="ProductionContextMigrations\202006280819262_Production_QRCodeTableUpdate.Designer.cs">
+      <DependentUpon>202006280819262_Production_QRCodeTableUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202006281205396_Production_RepairItem.cs" />
+    <Compile Include="ProductionContextMigrations\202006281205396_Production_RepairItem.Designer.cs">
+      <DependentUpon>202006281205396_Production_RepairItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202006281217474_Production_FaultyCase.cs" />
+    <Compile Include="ProductionContextMigrations\202006281217474_Production_FaultyCase.Designer.cs">
+      <DependentUpon>202006281217474_Production_FaultyCase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202006290123475_Production_RepairCodeInRepairItem.cs" />
+    <Compile Include="ProductionContextMigrations\202006290123475_Production_RepairCodeInRepairItem.Designer.cs">
+      <DependentUpon>202006290123475_Production_RepairCodeInRepairItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202006290202402_Production_AssemblyLineInQRCode.cs" />
+    <Compile Include="ProductionContextMigrations\202006290202402_Production_AssemblyLineInQRCode.Designer.cs">
+      <DependentUpon>202006290202402_Production_AssemblyLineInQRCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202006291350576_Production_RepairReasonInRepairItem.cs" />
+    <Compile Include="ProductionContextMigrations\202006291350576_Production_RepairReasonInRepairItem.Designer.cs">
+      <DependentUpon>202006291350576_Production_RepairReasonInRepairItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202006300138442_Production_AddFloorNameInRepairItem.cs" />
+    <Compile Include="ProductionContextMigrations\202006300138442_Production_AddFloorNameInRepairItem.Designer.cs">
+      <DependentUpon>202006300138442_Production_AddFloorNameInRepairItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202006300917115_Production_RepairSectionFaultyItemRequisition.cs" />
+    <Compile Include="ProductionContextMigrations\202006300917115_Production_RepairSectionFaultyItemRequisition.Designer.cs">
+      <DependentUpon>202006300917115_Production_RepairSectionFaultyItemRequisition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007010811235_Production_RepairSectionTransfer_TableEdit.cs" />
+    <Compile Include="ProductionContextMigrations\202007010811235_Production_RepairSectionTransfer_TableEdit.Designer.cs">
+      <DependentUpon>202007010811235_Production_RepairSectionTransfer_TableEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007020338344_Production_RepairSectionRequisition.cs" />
+    <Compile Include="ProductionContextMigrations\202007020338344_Production_RepairSectionRequisition.Designer.cs">
+      <DependentUpon>202007020338344_Production_RepairSectionRequisition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007020501459_Production_UpdateRepairSectionRequisition.cs" />
+    <Compile Include="ProductionContextMigrations\202007020501459_Production_UpdateRepairSectionRequisition.Designer.cs">
+      <DependentUpon>202007020501459_Production_UpdateRepairSectionRequisition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007041254017_Production_AddOrgInRepairSectionRequisitionDetail.cs" />
+    <Compile Include="ProductionContextMigrations\202007041254017_Production_AddOrgInRepairSectionRequisitionDetail.Designer.cs">
+      <DependentUpon>202007041254017_Production_AddOrgInRepairSectionRequisitionDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007051424281_Production_AddCheckUserInRepairSectionReq.cs" />
+    <Compile Include="ProductionContextMigrations\202007051424281_Production_AddCheckUserInRepairSectionReq.Designer.cs">
+      <DependentUpon>202007051424281_Production_AddCheckUserInRepairSectionReq.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007051502080_Production_AddHandOverInRepairRequisition.cs" />
+    <Compile Include="ProductionContextMigrations\202007051502080_Production_AddHandOverInRepairRequisition.Designer.cs">
+      <DependentUpon>202007051502080_Production_AddHandOverInRepairRequisition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007060457133_Production_AddPDNFaultyStock.cs" />
+    <Compile Include="ProductionContextMigrations\202007060457133_Production_AddPDNFaultyStock.Designer.cs">
+      <DependentUpon>202007060457133_Production_AddPDNFaultyStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007071226029_Production_ProductionAssembleStock.cs" />
+    <Compile Include="ProductionContextMigrations\202007071226029_Production_ProductionAssembleStock.Designer.cs">
+      <DependentUpon>202007071226029_Production_ProductionAssembleStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007080146141_Production_RenamePackagingQtyToMiniStockQty.cs" />
+    <Compile Include="ProductionContextMigrations\202007080146141_Production_RenamePackagingQtyToMiniStockQty.Designer.cs">
+      <DependentUpon>202007080146141_Production_RenamePackagingQtyToMiniStockQty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007080944502_Production_QCPassTransferInfoAddDetail.cs" />
+    <Compile Include="ProductionContextMigrations\202007080944502_Production_QCPassTransferInfoAddDetail.Designer.cs">
+      <DependentUpon>202007080944502_Production_QCPassTransferInfoAddDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007091346176_Production_AddRequistionFor.cs" />
+    <Compile Include="ProductionContextMigrations\202007091346176_Production_AddRequistionFor.Designer.cs">
+      <DependentUpon>202007091346176_Production_AddRequistionFor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007100101199_Production_StockFor.cs" />
+    <Compile Include="ProductionContextMigrations\202007100101199_Production_StockFor.Designer.cs">
+      <DependentUpon>202007100101199_Production_StockFor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007101206555_Production_ProductionToPackagingStockTransfer.cs" />
+    <Compile Include="ProductionContextMigrations\202007101206555_Production_ProductionToPackagingStockTransfer.Designer.cs">
+      <DependentUpon>202007101206555_Production_ProductionToPackagingStockTransfer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007101445352_Production_ProductionPackagingStockTransferStatus.cs" />
+    <Compile Include="ProductionContextMigrations\202007101445352_Production_ProductionPackagingStockTransferStatus.Designer.cs">
+      <DependentUpon>202007101445352_Production_ProductionPackagingStockTransferStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007130946140_Production_QRCodeInFaultyCase.cs" />
+    <Compile Include="ProductionContextMigrations\202007130946140_Production_QRCodeInFaultyCase.Designer.cs">
+      <DependentUpon>202007130946140_Production_QRCodeInFaultyCase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007140357254_Production_QRCodeProblemAndQRCodeTransferToRepair.cs" />
+    <Compile Include="ProductionContextMigrations\202007140357254_Production_QRCodeProblemAndQRCodeTransferToRepair.Designer.cs">
+      <DependentUpon>202007140357254_Production_QRCodeProblemAndQRCodeTransferToRepair.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007140441404_Production_TransferIdInQRCodeTransferAndProblems.cs" />
+    <Compile Include="ProductionContextMigrations\202007140441404_Production_TransferIdInQRCodeTransferAndProblems.Designer.cs">
+      <DependentUpon>202007140441404_Production_TransferIdInQRCodeTransferAndProblems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007170245337_Production_AddTransferIdAndTransferCodeInFaultyItemStock.cs" />
+    <Compile Include="ProductionContextMigrations\202007170245337_Production_AddTransferIdAndTransferCodeInFaultyItemStock.Designer.cs">
+      <DependentUpon>202007170245337_Production_AddTransferIdAndTransferCodeInFaultyItemStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007171534594_Production_AddQRCode_AddIncomingTransferId_InTransferFromRepair.cs" />
+    <Compile Include="ProductionContextMigrations\202007171534594_Production_AddQRCode_AddIncomingTransferId_InTransferFromRepair.Designer.cs">
+      <DependentUpon>202007171534594_Production_AddQRCode_AddIncomingTransferId_InTransferFromRepair.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007200409329_Production_ProductionStock_TransferFor.cs" />
+    <Compile Include="ProductionContextMigrations\202007200409329_Production_ProductionStock_TransferFor.Designer.cs">
+      <DependentUpon>202007200409329_Production_ProductionStock_TransferFor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007210618388_Production_RequisitionItemInfos.cs" />
+    <Compile Include="ProductionContextMigrations\202007210618388_Production_RequisitionItemInfos.Designer.cs">
+      <DependentUpon>202007210618388_Production_RequisitionItemInfos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007210632533_Production_AddAssemblyLineAndFlagInReqInfo.cs" />
+    <Compile Include="ProductionContextMigrations\202007210632533_Production_AddAssemblyLineAndFlagInReqInfo.Designer.cs">
+      <DependentUpon>202007210632533_Production_AddAssemblyLineAndFlagInReqInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007220621049_Production_AddRequisitionItemDetail.cs" />
+    <Compile Include="ProductionContextMigrations\202007220621049_Production_AddRequisitionItemDetail.Designer.cs">
+      <DependentUpon>202007220621049_Production_AddRequisitionItemDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007250458467_Production_AddUnitInReqItemDetail.cs" />
+    <Compile Include="ProductionContextMigrations\202007250458467_Production_AddUnitInReqItemDetail.Designer.cs">
+      <DependentUpon>202007250458467_Production_AddUnitInReqItemDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007260410366_Production_QRCodeTrace_update.cs" />
+    <Compile Include="ProductionContextMigrations\202007260410366_Production_QRCodeTrace_update.Designer.cs">
+      <DependentUpon>202007260410366_Production_QRCodeTrace_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007260431198_Production_TempQRCodeTrace_Add.cs" />
+    <Compile Include="ProductionContextMigrations\202007260431198_Production_TempQRCodeTrace_Add.Designer.cs">
+      <DependentUpon>202007260431198_Production_TempQRCodeTrace_Add.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007261131086_Production_AddAssemblyIdInQCAndTransferFromQC.cs" />
+    <Compile Include="ProductionContextMigrations\202007261131086_Production_AddAssemblyIdInQCAndTransferFromQC.Designer.cs">
+      <DependentUpon>202007261131086_Production_AddAssemblyIdInQCAndTransferFromQC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007270213402_Production_AddAssemblyLineInTransferFromQCInfo.cs" />
+    <Compile Include="ProductionContextMigrations\202007270213402_Production_AddAssemblyLineInTransferFromQCInfo.Designer.cs">
+      <DependentUpon>202007270213402_Production_AddAssemblyLineInTransferFromQCInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007270423173_Production_AddAssemblyLineInFaultyStock.cs" />
+    <Compile Include="ProductionContextMigrations\202007270423173_Production_AddAssemblyLineInFaultyStock.Designer.cs">
+      <DependentUpon>202007270423173_Production_AddAssemblyLineInFaultyStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007270450361_Production_AddAssemblyLineIdInRepairItemStock.cs" />
+    <Compile Include="ProductionContextMigrations\202007270450361_Production_AddAssemblyLineIdInRepairItemStock.Designer.cs">
+      <DependentUpon>202007270450361_Production_AddAssemblyLineIdInRepairItemStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007271153190_Production_AddAssemblyLineAndQRCodeInQCPass.cs" />
+    <Compile Include="ProductionContextMigrations\202007271153190_Production_AddAssemblyLineAndQRCodeInQCPass.Designer.cs">
+      <DependentUpon>202007271153190_Production_AddAssemblyLineAndQRCodeInQCPass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007271250542_Production_QCPassCodeInQCPassInfoTable.cs" />
+    <Compile Include="ProductionContextMigrations\202007271250542_Production_QCPassCodeInQCPassInfoTable.Designer.cs">
+      <DependentUpon>202007271250542_Production_QCPassCodeInQCPassInfoTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007300557204_Production_AddPackagingLineIdInRequisition.cs" />
+    <Compile Include="ProductionContextMigrations\202007300557204_Production_AddPackagingLineIdInRequisition.Designer.cs">
+      <DependentUpon>202007300557204_Production_AddPackagingLineIdInRequisition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202007300928352_Production_AddPackagingLineIdInRequisitionItemInfo.cs" />
+    <Compile Include="ProductionContextMigrations\202007300928352_Production_AddPackagingLineIdInRequisitionItemInfo.Designer.cs">
+      <DependentUpon>202007300928352_Production_AddPackagingLineIdInRequisitionItemInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008080335131_Production_AddIsChinaFaultyInFaultyStock.cs" />
+    <Compile Include="ProductionContextMigrations\202008080335131_Production_AddIsChinaFaultyInFaultyStock.Designer.cs">
+      <DependentUpon>202008080335131_Production_AddIsChinaFaultyInFaultyStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008090638383_Production_AddRepairLineInReqInfo.cs" />
+    <Compile Include="ProductionContextMigrations\202008090638383_Production_AddRepairLineInReqInfo.Designer.cs">
+      <DependentUpon>202008090638383_Production_AddRepairLineInReqInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008091411302_Production_MiniStockTransfer.cs" />
+    <Compile Include="ProductionContextMigrations\202008091411302_Production_MiniStockTransfer.Designer.cs">
+      <DependentUpon>202008091411302_Production_MiniStockTransfer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008100420223_Production_AddUnitAndWarehouseInMiniStockDetail.cs" />
+    <Compile Include="ProductionContextMigrations\202008100420223_Production_AddUnitAndWarehouseInMiniStockDetail.Designer.cs">
+      <DependentUpon>202008100420223_Production_AddUnitAndWarehouseInMiniStockDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008110553305_Production_AddUnitPackagingItem.cs" />
+    <Compile Include="ProductionContextMigrations\202008110553305_Production_AddUnitPackagingItem.Designer.cs">
+      <DependentUpon>202008110553305_Production_AddUnitPackagingItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008110824434_Production_AddPackagingLineAndPreviousIMEI.cs" />
+    <Compile Include="ProductionContextMigrations\202008110824434_Production_AddPackagingLineAndPreviousIMEI.Designer.cs">
+      <DependentUpon>202008110824434_Production_AddPackagingLineAndPreviousIMEI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008111121230_Production_AddPackagingLineNameAndQCInQRCode.cs" />
+    <Compile Include="ProductionContextMigrations\202008111121230_Production_AddPackagingLineNameAndQCInQRCode.Designer.cs">
+      <DependentUpon>202008111121230_Production_AddPackagingLineNameAndQCInQRCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008131210396_Production_AddPackagingIMEIRepairTransfer.cs" />
+    <Compile Include="ProductionContextMigrations\202008131210396_Production_AddPackagingIMEIRepairTransfer.Designer.cs">
+      <DependentUpon>202008131210396_Production_AddPackagingIMEIRepairTransfer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008151205372_Production_AddPakagingRepairTransferCode.cs" />
+    <Compile Include="ProductionContextMigrations\202008151205372_Production_AddPakagingRepairTransferCode.Designer.cs">
+      <DependentUpon>202008151205372_Production_AddPakagingRepairTransferCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008160400222_Production_AddTransferCodeInPackagingRepairTransfer.cs" />
+    <Compile Include="ProductionContextMigrations\202008160400222_Production_AddTransferCodeInPackagingRepairTransfer.Designer.cs">
+      <DependentUpon>202008160400222_Production_AddTransferCodeInPackagingRepairTransfer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008160820481_Production_AddFKInImeiTransferToRepairInfo.cs" />
+    <Compile Include="ProductionContextMigrations\202008160820481_Production_AddFKInImeiTransferToRepairInfo.Designer.cs">
+      <DependentUpon>202008160820481_Production_AddFKInImeiTransferToRepairInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008170526140_Production_PackagingRepairStock.cs" />
+    <Compile Include="ProductionContextMigrations\202008170526140_Production_PackagingRepairStock.Designer.cs">
+      <DependentUpon>202008170526140_Production_PackagingRepairStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008180914043_Production_TransferIdInIMEIProblemDetailTable.cs" />
+    <Compile Include="ProductionContextMigrations\202008180914043_Production_TransferIdInIMEIProblemDetailTable.Designer.cs">
+      <DependentUpon>202008180914043_Production_TransferIdInIMEIProblemDetailTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008181039545_Production_TransferPackagingRepairItemToPackagingQC.cs" />
+    <Compile Include="ProductionContextMigrations\202008181039545_Production_TransferPackagingRepairItemToPackagingQC.Designer.cs">
+      <DependentUpon>202008181039545_Production_TransferPackagingRepairItemToPackagingQC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008191126236_Production_AddFinishGoodsCartonColumns.cs" />
+    <Compile Include="ProductionContextMigrations\202008191126236_Production_AddFinishGoodsCartonColumns.Designer.cs">
+      <DependentUpon>202008191126236_Production_AddFinishGoodsCartonColumns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008200408345_Production_AddCartonNoInFinishGoodsPackaging.cs" />
+    <Compile Include="ProductionContextMigrations\202008200408345_Production_AddCartonNoInFinishGoodsPackaging.Designer.cs">
+      <DependentUpon>202008200408345_Production_AddCartonNoInFinishGoodsPackaging.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008220401040_Production_AddPackagingSectionFinishGoodsStock.cs" />
+    <Compile Include="ProductionContextMigrations\202008220401040_Production_AddPackagingSectionFinishGoodsStock.Designer.cs">
+      <DependentUpon>202008220401040_Production_AddPackagingSectionFinishGoodsStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008220806356_Production_AddPackagingLineInRepairRequisition.cs" />
+    <Compile Include="ProductionContextMigrations\202008220806356_Production_AddPackagingLineInRepairRequisition.Designer.cs">
+      <DependentUpon>202008220806356_Production_AddPackagingLineInRepairRequisition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008241047044_Production_AddGeneratedIMEITable.cs" />
+    <Compile Include="ProductionContextMigrations\202008241047044_Production_AddGeneratedIMEITable.Designer.cs">
+      <DependentUpon>202008241047044_Production_AddGeneratedIMEITable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202008270544236_Production_AddStockItemReturn.cs" />
+    <Compile Include="ProductionContextMigrations\202008270544236_Production_AddStockItemReturn.Designer.cs">
+      <DependentUpon>202008270544236_Production_AddStockItemReturn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202009011120058_Production_AddFaultyGroupAndType.cs" />
+    <Compile Include="ProductionContextMigrations\202009011120058_Production_AddFaultyGroupAndType.Designer.cs">
+      <DependentUpon>202009011120058_Production_AddFaultyGroupAndType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202103250815287_Production_tblLotIn.cs" />
+    <Compile Include="ProductionContextMigrations\202103250815287_Production_tblLotIn.Designer.cs">
+      <DependentUpon>202103250815287_Production_tblLotIn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202105050625539_Production_RepairSectionSemiFinishStock.cs" />
+    <Compile Include="ProductionContextMigrations\202105050625539_Production_RepairSectionSemiFinishStock.Designer.cs">
+      <DependentUpon>202105050625539_Production_RepairSectionSemiFinishStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202105050916145_Production_RepairSectionSemiFinishTransfer.cs" />
+    <Compile Include="ProductionContextMigrations\202105050916145_Production_RepairSectionSemiFinishTransfer.Designer.cs">
+      <DependentUpon>202105050916145_Production_RepairSectionSemiFinishTransfer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\Configuration.cs" />
+    <Compile Include="ProductionDAL\ProductionRepository.cs" />
+    <Compile Include="ProductionDAL\ProductionUnitOfWork.cs" />
+    <Compile Include="ProductionDAL\ProductionDbContext.cs" />
+    <Compile Include="ProductionDAL\ProductionBaseRepository.cs" />
+    <Compile Include="ProductionDAL\IProductionUnitOfWork.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="InventoryDAL\InventoryDbContext.cs" />
+    <Compile Include="InventoryDAL\InventoryBaseRepository.cs" />
+    <Compile Include="Repository\IBaseRepository.cs" />
+    <Compile Include="InventoryDAL\IInventoryUnitOfWork.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.Designer.cs">
+      <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011020520110_SalesAndDistribution_AddCategoryAndBRandId.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011020520110_SalesAndDistribution_AddCategoryAndBRandId.Designer.cs">
+      <DependentUpon>202011020520110_SalesAndDistribution_AddCategoryAndBRandId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011030442158_SalesAndDistribution_AddRSM.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011030442158_SalesAndDistribution_AddRSM.Designer.cs">
+      <DependentUpon>202011030442158_SalesAndDistribution_AddRSM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011030928439_SalesAndDistribution_AddDivisionDistrictZone.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011030928439_SalesAndDistribution_AddDivisionDistrictZone.Designer.cs">
+      <DependentUpon>202011030928439_SalesAndDistribution_AddDivisionDistrictZone.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011041201597_SalesAndDistribution_UpdateRSM.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011041201597_SalesAndDistribution_UpdateRSM.Designer.cs">
+      <DependentUpon>202011041201597_SalesAndDistribution_UpdateRSM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011041208237_SalesAndDistribution_AddRSM_EUserId.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011041208237_SalesAndDistribution_AddRSM_EUserId.Designer.cs">
+      <DependentUpon>202011041208237_SalesAndDistribution_AddRSM_EUserId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011041305410_SalesAndDistribution_AddRSM_EUserId_datatype.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011041305410_SalesAndDistribution_AddRSM_EUserId_datatype.Designer.cs">
+      <DependentUpon>202011041305410_SalesAndDistribution_AddRSM_EUserId_datatype.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011070937484_SalesAndDistribution_TblASM.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011070937484_SalesAndDistribution_TblASM.Designer.cs">
+      <DependentUpon>202011070937484_SalesAndDistribution_TblASM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011080545142_SalesAndDistribution_ASM_ZoneId.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011080545142_SalesAndDistribution_ASM_ZoneId.Designer.cs">
+      <DependentUpon>202011080545142_SalesAndDistribution_ASM_ZoneId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011080944504_SalesAndDistribution_AddTblTSE.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011080944504_SalesAndDistribution_AddTblTSE.Designer.cs">
+      <DependentUpon>202011080944504_SalesAndDistribution_AddTblTSE.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011090506253_SalesAndDistribution_RenameColumns.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011090506253_SalesAndDistribution_RenameColumns.Designer.cs">
+      <DependentUpon>202011090506253_SalesAndDistribution_RenameColumns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011090614125_SalesAndDistribution_AddZoneDistrictDivisionInDealer.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011090614125_SalesAndDistribution_AddZoneDistrictDivisionInDealer.Designer.cs">
+      <DependentUpon>202011090614125_SalesAndDistribution_AddZoneDistrictDivisionInDealer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011090620081_SalesAndDistribution_AddRepresentativeInDealer.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011090620081_SalesAndDistribution_AddRepresentativeInDealer.Designer.cs">
+      <DependentUpon>202011090620081_SalesAndDistribution_AddRepresentativeInDealer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011090624568_SalesAndDistribution_AddRepresentativeFlagInDealer.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011090624568_SalesAndDistribution_AddRepresentativeFlagInDealer.Designer.cs">
+      <DependentUpon>202011090624568_SalesAndDistribution_AddRepresentativeFlagInDealer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011100757233_SalesAndDistribution_AddZoneIdInRSM.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011100757233_SalesAndDistribution_AddZoneIdInRSM.Designer.cs">
+      <DependentUpon>202011100757233_SalesAndDistribution_AddZoneIdInRSM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011100804400_SalesAndDistribution_AddReportingSRInASMandTSE.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011100804400_SalesAndDistribution_AddReportingSRInASMandTSE.Designer.cs">
+      <DependentUpon>202011100804400_SalesAndDistribution_AddReportingSRInASMandTSE.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011100843022_SalesAndDistribution_tbl_SalesRepresentative.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011100843022_SalesAndDistribution_tbl_SalesRepresentative.Designer.cs">
+      <DependentUpon>202011100843022_SalesAndDistribution_tbl_SalesRepresentative.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011110935393_SalesAndDistribution_AddIsAllowToLoginInDealer.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011110935393_SalesAndDistribution_AddIsAllowToLoginInDealer.Designer.cs">
+      <DependentUpon>202011110935393_SalesAndDistribution_AddIsAllowToLoginInDealer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011111204313_SalesAndDistribution_AddCostPriceAndSalePriceAndFlagInModel.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011111204313_SalesAndDistribution_AddCostPriceAndSalePriceAndFlagInModel.Designer.cs">
+      <DependentUpon>202011111204313_SalesAndDistribution_AddCostPriceAndSalePriceAndFlagInModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011120133071_SalesAndDistribution_AddFlagInModel.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011120133071_SalesAndDistribution_AddFlagInModel.Designer.cs">
+      <DependentUpon>202011120133071_SalesAndDistribution_AddFlagInModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011120158534_SalesAndDistribution_UpdateItemStockTbl.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011120158534_SalesAndDistribution_UpdateItemStockTbl.Designer.cs">
+      <DependentUpon>202011120158534_SalesAndDistribution_UpdateItemStockTbl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011120226167_SalesAndDistribution_Add_tbl_StoreMasterStock.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011120226167_SalesAndDistribution_Add_tbl_StoreMasterStock.Designer.cs">
+      <DependentUpon>202011120226167_SalesAndDistribution_Add_tbl_StoreMasterStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011120953177_SalesAndDistribution_Add_Column_tblItemStock_CartoonId.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011120953177_SalesAndDistribution_Add_Column_tblItemStock_CartoonId.Designer.cs">
+      <DependentUpon>202011120953177_SalesAndDistribution_Add_Column_tblItemStock_CartoonId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\202011161122573_SalesAndDistribution_Add_tbl_DealerRequisition.cs" />
+    <Compile Include="SalesAndDistributionContextMigrations\202011161122573_SalesAndDistribution_Add_tbl_DealerRequisition.Designer.cs">
+      <DependentUpon>202011161122573_SalesAndDistribution_Add_tbl_DealerRequisition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SalesAndDistributionContextMigrations\Configuration.cs" />
+    <Compile Include="SalesAndDistributionDAL\ISalesAndDistributionUnitOfWork.cs" />
+    <Compile Include="SalesAndDistributionDAL\SalesAndDistributionUnitOfWork.cs" />
+    <Compile Include="SalesAndDistributionDAL\SalesAndDistributionRepository.cs" />
+    <Compile Include="SalesAndDistributionDAL\SalesAndDistributionBaseRepository.cs" />
+    <Compile Include="SalesAndDistributionDAL\SalesAndDistributionDbContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AccountsContextMigrations\202011110603211_Accounts_tblAccountsHead.resx">
+      <DependentUpon>202011110603211_Accounts_tblAccountsHead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountsContextMigrations\202011140845420_Accounts_AccountsHead3ColumnAdd.resx">
+      <DependentUpon>202011140845420_Accounts_AccountsHead3ColumnAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountsContextMigrations\202011150512136_Accounts_tblJournal.resx">
+      <DependentUpon>202011150512136_Accounts_tblJournal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountsContextMigrations\202011151035336_Accounts_JournalDate.resx">
+      <DependentUpon>202011151035336_Accounts_JournalDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountsContextMigrations\202011210557038_Accounts_tblFinance.resx">
+      <DependentUpon>202011210557038_Accounts_tblFinance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountsContextMigrations\202011211137295_Accounts_tblFinanceYear.resx">
+      <DependentUpon>202011211137295_Accounts_tblFinanceYear.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountsContextMigrations\202101280508536_Accounts_JournalNewColumnAdd.resx">
+      <DependentUpon>202101280508536_Accounts_JournalNewColumnAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountsContextMigrations\202101300750285_Accounts_ChequeBook.resx">
+      <DependentUpon>202101300750285_Accounts_ChequeBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountsContextMigrations\202101301225558_Accounts_Supplier&amp;Customers.resx">
+      <DependentUpon>202101301225558_Accounts_Supplier&amp;Customers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountsContextMigrations\202102010949473_Accounts_Account_CusandSuppAdd.resx">
+      <DependentUpon>202102010949473_Accounts_Account_CusandSuppAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202005310415074_Configuration_DbInitialize.resx">
+      <DependentUpon>202005310415074_Configuration_DbInitialize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202005310714228_Configuration_Changes.resx">
+      <DependentUpon>202005310714228_Configuration_Changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006011340398_Configuration_DbtblCustomer.resx">
+      <DependentUpon>202006011340398_Configuration_DbtblCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006020530382_Configuration_DbtblTS.resx">
+      <DependentUpon>202006020530382_Configuration_DbtblTS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006020813036_Configuration_DbtblCS.resx">
+      <DependentUpon>202006020813036_Configuration_DbtblCS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006031001288_Configuration_DbtblServicesWarehouse.resx">
+      <DependentUpon>202006031001288_Configuration_DbtblServicesWarehouse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006040757239_Configuration_DbtblmobilePartStockInfo&amp;Detail.resx">
+      <DependentUpon>202006040757239_Configuration_DbtblmobilePartStockInfo&amp;Detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006080719517_Configuration_AddNewColumn.resx">
+      <DependentUpon>202006080719517_Configuration_AddNewColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006080821407_Configuration_AddNColumn.resx">
+      <DependentUpon>202006080821407_Configuration_AddNColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006090618395_Configuration_DbAddTSTableColum.resx">
+      <DependentUpon>202006090618395_Configuration_DbAddTSTableColum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006101141523_Configuration_tblBranchAdd.resx">
+      <DependentUpon>202006101141523_Configuration_tblBranchAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006130759207_Configuration_DbBranch.resx">
+      <DependentUpon>202006130759207_Configuration_DbBranch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006140400238_Configuration_DbTransferInfo&amp;Details.resx">
+      <DependentUpon>202006140400238_Configuration_DbTransferInfo&amp;Details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006151329341_Configuration_DbnewColumnadd.resx">
+      <DependentUpon>202006151329341_Configuration_DbnewColumnadd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006160532385_Configuration_DbnewColumnadd1.resx">
+      <DependentUpon>202006160532385_Configuration_DbnewColumnadd1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006160538357_Configuration_RefNumStockDetail.resx">
+      <DependentUpon>202006160538357_Configuration_RefNumStockDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006220505196_Configuration_DbCostPriceAdd.resx">
+      <DependentUpon>202006220505196_Configuration_DbCostPriceAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006220911484_Configuration_DbStockTransferCostPriceAdd.resx">
+      <DependentUpon>202006220911484_Configuration_DbStockTransferCostPriceAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006221650580_Configuration_DbStockTransferSellPriceAdd.resx">
+      <DependentUpon>202006221650580_Configuration_DbStockTransferSellPriceAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006230453271_Configuration_DbStockTransferSPrice&amp;CpriceAdd.resx">
+      <DependentUpon>202006230453271_Configuration_DbStockTransferSPrice&amp;CpriceAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202006281203574_Configuration_DbCustomer&amp;TSBranchAdd.resx">
+      <DependentUpon>202006281203574_Configuration_DbCustomer&amp;TSBranchAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202007040639272_Configuration_tblFault&amp;ServiceAdd.resx">
+      <DependentUpon>202007040639272_Configuration_tblFault&amp;ServiceAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202007050554097_Configuration_Repair.resx">
+      <DependentUpon>202007050554097_Configuration_Repair.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202007250501546_Configuration_WorkShopadd.resx">
+      <DependentUpon>202007250501546_Configuration_WorkShopadd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202011240851488_Configuration_AddModelInMobilePartsStock.resx">
+      <DependentUpon>202011240851488_Configuration_AddModelInMobilePartsStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202011261215003_Configuration_add_prop_in_TransferInfo_Detail.resx">
+      <DependentUpon>202011261215003_Configuration_add_prop_in_TransferInfo_Detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202011301326370_Configuration_add_tblFaultyStockInfo_And_Details.resx">
+      <DependentUpon>202011301326370_Configuration_add_tblFaultyStockInfo_And_Details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202012030432147_Configuration_add_tblHandsetStock.resx">
+      <DependentUpon>202012030432147_Configuration_add_tblHandsetStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202012031057078_Configuration_add_tblMissingStock.resx">
+      <DependentUpon>202012031057078_Configuration_add_tblMissingStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202012051200428_Configuration_add_tblStockTransferModelToModel.resx">
+      <DependentUpon>202012051200428_Configuration_add_tblStockTransferModelToModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202012070759040_Configuration_add_prop_tblMissingStock.resx">
+      <DependentUpon>202012070759040_Configuration_add_prop_tblMissingStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202012080526248_Configuration_add_prop_tblHandset.resx">
+      <DependentUpon>202012080526248_Configuration_add_prop_tblHandset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202012101245161_Configuration_tblScrap.resx">
+      <DependentUpon>202012101245161_Configuration_tblScrap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202101121213172_Configuration_Handsetstock_IMEI1.resx">
+      <DependentUpon>202101121213172_Configuration_Handsetstock_IMEI1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202103131038098_Configuration_DealerSS.resx">
+      <DependentUpon>202103131038098_Configuration_DealerSS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202103140951575_Configuration_ColorSS_ModelSS_BrandSS.resx">
+      <DependentUpon>202103140951575_Configuration_ColorSS_ModelSS_BrandSS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202105311036369_Configuration_HandsetStock_Flag.resx">
+      <DependentUpon>202105311036369_Configuration_HandsetStock_Flag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202108241214446_Configuration_IssueQty.resx">
+      <DependentUpon>202108241214446_Configuration_IssueQty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlPanelContextMigrations\202006151000333_ControlPanel_AllEntities_16-May-2020.resx">
+      <DependentUpon>202006151000333_ControlPanel_AllEntities_16-May-2020.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlPanelContextMigrations\202008050953442_ControlPanel_BranchAddress.resx">
+      <DependentUpon>202008050953442_ControlPanel_BranchAddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006030537280_FrontDesk_DbInitialize.resx">
+      <DependentUpon>202006030537280_FrontDesk_DbInitialize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006051058296_FrontDesk_AddNewColumnsInJobOrder.resx">
+      <DependentUpon>202006051058296_FrontDesk_AddNewColumnsInJobOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006051150370_FrontDesk_JobOrderCode.resx">
+      <DependentUpon>202006051150370_FrontDesk_JobOrderCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006081153588_FrontDesk_AddTSToJobOrder.resx">
+      <DependentUpon>202006081153588_FrontDesk_AddTSToJobOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006170405450_FrontDesk_DbInitialize_17_June.resx">
+      <DependentUpon>202006170405450_FrontDesk_DbInitialize_17_June.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006170444383_FrontDesk_DbInitialize_17_June_FK.resx">
+      <DependentUpon>202006170444383_FrontDesk_DbInitialize_17_June_FK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006210354566_FrontDesk_DbTechnicalServicesStock.resx">
+      <DependentUpon>202006210354566_FrontDesk_DbTechnicalServicesStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006211035293_FrontDesk_dbtblJoborderBranchId.resx">
+      <DependentUpon>202006211035293_FrontDesk_dbtblJoborderBranchId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006230943023_FrontDesk_DbCost&amp;SellPriceAdd.resx">
+      <DependentUpon>202006230943023_FrontDesk_DbCost&amp;SellPriceAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006240935074_FrontDesk_DbCost&amp;SellPriceForTS.resx">
+      <DependentUpon>202006240935074_FrontDesk_DbCost&amp;SellPriceForTS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006261446396_FrontDesk_JobOrderTS.resx">
+      <DependentUpon>202006261446396_FrontDesk_JobOrderTS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006270654074_FrontDesk_DbJobOrderIMEIAdd.resx">
+      <DependentUpon>202006270654074_FrontDesk_DbJobOrderIMEIAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006271347045_FrontDesk_DbIMEI.resx">
+      <DependentUpon>202006271347045_FrontDesk_DbIMEI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202006290629225_FrontDesk_DbIMEI2AndEndDate.resx">
+      <DependentUpon>202006290629225_FrontDesk_DbIMEI2AndEndDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007041355321_FrontDesk_JobFault&amp;JobServiceAdd.resx">
+      <DependentUpon>202007041355321_FrontDesk_JobFault&amp;JobServiceAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007050555160_FrontDesk_JobOrderRepair.resx">
+      <DependentUpon>202007050555160_FrontDesk_JobOrderRepair.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007071332271_FrontDesk_TSRemarksJobOrder_tbl.resx">
+      <DependentUpon>202007071332271_FrontDesk_TSRemarksJobOrder_tbl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007100417348_FrontDesk_ServicesStockReqIdAdd.resx">
+      <DependentUpon>202007100417348_FrontDesk_ServicesStockReqIdAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007110708148_FrontDesk_JobOrderTsStateStatus.resx">
+      <DependentUpon>202007110708148_FrontDesk_JobOrderTsStateStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007111043364_FrontDesk_TSStockTSId&amp;StatusAdd.resx">
+      <DependentUpon>202007111043364_FrontDesk_TSStockTSId&amp;StatusAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007120932152_FrontDesk_TsStockInfo&amp;Details.resx">
+      <DependentUpon>202007120932152_FrontDesk_TsStockInfo&amp;Details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007130354481_FrontDesk_TsStockInfo&amp;DetailsRename.resx">
+      <DependentUpon>202007130354481_FrontDesk_TsStockInfo&amp;DetailsRename.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007140852355_FrontDesk_jobOrderTsRepairStatus.resx">
+      <DependentUpon>202007140852355_FrontDesk_jobOrderTsRepairStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007210307586_FrontDesk_JobCloseDate&amp;CUserId.resx">
+      <DependentUpon>202007210307586_FrontDesk_JobCloseDate&amp;CUserId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007280556107_FrontDesk_InvoiceInfoDetails.resx">
+      <DependentUpon>202007280556107_FrontDesk_InvoiceInfoDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007290401146_FrontDesk_PartsName.resx">
+      <DependentUpon>202007290401146_FrontDesk_PartsName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202007300348439_FrontDesk_CustomerType.resx">
+      <DependentUpon>202007300348439_FrontDesk_CustomerType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202008101006208_FrontDesk_CourierAndApproxBill.resx">
+      <DependentUpon>202008101006208_FrontDesk_CourierAndApproxBill.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202008170933383_FrontDesk_JobTransferId.resx">
+      <DependentUpon>202008170933383_FrontDesk_JobTransferId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202008170942350_FrontDesk_JobTransferBranchId.resx">
+      <DependentUpon>202008170942350_FrontDesk_JobTransferBranchId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202008230540117_FrontDesk_JobTransferDetail.resx">
+      <DependentUpon>202008230540117_FrontDesk_JobTransferDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202008240517283_FrontDesk_RequsitionUserBranchId.resx">
+      <DependentUpon>202008240517283_FrontDesk_RequsitionUserBranchId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202008250346200_FrontDesk_JobOrderReturnDetail.resx">
+      <DependentUpon>202008250346200_FrontDesk_JobOrderReturnDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202008250811266_FrontDesk_JobOrder_IsReturn.resx">
+      <DependentUpon>202008250811266_FrontDesk_JobOrder_IsReturn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202010030940034_FrontDesk_InvoicetblColumnAdd.resx">
+      <DependentUpon>202010030940034_FrontDesk_InvoicetblColumnAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202010040625137_FrontDesk_Column_InvoiceType.resx">
+      <DependentUpon>202010040625137_FrontDesk_Column_InvoiceType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202010111055005_FrontDesk_JobTransfer&amp;Return_Column_add.resx">
+      <DependentUpon>202010111055005_FrontDesk_JobTransfer&amp;Return_Column_add.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202010190548241_FrontDesk_JobLocation.resx">
+      <DependentUpon>202010190548241_FrontDesk_JobLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202011090622355_FrontDesk_IsHandset_Columnadd.resx">
+      <DependentUpon>202011090622355_FrontDesk_IsHandset_Columnadd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202012081024414_FrontDesk_add_prop_tblInvoiceDetail.resx">
+      <DependentUpon>202012081024414_FrontDesk_add_prop_tblInvoiceDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202012081117380_FrontDesk_edit_dataType_tblInvoiceDetail.resx">
+      <DependentUpon>202012081117380_FrontDesk_edit_dataType_tblInvoiceDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202012091102003_FrontDesk_add_tblFaultyStockAssignTS.resx">
+      <DependentUpon>202012091102003_FrontDesk_add_tblFaultyStockAssignTS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202012100730546_FrontDesk_add_prop_tblFaultyStockAssignTS.resx">
+      <DependentUpon>202012100730546_FrontDesk_add_prop_tblFaultyStockAssignTS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202012270815534_FrontDesk_TSStockModelId.resx">
+      <DependentUpon>202012270815534_FrontDesk_TSStockModelId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202012270911021_FrontDesk_TSStockModelId_.resx">
+      <DependentUpon>202012270911021_FrontDesk_TSStockModelId_.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202012270954243_FrontDesk_ReturnStock_ModelId.resx">
+      <DependentUpon>202012270954243_FrontDesk_ReturnStock_ModelId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202012280644223_FrontDesk_InvoiceInfo&amp;Details_ModelId.resx">
+      <DependentUpon>202012280644223_FrontDesk_InvoiceInfo&amp;Details_ModelId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202012300628165_FrontDesk_HandsetChangeTrace.resx">
+      <DependentUpon>202012300628165_FrontDesk_HandsetChangeTrace.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202101021000515_FrontDesk_CallCenterRemarks&amp;CustomerApproval.resx">
+      <DependentUpon>202101021000515_FrontDesk_CallCenterRemarks&amp;CustomerApproval.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202101040931394_FrontDesk_QCStatusAndQCRemarks.resx">
+      <DependentUpon>202101040931394_FrontDesk_QCStatusAndQCRemarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202101070652509_FrontDesk_MultipleJobDelivey.resx">
+      <DependentUpon>202101070652509_FrontDesk_MultipleJobDelivey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202102070515371_FrontDesk_QCTransferStatus.resx">
+      <DependentUpon>202102070515371_FrontDesk_QCTransferStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202103290601365_FrontDesk_NewColumn.resx">
+      <DependentUpon>202103290601365_FrontDesk_NewColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202103310913128_FrontDesk_JobOrderCustomerSupport.resx">
+      <DependentUpon>202103310913128_FrontDesk_JobOrderCustomerSupport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202103311121513_FrontDesk_JobOrderCustomerSupportTypeChange.resx">
+      <DependentUpon>202103311121513_FrontDesk_JobOrderCustomerSupportTypeChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202104050629469_FrontDesk_JobOrderMultipleCode.resx">
+      <DependentUpon>202104050629469_FrontDesk_JobOrderMultipleCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202105270833075_FrontDesk_QCPassFailDate.resx">
+      <DependentUpon>202105270833075_FrontDesk_QCPassFailDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202109050525176_FrontDesk_ProbalyDate.resx">
+      <DependentUpon>202109050525176_FrontDesk_ProbalyDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202008121414323_Inventory_AllEntities_12-Aug-2020.resx">
+      <DependentUpon>202008121414323_Inventory_AllEntities_12-Aug-2020.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202008130540525_Inventory_Add_Column_StockStatus_In_tblIQCReqDetailList.resx">
+      <DependentUpon>202008130540525_Inventory_Add_Column_StockStatus_In_tblIQCReqDetailList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202008131307164_Inventory_Add_Column_SomeColumn_In_tblIQCReqDetailList_tblIQCReqInfoList.resx">
+      <DependentUpon>202008131307164_Inventory_Add_Column_SomeColumn_In_tblIQCReqDetailList_tblIQCReqInfoList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202008240549493_Inventory_AddTACInDescription.resx">
+      <DependentUpon>202008240549493_Inventory_AddTACInDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202009210828003_Inventory_RenamingRepairStockToWarehouseFaultyStock.resx">
+      <DependentUpon>202009210828003_Inventory_RenamingRepairStockToWarehouseFaultyStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202010300235463_Inventory_Category.resx">
+      <DependentUpon>202010300235463_Inventory_Category.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202010301333211_Inventory_BrandAndBrandCategories.resx">
+      <DependentUpon>202010301333211_Inventory_BrandAndBrandCategories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202010301536534_Inventory_tblColor_AddCatAndBrandInModel_AddModelAndColorInItem.resx">
+      <DependentUpon>202010301536534_Inventory_tblColor_AddCatAndBrandInModel_AddModelAndColorInItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202010310607568_Inventory_UpdateDescription.resx">
+      <DependentUpon>202010310607568_Inventory_UpdateDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202011010430514_Inventory_ModelColor.resx">
+      <DependentUpon>202011010430514_Inventory_ModelColor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202011111200482_Inventory_AddCostPriceAndSalePriceAndFlagInModel.resx">
+      <DependentUpon>202011111200482_Inventory_AddCostPriceAndSalePriceAndFlagInModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202011120949407_Inventory_Add_tbl_HandSetStock.resx">
+      <DependentUpon>202011120949407_Inventory_Add_tbl_HandSetStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202103180714505_Inventory_STransferModelToModel.resx">
+      <DependentUpon>202103180714505_Inventory_STransferModelToModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202103231316087_Inventory_TransferCode.resx">
+      <DependentUpon>202103231316087_Inventory_TransferCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006271621248_Production_AllEntities_27-Jun-2020.resx">
+      <DependentUpon>202006271621248_Production_AllEntities_27-Jun-2020.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006280621017_Production_AddUnitIdInFaulty.resx">
+      <DependentUpon>202006280621017_Production_AddUnitIdInFaulty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006280819262_Production_QRCodeTableUpdate.resx">
+      <DependentUpon>202006280819262_Production_QRCodeTableUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006281205396_Production_RepairItem.resx">
+      <DependentUpon>202006281205396_Production_RepairItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006281217474_Production_FaultyCase.resx">
+      <DependentUpon>202006281217474_Production_FaultyCase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006290123475_Production_RepairCodeInRepairItem.resx">
+      <DependentUpon>202006290123475_Production_RepairCodeInRepairItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006290202402_Production_AssemblyLineInQRCode.resx">
+      <DependentUpon>202006290202402_Production_AssemblyLineInQRCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006291350576_Production_RepairReasonInRepairItem.resx">
+      <DependentUpon>202006291350576_Production_RepairReasonInRepairItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006300138442_Production_AddFloorNameInRepairItem.resx">
+      <DependentUpon>202006300138442_Production_AddFloorNameInRepairItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202006300917115_Production_RepairSectionFaultyItemRequisition.resx">
+      <DependentUpon>202006300917115_Production_RepairSectionFaultyItemRequisition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007010811235_Production_RepairSectionTransfer_TableEdit.resx">
+      <DependentUpon>202007010811235_Production_RepairSectionTransfer_TableEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007020338344_Production_RepairSectionRequisition.resx">
+      <DependentUpon>202007020338344_Production_RepairSectionRequisition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007020501459_Production_UpdateRepairSectionRequisition.resx">
+      <DependentUpon>202007020501459_Production_UpdateRepairSectionRequisition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007041254017_Production_AddOrgInRepairSectionRequisitionDetail.resx">
+      <DependentUpon>202007041254017_Production_AddOrgInRepairSectionRequisitionDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007051424281_Production_AddCheckUserInRepairSectionReq.resx">
+      <DependentUpon>202007051424281_Production_AddCheckUserInRepairSectionReq.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007051502080_Production_AddHandOverInRepairRequisition.resx">
+      <DependentUpon>202007051502080_Production_AddHandOverInRepairRequisition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007060457133_Production_AddPDNFaultyStock.resx">
+      <DependentUpon>202007060457133_Production_AddPDNFaultyStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007071226029_Production_ProductionAssembleStock.resx">
+      <DependentUpon>202007071226029_Production_ProductionAssembleStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007080146141_Production_RenamePackagingQtyToMiniStockQty.resx">
+      <DependentUpon>202007080146141_Production_RenamePackagingQtyToMiniStockQty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007080944502_Production_QCPassTransferInfoAddDetail.resx">
+      <DependentUpon>202007080944502_Production_QCPassTransferInfoAddDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007091346176_Production_AddRequistionFor.resx">
+      <DependentUpon>202007091346176_Production_AddRequistionFor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007100101199_Production_StockFor.resx">
+      <DependentUpon>202007100101199_Production_StockFor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007101206555_Production_ProductionToPackagingStockTransfer.resx">
+      <DependentUpon>202007101206555_Production_ProductionToPackagingStockTransfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007101445352_Production_ProductionPackagingStockTransferStatus.resx">
+      <DependentUpon>202007101445352_Production_ProductionPackagingStockTransferStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007130946140_Production_QRCodeInFaultyCase.resx">
+      <DependentUpon>202007130946140_Production_QRCodeInFaultyCase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007140357254_Production_QRCodeProblemAndQRCodeTransferToRepair.resx">
+      <DependentUpon>202007140357254_Production_QRCodeProblemAndQRCodeTransferToRepair.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007140441404_Production_TransferIdInQRCodeTransferAndProblems.resx">
+      <DependentUpon>202007140441404_Production_TransferIdInQRCodeTransferAndProblems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007170245337_Production_AddTransferIdAndTransferCodeInFaultyItemStock.resx">
+      <DependentUpon>202007170245337_Production_AddTransferIdAndTransferCodeInFaultyItemStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007171534594_Production_AddQRCode_AddIncomingTransferId_InTransferFromRepair.resx">
+      <DependentUpon>202007171534594_Production_AddQRCode_AddIncomingTransferId_InTransferFromRepair.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007200409329_Production_ProductionStock_TransferFor.resx">
+      <DependentUpon>202007200409329_Production_ProductionStock_TransferFor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007210618388_Production_RequisitionItemInfos.resx">
+      <DependentUpon>202007210618388_Production_RequisitionItemInfos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007210632533_Production_AddAssemblyLineAndFlagInReqInfo.resx">
+      <DependentUpon>202007210632533_Production_AddAssemblyLineAndFlagInReqInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007220621049_Production_AddRequisitionItemDetail.resx">
+      <DependentUpon>202007220621049_Production_AddRequisitionItemDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007250458467_Production_AddUnitInReqItemDetail.resx">
+      <DependentUpon>202007250458467_Production_AddUnitInReqItemDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007260410366_Production_QRCodeTrace_update.resx">
+      <DependentUpon>202007260410366_Production_QRCodeTrace_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007260431198_Production_TempQRCodeTrace_Add.resx">
+      <DependentUpon>202007260431198_Production_TempQRCodeTrace_Add.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007261131086_Production_AddAssemblyIdInQCAndTransferFromQC.resx">
+      <DependentUpon>202007261131086_Production_AddAssemblyIdInQCAndTransferFromQC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007270213402_Production_AddAssemblyLineInTransferFromQCInfo.resx">
+      <DependentUpon>202007270213402_Production_AddAssemblyLineInTransferFromQCInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007270423173_Production_AddAssemblyLineInFaultyStock.resx">
+      <DependentUpon>202007270423173_Production_AddAssemblyLineInFaultyStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007270450361_Production_AddAssemblyLineIdInRepairItemStock.resx">
+      <DependentUpon>202007270450361_Production_AddAssemblyLineIdInRepairItemStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007271153190_Production_AddAssemblyLineAndQRCodeInQCPass.resx">
+      <DependentUpon>202007271153190_Production_AddAssemblyLineAndQRCodeInQCPass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007271250542_Production_QCPassCodeInQCPassInfoTable.resx">
+      <DependentUpon>202007271250542_Production_QCPassCodeInQCPassInfoTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007300557204_Production_AddPackagingLineIdInRequisition.resx">
+      <DependentUpon>202007300557204_Production_AddPackagingLineIdInRequisition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202007300928352_Production_AddPackagingLineIdInRequisitionItemInfo.resx">
+      <DependentUpon>202007300928352_Production_AddPackagingLineIdInRequisitionItemInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008080335131_Production_AddIsChinaFaultyInFaultyStock.resx">
+      <DependentUpon>202008080335131_Production_AddIsChinaFaultyInFaultyStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008090638383_Production_AddRepairLineInReqInfo.resx">
+      <DependentUpon>202008090638383_Production_AddRepairLineInReqInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008091411302_Production_MiniStockTransfer.resx">
+      <DependentUpon>202008091411302_Production_MiniStockTransfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008100420223_Production_AddUnitAndWarehouseInMiniStockDetail.resx">
+      <DependentUpon>202008100420223_Production_AddUnitAndWarehouseInMiniStockDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008110553305_Production_AddUnitPackagingItem.resx">
+      <DependentUpon>202008110553305_Production_AddUnitPackagingItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008110824434_Production_AddPackagingLineAndPreviousIMEI.resx">
+      <DependentUpon>202008110824434_Production_AddPackagingLineAndPreviousIMEI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008111121230_Production_AddPackagingLineNameAndQCInQRCode.resx">
+      <DependentUpon>202008111121230_Production_AddPackagingLineNameAndQCInQRCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008131210396_Production_AddPackagingIMEIRepairTransfer.resx">
+      <DependentUpon>202008131210396_Production_AddPackagingIMEIRepairTransfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008151205372_Production_AddPakagingRepairTransferCode.resx">
+      <DependentUpon>202008151205372_Production_AddPakagingRepairTransferCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008160400222_Production_AddTransferCodeInPackagingRepairTransfer.resx">
+      <DependentUpon>202008160400222_Production_AddTransferCodeInPackagingRepairTransfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008160820481_Production_AddFKInImeiTransferToRepairInfo.resx">
+      <DependentUpon>202008160820481_Production_AddFKInImeiTransferToRepairInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008170526140_Production_PackagingRepairStock.resx">
+      <DependentUpon>202008170526140_Production_PackagingRepairStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008180914043_Production_TransferIdInIMEIProblemDetailTable.resx">
+      <DependentUpon>202008180914043_Production_TransferIdInIMEIProblemDetailTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008181039545_Production_TransferPackagingRepairItemToPackagingQC.resx">
+      <DependentUpon>202008181039545_Production_TransferPackagingRepairItemToPackagingQC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008191126236_Production_AddFinishGoodsCartonColumns.resx">
+      <DependentUpon>202008191126236_Production_AddFinishGoodsCartonColumns.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008200408345_Production_AddCartonNoInFinishGoodsPackaging.resx">
+      <DependentUpon>202008200408345_Production_AddCartonNoInFinishGoodsPackaging.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008220401040_Production_AddPackagingSectionFinishGoodsStock.resx">
+      <DependentUpon>202008220401040_Production_AddPackagingSectionFinishGoodsStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008220806356_Production_AddPackagingLineInRepairRequisition.resx">
+      <DependentUpon>202008220806356_Production_AddPackagingLineInRepairRequisition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008241047044_Production_AddGeneratedIMEITable.resx">
+      <DependentUpon>202008241047044_Production_AddGeneratedIMEITable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202008270544236_Production_AddStockItemReturn.resx">
+      <DependentUpon>202008270544236_Production_AddStockItemReturn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202009011120058_Production_AddFaultyGroupAndType.resx">
+      <DependentUpon>202009011120058_Production_AddFaultyGroupAndType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202103250815287_Production_tblLotIn.resx">
+      <DependentUpon>202103250815287_Production_tblLotIn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202105050625539_Production_RepairSectionSemiFinishStock.resx">
+      <DependentUpon>202105050625539_Production_RepairSectionSemiFinishStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202105050916145_Production_RepairSectionSemiFinishTransfer.resx">
+      <DependentUpon>202105050916145_Production_RepairSectionSemiFinishTransfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.resx">
+      <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011020520110_SalesAndDistribution_AddCategoryAndBRandId.resx">
+      <DependentUpon>202011020520110_SalesAndDistribution_AddCategoryAndBRandId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011030442158_SalesAndDistribution_AddRSM.resx">
+      <DependentUpon>202011030442158_SalesAndDistribution_AddRSM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011030928439_SalesAndDistribution_AddDivisionDistrictZone.resx">
+      <DependentUpon>202011030928439_SalesAndDistribution_AddDivisionDistrictZone.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011041201597_SalesAndDistribution_UpdateRSM.resx">
+      <DependentUpon>202011041201597_SalesAndDistribution_UpdateRSM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011041208237_SalesAndDistribution_AddRSM_EUserId.resx">
+      <DependentUpon>202011041208237_SalesAndDistribution_AddRSM_EUserId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011041305410_SalesAndDistribution_AddRSM_EUserId_datatype.resx">
+      <DependentUpon>202011041305410_SalesAndDistribution_AddRSM_EUserId_datatype.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011070937484_SalesAndDistribution_TblASM.resx">
+      <DependentUpon>202011070937484_SalesAndDistribution_TblASM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011080545142_SalesAndDistribution_ASM_ZoneId.resx">
+      <DependentUpon>202011080545142_SalesAndDistribution_ASM_ZoneId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011080944504_SalesAndDistribution_AddTblTSE.resx">
+      <DependentUpon>202011080944504_SalesAndDistribution_AddTblTSE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011090506253_SalesAndDistribution_RenameColumns.resx">
+      <DependentUpon>202011090506253_SalesAndDistribution_RenameColumns.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011090614125_SalesAndDistribution_AddZoneDistrictDivisionInDealer.resx">
+      <DependentUpon>202011090614125_SalesAndDistribution_AddZoneDistrictDivisionInDealer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011090620081_SalesAndDistribution_AddRepresentativeInDealer.resx">
+      <DependentUpon>202011090620081_SalesAndDistribution_AddRepresentativeInDealer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011090624568_SalesAndDistribution_AddRepresentativeFlagInDealer.resx">
+      <DependentUpon>202011090624568_SalesAndDistribution_AddRepresentativeFlagInDealer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011100757233_SalesAndDistribution_AddZoneIdInRSM.resx">
+      <DependentUpon>202011100757233_SalesAndDistribution_AddZoneIdInRSM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011100804400_SalesAndDistribution_AddReportingSRInASMandTSE.resx">
+      <DependentUpon>202011100804400_SalesAndDistribution_AddReportingSRInASMandTSE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011100843022_SalesAndDistribution_tbl_SalesRepresentative.resx">
+      <DependentUpon>202011100843022_SalesAndDistribution_tbl_SalesRepresentative.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011110935393_SalesAndDistribution_AddIsAllowToLoginInDealer.resx">
+      <DependentUpon>202011110935393_SalesAndDistribution_AddIsAllowToLoginInDealer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011111204313_SalesAndDistribution_AddCostPriceAndSalePriceAndFlagInModel.resx">
+      <DependentUpon>202011111204313_SalesAndDistribution_AddCostPriceAndSalePriceAndFlagInModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011120133071_SalesAndDistribution_AddFlagInModel.resx">
+      <DependentUpon>202011120133071_SalesAndDistribution_AddFlagInModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011120158534_SalesAndDistribution_UpdateItemStockTbl.resx">
+      <DependentUpon>202011120158534_SalesAndDistribution_UpdateItemStockTbl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011120226167_SalesAndDistribution_Add_tbl_StoreMasterStock.resx">
+      <DependentUpon>202011120226167_SalesAndDistribution_Add_tbl_StoreMasterStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011120953177_SalesAndDistribution_Add_Column_tblItemStock_CartoonId.resx">
+      <DependentUpon>202011120953177_SalesAndDistribution_Add_Column_tblItemStock_CartoonId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011161122573_SalesAndDistribution_Add_tbl_DealerRequisition.resx">
+      <DependentUpon>202011161122573_SalesAndDistribution_Add_tbl_DealerRequisition.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ERPBO\ERPBO.csproj">
+      <Project>{83de419f-8912-4254-a909-5f63a35eb2ec}</Project>
+      <Name>ERPBO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

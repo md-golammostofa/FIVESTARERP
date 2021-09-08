@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ERPBO.Production.ViewModels.RepairItemStockInfoViewModel>
+@{
+    Layout = null;
+    var pagerData = (ERPWeb.Infrastructure.PagerData)ViewBag.PagerData;
+    int sl = pagerData.Serial;
+    string badge = string.Empty;
+    var privilege = (ERPBO.Common.UserPrivilege)ViewBag.UserPrivilege;
+    int stock = 0;
+
+}
+
+<div class="row">
+    <div class="col-md-12" style="overflow-y:scroll">
+        <table class="table table-bordered table-striped table-sm table-responsive-lg text-sm">
+            <thead class="btn-dark">
+                <tr class="text-center text-sm text-bold">
+                    <td>#SL</td>
+                    <td>Belt</td>
+                    <td>Model</td>
+                    <td>Warehouse</td>
+                    <td>ItemType</td>
+                    <td>Item/Item-Color</td>
+                    <td>Total Stock</td>
+                    <td>Total Transfer</td>
+                    <td>Current Stock</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    sl = sl + 1;
+                    stock = (item.Quantity - item.QCQty);
+                    string belt = "(" + item.ProductionFloorName + ")-(" + item.AssemblyLineName + ")-(" + item.QCName + ")-(" + item.RepairLineName + ")";
+                    <tr>
+                        <td class="text-center text-bold">@sl</td>
+                        <td>@belt</td>
+                        <td class="text-center text-bold">@item.ModelName</td>
+                        <td>@item.WarehouseName</td>
+                        <td>@item.ItemTypeName</td>
+                        <td>@item.ItemName</td>
+                        <td class="text-center text-bold">@item.Quantity</td>
+                        <td class="text-center text-bold">@item.QCQty</td>
+                        <td class="text-center text-bold">@stock</td>
+                    </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="text-center text-bold">
+                        <td colspan="11">No data found in the table</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-12 repairItemStock">
+        @Html.Partial("_Pagination", pagerData)
+    </div>
+</div>
+
+

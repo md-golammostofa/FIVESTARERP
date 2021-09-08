@@ -1,0 +1,110 @@
+﻿@model  ERPBO.FrontDesk.ViewModels.JobOrderViewModel
+@{
+    string isWarrantyAvailable = Model.IsWarrantyAvailable ? "Yes" : "No";
+    string isWarrantyPaperEnclosed = Model.IsWarrantyPaperEnclosed ? "Yes" : "No";
+    string strWarrentStartDate = Model.WarrantyDate.HasValue ? Model.WarrantyDate.Value.ToString("dd-MMM-yyy") : "";
+    string strWarrentEndDate = Model.WarrantyEndDate != null ? Model.WarrantyEndDate.Value.ToString("dd-MMM-yyy") : "";
+    string EntryDate = Model.EntryDate != null ? Model.EntryDate.Value.ToString("dd-MMM-yyy") : "";
+    string RepairDate = Model.RepairDate != null ? Model.RepairDate.Value.ToString("dd-MMM-yyy") : "";
+    string CloseDate = Model.CloseDate != null ? Model.CloseDate.Value.ToString("dd-MMM-yyy") : "";
+    var jobOrder = (ERPBO.FrontDesk.ViewModels.HandsetChangeTraceViewModel)ViewBag.OldHansetInformation;
+}
+<div class="row">
+    <div class="col-md-12" style="overflow-y:scroll">
+        <table class="table table-sm table-bordered table-responsive-lg text-sm text-bold" id="tblJobOrderDetail">
+            <tr>
+                <td class="hide">@Model.JodOrderId</td>
+                <td class="text-blue">Job Code</td>
+                <td class="font-weight-bold">@Model.JobOrderCode</td>
+                <td class="text-blue"></td>
+                <td class="font-weight-bold">@Model.InvoiceCode</td>
+                <td class="text-blue">Create Date</td>
+                <td class="font-weight-bold">@EntryDate</td>
+            </tr>
+            <tr>
+                <td class="text-blue">Customer Type</td>
+                <td>@Model.CustomerType</td>
+                <td class="text-blue">IMEI1</td>
+                <td>@Model.IMEI</td>
+                <td class="text-blue">IMEI2</td>
+                <td>@Model.IMEI2</td>
+
+            </tr>
+            <tr>
+                <td class="text-blue">Type</td>
+                <td>@Model.Type</td>
+                <td class="text-blue">Model</td>
+                <td>@Model.ModelName</td>
+                <td class="text-blue">Color</td>
+                <td>@Model.ModelColor</td>
+            </tr>
+            <tr>
+                <td class="text-blue">Job Status</td>
+                <td>@Model.StateStatus</td>
+                <td class="text-blue">Accessories</td>
+                <td>@Model.AccessoriesNames</td>
+                <td class="text-blue">Issued by</td>
+                <td>@Model.EntryUser</td>
+            </tr>
+            <tr>
+                <td class="text-blue">Repair Status</td>
+                <td colspan="3">@Model.TsRepairStatus</td>
+                <td class="text-blue">TS Name</td>
+                <td>@Model.TSName</td>
+            </tr>
+            <tr>
+                <td class="text-blue">Symptoms</td>
+                <td colspan="5">@Model.Problems</td>
+            </tr>
+            <tr>
+                <td class="text-blue">Fault</td>
+                <td colspan="5">@Model.FaultName</td>
+            </tr>
+            <tr>
+                <td class="text-blue">Services</td>
+                <td colspan="5">@Model.ServiceName</td>
+            </tr>
+            <tr>
+                <td class="text-blue">UsedParts</td>
+                <td colspan="5">@Model.PartsName</td>
+            </tr>
+            <tr>
+                <td class="text-blue">TsRemarks</td>
+                <td colspan="5"><b style="color:orangered">@Model.TSRemarks</b></td>
+            </tr>
+        </table>
+        @if (Model.StateStatus == "HandSetChange" && Model.TsRepairStatus == "MODULE SWAP")
+        {
+            <table class="table table-sm table-bordered table-responsive-lg text-sm text-bold">
+                <tr class="text-center">
+                    <th colspan="4"><b style="color:red">Other Handset Information</b></th>
+                </tr>
+                <tr>
+                    <td class="text-purple">IMEI1</td>
+                    <td>@jobOrder.IMEI1</td>
+                    <td class="text-purple">Model</td>
+                    <td>@jobOrder.ModelName</td>
+                </tr>
+                <tr>
+                    <td class="text-purple">IMEI2</td>
+                    <td>@jobOrder.IMEI2</td>
+                    <td class="text-purple">Color</td>
+                    <td>@jobOrder.Color</td>
+                </tr>
+            </table>
+        }
+    </div>
+    <div class="col-md-12">
+        <div class="modal-footer">
+            @*@if ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.TsRepairStatus == "RETURN WITHOUT REPAIR") || (Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.IsReturn == true) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.JobOrderType == "Warrenty")) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.InvoiceCode != null)) || (Model.StateStatus == "HandSetChange" && Model.TsRepairStatus == "MODULE SWAP"))
+        {
+            <button type="button" class="btn btn-sm btn-success btnDeliveryDone">Delivery</button>
+        }*@
+            @if (Model.StateStatus == ERPBLL.Common.JobOrderStatus.QCAssigned && Model.TsRepairStatus == "QC" && Model.QCTransferStatus == "Received")
+            {
+                <button type="button" title="Click For Approval" class="btn btn-outline-success btnQcStatus"><i class="fas fa-sticky-note"></i></button>
+            }
+        </div>
+    </div>
+</div>
+

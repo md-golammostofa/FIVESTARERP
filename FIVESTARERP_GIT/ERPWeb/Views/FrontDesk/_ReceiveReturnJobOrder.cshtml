@@ -1,0 +1,79 @@
+﻿@model IEnumerable<ERPBO.FrontDesk.ViewModels.JobOrderReturnDetailViewModel>
+@{
+    var pagerData = (ERPWeb.Infrastructure.PagerData)ViewBag.PagerData;
+    int sl = pagerData.Serial;
+    string badge = string.Empty;
+    string badge1 = string.Empty;
+}
+<div class="col-md-12 text-sm">
+    <table class="table table-bordered table-sm table-striped" id="tblJobOrderReturn">
+        <thead class="btn-dark">
+            <tr class="text-center">
+                <th style="vertical-align:middle">#SL</th>
+                <th style="vertical-align:middle" class="hide"></th>
+                <th style="vertical-align:middle">DO Number</th>
+                <th style="vertical-align:middle" class="hide"></th>
+                <th style="vertical-align:middle">Job Code</th>
+                <th style="vertical-align:middle">Model</th>
+                <th style="vertical-align:middle">Color</th>
+                <th style="vertical-align:middle">Accessories</th>
+                <th style="vertical-align:middle">Job Status</th>
+                <th style="vertical-align:middle">Transfer Status</th>
+                <th style="vertical-align:middle" class="hide"></th>
+                <th style="vertical-align:middle">Repair Branch</th>
+                <th style="vertical-align:middle">Entry Date</th>
+                <th style="vertical-align:middle">Received By</th>
+                <th style="vertical-align:middle" class="action">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rec in Model)
+            {
+                sl = sl + 1;
+                badge1 = rec.JobStatus == "Repair-Done" ? "badge bg-success" : "badge bg-danger";
+                badge = rec.TransferStatus == "Pending" ? "badge bg-warning" : "badge bg-success";
+                string EntryDate = rec.EntryDate != null ? rec.EntryDate.Value.ToString("dd-MMM-yyy") : "";
+                <tr>
+                    <td class="text-center">@sl</td>
+                    <td class="hide">@rec.JobOrderReturnDetailId</td>
+                    <td>@rec.TransferCode</td>
+                    <td class="hide joborderId" joborderId="@rec.JobOrderId">@rec.JobOrderId</td>
+                    <td>
+                        <a href="#" class="data-item-details" data-item-details="@rec.JobOrderId" title="Job Order Details">@rec.JobOrderCode</a>
+                    </td>
+                    <td>@rec.ModelName</td>
+                    <td>@rec.ModelColor</td>
+                    <td>@rec.AccessoriesNames</td>
+                    <td class="text-center" data-val="@rec.JobStatus">
+                        <span class="@badge1">@rec.JobStatus</span>
+                    </td>
+                    <td class="text-center" data-val="@rec.TransferStatus">
+                        <span class="@badge">@rec.TransferStatus</span>
+                    </td>
+                    <td class="hide">@rec.BranchId</td>
+                    <td>@rec.FromBranchName</td>
+                    <th>@EntryDate</th>
+                    <td>@rec.ReceivedBy</td>
+                    <td class="text-center action">
+                        @if (rec.TransferStatus == "Pending")
+                        {
+                            <a class="btn btn-sm btn-outline-success  data-item-received2" title="Receive Job Order" data-item-received2="@rec.JobOrderReturnDetailId"><i class="fas fa-download"></i></a>
+                        }
+                    </td>
+
+                </tr>
+            }
+            @if (Model.Count() == 0)
+            {
+                <tr class="text-center empty-row">
+                    <td colspan="11">
+                        No Rows Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-md-12 receiveReturnJob">
+    @Html.Partial("_Pagination", pagerData)
+</div>

@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ERPBO.FrontDesk.ViewModels.InvoiceInfoViewModel>
+@{
+    var pagerData = (ERPWeb.Infrastructure.PagerData)ViewBag.PagerData;
+    int sl = pagerData.Serial;
+    double partsP = 0;
+    double vat = 0;
+    double tax = 0;
+    double discount = 0;
+    double netA = 0;
+}
+<div class="col-md-12 text-sm">
+    <table class="table table-bordered table-sm table-striped" id="tblAccessoriesSells">
+        <thead class="btn-dark">
+            <tr class="text-center">
+                <th style="vertical-align:middle">#SL</th>
+                <th style="vertical-align:middle">Invoice</th>
+                <th style="vertical-align:middle">Customer Name</th>
+                <th style="vertical-align:middle">Phone</th>
+                <th style="vertical-align:middle">Parts Price</th>
+                <th style="vertical-align:middle">VAT</th>
+                <th style="vertical-align:middle">TAX</th>
+                <th style="vertical-align:middle">Discount</th>
+                <th style="vertical-align:middle">Net Amount</th>
+                <th style="vertical-align:middle">Invoice Date</th>
+                <th style="vertical-align:middle">Issue By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inv in Model)
+            {
+                sl = sl + 1;
+                partsP += inv.TotalSPAmount;
+                vat += inv.VAT;
+                tax += inv.Tax;
+                discount += inv.Discount;
+                netA += inv.NetAmount;
+
+                string entryDate = inv.EntryDate != null ? inv.EntryDate.Value.ToString("dd-MMM-yyyy") : "";
+                <tr>
+                    <td class="text-center">@sl</td>
+                    <td class="action">
+                        <a href="@Url.Action("InvoiceReport","ReportSS", new {infoId= inv.InvoiceInfoId})" target="_blank" class="btn text-bold data-report-item2" style="color:blue;line-height:5px" @*id="btnReport"*@ title="Download Invoice">@inv.InvoiceCode</a>
+                    </td>
+                    <td>@inv.CustomerName</td>
+                    <td>@inv.CustomerPhone</td>
+                    <td class="text-center">@inv.TotalSPAmount.ToString("0.00")</td>
+                    <td class="text-center">@inv.VAT.ToString("0.00")</td>
+                    <td class="text-center">@inv.Tax.ToString("0.00")</td>
+                    <td class="text-center">@inv.Discount.ToString("0.00")</td>
+                    <td class="text-center">@inv.NetAmount.ToString("0.00")</td>
+                    <td>@entryDate</td>
+                    <td>@inv.UserName</td>
+                </tr>
+            }
+            @if (Model.Count() == 0)
+            {
+                <tr class="text-center empty-row">
+                    <td colspan="11">
+                        No Rows Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+              
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<div class="col-md-12 sell">
+    @Html.Partial("_Pagination", pagerData)
+</div>

@@ -1,0 +1,170 @@
+﻿@model IEnumerable<ERPBO.Inventory.ViewModels.UnitViewModel>
+@{
+    ViewBag.Title = "GetAllUnitList";
+
+    var pagerData = (ERPWeb.Infrastructure.PagerData)ViewBag.PagerData;
+    int sl = pagerData.Serial;
+}
+
+<div class="row">
+
+    <div class="col-md-12 mt-2 " style="overflow-y:scroll">
+        <table class="table table-bordered table-sm text-sm table-striped table-responsive-lg tblUnitData" id="tblUnitData">
+            <thead class="btn-dark">
+                <tr class="text-center">
+                    <th>#SL</th>
+                    <th class="hide"></th>
+                    <th>UnitName</th>
+                    <th>Unit Symbol</th>
+                    <th>Remarks</th>
+                    <th>Entry User</th>
+                    <th>Update User</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var unit in Model)
+                {
+                    sl = sl + 1;
+                    <tr>
+                        <td class="text-center" width="10%">@sl</td>
+                        <td class="hide">@unit.UnitId</td>
+                        <td>@unit.UnitName</td>
+                        <td class="text-center">@unit.UnitSymbol</td>
+                        <td>@unit.Remarks</td>
+                        <td class="text-center">@unit.EntryUser</td>
+                        <td class="text-center">@unit.UpdateUser</td>
+                        <td class="text-center">
+                            @*@if (privilege.Edit)
+                                {*@
+                            <a href="#" class="btn btn-warning btn-sm data-edit-item-unit" style="line-height:1" data-edit-item-unit="@unit.UnitId"><i class="fa fa-pen"></i> Edit</a>
+                            @*}*@
+                        </td>
+                    </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="text-center empty-row">
+                        <td colspan="5">
+                            No Rows Found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-12 unit">
+        @Html.Partial("_Pagination", pagerData)
+    </div>
+</div>
+
+
+
+
+@*@section scripts{
+    <script type="text/javascript">
+        var hdfUnitId = $("#hdfUnitId");
+        var txtUnitName = $("#txtUnitName");
+        var txtUnitSymbol = $("#txtUnitSymbol");
+        var txtRemarksUnit = $("#txtRemarksUnit");
+
+        $(document).ready(function () {
+            $('#tblUnitData').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+            });
+        })
+
+        function OpenModalUnit() {
+            $("#spanModalHeadUnit").text('Add New Unit');
+            $("#spanSaveTextUnit").text('Save');
+            $("#modalUnit").modal("show");
+            $(".error").addClass("hide");
+        }
+
+        $("#btnAddNewUnit").click(function (e) {
+            e.preventDefault();
+            clearCtrl();
+            OpenModalUnit();
+        })
+
+
+        $("#btnSubmitUnit").click(function (e) {
+            e.preventDefault();
+            $(".error").addClass("hide");
+            if (validateFormUnit() == true) {
+                var data = JSON.stringify({ UnitId: TryParseInt(hdfUnitId.val(), 0), UnitName: txtUnitName.val(), UnitSymbol: txtUnitSymbol.val(), Remarks: txtRemarksUnit.val()});
+                console.log(data);
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Inventory/SaveUnit', data, getToken())).then(function (res, status) {
+                    console.log(status);
+                    console.log(res);
+                    if (res == true) {
+                        message("#msg1", "#modalUnit");
+                    }
+                    else {
+                        message("#msg2");
+                    }
+                    enable("#btnSubmitUnit");
+                }).fail(function (err) {
+                    console.log(err);
+                    enable("#btnSubmitUnit");
+                });
+            }
+
+        })
+
+        function validateFormUnit() {
+            $(".error").addClass("hide");
+            var isValid = true;
+            if ($.trim(txtUnitName.val()) == "") {
+                $(".required-unitName").removeClass("hide");
+                isValid = false;
+            }
+            else {
+                var id = TryParseInt(hdfUnitId.val(), 0);
+                if (ajaxBooleanChecker(JSON.stringify({ id: id, unitName: txtUnitName.val().trim() }), '/Common/IsDuplicateUnitName', getToken()) == true) {
+                    $(".duplicate-unitName").removeClass("hide");
+                    isValid = false;
+                }
+
+            }
+            return isValid;
+        }
+
+
+        $(document).on("click", "a.data-edit-item-unit", function (e) {
+            e.preventDefault()
+            clearCtrl();
+            var row = $(this).parent().parents('tr');
+            var td1 = row.find('td:eq(1)').html();
+            var td2 = row.find('td:eq(2)').html();
+            var td3 = row.find('td:eq(3)').html();
+            var td4 = row.find('td:eq(4)').html();
+
+            hdfUnitId.val(td1);
+            txtUnitName.val(td2);
+            txtUnitSymbol.val(td3)
+            txtRemarksUnit.val(td4);
+
+        })
+
+        function clearCtrl() {
+            hdfUnitId.val('0');
+            txtUnitName.val('');
+            txtUnitSymbol.val('');
+            txtRemarksUnit.val('');
+
+        }
+        $(".data-edit-item-unit").click(function (e) {
+            e.preventDefault()
+            OpenModalUnit()
+            $("#spanModalHead").text('Update Unit');
+            $("#spanSaveTextUnit").text('Update');
+        });
+    </script>
+}*@
+

@@ -1,0 +1,260 @@
+﻿@model IEnumerable<ERPBO.Production.ViewModels.ProductionLineViewModel>
+@{
+    ViewBag.Title = "Production Floor List";
+    int sl = 0;
+    string badge = string.Empty;
+    var privilege = (ERPBO.Common.UserPrivilege)ViewBag.UserPrivilege;
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="row">
+            <div class="col-md-3">
+                @Html.AntiForgeryToken()
+            </div>
+            <div class="col-md-6">
+                <h4><b style="color:darkblue">Production Floor List</b></h4>
+
+            </div>
+            <div class="col-md-3 text-right">
+                @if (privilege != null && privilege.Add)
+                {
+                    <button class="btn btn-outline-primary btn-sm" id="btnAddNew"><i class="fa fa-plus"></i> Create Line</button>
+                }
+            </div>
+        </div>
+        <hr />
+    </div>
+    <div class="col-md-12">
+        <table class="table table-bordered table-sm table-striped" id="tblLineData">
+            <thead class="btn-dark">
+                <tr class="text-center">
+                    <th>#SL </th>
+                    <th class="hide"></th>
+                    <th>Floor</th>
+                    <th>InCharge Name</th>
+                    <th>StateStatus</th>
+                    <th>Remarks</th>
+                    <th>Entry User</th>
+                    <th>Update User</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var line in Model)
+                {
+                    sl = sl + 1;
+                    badge = line.StateStatus.ToLower() == "active" ? "badge bg-success" : "badge bg-danger";
+                    <tr>
+                        <td class="text-center">@sl</td>
+                        <td class="hide">@line.LineId</td>
+                        <td>@line.LineNumber</td>
+                        <td>@line.LineIncharge</td>
+                        <td class="text-center" data-val="@line.StateStatus">
+                            <span class="@badge">@line.StateStatus</span>
+                        </td>
+                        <td>@line.Remarks</td>
+                        <td class="text-center">@line.EntryUser</td>
+                        <td class="text-center">@line.UpdateUser</td>
+                        <td class="text-center">
+                            @if (privilege != null && privilege.Edit)
+                            {
+                                <a href="#" class="btn btn-warning btn-sm data-edit-item" data-edit-item="@line.LineId"><i class="fa fa-pen"></i> Edit</a>
+                            }
+                        </td>
+                    </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="text-center empty-row">
+                        <td colspan="9">
+                            No data found in the table
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modalLine" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-primary">
+                <h4 id="modalHeading" class="modal-title"><span id="spanModalHead">Add New Production Line</span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmLine">
+                    <input type="hidden" name="Id" id="hdfLineId" />
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtLineNumber" class="control-label font-weight-bold">Line Number</label>
+                            <input type="text" name="lineNumber" value="" id="txtLineNumber" class="form-control form-control-sm" />
+                            <span class="error hide required-lineNumber font-weight-bold">Input Line Number!</span>
+                            <span class="error hide duplicate-lineNumber font-weight-bold">Already Line Number Exist!</span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtIncharge" class="control-label font-weight-bold">InCharge Name</label>
+                            <input type="text" name="incharge" value="" id="txtIncharge" class="form-control form-control-sm" />
+                            <span class="error hide required-incharge font-weight-bold">Input Incharge Name!</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtRemarks" class="control-label font-weight-bold">Remarks</label>
+                            <input type="text" name="remarks" value="" id="txtRemarks" class="form-control form-control-sm" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label style="visibility:hidden">Is Active</label>
+                            <div class="form-control form-control-sm">
+                                <input type="checkbox" id="chkStatestatus" /> <b>Is Active?</b>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer btn-light">
+                <div class="col-md-6">
+                    <div id="msg1" class="alert alert-success hide float-left">
+                        Data has been saved Successful!
+                    </div>
+                    <div id="msg2" class="alert alert-danger hide float-left">
+                        Data has been failed to save!
+                    </div>
+                </div>
+                <button type="button" class="btn btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
+                <button type="submit" class="btn btn-success float-right" id="btnSubmit"><i class="far fa-save"></i> <span id="spanSaveText"> Save</span> </button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var hdfLineId = $("#hdfLineId");
+        var txtLineNumber = $("#txtLineNumber");
+        var txtIncharge = $("#txtIncharge");
+        var chkStatestatus = $("#chkStatestatus");
+        var txtRemarks = $("#txtRemarks");
+
+
+        $(document).ready(function () {
+            $('#tblLineData').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": false,
+                "pageLength": 10,
+                "language": {
+                    searchPlaceholder: "Search By Anything",
+                    search: ""
+                }
+            });
+            $('.dataTables_filter input[type="search"]').css(
+                { 'width': '350px', 'display': 'inline-block' }
+            );
+        })
+
+        function OpenModal() {
+            $("#spanModalHead").text('Add New Production Line');
+            $("#spanSaveText").text('Save');
+            $("#modalLine").modal("show");
+            $(".error").addClass("hide");
+        }
+
+        $("#btnAddNew").click(function (e) {
+            e.preventDefault();
+            OpenModal();
+            clearCtrl();
+        })
+
+        //validation
+        function validateForm() {
+            $(".error").addClass("hide");
+            var isValid = true;
+            if ($.trim(txtLineNumber.val()) == "") {
+                $(".required-lineNumber").removeClass("hide");
+                isValid = false;
+            }
+            else {
+                var id = TryParseInt(hdfLineId.val(), 0);
+                if (ajaxBooleanChecker(JSON.stringify({ id: id, lineNumber: txtLineNumber.val().trim() }), '/Common/IsDuplicateLineNumber', getToken()) == true) {
+                    $(".duplicate-lineNumber").removeClass("hide");
+                    isValid = false;
+                }
+            }
+            if ($.trim(txtIncharge.val()) == "") {
+                $(".required-incharge").removeClass("hide");
+                isValid = false;
+            }
+
+            return isValid;
+        }
+        //Data Save to database
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            $(".error").addClass("hide");
+            if (validateForm() == true) {
+                var data = JSON.stringify({
+                    LineId: TryParseInt(hdfLineId.val(), 0), LineNumber: txtLineNumber.val(), LineIncharge: txtIncharge.val(), Remarks: txtRemarks.val(),
+                    IsActive: chkStatestatus.is(":checked")
+                });
+                console.log(data);
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Production/SaveProductionLine', data, getToken())).then(function (res, status) {
+                    console.log(status);
+                    console.log(res);
+                    if (res == true) {
+                        message("#msg1", "#modalLine");
+                    }
+                    else {
+                        message("#msg2");
+                    }
+                    enable("#btnSubmit");
+                }).fail(function (err) {
+                    console.log(err);
+                    enable("#btnSubmit");
+                });
+            }
+
+        })
+        //data edit
+        $(document).on("click", "a.data-edit-item", function (e) {
+            e.preventDefault()
+            clearCtrl();
+            var row = $(this).parent().parents('tr');
+            var td1 = row.find('td:eq(1)').html();
+            var td2 = row.find('td:eq(2)').html();
+            var td3 = row.find('td:eq(3)').html();
+            var td4 = row.find('td:eq(4)').attr("data-val");
+            var td5 = row.find('td:eq(5)').html();
+
+            hdfLineId.val(td1);
+            txtLineNumber.val(td2);
+            txtIncharge.val(td3);
+            chkStatestatus.prop("checked", false);
+            if (td4 === 'Active') {
+                chkStatestatus.prop("checked", true);
+            }
+            txtRemarks.val(td5);
+        })
+        //clear txtbox
+        function clearCtrl() {
+            hdfLineId.val('0');
+            txtLineNumber.val('');
+            txtIncharge.val('');
+            chkStatestatus.prop("checked", false);
+            txtRemarks.val('');
+
+
+        }
+        $(".data-edit-item").click(function (e) {
+            e.preventDefault()
+            OpenModal()
+            $("#spanModalHead").text('Update Production Line');
+            $("#spanSaveText").text('Update');
+        });
+    </script>
+}
