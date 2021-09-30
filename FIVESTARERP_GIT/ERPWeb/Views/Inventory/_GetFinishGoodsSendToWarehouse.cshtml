@@ -11,6 +11,7 @@
                 <tr class="text-center">
                     <th>#SL</th>
                     <th class="hide"></th>
+                    <th style="vertical-align:middle">Action</th>
                     <th style="vertical-align:middle">Floor</th>
                     <th style="vertical-align:middle">Warehouse Name</th>
                     <th style="vertical-align:middle">Model Name</th>
@@ -21,7 +22,7 @@
                     <th style="vertical-align:middle">EntryDate</th>
                     <th style="vertical-align:middle">Entry User</th>
                     <th style="vertical-align:middle">Update User</th>
-                    <th style="vertical-align:middle">Action</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -29,25 +30,26 @@
                 {
                     sl = sl + 1;
                     badge = item.StateStatus == "Send" ? "badge bg-primary" : "badge bg-success";
-                    <tr>
-                        <td class="text-center text-bold">@sl</td>
-                        <td class="hide">@item.SendId</td>
-                        <td>@item.LineNumber</td>
-                        <td>@item.WarehouseName</td>
-                        <td>@item.ModelName</td>
-                        <td class="text-center text-bold">@item.TotalQty</td>
-                        <td class="text-center" data-val="@item.StateStatus">
-                            <span class="@badge">@item.StateStatus</span>
-                        </td>
-                        <td>@item.Remarks</td>
-                        <td class="text-center">@item.CartoonNo</td>
-                        <td class="text-center">@item.EntryDate.Value.ToString("dd-MMM-yyyy hh:mm tt")</td>
-                        <td class="text-center">@item.EntryUser</td>
-                        <td class="text-center">@item.UpdateUser</td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-outline-secondary data-finishgoods-item" title="View Details" data-finishgoods-item="@item.SendId"><i class="fas fa-eye"></i></a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td class="text-center text-bold">@sl</td>
+                    <td class="hide">@item.SendId</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-sm btn-outline-secondary data-finishgoods-item" title="View Details" data-finishgoods-item="@item.SendId"><i class="fas fa-eye"></i></a>
+                    </td>
+                    <td>@item.LineNumber</td>
+                    <td>@item.WarehouseName</td>
+                    <td>@item.ModelName</td>
+                    <td class="text-center text-bold">@item.TotalQty</td>
+                    <td class="text-center" data-val="@item.StateStatus">
+                        <span class="@badge">@item.StateStatus</span>
+                    </td>
+                    <td>@item.Remarks</td>
+                    <td class="text-center">@item.CartoonNo</td>
+                    <td class="text-center">@item.EntryDate.Value.ToString("dd-MMM-yyyy hh:mm tt")</td>
+                    <td class="text-center">@item.EntryUser</td>
+                    <td class="text-center">@item.UpdateUser</td>
+
+                </tr>
                 }
                 @if (Model.Count() == 0)
                 {

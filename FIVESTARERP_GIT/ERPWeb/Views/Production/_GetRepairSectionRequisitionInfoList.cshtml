@@ -17,6 +17,7 @@
             <thead class="btn-dark">
                 <tr class="text-center">
                     <th style="vertical-align:middle;white-space: nowrap">#SL</th>
+                    <th style="vertical-align:middle;white-space: nowrap">Action</th>
                     <th style="vertical-align:middle;white-space: nowrap">Requisition Code</th>
                     <th style="vertical-align:middle;white-space: nowrap">Section</th>
                     <th style="vertical-align:middle;white-space: nowrap">Model</th>
@@ -39,7 +40,7 @@
                     <th style="vertical-align:middle;white-space: nowrap">Rechecked Date</th>
                     <th style="vertical-align:middle;white-space: nowrap">Canceled by</th>
                     <th style="vertical-align:middle;white-space: nowrap">Canceled Date</th>
-                    <th style="vertical-align:middle;white-space: nowrap">Action</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -55,53 +56,54 @@
                     var canceledDate = info.CanceledDate.HasValue ? info.CanceledDate.Value.ToString("dd MMM yyyy hh:mm tt") : "";
                     var receivedDate = info.ReceivedDate.HasValue ? info.ReceivedDate.Value.ToString("dd MMM yyyy hh:mm tt") : "";
                     var updateDate = info.UpdateDate.HasValue ? info.UpdateDate.Value.ToString("dd MMM yyyy hh:mm tt") : "";
-                    <tr>
-                        <td class="text-center text-bold">@sl</td>
-                        <td>@info.RequisitionCode</td>
-                        <td>@sectionName</td>
-                        <td>@info.ModelName</td>
-                        <td>@info.WarehouseName</td>
-                        <td class="text-center text-bold">@info.TotalUnitQty</td>
-                        <td class="text-center" data-val="@info.StateStatus">
-                            <span class="@badge">@info.StateStatus</span>
-                        </td>
-                        <td class="text-center text-sm">@info.EntryUser</td>
-                        <td class="text-center text-sm">
-                            @info.EntryDate.Value.ToString("dd MMM yyyy hh:mm tt")
-                        </td>
-                        <td class="text-center text-sm">@info.CheckUser</td>
-                        <td class="text-center text-sm">
-                            @checkedDate
-                        </td>
-                        <td class="text-center text-sm">@info.ApproveUser</td>
-                        <td class="text-center text-sm">
-                            @approvedDate
-                        </td>
-                        <td class="text-center text-sm">@info.HandOverUser</td>
-                        <td class="text-center text-sm">
-                            @handOverDate
-                        </td>
-                        <td class="text-center text-sm">@info.ReceiveUser</td>
-                        <td class="text-center text-sm">
-                            @receivedDate
-                        </td>
-                        <td class="text-center text-sm">@info.UpdateUser</td>
-                        <td class="text-center text-sm">
-                            @updateDate
-                        </td>
-                        <td class="text-center text-sm">@info.RecheckUser</td>
-                        <td class="text-center text-sm">
-                            @recheckedDate
-                        </td>
-                        <td class="text-center text-sm">@info.CancelUser</td>
-                        <td class="text-center text-sm">
-                            @canceledDate
-                        </td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-outline-secondary data-item-detail" title="View Details" data-item-detail="@info.RSRInfoId"><i class="fas fa-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-outline-danger data-report-item" title="Pdf Report" data-report-item="@info.RSRInfoId"><i class="fas fa-file-pdf"></i></a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td class="text-center text-bold">@sl</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-sm btn-outline-secondary data-item-detail" title="View Details" data-item-detail="@info.RSRInfoId"><i class="fas fa-eye"></i></a>
+                        <a href="#" class="btn btn-sm btn-outline-danger data-report-item" title="Pdf Report" data-report-item="@info.RSRInfoId"><i class="fas fa-file-pdf"></i></a>
+                    </td>
+                    <td>@info.RequisitionCode</td>
+                    <td>@sectionName</td>
+                    <td>@info.ModelName</td>
+                    <td>@info.WarehouseName</td>
+                    <td class="text-center text-bold">@info.TotalUnitQty</td>
+                    <td class="text-center" data-val="@info.StateStatus">
+                        <span class="@badge">@info.StateStatus</span>
+                    </td>
+                    <td class="text-center text-sm">@info.EntryUser</td>
+                    <td class="text-center text-sm">
+                        @info.EntryDate.Value.ToString("dd MMM yyyy hh:mm tt")
+                    </td>
+                    <td class="text-center text-sm">@info.CheckUser</td>
+                    <td class="text-center text-sm">
+                        @checkedDate
+                    </td>
+                    <td class="text-center text-sm">@info.ApproveUser</td>
+                    <td class="text-center text-sm">
+                        @approvedDate
+                    </td>
+                    <td class="text-center text-sm">@info.HandOverUser</td>
+                    <td class="text-center text-sm">
+                        @handOverDate
+                    </td>
+                    <td class="text-center text-sm">@info.ReceiveUser</td>
+                    <td class="text-center text-sm">
+                        @receivedDate
+                    </td>
+                    <td class="text-center text-sm">@info.UpdateUser</td>
+                    <td class="text-center text-sm">
+                        @updateDate
+                    </td>
+                    <td class="text-center text-sm">@info.RecheckUser</td>
+                    <td class="text-center text-sm">
+                        @recheckedDate
+                    </td>
+                    <td class="text-center text-sm">@info.CancelUser</td>
+                    <td class="text-center text-sm">
+                        @canceledDate
+                    </td>
+
+                </tr>
                 }
                 @if (Model.Count() == 0)
                 {

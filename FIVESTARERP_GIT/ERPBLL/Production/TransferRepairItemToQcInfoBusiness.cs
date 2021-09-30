@@ -466,7 +466,7 @@ Inner Join [Inventory].dbo.tblWarehouses w on ti.WarehouseId = w.Id
 Inner Join [Inventory].dbo.tblItemTypes it on ti.ItemTypeId = it.ItemId
 Inner Join [Inventory].dbo.tblItems i on ti.ItemId = i.ItemId
 Inner Join [ControlPanel].dbo.tblApplicationUsers app on ti.EUserId = app.UserId
-Where 1= 1 {0}", param);
+Where 1= 1 {0} Order By ti.EntryDate desc", param);
 
             return query;
         }

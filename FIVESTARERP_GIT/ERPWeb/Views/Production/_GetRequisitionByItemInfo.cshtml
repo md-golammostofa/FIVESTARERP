@@ -13,6 +13,7 @@
             <thead class="btn-dark">
                 <tr class="text-center">
                     <th style="vertical-align:middle">#SL</th>
+                    <th style="vertical-align:middle">Action</th>
                     <th style="vertical-align:middle">REQ Code</th>
                     <th style="vertical-align:middle">Type</th>
                     <th style="vertical-align:middle">REQ For</th>
@@ -27,7 +28,7 @@
                     <th style="vertical-align:middle;white-space:nowrap">Entry Date</th>
                     <th style="vertical-align:middle">Update User</th>
                     <th style="vertical-align:middle;white-space:nowrap">Update Date</th>
-                    <th style="vertical-align:middle">Action</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -37,28 +38,29 @@
                     updateDate = item.UpdateDate.HasValue ? item.UpdateDate.Value.ToString("dd-MMM-yyyy hh:mm tt") : "";
                     badge = item.StateStatus == "Pending" ? "badge badge-warning" : (item.StateStatus == "Approved" ? "badge badge-success" : (item.StateStatus == "Accepted" ? "badge badge-primary" : "badge badge-danger"));
                     sectionName = (item.AssemblyLineId != null && item.AssemblyLineId > 0) ? item.AssemblyLineName : item.PackagingLineName;
-                    <tr>
-                        <td class="text-center text-bold">@sl</td>
-                        <td>@item.ReqInfoCode</td>
-                        <td class="text-center text-bold">@item.RequisitionType</td>
-                        <td>@item.RequisitionFor</td>
-                        <td>@item.LineNumber</td>
-                        <td>@sectionName</td>
-                        <td style="white-space:nowrap">@item.WarehouseName</td>
-                        <td class="text-center text-bold">@item.ModelName</td>
-                        <td class="text-center text-bold">@item.TotalReqCount</td>
-                        <td class="text-center text-bold" data-val="@item.StateStatus">
-                            <span class="@badge">@item.StateStatus</span>
-                        </td>
-                        <td>@item.Remarks</td>
-                        <td>@item.EntryUser</td>
-                        <td style="white-space:nowrap">@item.EntryDate.Value.ToString("dd-MMM-yyyy hh:mm tt")</td>
-                        <td>@item.UpdateUser</td>
-                        <td style="white-space:nowrap">@updateDate</td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-secondary btn-flat data-details" title="View Details" data-details="@item.ReqInfoId"><i class="fas fa-eye"></i></a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td class="text-center text-bold">@sl</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-sm btn-secondary btn-flat data-details" title="View Details" data-details="@item.ReqInfoId"><i class="fas fa-eye"></i></a>
+                    </td>
+                    <td>@item.ReqInfoCode</td>
+                    <td class="text-center text-bold">@item.RequisitionType</td>
+                    <td>@item.RequisitionFor</td>
+                    <td>@item.LineNumber</td>
+                    <td>@sectionName</td>
+                    <td style="white-space:nowrap">@item.WarehouseName</td>
+                    <td class="text-center text-bold">@item.ModelName</td>
+                    <td class="text-center text-bold">@item.TotalReqCount</td>
+                    <td class="text-center text-bold" data-val="@item.StateStatus">
+                        <span class="@badge">@item.StateStatus</span>
+                    </td>
+                    <td>@item.Remarks</td>
+                    <td>@item.EntryUser</td>
+                    <td style="white-space:nowrap">@item.EntryDate.Value.ToString("dd-MMM-yyyy hh:mm tt")</td>
+                    <td>@item.UpdateUser</td>
+                    <td style="white-space:nowrap">@updateDate</td>
+
+                </tr>
                 }
 
                 @if(Model.Count() == 0)
