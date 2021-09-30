@@ -67,6 +67,10 @@
                                         <i class="fas fa-file-excel">
                                         </i>
                                     </a>
+                                    <a href="@Url.Action("GetLotInBarcodePDFFileByItemColorAndRefNum", "Report", new { itemId = rii.ItemId, referenceId = rii.ReqInfoId.ToString(), rptType = "PDF" })" target="_blank" class="btn btn-sm btn-danger excel btn-flat float-right" title="Download QR Code Pdf File">
+                                        <i class="fas fa-file-pdf">
+                                        </i>
+                                    </a>
                                 }
                             </th>
                         </tr>

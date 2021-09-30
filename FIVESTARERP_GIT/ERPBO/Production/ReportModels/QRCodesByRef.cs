@@ -17,5 +17,6 @@ namespace ERPBO.Production.ReportModels
         public string WarehouseName { get; set; }
         public string ItemTypeName { get; set; }
         public string ItemName { get; set; }
+        public byte[] BarcodeLotInNumber { get; set; }
     }
 }

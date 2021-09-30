@@ -20,6 +20,7 @@ namespace ERPBLL.Production
         private readonly TransferRepairItemToQcInfoRepository _transferRepairItemToQcInfoRepository;
         private readonly TransferRepairItemToQcDetailRepository _transferRepairItemToQcDetailRepository;
         private readonly QRCodeTransferToRepairInfoRepository _qRCodeTransferToRepairInfoRepository;
+        private readonly TempQRCodeTraceRepository _tempQRCodeTraceRepository;
 
         // Business
         private readonly ITransferRepairItemToQcDetailBusiness _transferRepairItemToQcDetailBusiness;
@@ -44,6 +45,7 @@ namespace ERPBLL.Production
             this._transferRepairItemToQcInfoRepository = new TransferRepairItemToQcInfoRepository(this._productionDb);
             this._transferRepairItemToQcDetailRepository = new TransferRepairItemToQcDetailRepository(this._productionDb);
             this._qRCodeTransferToRepairInfoRepository = new QRCodeTransferToRepairInfoRepository(this._productionDb);
+            this._tempQRCodeTraceRepository = new TempQRCodeTraceRepository(this._productionDb);
 
             // Business class
             this._qCLineStockDetailBusiness = qCLineStockDetailBusiness;
@@ -277,7 +279,7 @@ namespace ERPBLL.Production
                         QCLineId = QrCodeInfoDto.QCLineId,
                         RepairLineId = QrCodeInfoDto.RepairLineId,
                         ForQty = 1,
-                        StateStatus = RequisitionStatus.Approved,
+                        StateStatus = RequisitionStatus.Accepted,//Change-29-09-2021
                         DescriptionId = dto.ModelId,
                         ItemId = dto.ItemId,
                         ItemTypeId = QrCodeInfoDto.ItemTypeId,
@@ -289,7 +291,17 @@ namespace ERPBLL.Production
                     };
                     transferInfo.TransferRepairItemToQcDetails = transferRepairItemDetails;
                 }
-
+                // QRCode //
+                var qrCode = _tempQRCodeTraceBusiness.GetTempQRCodeTraceByCode(dto.QRCode, orgId);
+                if(qrCode != null)
+                {
+                    qrCode.StateStatus= QRCodeStatus.LotIn;
+                    qrCode.UpdateDate = DateTime.Now;
+                    qrCode.UpUserId = user;
+                    _tempQRCodeTraceRepository.Update(qrCode);
+                    _tempQRCodeTraceRepository.Save();
+                }
+                
                 // Repair Speare Parts Stock
                 List<RepairLineStockDetailDTO> repairLineStocks = new List<RepairLineStockDetailDTO>();
                 foreach (var item in itemPreparationDetail)

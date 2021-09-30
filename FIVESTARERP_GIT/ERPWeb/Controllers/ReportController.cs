@@ -12,6 +12,8 @@ using System.Web;
 using System.Web.Mvc;
 using ERPWeb.Infrastructure;
 using System.Drawing.Printing;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace ERPWeb.Controllers
 {
@@ -38,6 +40,33 @@ namespace ERPWeb.Controllers
             #endregion
 
         }
+
+        #region Generate 128
+        public ActionResult GenerateCode128(string flag, string barcode)
+        {
+            if (string.IsNullOrEmpty(flag) && string.IsNullOrEmpty(barcode))
+            {
+                return View();
+            }
+            else
+            {
+                var byt = GenerateCode128(barcode);
+                ViewBag.BarcodeImage = string.Format(@"data:image/png;base64,{0}", Convert.ToBase64String(byt));
+                return View();
+            }
+        }
+        [HttpPost]
+        private byte[] GenerateCode128(string barcode)
+        {
+            Zen.Barcode.BarcodeDraw barcode1 = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
+            var ms = new MemoryStream();
+            byte[] imei;
+            Image image = barcode1.Draw(barcode, 12);
+            image.Save(ms, ImageFormat.Png);
+            imei = ms.ToArray();
+            return imei;
+        }
+        #endregion
 
         #region Production Report
         //[HttpPost,ValidateJsonAntiForgeryToken]
@@ -139,6 +168,56 @@ namespace ERPWeb.Controllers
                 //return new FileStreamResult()
             }
             return Content("");
+        }
+
+        public ActionResult GetLotInBarcodePDFFileByItemColorAndRefNum(long? itemId, long referenceId, string rptType)
+        {
+            IEnumerable<QRCodesByRef> reportData = _productionReportBusiness.GetQRCodesByRefId(itemId, referenceId, User.OrgId);
+            List<QRCodesByRef> LotInBarcodeList = new List<QRCodesByRef>();
+            foreach (var item in reportData)
+            {
+                QRCodesByRef qR = new QRCodesByRef();
+                qR.CodeNo = item.CodeNo;
+                qR.BarcodeLotInNumber = GenerateCode128(item.CodeNo);
+                LotInBarcodeList.Add(qR);
+            }
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptLotInBarcodeSticker.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+            }
+            ReportDataSource dataSource1 = new ReportDataSource("dsLotInBarcode", LotInBarcodeList);
+            localReport.DataSources.Add(dataSource1);
+            string reportType = rptType;
+            string mimeType;
+            string encoding;
+            string fileNameExtension = ".pdf";
+            Warning[] warnings;
+            string[] streams;
+            string deviceInfo =
+                    "<DeviceInfo>" +
+                    "<OutputFormat>PDF</OutputFormat>" +
+                    "<PageWidth>1.18in</PageWidth>" +
+                    "<PageHeight>0.5in</PageHeight>" +
+                    "<MarginTop>0in</MarginTop>" +
+                    "<MarginLeft>0.03in</MarginLeft>" +
+                    "<MarginRight>0in</MarginRight>" +
+                    "<MarginBottom>0in</MarginBottom>" +
+                    "</DeviceInfo>";
+            var renderedBytes = localReport.Render(
+                reportType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings
+                );
+            //var base64 = Convert.ToBase64String(renderedBytes);
+            //var file = String.Format("{0}", base64);
+            //return Json(new { File = file });
+            return File(renderedBytes, mimeType);
         }
         #endregion
 

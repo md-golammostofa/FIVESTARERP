@@ -232,17 +232,21 @@ Inner Join [Inventory].dbo.tblWarehouses w on rii.WarehouseId=w.Id
 Where 1= 1 and ri.OrganizationId={0} and ri.ReqInfoId = {1}", orgId, refNo)).ToList();
 
             string tCode = reqItemDto.FirstOrDefault().ReqInfoCode.Substring(4);
+
             var query = string.Format(@"Select Count(*) From tblTempQRCodeTrace Where AssemblyId={0} and Cast(EntryDate as date) = Cast(GetDate() as date) and OrganizationId={1}", reqItemDto.FirstOrDefault().AssemblyLineId, orgId);
 
             var itemCount = this._productionDb.Db.Database.SqlQuery<int>(query).FirstOrDefault();
 
             string prefix = reqItemDto.FirstOrDefault().AssemblyLineId.ToString() + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd");
             int sl = 1;
+            Random random = new Random();
             for (int i = 0; i < reqItemDto.Count; i++)
             {
                 for (int j = 0; j < reqItemDto[i].Quantity; j++)
                 {
                     itemCount++;
+                    var ran = random.Next().ToString();
+                    ran = ran.Substring(0, 4);
                     var year = Convert.ToInt32(DateTime.Now.ToString("yy"));
                     var month = Convert.ToInt32(DateTime.Now.ToString("MM"));
                     var day = Convert.ToInt32(DateTime.Now.ToString("dd"));
@@ -250,8 +254,8 @@ Where 1= 1 and ri.OrganizationId={0} and ri.ReqInfoId = {1}", orgId, refNo)).ToL
                     var min = Convert.ToInt32(DateTime.Now.ToString("mm"));
                     var sec = Convert.ToInt32(DateTime.Now.ToString("ss"));
                     var mili = Convert.ToInt32(DateTime.Now.ToString("fffffff"));
-                    var val = (year + month + day + hour + min + sec + mili + j + userId).ToString();
-                    val = val.PadLeft(11, '0');
+                    var val = ran + (year + month + day + hour + min + sec + mili + j + userId).ToString();
+                    val = val.PadLeft(12, '0');
                     QRCodeTraceDTO qRCode = new QRCodeTraceDTO
                     {
                         ProductionFloorId = reqItemDto[i].FloorId,
