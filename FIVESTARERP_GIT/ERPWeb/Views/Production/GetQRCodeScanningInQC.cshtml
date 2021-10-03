@@ -109,17 +109,23 @@
                                 <div class="card card-navy">
                                     <div class="card-header">
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <label class="control-label">Floor</label>
                                                 @Html.DropDownList("ddlProductionFloor", (IEnumerable<SelectListItem>)ViewBag.ddlProductionFloor, "--- Select Floor ---", new { @class = "form-control form-control-sm select2" })
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <label for="ddlQCLine" class="control-label font-weight-bold">QC Line</label>
                                                 <select id="ddlQCLine" class="form-control form-control-sm select2">
+                                                    <option value="0">--Select QC Line--</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="ddlSubQC" class="control-label font-weight-bold">QC</label>
+                                                <select id="ddlSubQC" class="form-control form-control-sm select2">
                                                     <option value="0">--Select QC--</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <label for="ddlRepairLine" class="control-label font-weight-bold">Repair Line</label>
                                                 <select id="ddlRepairLine" class="form-control form-control-sm select2">
                                                     <option value="0">--Select Repair Line--</option>
@@ -352,6 +358,7 @@
         var txtProblemQRCode = $("#txtProblemQRCode");
         var problemsObj = []; // data obj
         var qrCodeDataObj = {};
+        var ddlSubQC = $("#ddlSubQC");
 
         $(document).ready(function () {
             //Initialize Select2 Elements
@@ -587,9 +594,16 @@
         ddlProductionFloor.change(function () {
             clearDropdown("ddlRepairLine");
             clearDropdown("ddlQCLine");
+            clearDropdown("ddlSubQC");
             if (ddlProductionFloor.val() != "") {
                 LoadDropDown('/Common/GetQCByLine', 'POST', ddlQCLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
                 LoadDropDown('/Common/GetRepairLineByLine', 'POST', ddlRepairLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
+            }
+        })
+        ddlQCLine.change(function () {
+            clearDropdown("ddlSubQC");
+            if (ddlProductionFloor.val() != "" && ddlQCLine.val() != "") {
+                LoadDropDown('/Common/GetSubQCByQCLine', 'POST', ddlSubQC, JSON.stringify({ qcline: ddlQCLine.val() }));
             }
         })
 
@@ -654,7 +668,7 @@
 
             if (validationForm()) {
 
-                var info = { FloorId: TryParseInt(ddlProductionFloor.val(), 0), QCLineId: TryParseInt(ddlQCLine.val(), 0), RepairLineId: TryParseInt(ddlRepairLine.val(), 0), QRCode: txtItemQRCode.val(), AssemblyLineId: qrCodeDataObj.Assembly, DescriptionId: qrCodeDataObj.Model, ItemId: qrCodeDataObj.Item, ItemTypeId: qrCodeDataObj.ItemType, WarehouseId: qrCodeDataObj.Warehouse };
+                var info = { FloorId: TryParseInt(ddlProductionFloor.val(), 0), QCLineId: TryParseInt(ddlQCLine.val(), 0), SubQCId: TryParseInt(ddlSubQC.val(),0), RepairLineId: TryParseInt(ddlRepairLine.val(), 0), QRCode: txtItemQRCode.val(), AssemblyLineId: qrCodeDataObj.Assembly, DescriptionId: qrCodeDataObj.Model, ItemId: qrCodeDataObj.Item, ItemTypeId: qrCodeDataObj.ItemType, WarehouseId: qrCodeDataObj.Warehouse };
 
                 var problems = []; problems.length = 0;
                 $.each($("#tblProb tbody tr"), function (index, item) {

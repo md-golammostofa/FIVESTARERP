@@ -467,6 +467,7 @@
     <Compile Include="Production\DomainModels\RequisitionItemInfo.cs" />
     <Compile Include="Production\DomainModels\StockItemReturnDetail.cs" />
     <Compile Include="Production\DomainModels\StockItemReturnInfo.cs" />
+    <Compile Include="Production\DomainModels\SubQC.cs" />
     <Compile Include="Production\DomainModels\TempQRCodeTrace.cs" />
     <Compile Include="Production\DomainModels\TransferPackagingRepairItemToQcDetail.cs" />
     <Compile Include="Production\DomainModels\TransferPackagingRepairItemToQcInfo.cs" />
@@ -522,6 +523,7 @@
     <Compile Include="Production\DTOModel\RepairSectionSemiFinishTransferInfoDTO.cs" />
     <Compile Include="Production\DTOModel\StockItemReturnDetailDTO.cs" />
     <Compile Include="Production\DTOModel\StockItemReturnInfoDTO.cs" />
+    <Compile Include="Production\DTOModel\SubQCDTO.cs" />
     <Compile Include="Production\DTOModel\TempQRCodeTraceDTO.cs" />
     <Compile Include="Production\DTOModel\QRCodeTraceDTO.cs" />
     <Compile Include="Production\DTOModel\QCItemStockDetailDTO.cs" />
@@ -657,6 +659,7 @@
     <Compile Include="Production\ViewModels\SetIMEIDataForHTML.cs" />
     <Compile Include="Production\ViewModels\StockItemReturnDetailViewModel.cs" />
     <Compile Include="Production\ViewModels\StockItemReturnInfoViewModel.cs" />
+    <Compile Include="Production\ViewModels\SubQCViewModel.cs" />
     <Compile Include="Production\ViewModels\TempQRCodeTraceViewModel.cs" />
     <Compile Include="Production\ViewModels\QRCodeTraceViewModel.cs" />
     <Compile Include="Production\ViewModels\ProductionLineViewModel.cs" />

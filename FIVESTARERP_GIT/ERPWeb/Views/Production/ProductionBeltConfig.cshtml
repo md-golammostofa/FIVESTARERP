@@ -19,6 +19,9 @@
                         <a class="nav-link" id="custom-tabs-three-qc-tab" data-toggle="pill" href="#custom-tabs-three-qc" role="tab" aria-controls="custom-tabs-three-qc" aria-selected="false">Quality Control</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-three-subqc-tab" data-toggle="pill" href="#custom-tabs-three-subqc" role="tab" aria-controls="custom-tabs-three-subqc" aria-selected="false">Sub QC</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" id="custom-tabs-four-repair-tab" data-toggle="pill" href="#custom-tabs-four-repair" role="tab" aria-controls="custom-tabs-four-repair" aria-selected="false">Repair Line</a>
                     </li>
                     <li class="nav-item">
@@ -165,6 +168,54 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="col-md-12" id="dataContainer3">
+                                            @*@{Html.RenderAction("ProductionBeltConfig", new { @flag = "qc" });}*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show " id="custom-tabs-three-subqc" role="tabpanel" aria-labelledby="custom-tabs-three-subqc">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    List Of Sub Quality Control
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="text" name="searchQC" id="searchBySubQC" class="form-control form-control-sm" placeholder="Search By Anything" onkeyup="tableFilter('.tblQCSubLine tbody tr',this)" />
+                                            </div>
+                                            <div class="col-md-4">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-outline-primary btn-flat btn-sm float-right" id="btnAddNewSubQC"><i class="fa fa-plus"></i> Create QC</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="col-md-12" id="dataContainer9">
                                             @*@{Html.RenderAction("ProductionBeltConfig", new { @flag = "qc" });}*@
                                         </div>
                                     </div>
@@ -410,6 +461,45 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalSubQC" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <h4 id="modalHeading" class="modal-title"><span id="spanModalHeadSubQC">Add Sub QC</span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmQC">
+                    <input type="hidden" name="Id" id="hdfSubQCId" />
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ddlQCLineNumber" class="control-label font-weight-bold">QC Line</label>
+                            @Html.DropDownList("ddlQCLineNumber", (IEnumerable<SelectListItem>)ViewBag.ddlQCLineNumber, "--Select QC Line--", new { @class = "form-control form-control-sm" })
+                            <span class="error hide required-qcLineNumber font-weight-bold">QC Line is required!</span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtSubQCName" class="control-label font-weight-bold">Sub QC Name</label>
+                            <input type="text" value="" id="txtSubQCName" class="form-control form-control-sm" />
+                            <span class="error hide required-subqcName font-weight-bold">Input Sub QC Name!</span>
+                            <span class="error hide duplicate-qcName font-weight-bold">Duplicate QC Name!</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtRemarksSubQC" class="control-label font-weight-bold">Remarks</label>
+                            <input type="text" name="remarks" value="" id="txtRemarksSubQC" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer btn-light">
+                <button type="button" class="btn btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
+                <button type="submit" class="btn btn-success float-right" id="btnSubmitSubQC"><i class="far fa-save"></i> <span id="spanSaveTextSubQC">Save</span> </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="modalRl" role="dialog" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -521,11 +611,17 @@
         var hdfAssemblyId = $("#hdfAssemblyId");
 
         // QC
+        var hdfQCId = $("#hdfQCId");
         var ddlLineNumberQC = $("#ddlLineNumberQC");
         var txtQCName = $("#txtQCName");
         var txtRemarksQC = $("#txtRemarksQC");
         var chkStatestatusQC = $("#chkStatestatusQC");
-        var hdfQCId = $("#hdfQCId");
+        var txtRemarksSubQC = $("#txtRemarksSubQC");
+        //sub qc
+        var hdfSubQCId = $("#hdfSubQCId");
+        var ddlQCLineNumber = $("#ddlQCLineNumber");
+        var txtSubQCName = $("#txtSubQCName");
+        var hdfSubQCId = $("#hdfSubQCId");
 
         // Repair
         var ddlLineNumberRepair = $("#ddlLineNumberRepair");
@@ -1025,11 +1121,88 @@
                 })
             }
         })
+        ///SubQC
+        function OpenModalSubQC() {
+            $("#spanModalHeadSubQC").text('Add Sub QC');
+            $("#spanSaveTextSubQC").text('Save');
+            $("#modalSubQC").modal("show");
+            $(".error").addClass("hide");
+        }
+
+        $("#btnAddNewSubQC").click(function (e) {
+            e.preventDefault();
+            OpenModalSubQC();
+            clearCtrlSubQC();
+        })
+
+        function clearCtrlSubQC() {
+            hdfSubQCId.val("0");
+            ddlQCLineNumber.val('');
+            txtSubQCName.val('');
+            txtRemarksSubQC.val('');
+        }
+        function validateSubQCForm() {
+            var isValid = true;
+            $(".error").addClass('hide');
+            if ($.trim(ddlQCLineNumber.val()) === "") {
+                $(".required-qcLineNumber").removeClass('hide');
+                isValid = false;
+            }
+            if (txtSubQCName.val() === "") {
+                $(".required-subqcName").removeClass('hide');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        $("#btnSubmitSubQC").click(function (e) {
+            e.preventDefault();
+            if (validateSubQCForm()) {
+                disable("#btnSubmitSubQC");
+                var data = JSON.stringify({ SubQCId: TryParseInt(hdfSubQCId.val(), 0), SubQCName: $.trim(txtSubQCName.val()), QCId: TryParseInt(ddlQCLineNumber.val(), 0), Remarks: txtRemarksSubQC.val() });
+                //return console.log(data);
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveSubQualityControl', data, getToken())).then(function (res, status) {
+                    console.log(status);
+                    console.log(res);
+                    if (res === true) {
+                        toastrSuccessAlert(execuStatus.successSave);
+                        //location.reload();
+                        loadSubQCDataTable();
+                        $("#modalSubQC").modal("toggle");
+                    }
+                    else {
+                        toastrErrorAlert(execuStatus.fail);
+                    }
+                    enable("#btnSubmitSubQC");
+                }).fail(function (error) {
+                    console.log(error);
+                    enable("#btnSubmitSubQC");
+                })
+            }
+        })
+        $(document).on('click', ".data-subQC-edit", function (e) {
+            e.preventDefault();
+            var tds = $(this).parent().parents('tr').children('td');
+            var td1 = tds.eq(3).html();
+            var td2 = tds.eq(4).html();
+            var td3 = tds.eq(1).html();
+            var td4 = tds.eq(5).html();
+
+            OpenModalSubQC();
+            clearCtrlSubQC();
+            $("#spanModalHeadSubQC").text('Update Sub QC');
+            hdfSubQCId.val(td1);
+            txtSubQCName.val(td2);
+            ddlQCLineNumber.val(td3);
+
+            txtRemarksSubQC.val(td4);
+        })
 
         function loadDataInitializer() {
             loadFloorDataTable();
             loadAssemblyDataTable();
             loadQCDataTable();
+            loadSubQCDataTable();
             loadRepairDataTable();
             loadPackagingDataTable();
         }
@@ -1072,6 +1245,20 @@
                     $("#dataContainer3").fadeOut('500', function () {
                         $("#dataContainer3").empty();
                         $("#dataContainer3").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                consoleLog(error);
+            })
+        }
+        function loadSubQCDataTable() {
+            $("#searchBySubQC").val('');
+            var data = { flag: "subQc" };
+            $.when(getReqWithData(dataType.html, type.get, '/Production/ProductionBeltConfig', data)).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer9").fadeOut('500', function () {
+                        $("#dataContainer9").empty();
+                        $("#dataContainer9").append(res).fadeIn('500');
                     });
                 }
             }).fail(function (error) {

@@ -495,4 +495,8 @@ namespace ERPDAL.ProductionDAL
     {
         public RepairSectionSemiFinishTransferDetailsRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
     }
+    public class SubQCRepository : ProductionBaseRepository<SubQC>
+    {
+        public SubQCRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
 }

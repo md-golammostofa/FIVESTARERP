@@ -17,6 +17,7 @@ namespace ERPBO.Production.ViewModels
         public long FloorId { get; set; }
         [Range(1, long.MaxValue)]
         public long QCLineId { get; set; }
+        public long? SubQCId { get; set; }
         //[Range(1, long.MaxValue)]
         public long RepairLineId { get; set; }
         [StringLength(100)]

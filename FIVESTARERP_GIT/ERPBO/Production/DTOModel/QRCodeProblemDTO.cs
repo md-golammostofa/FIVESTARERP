@@ -16,9 +16,11 @@ namespace ERPBO.Production.DTOModel
         public string TransferCode { get; set; }
         public long FloorId { get; set; }
         public long QCLineId { get; set; }
+        public long? SubQCId { get; set; }
         public long RepairLineId { get; set; }
         [StringLength(100)]
         public string QRCode { get; set; }
+
         public long AssemblyLineId { get; set; }
         public long DescriptionId { get; set; }
         public long ProblemId { get; set; }

@@ -861,6 +861,14 @@
     <Compile Include="ProductionContextMigrations\202105050916145_Production_RepairSectionSemiFinishTransfer.Designer.cs">
       <DependentUpon>202105050916145_Production_RepairSectionSemiFinishTransfer.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProductionContextMigrations\202110030638252_Production_SubQC.cs" />
+    <Compile Include="ProductionContextMigrations\202110030638252_Production_SubQC.Designer.cs">
+      <DependentUpon>202110030638252_Production_SubQC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202110030954281_Production_SubQCId.cs" />
+    <Compile Include="ProductionContextMigrations\202110030954281_Production_SubQCId.Designer.cs">
+      <DependentUpon>202110030954281_Production_SubQCId.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProductionContextMigrations\Configuration.cs" />
     <Compile Include="ProductionDAL\ProductionRepository.cs" />
     <Compile Include="ProductionDAL\ProductionUnitOfWork.cs" />
@@ -1549,6 +1557,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202105050916145_Production_RepairSectionSemiFinishTransfer.resx">
       <DependentUpon>202105050916145_Production_RepairSectionSemiFinishTransfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202110030638252_Production_SubQC.resx">
+      <DependentUpon>202110030638252_Production_SubQC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202110030954281_Production_SubQCId.resx">
+      <DependentUpon>202110030954281_Production_SubQCId.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.resx">
       <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>

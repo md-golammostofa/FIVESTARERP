@@ -96,5 +96,6 @@ namespace ERPDAL.ProductionDAL
         public DbSet<RepairSectionSemiFinishStockDetails> tblRepairSectionSemiFinishStockDetails { get; set; }
         public DbSet<RepairSectionSemiFinishTransferInfo> tblRepairSectionSemiFinishTransferInfo { get; set; }
         public DbSet<RepairSectionSemiFinishTransferDetails> tblRepairSectionSemiFinishTransferDetails { get; set; }
+        public DbSet<SubQC> tblSubQC { get; set; }
     }
 }

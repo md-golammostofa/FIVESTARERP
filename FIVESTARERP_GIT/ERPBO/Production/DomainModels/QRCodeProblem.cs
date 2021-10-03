@@ -18,6 +18,7 @@ namespace ERPBO.Production.DomainModels
         public string TransferCode { get; set; }
         public long FloorId { get; set; }
         public long QCLineId { get; set; }
+        public long? SubQCId { get; set; }
         public long RepairLineId { get; set; }
         [StringLength(100)]
         public string QRCode { get; set; }
