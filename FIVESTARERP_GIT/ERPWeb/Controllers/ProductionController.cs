@@ -2896,7 +2896,7 @@ namespace ERPWeb.Controllers
 
         #endregion
 
-        #region subQC
+        #region SubQC
         public ActionResult SaveSubQualityControl(SubQCViewModel model)
         {
             bool IsSuccess = false;
@@ -5331,6 +5331,28 @@ namespace ERPWeb.Controllers
             IEnumerable<LotInLogViewModel> viewModel = new List<LotInLogViewModel>();
             AutoMapper.Mapper.Map(dto, viewModel);
             return PartialView("_GetLotInList", viewModel);
+        }
+        #endregion
+
+        #region Reports
+        public ActionResult QRCodeProblemList(string flag,long? qcLine,long? modelId,long? qcId, string qrCode = "", string prbName = "")
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                ViewBag.ddlQCLineNo = _qualityControlBusiness.GetQualityControls(User.OrgId).Select(des => new SelectListItem { Text = des.QCName, Value = des.QCId.ToString() }).ToList();
+
+                ViewBag.ddlQCName = _subQCBusiness.GetAllQCByOrgId(User.OrgId).Select(des => new SelectListItem { Text = des.SubQCName, Value = des.SubQCId.ToString() }).ToList();
+
+                ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(des => new SelectListItem { Text = des.DescriptionName, Value = des.DescriptionId.ToString() }).ToList();
+                return View();
+            }
+            else
+            {
+                var dto = _qRCodeProblemBusiness.GetQRCodeProblemList(qcLine, qrCode, modelId, prbName, qcId, User.OrgId);
+                List<QRCodeProblemViewModel> viewModels = new List<QRCodeProblemViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_QRCodeProblemList", viewModels);
+            }
         }
         #endregion
 

@@ -14,6 +14,7 @@ using ERPWeb.Infrastructure;
 using System.Drawing.Printing;
 using System.Drawing;
 using System.Drawing.Imaging;
+using ERPBLL.Production.Interface;
 
 namespace ERPWeb.Controllers
 {
@@ -26,10 +27,12 @@ namespace ERPWeb.Controllers
         private readonly IDescriptionBusiness _descriptionBusiness;
         private readonly IWarehouseBusiness _warehouseBusiness;
         private readonly ISupplierBusiness _supplierBusiness;
+        private readonly IQRCodeProblemBusiness _qRCodeProblemBusiness;
 
-        public ReportController(IProductionReportBusiness productionReportBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, IInventoryReportBusiness inventoryReportBusiness, IDescriptionBusiness descriptionBusiness, IWarehouseBusiness warehouseBusiness, ISupplierBusiness supplierBusiness)
+        public ReportController(IProductionReportBusiness productionReportBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, IInventoryReportBusiness inventoryReportBusiness, IDescriptionBusiness descriptionBusiness, IWarehouseBusiness warehouseBusiness, ISupplierBusiness supplierBusiness, IQRCodeProblemBusiness qRCodeProblemBusiness)
         {
             this._productionReportBusiness = productionReportBusiness;
+            this._qRCodeProblemBusiness = qRCodeProblemBusiness;
 
             #region Inventory
             this._warehouseStockDetailBusiness = warehouseStockDetailBusiness;
@@ -312,6 +315,54 @@ namespace ERPWeb.Controllers
         #endregion
 
         #endregion
+
+        #region QRCode Problem List
+        public ActionResult GetQRCodeProblemList(long? ddlQCLineNo,long? ddlQCName,long? ddlModelName, string qrCode,string prbName,string rptType)
+        {
+            bool IsSuccess = false;
+
+            var data = _qRCodeProblemBusiness.GetQRCodeProblemList(ddlQCLineNo, qrCode, ddlModelName, prbName, ddlQCName, User.OrgId);
+
+            List<ReportHead> reportHead = _productionReportBusiness.GetReportHead(User.BranchId, User.OrgId).ToList();
+
+            reportHead.FirstOrDefault().OrgLogo = Utility.GetImageBytes(User.LogoPaths[0]);
+            reportHead.FirstOrDefault().ReportLogo = Utility.GetImageBytes(User.LogoPaths[0]);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptQRCodeProblemList.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("QRCodeProblem", data);
+                ReportDataSource dataSource2 = new ReportDataSource("ReportHead", reportHead);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "QRCode";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension;
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    rptType,
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region otherFile
         private void GetReportFileByOneDataSource(string path, object reportData, string dataSourceName, string rptType, out byte[] fileBytes, out string fileMimeType)
         {
             fileBytes = null;
@@ -385,5 +436,6 @@ namespace ERPWeb.Controllers
         {
             base.Dispose(disposing);
         }
+        #endregion
     }
 }

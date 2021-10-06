@@ -48,5 +48,7 @@ namespace ERPBO.Production.DTOModel
         public string EntryUser { get; set; }
         [StringLength(50)]
         public string UpdateUser { get; set; }
+        public string QCLineNo { get; set; }
+        public string SubQCName { get; set; }
     }
 }

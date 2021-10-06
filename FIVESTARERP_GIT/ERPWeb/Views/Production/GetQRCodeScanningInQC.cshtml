@@ -153,7 +153,8 @@
                                                     <div class="col-md-12">
                                                         <ul>
                                                             <li class="error hide floor">Floor is required</li>
-                                                            <li class="error hide qc">QC is required</li>
+                                                            <li class="error hide qc">QC Line is required</li>
+                                                            <li class="error hide subqc">QC is required</li>
                                                             <li class="error hide repair">Repair is required</li>
                                                             <li class="error hide qrCode">QRCode is required</li>
                                                             <li class="error hide invalid-qrCode">Invalid QRCode</li>
@@ -627,6 +628,10 @@
             }
             if (TryParseInt(ddlQCLine.val(), 0) <= 0) {
                 $(".qc").removeClass("hide");
+                isValid = false;
+            }
+            if (TryParseInt(ddlSubQC.val(), 0) <= 0) {
+                $(".subqc").removeClass("hide");
                 isValid = false;
             }
             if (TryParseInt(ddlRepairLine.val(), 0) <= 0) {

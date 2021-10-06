@@ -914,6 +914,8 @@
     <Content Include="Views\Configuration\TotalStockDetailsReport.cshtml" />
     <Content Include="Views\Configuration\_TotalStockDetailsReport.cshtml" />
     <Content Include="Views\Production\_SubQC.cshtml" />
+    <Content Include="Views\Production\QRCodeProblemList.cshtml" />
+    <Content Include="Views\Production\_QRCodeProblemList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1034,6 +1036,7 @@
     <Content Include="Reports\ERPRpt\Production\rptLotInBarcodeSticker.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Reports\ERPRpt\Production\rptQRCodeProblemList.rdlc" />
     <EmbeddedResource Include="Reports\ServiceRpt\Configuration\rptOtherBranchRequsition - Copy.rdlc" />
     <Content Include="Reports\ServiceRpt\FrontDesk\rptHandsetChangeInformation.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
