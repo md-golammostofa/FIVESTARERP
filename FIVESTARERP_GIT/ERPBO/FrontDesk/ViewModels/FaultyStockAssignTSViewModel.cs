@@ -28,5 +28,6 @@ namespace ERPBO.FrontDesk.ViewModels
         //Custom
         public string MobilePartName { get; set; }
         public string ModelName { get; set; }
+        public string PartsCode { get; set; }
     }
 }

@@ -182,6 +182,8 @@ namespace ERPWeb
 
             // Configuration Database
             #region Configuration
+            container.RegisterType<IFaultyStockTransferDetailsBusiness, FaultyStockTransferDetailsBusiness>();
+            container.RegisterType<IFaultyStockTransferInfoBusiness, FaultyStockTransferInfoBusiness>();
             container.RegisterType<IModelSSBusiness, ModelSSBusiness>();
             container.RegisterType<IBrandSSBusiness, BrandSSBusiness>();
             container.RegisterType<IColorSSBusiness, ColorSSBusiness>();

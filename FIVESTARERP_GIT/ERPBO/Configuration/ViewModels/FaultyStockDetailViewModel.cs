@@ -16,7 +16,7 @@ namespace ERPBO.Configuration.ViewModels
         public int Quantity { get; set; }
         public double CostPrice { get; set; }
         public double SellPrice { get; set; }
-        public long TSId { get; set; }
+        public long? TSId { get; set; }
         public long? BranchId { get; set; }
         public string StateStatus { get; set; }
         public string Remarks { get; set; }
@@ -25,7 +25,7 @@ namespace ERPBO.Configuration.ViewModels
         public Nullable<DateTime> EntryDate { get; set; }
         public long? UpUserId { get; set; }
         public Nullable<DateTime> UpdateDate { get; set; }
-        public long FaultyStockInfoId { get; set; }
+        public long? FaultyStockInfoId { get; set; }
 
         //Custom p
         public string MobilePartName { get; set; }

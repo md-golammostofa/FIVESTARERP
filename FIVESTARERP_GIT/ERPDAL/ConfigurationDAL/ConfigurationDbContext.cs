@@ -43,5 +43,7 @@ namespace ERPDAL.ConfigurationDAL
         public DbSet<ColorSS> tblColorSS { get; set; }
         public DbSet<BrandSS> tblBrandSS { get; set; }
         public DbSet<ModelSS> tblModelSS { get; set; }
+        public DbSet<FaultyStockTransferInfo> tblFaultyStockTransferInfo { get; set; }
+        public DbSet<FaultyStockTransferDetails> tblFaultyStockTransferDetails { get; set; }
     }
 }

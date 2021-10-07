@@ -8,27 +8,22 @@ using System.Threading.Tasks;
 
 namespace ERPBO.Configuration.DomainModels
 {
-    [Table("tblFaultyStockDetails")]
-    public class FaultyStockDetails
+    [Table("tblFaultyStockTransferInfo")]
+    public class FaultyStockTransferInfo
     {
         [Key]
-        public long FaultyStockDetailId { get; set; }
-        public long? DescriptionId { get; set; }
-        public long? JobOrderId { get; set; }
-        public long? SWarehouseId { get; set; }
-        public long? PartsId { get; set; }
-        public int Quantity { get; set; }
-        public double CostPrice { get; set; }
-        public double SellPrice { get; set; }
-        public long? TSId { get; set; }
-        public long? BranchId { get; set; }
+        public long FSTInfoId { get; set; }
+        public string TransferCode { get; set; }
         public string StateStatus { get; set; }
+        public long BranchFrom { get; set; }
+        public long BranchTo { get; set; }
         public string Remarks { get; set; }
+        public long BranchId { get; set; }
         public long OrganizationId { get; set; }
         public long? EUserId { get; set; }
         public Nullable<DateTime> EntryDate { get; set; }
         public long? UpUserId { get; set; }
         public Nullable<DateTime> UpdateDate { get; set; }
-        public long? FaultyStockInfoId { get; set; }
+        public IEnumerable<FaultyStockTransferDetails> faultyStockTransferDetails { get; set; }
     }
 }

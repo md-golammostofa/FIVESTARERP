@@ -34,6 +34,11 @@ namespace ERPBLL.Configuration
             this._mobilePartStockInfoBusiness = mobilePartStockInfoBusiness;
         }
 
+        public FaultyStockDetails GetCostAndSellPrice(long modelId, long partsId, long orgId, long branchId)
+        {
+            return this._faultyStockDetailRepository.GetOneByOrg(f => f.DescriptionId == modelId && f.PartsId == partsId && f.OrganizationId == orgId && f.BranchId == branchId);
+        }
+
         public bool SaveFaultyStock(List<ERPBO.Configuration.DTOModels.FaultyStockDetailDTO> faultyStocksDto, long userId, long orgId, long branchId)
         {
             bool isSuccess = false;
@@ -48,8 +53,8 @@ namespace ERPBLL.Configuration
                 faultyStock = new FaultyStockDetails()
                 {
                     BranchId = branchId,
-                    CostPrice = getPrice.CostPrice,
-                    SellPrice = getPrice.SellPrice,
+                    CostPrice = 0,
+                    SellPrice = 0,
                     StateStatus = StockStatus.StockIn,
                     SWarehouseId = item.SWarehouseId,
                     EUserId = userId,
@@ -59,7 +64,7 @@ namespace ERPBLL.Configuration
                     DescriptionId = item.DescriptionId,
                     PartsId = item.PartsId,
                     Quantity = item.Quantity,
-                    Remarks = "Faulty By Main Stock",
+                    Remarks = "Faulty By StockIn",
                     TSId = 0,
 
                 };
@@ -68,8 +73,8 @@ namespace ERPBLL.Configuration
                     MobilePartId = item.PartsId,
                     SWarehouseId = item.SWarehouseId,
                     DescriptionId = item.DescriptionId,
-                    CostPrice = getPrice.CostPrice,
-                    SellPrice = getPrice.SellPrice,
+                    CostPrice = 0,
+                    SellPrice = 0,
                     Quantity = item.Quantity,
                     Remarks = "Stock-Out By Faulty",
                     OrganizationId = orgId,
@@ -94,8 +99,8 @@ namespace ERPBLL.Configuration
                     faultyInfo = new FaultyStockInfo()
                     {
                         BranchId = branchId,
-                        CostPrice = getPrice.CostPrice,
-                        SellPrice = getPrice.SellPrice,
+                        CostPrice = 0,
+                        SellPrice = 0,
                         SWarehouseId = item.SWarehouseId,
                         EUserId = userId,
                         OrganizationId = orgId,
@@ -120,7 +125,8 @@ namespace ERPBLL.Configuration
 
             if (_faultyStockDetailRepository.Save() == true)
             {
-                isSuccess = SaveMobilePartStockOut(stockdto, userId, orgId, branchId);
+                //isSuccess = SaveMobilePartStockOut(stockdto, userId, orgId, branchId);
+                isSuccess = true;
             }
             return isSuccess;
         }
@@ -187,6 +193,72 @@ namespace ERPBLL.Configuration
                 faultyStockDetails.Add(faultyStock);
             }
             
+            _faultyStockDetailRepository.InsertAll(faultyStockDetails);
+            return _faultyStockDetailRepository.Save();
+        }
+
+        public bool SaveFaultyStockOut(List<FaultyStockDetailDTO> faultyStocksDto, long userId, long orgId, long branchId)
+        {
+            List<FaultyStockDetails> faultyStockDetails = new List<FaultyStockDetails>();
+            FaultyStockDetails faultyStock = new FaultyStockDetails();
+            FaultyStockInfo faultyInfo = new FaultyStockInfo();
+            foreach (var item in faultyStocksDto)
+            {
+                faultyStock = new FaultyStockDetails()
+                {
+                    BranchId = branchId,
+                    CostPrice = item.CostPrice,
+                    SellPrice = item.SellPrice,
+                    StateStatus = StockStatus.StockIn,
+                    SWarehouseId = item.SWarehouseId,
+                    EUserId = userId,
+                    OrganizationId = orgId,
+                    EntryDate = DateTime.Now,
+                    JobOrderId = item.JobOrderId,
+                    DescriptionId = item.DescriptionId,
+                    PartsId = item.PartsId,
+                    Quantity = item.Quantity,
+                    Remarks = "Faulty By TS",
+                    TSId = item.TSId,
+
+                };
+                var faultyStockInfo = _faultyStockInfoBusiness.GetAllFaultyStockInfoByModelAndPartsIdAndCostPrice(item.DescriptionId.Value, item.PartsId.Value, item.CostPrice, orgId, branchId);
+                if (faultyStockInfo != null)
+                {
+                    faultyStockInfo.StockOutQty += item.Quantity;
+                    faultyStockInfo.UpUserId = userId;
+                    faultyStockInfo.UpdateDate = DateTime.Now;
+                    _faultyStockInfoRepository.Update(faultyStockInfo);
+                    //FaultyStockInfoId//
+                    faultyStock.FaultyStockInfoId = faultyStockInfo.FaultyStockInfoId;
+                }
+                else
+                {
+                    faultyInfo = new FaultyStockInfo()
+                    {
+                        BranchId = branchId,
+                        CostPrice = item.CostPrice,
+                        SellPrice = item.SellPrice,
+                        SWarehouseId = item.SWarehouseId,
+                        EUserId = userId,
+                        OrganizationId = orgId,
+                        EntryDate = DateTime.Now,
+                        JobOrderId = item.JobOrderId,
+                        DescriptionId = item.DescriptionId,
+                        PartsId = item.PartsId,
+                        StockInQty = item.Quantity,
+                        StockOutQty = 0,
+                        Remarks = "",
+                    };
+                    _faultyStockInfoRepository.Insert(faultyInfo);
+                    if (_faultyStockInfoRepository.Save())
+                    {
+                        faultyStock.FaultyStockInfoId = faultyInfo.FaultyStockInfoId;
+                    }
+                }
+                faultyStockDetails.Add(faultyStock);
+            }
+
             _faultyStockDetailRepository.InsertAll(faultyStockDetails);
             return _faultyStockDetailRepository.Save();
         }

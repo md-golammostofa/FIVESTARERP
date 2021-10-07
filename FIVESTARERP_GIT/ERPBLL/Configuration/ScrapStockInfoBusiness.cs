@@ -25,11 +25,16 @@ namespace ERPBLL.Configuration
         }
         public IEnumerable<ScrapStockInfoDTO> GetScrapStockByOrgId(long orgId, long branchId)
         {
-            return this._configurationDb.Db.Database.SqlQuery<ScrapStockInfoDTO>(string.Format(@"Select fsa.ScrapStockInfoId,fsa.DescriptionId,fsa.PartsId,fsa.CostPrice,fsa.SellPrice,mp.MobilePartName'PartsName',des.ModelName,fsa.ScrapQuantity
+            return this._configurationDb.Db.Database.SqlQuery<ScrapStockInfoDTO>(string.Format(@"Select fsa.ScrapStockInfoId,fsa.DescriptionId,fsa.PartsId,fsa.CostPrice,fsa.SellPrice,mp.MobilePartName'PartsName',mp.MobilePartCode'PartsCode',des.ModelName,fsa.ScrapQuantity
 From [Configuration].dbo.tblScrapStockInfo fsa
 Left Join [Configuration].dbo.tblModelSS des on fsa.DescriptionId =des.ModelId  and fsa.OrganizationId = des.OrganizationId
 Left Join [Configuration].dbo.tblMobileParts mp on fsa.PartsId = mp.MobilePartId and fsa.OrganizationId = mp.OrganizationId
 where fsa.OrganizationId={0} and fsa.BranchId={1}", orgId, branchId)).ToList();
+        }
+
+        public ScrapStockInfo GetOneScrapedByModel(long modelId, long partsId, long orgId, long branchId)
+        {
+            return _scrapStockInfoRepository.GetOneByOrg(s => s.DescriptionId == modelId && s.PartsId == partsId && s.OrganizationId == orgId && s.BranchId == branchId);
         }
     }
 }

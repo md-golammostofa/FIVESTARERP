@@ -10,5 +10,6 @@ namespace ERPBLL.Configuration.Interface
     public interface IScrapStockDetailBusiness
     {
         bool SaveScrapStockIn(List<ScrapStockDetailDTO> dto, long userId, long orgId, long branchId);
+        bool SaveFaultyScrapedStock(List<ScrapStockDetailDTO> dto, long userId, long orgId, long branchId);
     }
 }

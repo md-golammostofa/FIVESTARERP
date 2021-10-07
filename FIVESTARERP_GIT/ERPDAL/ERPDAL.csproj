@@ -272,6 +272,14 @@
     <Compile Include="ConfigurationContextMigrations\202108241214446_Configuration_IssueQty.Designer.cs">
       <DependentUpon>202108241214446_Configuration_IssueQty.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigurationContextMigrations\202110061216343_Configuration_ScrapedUpD.cs" />
+    <Compile Include="ConfigurationContextMigrations\202110061216343_Configuration_ScrapedUpD.Designer.cs">
+      <DependentUpon>202110061216343_Configuration_ScrapedUpD.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202110070921399_Configuration_FaultyStockUpdate.cs" />
+    <Compile Include="ConfigurationContextMigrations\202110070921399_Configuration_FaultyStockUpdate.Designer.cs">
+      <DependentUpon>202110070921399_Configuration_FaultyStockUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigurationContextMigrations\Configuration.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationBaseRepository.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationDbContext.cs" />
@@ -1131,6 +1139,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigurationContextMigrations\202108241214446_Configuration_IssueQty.resx">
       <DependentUpon>202108241214446_Configuration_IssueQty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202110061216343_Configuration_ScrapedUpD.resx">
+      <DependentUpon>202110061216343_Configuration_ScrapedUpD.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202110070921399_Configuration_FaultyStockUpdate.resx">
+      <DependentUpon>202110070921399_Configuration_FaultyStockUpdate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ControlPanelContextMigrations\202006151000333_ControlPanel_AllEntities_16-May-2020.resx">
       <DependentUpon>202006151000333_ControlPanel_AllEntities_16-May-2020.cs</DependentUpon>

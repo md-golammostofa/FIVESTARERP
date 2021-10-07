@@ -144,4 +144,12 @@ namespace ERPDAL.ConfigurationDAL
     {
         public ModelSSRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
     }
+    public class FaultyStockTransferInfoRepository : ConfigurationBaseRepository<FaultyStockTransferInfo>
+    {
+        public FaultyStockTransferInfoRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
+    public class FaultyStockTransferDetailsRepository : ConfigurationBaseRepository<FaultyStockTransferDetails>
+    {
+        public FaultyStockTransferDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
 }

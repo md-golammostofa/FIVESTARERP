@@ -916,6 +916,7 @@
     <Content Include="Views\Production\_SubQC.cshtml" />
     <Content Include="Views\Production\QRCodeProblemList.cshtml" />
     <Content Include="Views\Production\_QRCodeProblemList.cshtml" />
+    <Content Include="Views\Configuration\CreateFaultyScraped.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
