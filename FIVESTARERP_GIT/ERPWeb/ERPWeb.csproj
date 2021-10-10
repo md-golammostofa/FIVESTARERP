@@ -917,6 +917,15 @@
     <Content Include="Views\Production\QRCodeProblemList.cshtml" />
     <Content Include="Views\Production\_QRCodeProblemList.cshtml" />
     <Content Include="Views\Configuration\CreateFaultyScraped.cshtml" />
+    <Content Include="Views\Configuration\GetFaultyStockTransferList.cshtml" />
+    <Content Include="Views\Configuration\_GetFaultyStockTransferList.cshtml" />
+    <Content Include="Views\Configuration\CreateFaultyTransfer.cshtml" />
+    <Content Include="Views\Configuration\_TransferFaultyStockDetails.cshtml" />
+    <Content Include="Views\Configuration\GetFaultyStockReceiveList.cshtml" />
+    <Content Include="Views\Configuration\_GetFaultyStockReceiveList.cshtml" />
+    <Content Include="Views\Configuration\_GetFaultyStockReceive.cshtml" />
+    <Content Include="Views\FrontDesk\_GetIMEICountReport.cshtml" />
+    <Content Include="Views\FrontDesk\GetIMEICountReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

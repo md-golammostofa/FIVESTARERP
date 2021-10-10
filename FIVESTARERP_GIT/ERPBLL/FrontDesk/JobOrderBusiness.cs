@@ -2328,5 +2328,13 @@ Left Join [Configuration].dbo.tblModelSS m on job.DescriptionId=m.ModelId
 Where 1=1{0} and (job.QCStatus='QC-Pass' OR job.QCStatus='QC-Fail')", Utility.ParamChecker(param));
             return query;
         }
+
+        public IEnumerable<JobOrderDTO> GetIMEICount(long branchId, long orgId)
+        {
+            return this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(string.Format(@"Select CustomerName,MobileNo,ModelName,IMEI,Count(IMEI)'Total' From tblJobOrders j
+Left Join [Configuration].dbo.tblModelSS m on j.DescriptionId=m.ModelId
+Where j.BranchId={0} and j.OrganizationId={1}
+Group By CustomerName,MobileNo,IMEI,ModelName", branchId, orgId)).ToList();
+        }
     }
 }

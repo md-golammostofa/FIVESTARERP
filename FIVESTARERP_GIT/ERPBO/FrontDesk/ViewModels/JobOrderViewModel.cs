@@ -107,5 +107,6 @@ namespace ERPBO.FrontDesk.ViewModels
         public Nullable<DateTime> QCPassFailDate { get; set; }
         //05-09-21
         public Nullable<DateTime> ProbablyDate { get; set; }
+        public int Total { get; set; }
     }
 }

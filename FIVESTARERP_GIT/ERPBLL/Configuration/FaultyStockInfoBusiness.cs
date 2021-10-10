@@ -25,9 +25,9 @@ namespace ERPBLL.Configuration
         {
             return _faultyStockInfoRepository.GetAll(s => s.OrganizationId == orgId && s.BranchId == branchId);
         }
-        public FaultyStockInfo GetAllFaultyStockInfoByModelAndPartsIdAndCostPrice(long modelId, long partsId, double cprice, long orgId, long branchId)
+        public FaultyStockInfo GetAllFaultyStockInfoByModelAndPartsIdAndCostPrice(long modelId, long partsId, long orgId, long branchId)
         {
-            return _faultyStockInfoRepository.GetOneByOrg(s => s.DescriptionId == modelId && s.PartsId == partsId && s.CostPrice == cprice && s.OrganizationId == orgId && s.BranchId == branchId);
+            return _faultyStockInfoRepository.GetOneByOrg(s => s.DescriptionId == modelId && s.PartsId == partsId && s.OrganizationId == orgId && s.BranchId == branchId);
         }
         public IEnumerable<FaultyStockInfoDTO> GetFaultyStockInfoByQuery(long? warehouseId, long? modelId, long? partsId, string lessOrEq, long orgId, long branchId)
         {
@@ -64,11 +64,12 @@ Where 1=1 and fs.OrganizationId={0} and fs.BranchId= {1} {2}", orgId, branchId, 
 
         public IEnumerable<FaultyStockInfoDTO> GetAllFaultyMobilePartsAndCode(long orgId)
         {
-            return this._configurationDb.Db.Database.SqlQuery<FaultyStockInfoDTO>(
-                string.Format(@"SELECT DISTINCT fsi.PartsId,CAST(mp.MobilePartName AS VARCHAR(25)) +'-'+ CAST(mp.MobilePartCode AS VARCHAR(10)) 'MobilePartName'
+            var data= this._configurationDb.Db.Database.SqlQuery<FaultyStockInfoDTO>(
+                string.Format(@"SELECT DISTINCT fsi.PartsId,CAST(mp.MobilePartName AS VARCHAR(25)) +'-'+ CAST(mp.MobilePartCode AS VARCHAR(10)) 'MobilePartName',fsi.StockInQty,fsi.StockOutQty
 FROM [Configuration].dbo.tblFaultyStockInfo fsi
 Inner Join [Configuration].dbo.tblMobileParts mp On fsi.PartsId = mp.MobilePartId and fsi.OrganizationId = mp.OrganizationId
 where fsi.OrganizationId={0}", orgId)).ToList();
+            return data;
         }
         public IEnumerable<FaultyStockInfo> GetAllFaultyMobilePartStockByParts(long warehouseId, long partsId, long orgId, long branchId, long modelId)
         {
@@ -82,6 +83,16 @@ where fsi.OrganizationId={0}", orgId)).ToList();
         public FaultyStockInfo GetAllFaultyStockByStockIn(long modelId, long partsId, long orgId, long branchId)
         {
             return _faultyStockInfoRepository.GetOneByOrg(s => s.DescriptionId == modelId && s.PartsId == partsId && s.OrganizationId == orgId && s.BranchId == branchId);
+        }
+
+        public IEnumerable<FaultyStockInfoDTO> GetAllFaultyMobilePartsAndCode2(long orgId, long branchId)
+        {
+            var data = this._configurationDb.Db.Database.SqlQuery<FaultyStockInfoDTO>(
+                string.Format(@"SELECT DISTINCT fsi.PartsId,CAST(mp.MobilePartName AS VARCHAR(25)) +'-'+ CAST(mp.MobilePartCode AS VARCHAR(10)) 'MobilePartName',fsi.StockInQty,fsi.StockOutQty
+FROM [Configuration].dbo.tblFaultyStockInfo fsi
+Inner Join [Configuration].dbo.tblMobileParts mp On fsi.PartsId = mp.MobilePartId and fsi.OrganizationId = mp.OrganizationId
+where fsi.OrganizationId={0} and fsi.BranchId={1}", orgId,branchId)).ToList();
+            return data;
         }
     }
 }

@@ -24,8 +24,9 @@ namespace ERPBLL.FrontDesk
         private readonly FaultyStockDetailRepository _faultyStockDetailRepository;
         private readonly FaultyStockAssignTSRepository _faultyStockAssignTSRepository;
         private readonly IMobilePartStockDetailBusiness _mobilePartStockDetailBusiness;
+        private readonly IMobilePartStockInfoBusiness _mobilePartStockInfoBusiness;
         private readonly IScrapStockDetailBusiness _scrapStockDetailBusiness;
-        public FaultyStockAssignTSBusiness(IFrontDeskUnitOfWork fronDeskDb, IFaultyStockInfoBusiness faultyStockInfoBusiness, IConfigurationUnitOfWork configDb, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, IScrapStockDetailBusiness scrapStockDetailBusiness)
+        public FaultyStockAssignTSBusiness(IFrontDeskUnitOfWork fronDeskDb, IFaultyStockInfoBusiness faultyStockInfoBusiness, IConfigurationUnitOfWork configDb, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, IScrapStockDetailBusiness scrapStockDetailBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness)
         {
             this._fronDeskDb = fronDeskDb;
             this._configDb = configDb;
@@ -35,6 +36,7 @@ namespace ERPBLL.FrontDesk
             this._faultyStockAssignTSRepository = new FaultyStockAssignTSRepository(this._fronDeskDb);
             this._mobilePartStockDetailBusiness = mobilePartStockDetailBusiness;
             this._scrapStockDetailBusiness = scrapStockDetailBusiness;
+            this._mobilePartStockInfoBusiness = mobilePartStockInfoBusiness;
         }
         public bool SaveFaultyStockAssignTS(long ts, long[] jobAssign, long userId, long orgId, long branchId)
         {
@@ -146,13 +148,14 @@ where fsa.OrganizationId={0} and fsa.BranchId={1}", orgId, branchId)).ToList();
             foreach (var item in dto)
             {
                 var assignTS = GetFaultyStockAssignTsOneById(item, orgId, branchId);
+                var parts = _mobilePartStockInfoBusiness.GetPriceByModelAndParts(assignTS.DescriptionId.Value, assignTS.PartsId.Value, orgId, branchId).LastOrDefault();
                 if (assignTS.RepairedQuantity > 0)
                 {
                     MobilePartStockDetailDTO detail = new MobilePartStockDetailDTO()
                     {
                         BranchId = branchId,
-                        CostPrice = assignTS.CostPrice,
-                        SellPrice = assignTS.SellPrice,
+                        CostPrice = parts.CostPrice,
+                        SellPrice = parts.SellPrice,
                         DescriptionId = assignTS.DescriptionId,
                         EntryDate = DateTime.Now,
                         EUserId = userId,
@@ -169,7 +172,7 @@ where fsa.OrganizationId={0} and fsa.BranchId={1}", orgId, branchId)).ToList();
                     ScrapStockDetailDTO scrapStock = new ScrapStockDetailDTO()
                     {
                         BranchId = branchId,
-                        CostPrice = assignTS.CostPrice,
+                        CostPrice = 0,
                         DescriptionId = assignTS.DescriptionId,
                         PartsId = assignTS.PartsId,
                         TSId = assignTS.TSId,
@@ -180,7 +183,7 @@ where fsa.OrganizationId={0} and fsa.BranchId={1}", orgId, branchId)).ToList();
                         OrganizationId = orgId,
                         Quantity = assignTS.ScrapQuantity,
                         RepairedQuantity = assignTS.RepairedQuantity,
-                        SellPrice = assignTS.SellPrice,
+                        SellPrice = 0,
                         StockStatus = StockStatus.StockIn,
                     };
                     scrapStockDetails.Add(scrapStock);

@@ -2034,6 +2034,20 @@ namespace ERPWeb.Controllers
                 return PartialView("_QCPassFailReport",viewModels);
             }
         }
+        public ActionResult GetIMEICountReport(string flag)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderBusiness.GetIMEICount(User.BranchId, User.OrgId);
+                List<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetIMEICountReport", viewModels);
+            }
+        }
         #endregion
 
         #region Call Center

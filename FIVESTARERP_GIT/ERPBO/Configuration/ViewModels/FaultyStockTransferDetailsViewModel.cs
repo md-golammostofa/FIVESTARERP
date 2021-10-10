@@ -23,5 +23,8 @@ namespace ERPBO.Configuration.ViewModels
         public Nullable<DateTime> UpdateDate { get; set; }
         //
         public long FSTInfoId { get; set; }
+        public string ModelName { get; set; }
+        public string PartsName { get; set; }
+        public string PartsCode { get; set; }
     }
 }

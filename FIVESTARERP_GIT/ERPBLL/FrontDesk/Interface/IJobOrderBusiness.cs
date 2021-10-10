@@ -88,5 +88,6 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<JobOrderDTO> GetMultipleJobReceipt(string multipleJobCode,long orgId, long branchId);
         IEnumerable<JobOrderDTO> GetRefeNumberCount(string imei, long branchId, long orgId);
         IEnumerable<JobOrderDTO> GetQCPassFailData(string jobCode, long? modelId, string status, long orgId, long branchId, string fromDate, string toDate);
+        IEnumerable<JobOrderDTO> GetIMEICount(long branchId, long orgId);
     }
 }

@@ -105,35 +105,35 @@
                 $.each($(".tblFaultyStockAssignTS tbody tr"), function (index, item) {
                     if ($(this).children('td').eq(0).children('input[name="item"]').is(":checked")) {
                         totalCheckedItems++;
-                        var returnRepairedQty = $(this).children('td').eq(9).children('input[type="number"]').val();
-                        var returnDamageQty = $(this).children('td').eq(10).children('input[type="number"]').val();
-                        var availableStockQty = $(this).children('td').eq(8).html();
+                        var returnRepairedQty = $(this).children('td').eq(7).children('input[type="number"]').val();
+                        var returnDamageQty = $(this).children('td').eq(8).children('input[type="number"]').val();
+                        var availableStockQty = $(this).children('td').eq(6).html();
                         if (TryParseInt(returnRepairedQty, 0) < 0) {
                             $(this).children('td').eq(9).children('input[type="number"]').addClass("error-border");
                             isValid = false;
                             invalidValue++;
                         }
                         else if (TryParseInt(returnDamageQty, 0) < 0) {
-                            $(this).children('td').eq(10).children('input[type="number"]').addClass("error-border");
+                            $(this).children('td').eq(8).children('input[type="number"]').addClass("error-border");
                             isValid = false;
                             invalidValue++;
                         }
                         else {
                             if (TryParseInt(returnRepairedQty, 0) + TryParseInt(returnDamageQty, 0) > TryParseInt(availableStockQty, 0)) {
-                                $(this).children('td').eq(9).children('input[type="number"]').addClass("error-border");
-                                $(this).children('td').eq(10).children('input[type="number"]').addClass("error-border");
+                                $(this).children('td').eq(7).children('input[type="number"]').addClass("error-border");
+                                $(this).children('td').eq(8).children('input[type="number"]').addClass("error-border");
                                 isValid = false;
                                 invalidValue++;
                             }
                             else if (TryParseInt(returnRepairedQty, 0) + TryParseInt(returnDamageQty, 0) < TryParseInt(availableStockQty, 0)) {
-                                $(this).children('td').eq(9).children('input[type="number"]').addClass("error-border");
-                                $(this).children('td').eq(10).children('input[type="number"]').addClass("error-border");
+                                $(this).children('td').eq(7).children('input[type="number"]').addClass("error-border");
+                                $(this).children('td').eq(8).children('input[type="number"]').addClass("error-border");
                                 isValid = false;
                                 invalidValue++;
                             }
                             else {
-                                $(this).children('td').eq(9).children('input[type="number"]').removeClass("error-border");
-                                $(this).children('td').eq(10).children('input[type="number"]').removeClass("error-border");
+                                $(this).children('td').eq(7).children('input[type="number"]').removeClass("error-border");
+                                $(this).children('td').eq(8).children('input[type="number"]').removeClass("error-border");
                             }
                         }
                     }
@@ -165,8 +165,8 @@
                             var tds = $(this).children('td');
                             items.push({
                                 FaultyStockAssignTSId: tds.eq('2').html(),
-                                RepairedQuantity: tds.eq('9').children('input[type="number"]').val(),
-                                ScrapQuantity: tds.eq('10').children('input[type="number"]').val(),
+                                RepairedQuantity: tds.eq('7').children('input[type="number"]').val(),
+                                ScrapQuantity: tds.eq('8').children('input[type="number"]').val(),
                                 Remarks: "Job-Done"
                             })
                         })

@@ -22,5 +22,8 @@ namespace ERPBO.Configuration.ViewModels
         public long? UpUserId { get; set; }
         public Nullable<DateTime> UpdateDate { get; set; }
         public IEnumerable<FaultyStockTransferDetails> faultyStockTransferDetails { get; set; }
+        //
+        public string BranchName { get; set; }
+        public string UserName { get; set; }
     }
 }

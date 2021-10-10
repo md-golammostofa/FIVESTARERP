@@ -183,5 +183,10 @@ Where 1=1{0}
 ", Utility.ParamChecker(param));
             return query;
         }
+
+        public IEnumerable<MobilePartStockInfo> GetPriceByModelAndParts(long modelId, long partsId, long orgId, long branchId)
+        {
+            return mobilePartStockInfoRepository.GetAll(s => s.DescriptionId == modelId && s.MobilePartId == partsId && s.OrganizationId == orgId && s.BranchId == branchId).ToList();
+        }
     }
 }

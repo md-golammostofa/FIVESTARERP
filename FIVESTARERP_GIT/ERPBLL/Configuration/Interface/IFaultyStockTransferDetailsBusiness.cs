@@ -12,8 +12,10 @@ namespace ERPBLL.Configuration.Interface
     {
         IEnumerable<FaultyStockTransferDetails> GetAllDetails(long orgId, long branchId);
         FaultyStockTransferDetails GetOneByOneDetails(long detailId, long orgId, long branchId);
-        IEnumerable<FaultyStockTransferDetailsDTO> GetAllDetailsByInfoId(long infoId, long orgId, long branchId);
+        IEnumerable<FaultyStockTransferDetails> GetAllDetailsByInfoId(long infoId, long orgId, long branchId);
         FaultyStockTransferDetails GetOneDetailsByInfoId(long infoId, long orgId, long branchId);
-
+        bool SaveFaultyStockTransfer(FaultyStockTransferInfoDTO dto, long userId, long orgId, long branchId);
+        IEnumerable<FaultyStockTransferDetails> GetAllReceiveDetailsByInfoId(long infoId, long orgId);
+        bool SaveFaultyStockReceive(long transferId, long userId, long orgId, long branchId);
     }
 }

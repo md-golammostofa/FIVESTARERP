@@ -26,5 +26,6 @@ namespace ERPBLL.Configuration.Interface
         IEnumerable<MobilePartStockInfoDTO> GetAllGoodMobilePartsAndCode(long orgId);
         MobilePartStockInfo GetPriceByModel(long modelId,long partsId,long orgId, long branchId);
         IEnumerable<MobilePartStockInfoDTO> GetPartsPriceList(long orgId,long branchId,long? model,long? parts);
+        IEnumerable<MobilePartStockInfo> GetPriceByModelAndParts(long modelId, long partsId, long orgId, long branchId);
     }
 }

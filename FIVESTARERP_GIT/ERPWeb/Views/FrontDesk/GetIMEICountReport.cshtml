@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "GetIMEICountReport";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow card-primary card-outline card-tabs" style="margin-top:-20px">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs nav-pills" id="custom-tabs-two-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-two-imeiCountReport-tab" data-toggle="pill" href="#custom-tabs-two-imeiCountReport" role="tab" aria-controls="custom-tabs-two-imeiCountReport" aria-selected="true">IMEI Count</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body shadow">
+                <div class="tab-content" id="custom-tabs-two-tabContent">
+                    @Html.AntiForgeryToken()
+                    <div class="tab-pane fade show active" id="custom-tabs-two-imeiCountReport" role="tabpanel" aria-labelledby="custom-tabs-two-imeiCountReport-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card shadow card-gray-dark">
+                                    <div class="card-header shadow">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    IMEI Count Report
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-15px">
+                                <div class="card shadow card-navy">
+                                    <div class="card-body text-sm">
+                                        @Html.AntiForgeryToken()
+                                        @using (Html.BeginForm("TSRequsitionReport", "ReportSS", FormMethod.Get, new { @target = "_blank" }))
+                                        {
+                                            <div class="col-md-12 mt-3 text-sm" id="dataContainer">
+                                                @{Html.RenderAction("GetIMEICountReport", new { @flag = "view" });}
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

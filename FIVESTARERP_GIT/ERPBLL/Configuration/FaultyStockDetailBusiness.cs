@@ -156,7 +156,7 @@ namespace ERPBLL.Configuration
                     TSId = item.TSId,
                     
                 };
-                var faultyStockInfo = _faultyStockInfoBusiness.GetAllFaultyStockInfoByModelAndPartsIdAndCostPrice(item.DescriptionId.Value,item.PartsId.Value,item.CostPrice,orgId,branchId);
+                var faultyStockInfo = _faultyStockInfoBusiness.GetAllFaultyStockInfoByModelAndPartsIdAndCostPrice(item.DescriptionId.Value,item.PartsId.Value,orgId,branchId);
                 if (faultyStockInfo != null)
                 {
                     faultyStockInfo.StockInQty += item.Quantity;
@@ -218,11 +218,11 @@ namespace ERPBLL.Configuration
                     DescriptionId = item.DescriptionId,
                     PartsId = item.PartsId,
                     Quantity = item.Quantity,
-                    Remarks = "Faulty By TS",
+                    Remarks = "Faulty By Branch Transfer",
                     TSId = item.TSId,
 
                 };
-                var faultyStockInfo = _faultyStockInfoBusiness.GetAllFaultyStockInfoByModelAndPartsIdAndCostPrice(item.DescriptionId.Value, item.PartsId.Value, item.CostPrice, orgId, branchId);
+                var faultyStockInfo = _faultyStockInfoBusiness.GetAllFaultyStockInfoByModelAndPartsIdAndCostPrice(item.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
                 if (faultyStockInfo != null)
                 {
                     faultyStockInfo.StockOutQty += item.Quantity;
@@ -282,7 +282,7 @@ namespace ERPBLL.Configuration
                 StockDetail.EntryDate = DateTime.Now;
                 StockDetail.StockStatus = StockStatus.StockOut;
                 StockDetail.ReferrenceNumber = item.ReferrenceNumber;
-                StockDetail.DescriptionId = item.DescriptionId; //Nishad
+                StockDetail.DescriptionId = item.DescriptionId;
 
                 var warehouse = _mobilePartStockInfoBusiness.GetMobilePartStockInfoByModelAndMobilePartsAndCostPrice(item.DescriptionId.Value, item.MobilePartId.Value, item.CostPrice, orgId, branchId);
 
