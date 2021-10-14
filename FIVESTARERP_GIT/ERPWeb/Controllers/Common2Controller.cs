@@ -407,8 +407,8 @@ namespace ERPWeb.Controllers
         public ActionResult GetPartsStockByParts(long partsId,long jobOrderId)
         {
             var jobOrder = _jobOrderBusiness.GetJobOrderById(jobOrderId,User.OrgId);
-            var warehouse = _servicesWarehouseBusiness.GetWarehouseOneByOrgId(User.OrgId, jobOrder.BranchId.Value);
-            var stock = _mobilePartStockInfoBusiness.GetAllMobilePartStockByParts(warehouse.SWarehouseId, partsId, User.OrgId, warehouse.BranchId, jobOrder.DescriptionId).Select(s => s.StockInQty - s.StockOutQty).Sum();
+            var warehouse = _servicesWarehouseBusiness.GetWarehouseOneByOrgId(User.OrgId, User.BranchId);
+            var stock = _mobilePartStockInfoBusiness.GetAllMobilePartStockByParts(warehouse.SWarehouseId, partsId, User.OrgId, User.BranchId, jobOrder.DescriptionId).Select(s => s.StockInQty - s.StockOutQty).Sum();
             if (stock == null)
             {
                 stock = 0;

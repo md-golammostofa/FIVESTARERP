@@ -34,8 +34,9 @@ namespace ERPWeb.Controllers
         private readonly IMobilePartBusiness _mobilePartBusiness;
         private readonly IDescriptionBusiness _descriptionBusiness;
         private readonly IPackagingLineBusiness _packagingLineBusiness;
+        private readonly IModelSSBusiness _modelSSBusiness;
 
-        public UserController (IRequsitionInfoBusiness requsitionInfoBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IProductionLineBusiness productionLineBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness,IItemReturnInfoBusiness itemReturnInfoBusiness, IJobOrderBusiness jobOrderBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, IMobilePartBusiness mobilePartBusiness, IDescriptionBusiness descriptionBusiness, IPackagingLineBusiness packagingLineBusiness)
+        public UserController (IRequsitionInfoBusiness requsitionInfoBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IProductionLineBusiness productionLineBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness,IItemReturnInfoBusiness itemReturnInfoBusiness, IJobOrderBusiness jobOrderBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, IMobilePartBusiness mobilePartBusiness, IDescriptionBusiness descriptionBusiness, IPackagingLineBusiness packagingLineBusiness, IModelSSBusiness modelSSBusiness)
         {
             this._requsitionInfoBusiness = requsitionInfoBusiness;
             this._finishGoodsStockInfoBusiness = finishGoodsStockInfoBusiness;
@@ -50,6 +51,7 @@ namespace ERPWeb.Controllers
             this._mobilePartBusiness = mobilePartBusiness;
             this._descriptionBusiness = descriptionBusiness;
             this._packagingLineBusiness = packagingLineBusiness;
+            this._modelSSBusiness = modelSSBusiness;
         }
         public ActionResult Index()
         {
@@ -281,7 +283,7 @@ namespace ERPWeb.Controllers
         public ActionResult ReturnStockDetails(long id)
         {
             var info = _tsStockReturnInfoBusiness.GetAllReturnId(id, User.OrgId,User.BranchId);
-            var jobOrderInfo = _jobOrderBusiness.GetJobOrdersByIdWithBranch(info.JobOrderId, User.BranchId, User.OrgId);
+            var jobOrderInfo = _jobOrderBusiness.GetJobOrderById(info.JobOrderId, User.OrgId);
             var jobOrder = new RequsitionInfoForJobOrderViewModel();
             if(jobOrderInfo != null)
             {
@@ -289,8 +291,8 @@ namespace ERPWeb.Controllers
                 {
                     RequsitionCode = info.RequsitionCode,
                     JobOrderCode = (jobOrderInfo.JobOrderCode),
-                    Type = (_jobOrderBusiness.GetJobOrdersByIdWithBranch(info.JobOrderId, User.BranchId, User.OrgId).Type),
-                    ModelName = (_descriptionBusiness.GetDescriptionOneByOrdId(info.ModelId.Value, User.OrgId).DescriptionName),
+                    Type = jobOrderInfo.Type,
+                    ModelName = (_modelSSBusiness.GetModelById(jobOrderInfo.DescriptionId, User.OrgId).ModelName),
                     ModelColor= jobOrderInfo.ModelColor,
                     Requestby = UserForEachRecord(info.EUserId.Value).UserName,
                     EntryDate = info.EntryDate,

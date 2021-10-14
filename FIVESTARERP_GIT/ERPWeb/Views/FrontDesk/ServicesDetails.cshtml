@@ -118,7 +118,7 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <b>Symptom:</b>
+                                                <b>Problem:</b>
                                                 @foreach (var item in Problems)
                                                 {
                                                     problem += item.ProblemName + ",";
@@ -146,7 +146,7 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <b>Fault:</b>
+                                                <b>Engineer Problem:</b>
                                                 @foreach (var item in Faulty)
                                                 {
                                                     faulty += item.FaultName + ",";
@@ -174,7 +174,7 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <b>Service: </b>
+                                                <b>Repair Type: </b>
                                                 @foreach (var item in services)
                                                 {
                                                     service += item.ServiceName + ",";
@@ -202,7 +202,7 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <b>Repair: </b><span id="repairName">@repair.RepairName</span>
+                                                <b>Repair Code: </b><span id="repairName">@repair.RepairName</span>
                                             </td>
                                         </tr>
                                     </tbody>

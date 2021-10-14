@@ -14,7 +14,9 @@
                 <th>Model</th>
                 <th>Parts Name</th>
                 <th>Parts Code</th>
-                <th>Scraped Qty.</th>
+                <th>StockIn</th>
+                <th>StockOut</th>
+                <th>StockQty</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -32,6 +34,8 @@
                 <td class="text-center">
                     @info.ScrapQuantity
                 </td>
+                <td class="text-center">@info.ScrapOutQty</td>
+                <td class="text-center">@info.StockQty</td>
             </tr>
             }
             @if (Model.Count() == 0)

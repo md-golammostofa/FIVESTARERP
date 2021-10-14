@@ -152,7 +152,7 @@ namespace ERPBLL.Common
             IEnumerable<Dropdown> dropdowns = new List<Dropdown>
             {
                 new Dropdown(){text=CustomerType.WalkInCustomer,value=CustomerType.WalkInCustomer},
-                new Dropdown(){text=CustomerType.Dealer,value=CustomerType.Dealer}
+                //new Dropdown(){text=CustomerType.Dealer,value=CustomerType.Dealer}
             };
             return dropdowns;
         }

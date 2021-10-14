@@ -173,7 +173,8 @@ namespace ERPBLL.Configuration
         {
             bool IsSuccess = false;
             var reqInfo = _requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoForJobOrderId(reqId, orgId);
-            var modelId = _jobOrderBusiness.GetJobOrdersByIdWithBranch(reqInfo.JobOrderId.Value, reqInfo.BranchId.Value, orgId).DescriptionId;//Nishad//
+
+            var modelId = _jobOrderBusiness.GetJobOrdersByIdWithBranch(reqInfo.JobOrderId.Value, reqInfo.BranchId.Value, orgId).DescriptionId;
             var reqDetails = _requsitionDetailForJobOrderBusiness.GetAllRequsitionDetailForJobOrderId(reqId, orgId, reqInfo.BranchId.Value);
             List<MobilePartStockDetail> stockDetails = new List<MobilePartStockDetail>();
             List<TechnicalServicesStockDTO> servicesStockDTOs = new List<TechnicalServicesStockDTO>();
@@ -181,7 +182,7 @@ namespace ERPBLL.Configuration
             foreach (var item in reqDetails)
             {
                 var reqQty = item.Quantity;
-                var partsInStock = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoByModelAndBranch(orgId, modelId, reqInfo.BranchId.Value).Where(i => i.MobilePartId == item.PartsId && (i.StockInQty - i.StockOutQty) > 0).OrderBy(i => i.MobilePartStockInfoId).ToList();
+                var partsInStock = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoByModelAndBranch(orgId, modelId, branchId).Where(i => i.MobilePartId == item.PartsId && (i.StockInQty - i.StockOutQty) > 0).OrderBy(i => i.MobilePartStockInfoId).ToList();
 
                 if (partsInStock.Count() > 0)
                 {
@@ -207,7 +208,7 @@ namespace ERPBLL.Configuration
 
                         MobilePartStockDetail stockDetail = new MobilePartStockDetail()
                         {
-                            DescriptionId = modelId,//Nishad//
+                            DescriptionId = modelId,
                             SWarehouseId = item.SWarehouseId,
                             MobilePartId = item.PartsId,
                             CostPrice = stock.CostPrice,
@@ -215,7 +216,7 @@ namespace ERPBLL.Configuration
                             Quantity = stockOutQty,
                             Remarks = item.Remarks,
                             OrganizationId = orgId,
-                            BranchId = reqInfo.BranchId.Value,
+                            BranchId = branchId,
                             EUserId = userId,
                             EntryDate = DateTime.Now,
                             StockStatus = StockStatus.StockOut,

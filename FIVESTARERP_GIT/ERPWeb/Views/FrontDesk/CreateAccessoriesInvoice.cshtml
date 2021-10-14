@@ -12,7 +12,7 @@
                         <a href="/FrontDesk/GetJobOrders" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
                     </div>
                     <div class="col-md-4">
-                        <h4 class="text-center">Inovoice For Accessories Sales</h4>
+                        <h4 class="text-center">Create Sales Inovoice</h4>
                     </div>
                     <div class="col-md-4">
                         <a href="#" class="btn btn-outline-danger btn-sm float-lg-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i></a>
@@ -22,12 +22,12 @@
         </div>
     </div>
 </div>
-<div class="row text-sm">
+<div class="row text-sm" style="background-color:lightgoldenrodyellow">
     <div class="col-md-8">
         <div class="card card-secondary shadow">
             <form id="salesAccessories">
                 @Html.AntiForgeryToken()
-                <div class="card-body shadow">
+                <div class="card-body shadow" style="background-color:lightslategray">
                     <div class="row" style="border-bottom:1px solid #cecece">
                         <div class="col-md-3">
                             <div class="input-group input-group-sm mb-3">
@@ -61,29 +61,30 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <label for="ddlSellType" class="control-label font-weight-bold">Sale Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                             <select class="form-control form-control-sm select2" id="ddlSellType">
                                 <option value="">--Select--</option>
                                 <option value="Good">Good</option>
                                 <option value="Faulty">Faulty</option>
+                                <option value="Scraped">Scraped</option>
                                 <option value="Handset">Handset</option>
                             </select>
                             <span class="error hide req-sellType">Input Sale Type!</span>
                         </div>
-                        <div class="col-md-2" id="partsModel">
+                        <div class="col-md-3" id="partsModel">
                             <label for="ddlPartsModelName" class="control-label font-weight-bold">Model<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                             @Html.DropDownList("ddlPartsModelName", (IEnumerable<SelectListItem>)ViewBag.ddlPartsModelName, "--Select--", new { @class = "form-control form-control-sm select2" })
                             <span class="error hide require-partsModel font-weight-bold">Model is required !</span>
                             <span class="error hide require-duplicate-parts font-weight-bold">Parts is Added!</span>
                         </div>
-                        <div class="col-md-2" id="divParts">
+                        <div class="col-md-3" id="divParts">
                             <label for="ddlMobileParts" class="control-label font-weight-bold">Parts Name<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                             @Html.DropDownList("ddlMobileParts", (IEnumerable<SelectListItem>)ViewBag.ddlMobileParts, "--Select Parts--", new { @class = "form-control form-control-sm select2" })
                             <span class="error hide require-mobileParts font-weight-bold">Parts is required !</span>
                             <span class="error hide require-duplicate-parts font-weight-bold">Parts is Added!</span>
                         </div>
-                        <div class="col-md-2" id="divFaultyParts">
+                        <div class="col-md-3" id="divFaultyParts">
                             <label for="ddlFaultyMobileParts" class="control-label font-weight-bold">Parts Name<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                             @Html.DropDownList("ddlFaultyMobileParts", (IEnumerable<SelectListItem>)ViewBag.ddlFaultyMobileParts, "--Select Parts--", new { @class = "form-control form-control-sm select2" })
                             <span class="error hide require-mobileParts font-weight-bold">Parts is required !</span>
@@ -98,18 +99,18 @@
                             <span class="error hide require-duplicate-imei font-weight-bold">IMEI is added !</span>
                             <span class="error hide stock-imei font-weight-bold">IMEI is not in Stock !</span>
                         </div>
-                        <div class="col-md-2" id="divSellPriceForParts">
+                        <div class="col-md-3" id="divSellPriceForParts">
                             <label for="ddlsellsPrice" class="control-label font-weight-bold">Sales Price<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                             @Html.DropDownList("ddlsellsPrice", (IEnumerable<SelectListItem>)ViewBag.ddlsellsPrice, "--Select--", new { @class = "form-control form-control-sm" })
                             <span class="error hide require-sellPrice font-weight-bold">Price is required !</span>
                         </div>
-                        <div class="col-md-2" id="divSellPriceForHandset">
+                        <div class="col-md-3" id="divSellPriceForHandset">
                             <label for="txtSellPriceForHandset" class="control-label font-weight-bold">Sales Price<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                             <input type="number" placeholder="Sell Price" name="SellPrice" id="txtSellPriceForHandset" class="form-control form-control-sm" />
                             <span class="error hide require-sellPrice font-weight-bold">Price is required !</span>
                         </div>
-                        <div class="col-md-2">
-                            <label for="txtQty" class="control-label font-weight-bold">Qty.<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup><span id="stockQty" class="font-weight-bold mt-2 stockQty" style="color:red"></span></label>
+                        <div class="col-md-3">
+                            <label for="txtQty" class="control-label font-weight-bold">Qty.<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup><span id="stockQty" class="font-weight-bold mt-2 stockQty" style="color:white"></span></label>
                             <div class="input-group">
                                 <div class="col-sm-12">
                                     <input type="number" placeholder="Qty" name="quantity" id="txtQty" class="form-control form-control-sm" />
@@ -125,7 +126,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <br />
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card shadow">
@@ -143,6 +144,7 @@
                                                         <th>SalesPrice</th>
                                                         <th>Qty.</th>
                                                         <th class="hide"></th>
+                                                        <th>Total</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -158,8 +160,8 @@
             </form>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card card-secondary shadow">
+    <div class="col-md-4" >
+        <div class="card card-secondary shadow" style="background-color:slategray;color:white;">
             <form>
                 <div class="card-body shadow">
                     <div class="row">
@@ -175,29 +177,49 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="txtVAT" class="control-label font-weight-bold">VAT</label>
-                            <input type="number" class="form-control form-control-sm" id="txtVAT" />
-                            <span class="error hide require-VAT font-weight-bold">Customer name is required !</span>
+                            <label for="txtSubTotal" class="control-label font-weight-bold">SubTotal(Tk)</label>
+                            <input type="number" value="0" class="form-control form-control-sm" id="txtSubTotal" disabled />
+                            <span class="error hide require-subTotal font-weight-bold">Sub Total Required !</span>
                         </div>
                         <div class="col-md-6">
-                            <label for="txtTAX" class="control-label font-weight-bold">TAX</label>
-                            <input type="number" class="form-control form-control-sm" id="txtTAX" />
+                            <label for="txtVAT" class="control-label font-weight-bold">VAT(%)</label>
+                            <input type="number" value="0" class="form-control form-control-sm" id="txtVAT" />
+                            <span class="error hide require-VAT font-weight-bold">Customer name is required !</span>
+                        </div>
+                        <div class="col-md-6 hide">
+                            <label for="txtTAX" class="control-label font-weight-bold">TAX(Tk)</label>
+                            <input type="number" value="0" class="form-control form-control-sm" id="txtTAX" />
                             <span class="error hide require-TAX font-weight-bold">Mobile No is required !</span>
                         </div>
                     </div>
                     <div class="row">
-                        
                         <div class="col-md-6">
-                            <label for="txtDiscount" class="control-label font-weight-bold">Discount</label>
-                            <input type="number" class="form-control form-control-sm" id="txtDiscount" />
+                            <label for="txtDiscount" class="control-label font-weight-bold">Discount(Tk)</label>
+                            <input type="number" value="0" class="form-control form-control-sm" id="txtDiscount" />
                             <span class="error hide require-discount font-weight-bold">Customer name is required !</span>
                         </div>
+                        <div class="col-md-6">
+                            <label for="txtNetAmount" class="control-label font-weight-bold">Net Amount(Tk)</label>
+                            <input type="number" value="0" class="form-control form-control-sm" id="txtNetAmount" disabled />
+                            <span class="error hide require-netAmount font-weight-bold">Net Amount is required !</span>
+                        </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="txtReceiveAmount" class="control-label font-weight-bold">Receive Amt(Tk)</label>
+                            <input type="number" value="0" class="form-control form-control-sm" id="txtReceiveAmount" />
+                            <span class="error hide require-receiveAmount font-weight-bold">Receive Amount is required !</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txtReturnAmount" class="control-label font-weight-bold">Return Amt(Tk)</label>
+                            <input type="number" value="0" class="form-control form-control-sm" id="txtReturnAmount" disabled />
+                            <span class="error hide require-returnAmount font-weight-bold">Return Amount is required !</span>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-3">
                             <label for="txtDiscount" class="control-label font-weight-bold" style="visibility:hidden">Discount</label>
-                            <button type="submit" id="btnInvoiceSubmit" class="btn btn-sm btn-success float-right" title="Submit the form for save"><i class="fas fa-paper-plane"></i> Save </button>
+                            <button type="submit" value="0" id="btnInvoiceSubmit" class="btn btn-sm btn-success float-right" title="Submit the form for save"><i class="fas fa-paper-plane"></i> Save </button>
                         </div>
                     </div>
                 </div>
@@ -227,6 +249,11 @@
         var modelId = '';
         var colorId = '';
         var ddlPartsModelName = $("#ddlPartsModelName");
+        //
+        var txtSubTotal = $("#txtSubTotal");
+        var txtNetAmount = $("#txtNetAmount");
+        var txtReceiveAmount = $("#txtReceiveAmount");
+        var txtReturnAmount = $("#txtReturnAmount");
 
         $(document).ready(function () {
 
@@ -295,16 +322,32 @@
                 $("#divFaultyParts").show();
                 $("#divParts").hide();
                 $("#divModel").hide();
-                $("#divSellPriceForParts").show();
-                $("#divSellPriceForHandset").hide();
+                $("#divSellPriceForParts").hide();
+                $("#divSellPriceForHandset").show();
                 ddlMobileParts.val('');
                 ddlMobileParts.trigger("change");
                 txtIMEI.val('');
                 //ddlHandset.trigger("change");
-                txtSellPriceForHandset.val('');
+                ddlsellsPrice.val('');
+                ddlsellsPrice.trigger("change");
                 txtQty.val('');
                 enable("#txtQty");
                 
+            }
+            else if (ddlSellType.val() === "Scraped") {
+                $("#divFaultyParts").show();
+                $("#divParts").hide();
+                $("#divModel").hide();
+                $("#divSellPriceForParts").hide();
+                $("#divSellPriceForHandset").show();
+                ddlMobileParts.val('');
+                ddlMobileParts.trigger("change");
+                txtIMEI.val('');
+                //ddlHandset.trigger("change");
+                ddlsellsPrice.val('');
+                ddlsellsPrice.trigger("change");
+                txtQty.val('');
+                enable("#txtQty");
             }
             else if (ddlSellType.val() === "Good") {
                 $("#divFaultyParts").hide();
@@ -363,25 +406,25 @@
                 LoadDropDown('/Common2/GetSellPriceForDDL', 'POST', ddlsellsPrice, JSON.stringify({ partsId: ddlMobileParts.val(), modelId: ddlPartsModelName.val() }));
             }
         })
-        ddlFaultyMobileParts.change(function () {
-            clearDropdown("ddlsellsPrice");
-            if (ddlFaultyMobileParts.val() != "") {
-                LoadDropDown('/Common2/GetFaultyStockSellPriceForDDL', 'POST', ddlsellsPrice, JSON.stringify({ partsId: TryParseInt(ddlFaultyMobileParts.val(), 0), modelId: ddlPartsModelName.val() }));
-            }
-        })
-        ddlFaultyMobileParts.change(function () {
-            $("#stockQty").text('');
-            if (ddlFaultyMobileParts.val() != "") {
-                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common2/GetFaultyStockForAccessoriesSells', JSON.stringify({ partsId: TryParseInt(ddlFaultyMobileParts.val(), 0), modelId: ddlPartsModelName.val() }), getToken())).then(function (res, status) {
-                    if (status == "success") {
-                        $("#stockQty").text('(' + res + ')');
-                    }
-                }).fail(function (error) {
-                    consoleLog(error);
-                })
-            }
+        //ddlFaultyMobileParts.change(function () {
+        //    clearDropdown("ddlsellsPrice");
+        //    if (ddlFaultyMobileParts.val() != "") {
+        //        LoadDropDown('/Common2/GetFaultyStockSellPriceForDDL', 'POST', ddlsellsPrice, JSON.stringify({ partsId: TryParseInt(ddlFaultyMobileParts.val(), 0), modelId: ddlPartsModelName.val() }));
+        //    }
+        //})
+        //ddlFaultyMobileParts.change(function () {
+        //    $("#stockQty").text('');
+        //    if (ddlFaultyMobileParts.val() != "") {
+        //        $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common2/GetFaultyStockForAccessoriesSells', JSON.stringify({ partsId: TryParseInt(ddlFaultyMobileParts.val(), 0), modelId: ddlPartsModelName.val() }), getToken())).then(function (res, status) {
+        //            if (status == "success") {
+        //                $("#stockQty").text('(' + res + ')');
+        //            }
+        //        }).fail(function (error) {
+        //            consoleLog(error);
+        //        })
+        //    }
 
-        })
+        //})
 
         function validateInput() {
             $('.error').addClass('hide');
@@ -452,7 +495,17 @@
                     isValid = false;
                     $(".require-mobileParts").removeClass("hide");
                 }
-                if (TryParseInt(ddlsellsPrice.val(), 0) <= 0) {
+                if (TryParseInt(txtSellPriceForHandset.val(), 0) <= 0) {
+                    isValid = false;
+                    $(".require-sellPrice").removeClass("hide");
+                }
+            }
+            else if (ddlSellType.val() == "Scraped") {
+                if (TryParseInt(ddlFaultyMobileParts.val(), 0) <= 0) {
+                    isValid = false;
+                    $(".require-mobileParts").removeClass("hide");
+                }
+                if (TryParseInt(txtSellPriceForHandset.val(), 0) <= 0) {
                     isValid = false;
                     $(".require-sellPrice").removeClass("hide");
                 }
@@ -526,6 +579,11 @@
                 var td8 = "<td class='text-center'>" + ddlsellsPrice.val() + "</td>";
                 var td9 = "<td class='text-center'>" + txtSellPriceForHandset.val() + "</td>";
                 var td10 = "<td class='text-center'>" + txtQty.val() + "</td>";
+                if (ddlSellType.val() === "Good") {
+                    var td15 = "<td class='text-center'>" + ddlsellsPrice.val() * txtQty.val() + "</td>";
+                } else {
+                    var td16 = "<td class='text-center'>" + txtSellPriceForHandset.val() * txtQty.val() + "</td>";
+                }
                 var td11 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i> </a></td>";
                 var td12 = "<td class='text-center hide'>" + ddlSellType.val() + "</td>";
 
@@ -533,33 +591,51 @@
                 var td14 = "<td class='text-center'>" + $("#ddlPartsModelName option:selected").text() + "</td>";
 
                 if (TryParseInt(ddlMobileParts.val(), 0) > 0) {
-                    var tr = "<tr>" + td1 + td12 + td13 + td14 + td2 + td3 + td8 + td10 + td6 + td11 + "</tr>";
+                    var tr = "<tr>" + td1 + td12 + td13 + td14 + td2 + td3 + td8 + td10 + td6 + td15 + td11 + "</tr>";
                     if ($("#tblAccessorieSells tbody tr").length == 0) {
                         $("#tblAccessorieSells tbody").append(tr);
                     }
                     else {
                         $("#tblAccessorieSells tbody tr").eq(0).before(tr);
                     }
+                    fnCalculateSubTotal();
+                    fnCalculateNetAmount();
+                    txtVAT.val('0');
+                    txtDiscount.val('0');
+                    txtReceiveAmount.val('0');
+                    txtReturnAmount.val('0');
                     clearCtrl();
                 }
                 if (TryParseInt(ddlFaultyMobileParts.val(), 0) > 0) {
-                    var tr = "<tr>" + td1 + td12 + td13 + td14 + td4 + td5 + td8 + td10 + td6 + td11 + "</tr>";
+                    var tr = "<tr>" + td1 + td12 + td13 + td14 + td4 + td5 + td9 + td10 + td6 + td16 + td11 + "</tr>";
                     if ($("#tblAccessorieSells tbody tr").length == 0) {
                         $("#tblAccessorieSells tbody").append(tr);
                     }
                     else {
                         $("#tblAccessorieSells tbody tr").eq(0).before(tr);
                     }
+                    fnCalculateSubTotal();
+                    fnCalculateNetAmount();
+                    txtVAT.val('0');
+                    txtDiscount.val('0');
+                    txtReceiveAmount.val('0');
+                    txtReturnAmount.val('0');
                     clearCtrl();
                 }
                 if ($.trim(txtIMEI.val()) != "" && $.trim(txtIMEI.val()).length == 15) {
-                    var tr = "<tr>" + td1 + td12 + td13 + td14 + td6 + td7 + td9 + td10+ td6 + td11 + "</tr>";
+                    var tr = "<tr>" + td1 + td12 + td13 + td14 + td6 + td7 + td9 + td10 + td6 + td16 + td11 + "</tr>";
                     if ($("#tblAccessorieSells tbody tr").length == 0) {
                         $("#tblAccessorieSells tbody").append(tr);
                     }
                     else {
                         $("#tblAccessorieSells tbody tr").eq(0).before(tr);
                     }
+                    fnCalculateSubTotal();
+                    fnCalculateNetAmount();
+                    txtVAT.val('0');
+                    txtDiscount.val('0');
+                    txtReceiveAmount.val('0');
+                    txtReturnAmount.val('0');
                     clearCtrl();
                 }
 
@@ -591,12 +667,99 @@
         $(document).on("click", "a.data-onfly-del", function (e) {
             e.preventDefault();
             var index = $(this).parent().parents('tbody tr').index();
+            var amount = $(this).parent().parents('tbody tr').find('td:eq(9)').html();
             if (bootbox.confirm("Are you sure you want to delete?", function (result) {
                 if (result === true) {
                     removeTableRow("#tblAccessorieSells tbody", index);
                     fnFixTheTbodyRowSerialInDecsOrder("#tblAccessorieSells", index);
+                    
                 };
+                var total = fnCalculateSubTotal() - (parseFloat(amount));
+                txtSubTotal.val(total);
+                txtNetAmount.val(total);
+                txtVAT.val('0');
+                txtDiscount.val('0');
+                txtReceiveAmount.val('0');
+                txtReturnAmount.val('0');
             }));
+        })
+        //
+        function fnCalculateSubTotal() {
+            var subTotal = 0;
+            $.each($("#tblAccessorieSells tbody tr"), function (index, item) {
+                var ttl = $(this).children('td').eq('9').html();
+                subTotal += parseFloat(ttl,0);
+                console.log(item);
+            })
+            txtSubTotal.val(subTotal)
+            return subTotal;
+        }
+
+        function fnCalculateNetAmount() {
+            var netTotal = 0;
+            $.each($("#tblAccessorieSells tbody tr"), function (index, item) {
+                var ttl = $(this).children('td').eq('9').html();
+                netTotal += parseFloat(ttl, 0);
+                console.log(item);
+            })
+            txtNetAmount.val(netTotal)
+            return netTotal;
+        }
+        //vat Calculate
+        txtVAT.keyup(function () {
+            if (txtDiscount.val() > 0) {
+                if (txtVAT.val() > 0) {
+                    total = (parseFloat(fnCalculateNetAmount(), 0) + (parseFloat(txtVAT.val(), 0) * parseFloat(fnCalculateNetAmount(), 0))/100) - parseFloat(txtDiscount.val())
+                    txtNetAmount.val(total);
+                }
+                else {
+                    total = parseFloat(fnCalculateNetAmount(), 0) - parseFloat(txtDiscount.val(), 0)
+                    txtNetAmount.val(total);
+                }
+            }
+            else {
+                var total = parseFloat(fnCalculateNetAmount(), 0) + (parseFloat(txtVAT.val(), 0) * parseFloat(fnCalculateNetAmount(), 0))/100
+                if (txtVAT.val() == 0 || $.trim(txtVAT.val()) == "") {
+                    fnCalculateNetAmount();
+                }
+                else {
+                    txtNetAmount.val(total);
+                }
+            }
+        });
+        //discount calc
+        txtDiscount.keyup(function () {
+            if (txtDiscount.val() == 0 || txtDiscount.val() == "" || txtDiscount.val() > 0) {
+                if (txtVAT.val() > 0) {
+                    if (txtDiscount.val() > 0) {
+                        total = (parseFloat(fnCalculateNetAmount(), 0) + (parseFloat(txtVAT.val(), 0) * parseFloat(fnCalculateNetAmount(), 0))/100) - parseFloat(txtDiscount.val())
+                        txtNetAmount.val(total);
+                    }
+                    else {
+                        var total = parseFloat(fnCalculateNetAmount(), 0) + (parseFloat(txtVAT.val(), 0) * parseFloat(fnCalculateNetAmount(), 0))/100
+                        txtNetAmount.val(total);
+                    }
+                }
+                else {
+                    if (txtDiscount.val() > 0) {
+                        total = parseFloat(fnCalculateNetAmount(), 0) - (parseFloat(txtDiscount.val(), 0) * parseFloat(fnCalculateNetAmount(), 0))/100
+                        txtNetAmount.val(total);
+                    } else {
+                        total = parseFloat(fnCalculateNetAmount(), 0)
+                        txtNetAmount.val(total);
+                    }
+                }
+            }
+        })
+        //Rece
+        txtReceiveAmount.keyup(function () {
+            if (txtReceiveAmount.val() > 0) {
+                total = parseFloat(txtReceiveAmount.val(), 0) - parseFloat(txtNetAmount.val(), 0)
+                txtReturnAmount.val(total)
+            }
+            else {
+                txtReturnAmount.val('0')
+            }
         })
 
          $("#btnInvoiceSubmit").click(function (e) {
@@ -615,6 +778,8 @@
                             VAT: TryParseFloat(txtVAT.val(), 0.00),
                             Tax: TryParseFloat(txtTAX.val(), 0.00),
                             Discount: TryParseFloat(txtDiscount.val(), 0.00),
+                            TotalSPAmount: TryParseFloat(txtSubTotal.val(), 0.00),
+                            NetAmount: TryParseInt(txtNetAmount.val(),0.00)
                         };
 
                         var details = []; details.length = 0;
@@ -636,6 +801,7 @@
                                 }                               
                                 var price = tds.eq('6').html();
                                 var qty = tds.eq('7').html();
+                                var total = tds.eq('9').html();
                                 details.push({
                                     InvoiceDetailId: 0,
                                     SalesType: saleType,
@@ -646,7 +812,7 @@
                                     IMEI: imei,
                                     Quantity: TryParseInt(qty, 0),
                                     SellPrice: TryParseFloat(price, 0),
-                                    Total: (price * qty),
+                                    Total: TryParseFloat(total, 0),
                                 })
                             });
                             

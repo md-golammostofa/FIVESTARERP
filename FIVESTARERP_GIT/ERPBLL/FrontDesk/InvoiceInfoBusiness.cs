@@ -32,8 +32,11 @@ namespace ERPBLL.FrontDesk
         private readonly FaultyStockInfoRepository _faultyStockInfoRepository;
         private readonly FaultyStockDetailRepository _faultyStockDetailRepository;
         private readonly HandSetStockRepository _handSetStockRepository;
+        private readonly ScrapStockInfoRepository _scrapStockInfoRepository;//repo
+        private readonly ScrapStockDetailRepository _scrapStockDetailRepository;//repo
+        private readonly IScrapStockInfoBusiness _scrapStockInfoBusiness;
 
-        public InvoiceInfoBusiness(IFrontDeskUnitOfWork frontDeskUnitOfWork, IConfigurationUnitOfWork ConfigurationUnitOfWork, IJobOrderBusiness jobOrderBusiness,  IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, InvoiceDetailBusiness invoiceDetailBusiness, IHandSetStockBusiness handSetStockBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness)
+        public InvoiceInfoBusiness(IFrontDeskUnitOfWork frontDeskUnitOfWork, IConfigurationUnitOfWork ConfigurationUnitOfWork, IJobOrderBusiness jobOrderBusiness,  IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, InvoiceDetailBusiness invoiceDetailBusiness, IHandSetStockBusiness handSetStockBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IScrapStockInfoBusiness scrapStockInfoBusiness)
         {
             this._frontDeskUnitOfWork = frontDeskUnitOfWork;
             this._configurationDb = ConfigurationUnitOfWork;
@@ -49,6 +52,9 @@ namespace ERPBLL.FrontDesk
             _faultyStockInfoRepository = new FaultyStockInfoRepository(this._configurationDb);
             _handSetStockRepository = new HandSetStockRepository(this._configurationDb);
             _faultyStockDetailRepository = new FaultyStockDetailRepository(this._configurationDb);
+            this._scrapStockInfoBusiness = scrapStockInfoBusiness;
+            this._scrapStockInfoRepository = new ScrapStockInfoRepository(this._configurationDb);
+            this._scrapStockDetailRepository = new ScrapStockDetailRepository(this._configurationDb);
         }
 
         public InvoiceInfo GetAllInvoice(long jobOrderId, long orgId, long branchId)
@@ -231,8 +237,8 @@ where 1=1{0} order by EntryDate desc", Utility.ParamChecker(param));
                 invoiceInfo.VAT = infodto.VAT;
                 invoiceInfo.Tax = infodto.Tax;
                 invoiceInfo.Discount = infodto.Discount;
-                invoiceInfo.TotalSPAmount = spamount;
-                invoiceInfo.NetAmount = netamount;
+                invoiceInfo.TotalSPAmount = infodto.TotalSPAmount;
+                invoiceInfo.NetAmount = infodto.NetAmount;
                 invoiceInfo.Remarks = infodto.Remarks;
                 invoiceInfo.EntryDate = DateTime.Now;
                 invoiceInfo.EUserId = userId;
@@ -275,6 +281,7 @@ where 1=1{0} order by EntryDate desc", Utility.ParamChecker(param));
             List<FaultyStockDetails> faultyStockDetails = new List<FaultyStockDetails>();
             List<HandSetStock> handSetStocks = new List<HandSetStock>();
             List<MobilePartStockDetail> stockDetails = new List<MobilePartStockDetail>();
+            List<ScrapStockDetail> scrapedStock = new List<ScrapStockDetail>(); 
             foreach (var item in invDetail)
             {
                 if (item.SalesType == "Good")
@@ -381,6 +388,55 @@ where 1=1{0} order by EntryDate desc", Utility.ParamChecker(param));
                         }
                     }
                 }
+                if (item.SalesType == "Scraped")
+                {
+                    var reqQty = item.Quantity;
+                    var partsInStock = _scrapStockInfoBusiness.GetScrapStockOneByOrgId(orgId, branchId).Where(i => i.PartsId == item.PartsId && i.DescriptionId == item.ModelId && (i.ScrapQuantity - i.ScrapOutQty) > 0).OrderBy(i => i.ScrapStockInfoId).ToList();
+
+                    if (partsInStock.Count() > 0)
+                    {
+                        int remainQty = reqQty;
+                        foreach (var stock in partsInStock)
+                        {
+
+                            var totalStockqty = (stock.ScrapQuantity - stock.ScrapOutQty); // total stock
+                            var stockOutQty = 0;
+                            if (totalStockqty <= remainQty)
+                            {
+                                stock.ScrapOutQty += totalStockqty;
+                                stockOutQty = totalStockqty;
+                                remainQty -= totalStockqty;
+                            }
+                            else
+                            {
+                                stockOutQty = remainQty;
+                                stock.ScrapOutQty += remainQty;
+                                remainQty = 0;
+                            }
+
+                            ScrapStockDetail scrapDetails = new ScrapStockDetail()
+                            {
+                                PartsId = item.PartsId,
+                                CostPrice = 0,
+                                SellPrice = 0,
+                                Quantity = stockOutQty,
+                                OrganizationId = orgId,
+                                BranchId = branchId,
+                                EUserId = userId,
+                                EntryDate = DateTime.Now,
+                                StockStatus = StockStatus.StockOut,
+                                DescriptionId = stock.DescriptionId,
+                                FaultyStockInfoId = stock.ScrapStockInfoId,
+                            };
+                            scrapedStock.Add(scrapDetails);
+                            _scrapStockInfoRepository.Update(stock);
+                            if (remainQty == 0)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
                 if (item.SalesType == "Handset")
                 {
                     var reqQty = item.Quantity;
@@ -411,6 +467,11 @@ where 1=1{0} order by EntryDate desc", Utility.ParamChecker(param));
             {
                 _faultyStockDetailRepository.InsertAll(faultyStockDetails);
                 isSuccess = _faultyStockDetailRepository.Save();
+            }
+            if (scrapedStock.Count > 0)
+            {
+                _scrapStockDetailRepository.InsertAll(scrapedStock);
+                isSuccess = _scrapStockDetailRepository.Save();
             }
             if (handSetStocks.Count > 0)
             {

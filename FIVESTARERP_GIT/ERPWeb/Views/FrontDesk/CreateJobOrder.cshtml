@@ -98,7 +98,7 @@
                         </div>
                         <div class="col-md-3">
                             <label for="ddlCustomerType" class="control-label font-weight-bold">Customer Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
-                            @Html.DropDownList("ddlCustomerType", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, "--Select CustomerType--", new { @class = "form-control form-control-sm ctrl-changed" })
+                            @Html.DropDownList("ddlCustomerType", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, new { @class = "form-control form-control-sm ctrl-changed" })
                             <span class="error hide require-customerType font-weight-bold">Customer Type is required !</span>
                         </div>
                     </div>

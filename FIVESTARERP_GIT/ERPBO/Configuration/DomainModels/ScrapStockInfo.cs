@@ -16,6 +16,7 @@ namespace ERPBO.Configuration.DomainModels
         public long? DescriptionId { get; set; }
         public long? PartsId { get; set; }
         public int ScrapQuantity { get; set; }
+        public int ScrapOutQty { get; set; }
         public double CostPrice { get; set; }
         public double SellPrice { get; set; }
         public long? BranchId { get; set; }

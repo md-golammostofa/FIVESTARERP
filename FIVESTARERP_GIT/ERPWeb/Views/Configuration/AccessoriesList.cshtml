@@ -1010,7 +1010,7 @@
                     </div>
                 </div>
                 <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
-                <button type="submit" class="btn btn-sm btn-success float-right" id="btnSubmitColor"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
+                <button type="submit" class="btn btn-sm btn-success float-right" id="btnSubmitColor"><i class="far fa-save"></i> <span id="spanSaveTextColor">Save </span> </button>
             </div>
         </div>
     </div>
@@ -1080,7 +1080,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="ddlBrandName" class="control-label font-weight-bold">Brand<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
-                            @Html.DropDownList("ddlBrandName", (IEnumerable<SelectListItem>)ViewBag.ddlBrandName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                            @Html.DropDownList("ddlBrandName", (IEnumerable<SelectListItem>)ViewBag.ddlBrandName, "--Select Brand--", new { @class = "form-control form-control-sm" })
                             <span class="error hide require-brandName font-weight-bold">Brand is required !</span>
                         </div>
                     </div>
@@ -2203,7 +2203,7 @@
             }).fail(function (err) { console.log(err) })
         }
         function OpenModalColor() {
-            //clearCtrlRepair();
+            clearCtrlColor();
             $("#spanModalHeadColor").text('Add New Color');
             $("#spanSaveTextColor").text('Save');
             $("#modalColor").modal("show");
@@ -2212,7 +2212,7 @@
 
         $("#btnAddNewColor").click(function (e) {
             e.preventDefault();
-            //clearCtrlRepair();
+            clearCtrlColor();
             OpenModalColor();
         })
 
@@ -2265,6 +2265,30 @@
                 });
             }
         })
+        $(document).on("click", "a.data-edit-color", function (e) {
+            e.preventDefault()
+            clearCtrlColor();
+            OpenModalColor()
+            $("#spanModalHeadColor").text('Update Color');
+            $("#spanSaveTextColor").text('Update');
+            var row = $(this).parent().parents('tr').children('td');
+            var td1 = row.eq(1).html();
+            var td2 = row.eq(2).html();
+            var td3 = row.eq(3).html();
+
+            
+            hdfColorId.val(td1);
+            txtColorName.val(td2);
+            txtColorRemarks.val(td3);
+
+        })
+
+        function clearCtrlColor() {
+            hdfColorId.val("0");
+            txtColorName.val('');
+            txtColorRemarks.val('');
+        }
+
         //
         //Brand
         searchByColor.keyup(function () {
@@ -2283,7 +2307,7 @@
         }
 
         function OpenModalBrand() {
-            //clearCtrlRepair();
+            clearCtrlBrand();
             $("#spanModalHeadBrand").text('Add New Brand');
             $("#spanSaveTextBrand").text('Save');
             $("#modalBrand").modal("show");
@@ -2292,7 +2316,7 @@
 
         $("#btnAddNewBrand").click(function (e) {
             e.preventDefault();
-            //clearCtrlRepair();
+            clearCtrlBrand();
             OpenModalBrand();
         })
         function validateBrand() {
@@ -2338,6 +2362,30 @@
                 });
             }
         })
+        $(document).on("click", "a.data-edit-brand", function (e) {
+            e.preventDefault()
+            clearCtrlBrand();
+            OpenModalBrand()
+            $("#spanModalHeadBrand").text('Update Brand');
+            $("#spanSaveTextBrand").text('Update');
+            var row = $(this).parent().parents('tr').children('td');
+            var td1 = row.eq(1).html();
+            var td2 = row.eq(2).html();
+            var td3 = row.eq(3).html();
+
+
+            hdfBrandId.val(td1);
+            txtBrandName.val(td2);
+            txtBrandRemarks.val(td3);
+
+        })
+
+        function clearCtrlBrand() {
+            hdfBrandId.val("0");
+            txtBrandName.val('');
+            txtBrandRemarks.val('');
+        }
+
         //Model
         searchByModel.keyup(function () {
             LoadModelDataTable();
@@ -2355,7 +2403,7 @@
         }
 
         function OpenModalModel() {
-            //clearCtrlRepair();
+            clearCtrlModel();
             $("#spanModalHeadModel").text('Add New Brand');
             $("#spanSaveTextModel").text('Save');
             $("#modalModel").modal("show");
@@ -2364,7 +2412,7 @@
 
         $("#btnAddNewModel").click(function (e) {
             e.preventDefault();
-            //clearCtrlRepair();
+            //clearCtrlModel();
             OpenModalModel();
         })
         function validateModel() {
@@ -2393,8 +2441,8 @@
             if (validateModel() == true) {
                 disable("#btnSubmitModel");
                 $(".error").addClass("hide");
-                var data = JSON.stringify({ ModelId: TryParseInt(hdfModelId.val(), 0), ModelName: txtModelName.val(), BrandId: TryParseInt(ddlBrandName.val(),0), Remarks: txtModelRemarks.val() });
-                console.log(data);
+                var data = JSON.stringify({ ModelId: TryParseInt(hdfModelId.val(), 0), ModelName: txtModelName.val(), BrandId: TryParseInt(ddlBrandName.val(), 0), Remarks: txtModelRemarks.val() });
+                //return console.log(data);
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Configuration/SaveModel', data, getToken())).then(function (res, status) {
                     console.log(status);
                     console.log(res);
@@ -2414,6 +2462,34 @@
                 });
             }
         })
+        $(document).on("click", "a.data-edit-model", function (e) {
+            e.preventDefault()
+            
+            $("#spanModalHeadModel").text('Update Model');
+            $("#spanSaveTextModel").text('Update');
+            var row = $(this).parent().parents('tr').children('td');
+            var td1 = row.eq(1).html();
+            var td2 = row.eq(2).html();
+            var td3 = row.eq(3).html();
+            var td4 = row.eq(4).html();
+            var td5 = row.eq(5).html();
+
+            clearCtrlModel();
+            OpenModalModel()
+            hdfModelId.val(td1);
+            txtModelName.val(td2);
+            ddlBrandName.val(td3);
+            //ddlBrandName.text(td4);
+            txtModelRemarks.val(td5);
+
+        })
+
+        function clearCtrlModel() {
+            hdfModelId.val("0");
+            txtModelName.val('');
+            ddlBrandName.val('');
+            txtModelRemarks.val('');
+        }
 
         // Pagination
         $(document).on('click', 'a.page-link', function (e) {

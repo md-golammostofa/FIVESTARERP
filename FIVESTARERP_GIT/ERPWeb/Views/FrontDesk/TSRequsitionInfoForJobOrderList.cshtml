@@ -10,7 +10,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" id="custom-tabs-two-requsitionList-tab" data-toggle="pill" href="#custom-tabs-two-requsitionList" role="tab" aria-controls="custom-tabs-two-requsitionList" aria-selected="true">Requsition</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item hide">
                         <a class="nav-link" id="custom-tabs-two-otherBRequsitionList-tab" data-toggle="pill" href="#custom-tabs-two-otherBRequsitionList" role="tab" aria-controls="custom-tabs-two-otherBRequsitionList" aria-selected="true">Requsition(Other Branch)</a>
                     </li>
                 </ul>
@@ -168,7 +168,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-12 text-sm" id="dataContainer2">
-                                                @{Html.RenderAction("AnotherBranchRequsitionPartialList");}
+                                                @*@{Html.RenderAction("AnotherBranchRequsitionPartialList");}*@
                                             </div>
                                         </div>
                                     </div>
@@ -479,6 +479,7 @@
                         hdfRequsitionDetailId.val('0');
                         hdfRowIndex.val("");
                         removeTableRow("#tblRequsitionInfoForJobOrder tbody", index);
+                        LoadDataTable();
                         $('.toastrReqSuccess').trigger('click');
                         setTimeout(function () {
                         }, 1500);

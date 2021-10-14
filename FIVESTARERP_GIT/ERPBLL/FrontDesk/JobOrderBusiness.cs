@@ -150,8 +150,8 @@ CloseDate,TSRemarks,
 SUBSTRING(FaultName,1,LEN(FaultName)-1) 'FaultName',SUBSTRING(ServiceName,1,LEN(ServiceName)-1) 'ServiceName',
 SUBSTRING(AccessoriesNames,1,LEN(AccessoriesNames)-1) 'AccessoriesNames',SUBSTRING(PartsName,1,LEN(PartsName)-1) 'PartsName',
 SUBSTRING(Problems,1,LEN(Problems)-1) 'Problems',TSId,TSName,RepairDate,
-IMEI,[Type],ModelColor,WarrantyDate,Remarks,ReferenceNumber,IMEI2,CloseUser,InvoiceCode,InvoiceInfoId,CustomerType,CourierNumber,CourierName,ApproxBill,IsTransfer,JobLocationB,IsReturn,CustomerApproval,CallCenterRemarks,ProbablyDate
-From (Select jo.JodOrderId,jo.CustomerName,jo.MobileNo,jo.[Address],de.ModelName,bn.BrandName,jo.IsWarrantyAvailable,jo.InvoiceInfoId,jo.IsWarrantyPaperEnclosed,jo.IsHandset,jo.JobOrderType,jo.StateStatus,jo.EntryDate,ap.UserName'EntryUser',jo.CloseDate,jo.InvoiceCode,jo.CustomerType,jo.CourierNumber,jo.CourierName,jo.ApproxBill,jo.IsTransfer,jo.IsReturn,bb.BranchName'JobLocationB',jo.CustomerApproval,jo.CallCenterRemarks,mo.ModelName'CSModelName',co.ColorName'CSColorName',jo.CSIMEI1,jo.CSIMEI2,jo.CustomerSupportStatus,jo.MultipleJobOrderCode,jo.ProbablyDate,
+IMEI,[Type],ModelColor,WarrantyDate,Remarks,ReferenceNumber,IMEI2,CloseUser,InvoiceCode,InvoiceInfoId,CustomerType,CourierNumber,CourierName,ApproxBill,IsTransfer,JobLocationB,IsReturn,CustomerApproval,CallCenterRemarks,ProbablyDate,TransferBranchId
+From (Select jo.JodOrderId,jo.CustomerName,jo.MobileNo,jo.[Address],de.ModelName,bn.BrandName,jo.IsWarrantyAvailable,jo.InvoiceInfoId,jo.IsWarrantyPaperEnclosed,jo.IsHandset,jo.JobOrderType,jo.StateStatus,jo.EntryDate,ap.UserName'EntryUser',jo.CloseDate,jo.InvoiceCode,jo.CustomerType,jo.CourierNumber,jo.CourierName,jo.ApproxBill,jo.IsTransfer,jo.IsReturn,bb.BranchName'JobLocationB',jo.CustomerApproval,jo.CallCenterRemarks,mo.ModelName'CSModelName',co.ColorName'CSColorName',jo.CSIMEI1,jo.CSIMEI2,jo.CustomerSupportStatus,jo.MultipleJobOrderCode,jo.ProbablyDate,jo.TransferBranchId,
 
 Cast((Select FaultName+',' From [Configuration].dbo.tblFault fa
 Inner Join tblJobOrderFault jof on fa.FaultId = jof.FaultId
@@ -767,7 +767,7 @@ Order By j.EUserId desc) 'EntryUser'
 from tblJobOrders jo
 Inner Join [Configuration].dbo.tblModelSS de on jo.DescriptionId = de.ModelId
 Inner Join [ControlPanel].dbo.tblApplicationUsers ap on jo.TSId = ap.UserId 
-Where 1 = 1{0} and (jo.StateStatus='TS-Assigned' or jo.StateStatus='QC-Assigned' or jo.StateStatus='Repair-Done' or jo.StateStatus='Delivery-Done')) tbl Order By JobOrderCode desc", Utility.ParamChecker(param));
+Where 1 = 1{0} and (jo.StateStatus='TS-Assigned')) tbl Order By JobOrderCode desc", Utility.ParamChecker(param));
             return query;
         }
 
@@ -982,7 +982,7 @@ Group By parts.MobilePartId,parts.MobilePartName) tbl", orgId, branchId, jobOrde
             return this._frontDeskUnitOfWork.Db.Database.SqlQuery<DashboardApprovedRequsitionDTO>(
                 string.Format(@"select JodOrderId,rq.RequsitionInfoForJobOrderId,jo.JobOrderCode,RequsitionCode,rq.StateStatus,rq.EntryDate from tblJobOrders jo
                 Inner join tblRequsitionInfoForJobOrders rq on jo.JodOrderId=rq.JobOrderId
-                Where Cast(GETDATE() as date) = Cast(rq.EntryDate as date) and  rq.StateStatus='Pending' and  jo.OrganizationId={0} and jo.BranchId={1}", orgId, branchId)).ToList();
+                Where Cast(GETDATE() as date) = Cast(rq.EntryDate as date) and  rq.StateStatus='Pending' and  jo.OrganizationId={0} and rq.UserBranchId={1}", orgId, branchId)).ToList();
         }
 
         public IEnumerable<DashboardApprovedRequsitionDTO> DashboardCurrentRequsition(long orgId, long branchId)
@@ -990,7 +990,7 @@ Group By parts.MobilePartId,parts.MobilePartName) tbl", orgId, branchId, jobOrde
             return this._frontDeskUnitOfWork.Db.Database.SqlQuery<DashboardApprovedRequsitionDTO>(
                 string.Format(@"select JodOrderId,rq.RequsitionInfoForJobOrderId,jo.JobOrderCode,RequsitionCode,rq.StateStatus,rq.EntryDate from tblJobOrders jo
                 Inner join tblRequsitionInfoForJobOrders rq on jo.JodOrderId=rq.JobOrderId
-                Where Cast(GETDATE() as date) = Cast(rq.EntryDate as date) and  rq.StateStatus='Current' and  jo.OrganizationId={0} and jo.BranchId={1}", orgId, branchId)).ToList();
+                Where Cast(GETDATE() as date) = Cast(rq.EntryDate as date) and  rq.StateStatus='Current' and  jo.OrganizationId={0} and rq.UserBranchId={1}", orgId, branchId)).ToList();
         }
 
         public bool UpdateJobSingOutStatus(long jobOrderId, long userId, long orgId, long branchId)
@@ -1742,14 +1742,6 @@ Where OrganizationId={0} and BranchId={1} and TsRepairStatus='PENDING FOR APPROV
             {
                 param += string.Format(@"and jo.OrganizationId={0}", orgId);
             }
-//            if (branchId > 0)
-//            {
-//                param += string.Format(@"and ((jo.BranchId={0} and (jo.IsTransfer is null or jo.IsTransfer='True'))
-//OR 
-//(jo.TransferBranchId={0} and jo.IsTransfer= 'true')
-//OR
-//(jo.IsReturn='True' and jo.BranchId={0} and jo.IsTransfer='False'))", branchId);
-//            }
             if (branchId > 0)
             {
                 param += string.Format(@"and ((jo.TsRepairStatus='QC' and jo.IsTransfer is null and jo.BranchId={0}) or (jo.TsRepairStatus='QC' and jo.IsTransfer='True' and jo.TransferBranchId={0}))", branchId);
@@ -2108,7 +2100,7 @@ where MultipleDeliveryCode='{0}' and jo.BranchId={1} and jo.OrganizationId={2}) 
 
         public bool UpdateQCTransferStatus(long jobOrderId, long orgId, long branchId, long userId)
         {
-            var jobOrderInDb = GetJobOrdersByIdWithBranch(jobOrderId, branchId, orgId);
+            var jobOrderInDb = GetJobOrderById(jobOrderId, orgId);
            
             if (jobOrderInDb != null)
             {

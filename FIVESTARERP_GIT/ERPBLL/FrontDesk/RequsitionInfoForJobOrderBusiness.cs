@@ -79,7 +79,7 @@ Where Cast(GETDATE() as date) = Cast(EntryDate as date) and  OrganizationId={0} 
             }
             if (branchId > 0)
             {
-                param += string.Format(@"and q.BranchId={0} ", branchId);
+                param += string.Format(@"and q.UserBranchId={0} ", branchId);
             }
             if (!string.IsNullOrEmpty(reqCode))
             {
@@ -123,7 +123,7 @@ app.UserName'Requestby',
 q.EntryDate,UserBranchId From tblRequsitionInfoForJobOrders q
 inner join tblJobOrders j on q.JobOrderId=j.JodOrderId 
 inner join[ControlPanel].dbo.tblApplicationUsers app on q.OrganizationId = app.OrganizationId and q.EUserId= app.UserId 
-where j.IsTransfer IS NULL and 1=1 {0}
+where 1=1 {0}
 order by EntryDate desc
 ", Utility.ParamChecker(param));
             return query;
@@ -133,7 +133,7 @@ order by EntryDate desc
         {
             bool IsSuccess = false;
             var jobOrder = _jobOrderBusiness.GetJobOrderById(requsitionInfoDTO.JobOrderId.Value, orgId);
-            var warehouse = _servicesWarehouseBusiness.GetWarehouseOneByOrgId(orgId, jobOrder.BranchId.Value);
+            var warehouse = _servicesWarehouseBusiness.GetWarehouseOneByOrgId(orgId,branchId);
             RequsitionInfoForJobOrder requsitionInfo = new RequsitionInfoForJobOrder();
             if (requsitionInfoDTO.RequsitionInfoForJobOrderId == 0)
             {

@@ -934,21 +934,7 @@ namespace ERPWeb.Controllers
 
         public ActionResult RequsitionInfoForJobOrderPartialListList(long jobOrderId)
         {
-            //IEnumerable<RequsitionInfoForJobOrderDTO> requsitionInfoForJobOrderDTO = _requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoForJobOrder(jobOrderId, User.OrgId, User.BranchId).Select(info => new RequsitionInfoForJobOrderDTO
-            //{
-            //    RequsitionInfoForJobOrderId = info.RequsitionInfoForJobOrderId,
-            //    RequsitionCode = info.RequsitionCode,
-            //    SWarehouseId = info.SWarehouseId,
-            //    SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(info.SWarehouseId.Value, User.OrgId, User.BranchId).ServicesWarehouseName),
-            //    StateStatus = info.StateStatus,
-            //    JobOrderId = info.JobOrderId,
-            //    JobOrderCode = info.JobOrderCode,
-            //    Remarks = info.Remarks,
-            //    BranchId = info.BranchId,
-            //    OrganizationId = info.OrganizationId,
-            //    EUserId = info.EUserId,
-            //    EntryDate = DateTime.Now,
-            //}).ToList();
+            
             var dto = _requsitionInfoForJobOrderBusiness.GetRequsitionInfoTSData(jobOrderId);
             List<RequsitionInfoForJobOrderViewModel> requsitionInfoForJobs = new List<RequsitionInfoForJobOrderViewModel>();
             AutoMapper.Mapper.Map(dto, requsitionInfoForJobs);
@@ -973,8 +959,8 @@ namespace ERPWeb.Controllers
         public ActionResult RequsitionForJobOrderDetails(long? requsitionInfoId)
         {
             var info = _requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoForJobOrderId(requsitionInfoId.Value, User.OrgId);
-            var jobOrderInfo = _jobOrderBusiness.GetJobOrdersByIdWithBranch(info.JobOrderId.Value, User.BranchId, User.OrgId);
-            jobOrderInfo = jobOrderInfo == null ? _jobOrderBusiness.GetJobOrdersByIdWithTransferBranch(info.JobOrderId.Value, User.BranchId, User.OrgId) : jobOrderInfo;
+            var jobOrderInfo = _jobOrderBusiness.GetJobOrdersByIdWithBranch(info.JobOrderId.Value, info.BranchId.Value, User.OrgId);
+            jobOrderInfo = jobOrderInfo == null ? _jobOrderBusiness.GetJobOrdersByIdWithTransferBranch(info.JobOrderId.Value, info.BranchId.Value, User.OrgId) : jobOrderInfo;
 
             ViewBag.ReqInfoJobOrder = new RequsitionInfoForJobOrderViewModel
             {
@@ -983,7 +969,7 @@ namespace ERPWeb.Controllers
                 Type = (_jobOrderBusiness.GetJobOrdersByIdWithBranch(info.JobOrderId.Value, jobOrderInfo.BranchId.Value, User.OrgId).Type),
                 ModelName = (_modelSSBusiness.GetModelById(jobOrderInfo.DescriptionId, User.OrgId).ModelName),
                 EntryDate = info.EntryDate,
-                SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(info.SWarehouseId.Value, User.OrgId, jobOrderInfo.BranchId.Value).ServicesWarehouseName),
+                SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(info.SWarehouseId.Value, User.OrgId,User.BranchId).ServicesWarehouseName),
             };
 
             IEnumerable<RequsitionDetailForJobOrderDTO> requsitionDetailsDto = _requsitionDetailForJobOrderBusiness.GetAllRequsitionDetailForJobOrderId(requsitionInfoId.Value, User.OrgId, jobOrderInfo.BranchId.Value).Select(s => new RequsitionDetailForJobOrderDTO
@@ -1032,44 +1018,7 @@ namespace ERPWeb.Controllers
         }
         public ActionResult TSRequsitionInfoForJobOrderPartialListList(string reqCode, long? warehouseId,long? tsId, string status, string fromDate, string toDate,string jobCode="",int page=1)
         {
-            //IEnumerable<RequsitionInfoForJobOrderDTO> requsitionInfoForJobOrderDTO = _requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoForJob(User.OrgId, User.BranchId).Where(req =>
-            //    (reqCode == null || reqCode.Trim() == "" || req.RequsitionCode.Contains(reqCode))
-            //    &&
-            //    (warehouseId == null || warehouseId <= 0 || req.SWarehouseId == warehouseId)
-            //    &&
-            //    (tsId == null || tsId <= 0 || req.EUserId == tsId)
-            //    &&
-            //    (status == null || status.Trim() == "" || req.StateStatus == status.Trim())
-            //    &&
-            //    (
-            //        (fromDate == null && toDate == null)
-            //        ||
-            //         (fromDate == "" && toDate == "")
-            //        ||
-            //        (fromDate.Trim() != "" && toDate.Trim() != "" &&
-
-            //            req.EntryDate.Value.Date >= Convert.ToDateTime(fromDate).Date &&
-            //            req.EntryDate.Value.Date <= Convert.ToDateTime(toDate).Date)
-            //        ||
-            //        (fromDate.Trim() != "" && req.EntryDate.Value.Date == Convert.ToDateTime(fromDate).Date)
-            //        ||
-            //        (toDate.Trim() != "" && req.EntryDate.Value.Date == Convert.ToDateTime(toDate).Date)
-            //    )).Select(info => new RequsitionInfoForJobOrderDTO
-            //{
-            //    RequsitionInfoForJobOrderId = info.RequsitionInfoForJobOrderId,
-            //    RequsitionCode = info.RequsitionCode,
-            //    SWarehouseId = info.SWarehouseId,
-            //    SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(info.SWarehouseId.Value, User.OrgId, User.BranchId).ServicesWarehouseName),
-            //    StateStatus = info.StateStatus,
-            //    JobOrderId = info.JobOrderId,
-            //    JobOrderCode = info.JobOrderCode,
-            //    Remarks = info.Remarks,
-            //    BranchId = info.BranchId,
-            //    OrganizationId = info.OrganizationId,
-            //    EUserId = info.EUserId,
-            //    Requestby = UserForEachRecord(info.EUserId.Value).UserName,
-            //    EntryDate = info.EntryDate
-            //}).ToList();
+           
             var dto = _requsitionInfoForJobOrderBusiness.GetRequsitionInfoData(reqCode, warehouseId, tsId, status, fromDate, toDate, User.OrgId, User.BranchId,jobCode);
             List<RequsitionInfoForJobOrderViewModel> requsitionInfoForJobs = new List<RequsitionInfoForJobOrderViewModel>();
             // Pagination //
@@ -1102,7 +1051,7 @@ namespace ERPWeb.Controllers
             ViewBag.UserPrivilege = UserPrivilege("FrontDesk", "TSRequsitionInfoForJobOrderList");
 
             ///
-            IEnumerable<RequsitionDetailForJobOrderDTO> returnDTO = _requsitionDetailForJobOrderBusiness.GetModelWiseAvailableQtyByRequsition(requsitionInfoId.Value, User.OrgId, jobOrderInfo.BranchId.Value, jobOrderInfo.DescriptionId);
+            IEnumerable<RequsitionDetailForJobOrderDTO> returnDTO = _requsitionDetailForJobOrderBusiness.GetModelWiseAvailableQtyByRequsition(requsitionInfoId.Value, User.OrgId, User.BranchId, jobOrderInfo.DescriptionId);
             if (returnDTO.Count() == 0)
             {
                 IEnumerable<RequsitionDetailForJobOrderDTO> requsitionDetailsDto = _requsitionDetailForJobOrderBusiness.GetAllRequsitionDetailForJobOrderId(requsitionInfoId.Value, User.OrgId, jobOrderInfo.BranchId.Value).Select(s => new RequsitionDetailForJobOrderDTO
@@ -1410,7 +1359,7 @@ namespace ERPWeb.Controllers
                 RequsitionInfoForJobOrderId = stock.RequsitionInfoForJobOrderId,
                 RequsitionCode = (_requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoOneByOrgId(stock.RequsitionInfoForJobOrderId, User.OrgId, jobOrder.BranchId.Value).RequsitionCode),
                 SWarehouseId = stock.SWarehouseId,
-                SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(stock.SWarehouseId.Value, User.OrgId, jobOrder.BranchId.Value).ServicesWarehouseName),
+                SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(stock.SWarehouseId.Value, User.OrgId, User.BranchId).ServicesWarehouseName),
                 PartsId = stock.PartsId,
                 PartsName = (_mobilePartBusiness.GetMobilePartOneByOrgId(stock.PartsId.Value, User.OrgId).MobilePartName),
                 MobilePartCode= (_mobilePartBusiness.GetMobilePartOneByOrgId(stock.PartsId.Value, User.OrgId).MobilePartCode),
@@ -1652,9 +1601,9 @@ namespace ERPWeb.Controllers
         }
         public ActionResult CreateAccessoriesInvoice()
         {
-            ViewBag.ddlMobileParts = _mobilePartStockInfoBusiness.GetAllGoodMobilePartsAndCode(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.MobilePartName, Value = mobile.MobilePartId.ToString() }).ToList();
+            ViewBag.ddlMobileParts = _mobilePartBusiness.GetAllMobilePartAndCode(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.MobilePartName, Value = mobile.MobilePartId.ToString() }).ToList();
 
-            ViewBag.ddlFaultyMobileParts = _faultyStockInfoBusiness.GetAllFaultyMobilePartsAndCode(User.OrgId).Select(s => new SelectListItem { Text = s.MobilePartName, Value = s.PartsId.ToString() }).ToList();
+            ViewBag.ddlFaultyMobileParts = _mobilePartBusiness.GetAllMobilePartAndCode(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.MobilePartName, Value = mobile.MobilePartId.ToString() }).ToList();
 
             ViewBag.ddlsellsPrice = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoByOrgId(User.OrgId, User.BranchId).Select(mobile => new SelectListItem { Text = mobile.SellPrice.ToString(), Value = mobile.MobilePartStockInfoId.ToString() }).ToList();
 

@@ -12,6 +12,7 @@ namespace ERPBO.Configuration.ViewModels
         public long? DescriptionId { get; set; }
         public long? PartsId { get; set; }
         public int ScrapQuantity { get; set; }
+        public int ScrapOutQty { get; set; }
         public double CostPrice { get; set; }
         public double SellPrice { get; set; }
         public long? BranchId { get; set; }
@@ -24,5 +25,6 @@ namespace ERPBO.Configuration.ViewModels
         public string ModelName { get; set; }
         public string PartsName { get; set; }
         public string PartsCode { get; set; }
+        public int StockQty { get; set; }
     }
 }

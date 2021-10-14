@@ -30,7 +30,7 @@ namespace ERPBLL.FrontDesk
             return this._frontDeskUnitOfWork.Db.Database.SqlQuery<DashbordTsPartsReturnDTO>(
                 string.Format(@"select tr.ReturnInfoId,tr.JobOrderId,jo.JobOrderCode,RequsitionCode,tr.StateStatus,tr.EntryDate from tblTsStockReturnInfo tr
                 Inner join tblJobOrders jo on tr.JobOrderId=jo.JodOrderId
-                Where  tr.StateStatus='Stock-Return' and  jo.OrganizationId={0} and jo.BranchId={1}", orgId, branchId)).ToList();
+                Where  tr.StateStatus='Stock-Return' and  tr.OrganizationId={0} and tr.BranchId={1}", orgId, branchId)).ToList();
         }
 
         public TsStockReturnInfo GetAllReturnId(long returnInfoId, long orgId, long branchId)
@@ -63,7 +63,7 @@ namespace ERPBLL.FrontDesk
                 info.EUserId = userId;
                 info.EntryDate = DateTime.Now;
                 info.OrganizationId = orgId;
-                info.BranchId = jobId.BranchId;
+                info.BranchId = branchId;
                 info.ModelId = modelId;
                 List<TsStockReturnDetail> detail = new List<TsStockReturnDetail>();
                 foreach(var details in item.TsStockReturnDetails)
@@ -75,7 +75,7 @@ namespace ERPBLL.FrontDesk
                     d.PartsId = details.PartsId;
                     d.Quantity = details.Quantity;
                     d.ModelId = modelId;
-                    d.BranchId = jobId.BranchId;
+                    d.BranchId = branchId;
                     d.OrganizationId = orgId;
                     d.EUserId = userId;
                     d.EntryDate = DateTime.Now;
