@@ -2,12 +2,14 @@
   font-weight: bold;
 }
 .toast-message {
-  -ms-word-wrap: break-word;
-  word-wrap: break-word;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    font-size: 25px;
 }
 .toast-message a,
 .toast-message label {
   color: #FFFFFF;
+  font-size:large;
 }
 .toast-message a:hover {
   color: #CCCCCC;
@@ -18,7 +20,7 @@
   right: -0.3em;
   top: -0.3em;
   float: right;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
   color: #FFFFFF;
   -webkit-text-shadow: 0 1px 0 #ffffff;
@@ -161,7 +163,7 @@ button.toast-close-button {
   background-color: #030303;
 }
 .toast-success {
-  background-color: #51A351;
+    background-color: #0ff70f;
 }
 .toast-error {
   background-color: #BD362F;

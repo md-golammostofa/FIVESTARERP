@@ -8,7 +8,7 @@
 
     /**/
 
-    ViewBag.Title = "T.S Services Details";
+    ViewBag.Title = "Engineer Services Details";
     int sl = 0;
     int sl2 = 0;
     var jobOrder = (ERPBO.FrontDesk.ViewModels.JobOrderViewModel)ViewBag.JobOrder;
@@ -1406,7 +1406,7 @@ $('.toastrDefaultError').trigger('click');
                     fnSubmitJobSignOut(jobOrderSignOutObj);
                 }
             }
-            else if (info.TsRepairStatus === "RETURN WITHOUT REPAIR") {
+            else if (info.TsRepairStatus === "RETURN FOR ENGINEER HEAD") {
                 // not used qty
                 // Direct Stock Singout
                 fnSubmitJobSignOut(jobOrderSignOutObj);
@@ -1537,7 +1537,7 @@ $('.toastrDefaultError').trigger('click');
 
         //////
         $(document).ready(function () {
-            if ($("#repairName").text() == "QC" || $("#repairName").text() == "RETURN WITHOUT REPAIR") {
+            if ($("#repairName").text() == "QC" || $("#repairName").text() == "RETURN FOR ENGINEER HEAD") {
                 $("#btnjobsign").show();
                // $("#btnHandsetchange").hide();
                 $("#changeIMEI1").hide();

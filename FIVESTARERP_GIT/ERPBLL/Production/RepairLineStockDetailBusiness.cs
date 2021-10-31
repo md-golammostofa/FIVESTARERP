@@ -111,6 +111,7 @@ namespace ERPBLL.Production
 
         public bool SaveRepairLineStockOut(List<RepairLineStockDetailDTO> repairLineStockDetailDTO, long userId, long orgId, string flag)
         {
+            bool IsSuccess = false;
             List<RepairLineStockDetail> repairLineStockDetails = new List<RepairLineStockDetail>();
             foreach (var item in repairLineStockDetailDTO)
             {
@@ -131,11 +132,20 @@ namespace ERPBLL.Production
                 stockDetail.EntryDate = DateTime.Now;
                 stockDetail.StockStatus = StockStatus.StockOut;
                 stockDetail.RefferenceNumber = item.RefferenceNumber;
-                //&& o.QCLineId == item.QCLineId // 30-Jun-2020
-                var repairStockInfo = _repairLineStockInfoBusiness.GetRepairLineStockInfos(orgId).Where(o => o.ItemTypeId == item.ItemTypeId && o.ItemId == item.ItemId && o.ProductionLineId == item.ProductionLineId && o.DescriptionId == item.DescriptionId && o.RepairLineId == item.RepairLineId).FirstOrDefault();
-                repairStockInfo.StockOutQty += item.Quantity;
-                _repairLineStockInfoRepository.Update(repairStockInfo);
                 repairLineStockDetails.Add(stockDetail);
+                //&& o.QCLineId == item.QCLineId // 30-Jun-2020
+                var repairStockInfo = _repairLineStockInfoBusiness.GetRepairLineStockInfos(orgId).Where(o => o.ItemTypeId == item.ItemTypeId && o.ItemId == item.ItemId && o.ProductionLineId == item.ProductionLineId && o.DescriptionId == item.DescriptionId && o.RepairLineId == item.RepairLineId && ((o.StockInQty - o.StockOutQty) > item.Quantity || (o.StockInQty - o.StockOutQty) == item.Quantity)).FirstOrDefault();
+                if(repairStockInfo != null)
+                {
+                    repairStockInfo.StockOutQty += item.Quantity;
+                    _repairLineStockInfoRepository.Update(repairStockInfo);
+                    //IsSuccess = true;
+                }
+                else
+                {
+                   return IsSuccess = false;
+                }
+                
             }
             _repairLineStockDetailRepository.InsertAll(repairLineStockDetails);
             return _repairLineStockDetailRepository.Save();

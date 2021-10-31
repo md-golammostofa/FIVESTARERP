@@ -3565,6 +3565,8 @@ namespace ERPWeb.Reports.DataSets {
             
             private global::System.Data.DataColumn columnProbablyDate;
             
+            private global::System.Data.DataColumn columnRemarks;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public JobCreateReceiptDataTable() {
@@ -3760,6 +3762,14 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn RemarksColumn {
+                get {
+                    return this.columnRemarks;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -3815,7 +3825,8 @@ namespace ERPWeb.Reports.DataSets {
                         string EntryUser, 
                         System.DateTime EntryDate, 
                         string ApproxBill, 
-                        System.DateTime ProbablyDate) {
+                        System.DateTime ProbablyDate, 
+                        string Remarks) {
                 JobCreateReceiptRow rowJobCreateReceiptRow = ((JobCreateReceiptRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         JodOrderId,
@@ -3837,7 +3848,8 @@ namespace ERPWeb.Reports.DataSets {
                         EntryUser,
                         EntryDate,
                         ApproxBill,
-                        ProbablyDate};
+                        ProbablyDate,
+                        Remarks};
                 rowJobCreateReceiptRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowJobCreateReceiptRow);
                 return rowJobCreateReceiptRow;
@@ -3880,6 +3892,7 @@ namespace ERPWeb.Reports.DataSets {
                 this.columnEntryDate = base.Columns["EntryDate"];
                 this.columnApproxBill = base.Columns["ApproxBill"];
                 this.columnProbablyDate = base.Columns["ProbablyDate"];
+                this.columnRemarks = base.Columns["Remarks"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3925,6 +3938,8 @@ namespace ERPWeb.Reports.DataSets {
                 base.Columns.Add(this.columnApproxBill);
                 this.columnProbablyDate = new global::System.Data.DataColumn("ProbablyDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnProbablyDate);
+                this.columnRemarks = new global::System.Data.DataColumn("Remarks", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRemarks);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -14691,6 +14706,22 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Remarks {
+                get {
+                    try {
+                        return ((string)(this[this.tableJobCreateReceipt.RemarksColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Remarks\' in table \'JobCreateReceipt\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableJobCreateReceipt.RemarksColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsJodOrderIdNull() {
                 return this.IsNull(this.tableJobCreateReceipt.JodOrderIdColumn);
             }
@@ -14927,6 +14958,18 @@ namespace ERPWeb.Reports.DataSets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetProbablyDateNull() {
                 this[this.tableJobCreateReceipt.ProbablyDateColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsRemarksNull() {
+                return this.IsNull(this.tableJobCreateReceipt.RemarksColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetRemarksNull() {
+                this[this.tableJobCreateReceipt.RemarksColumn] = global::System.Convert.DBNull;
             }
         }
         

@@ -116,7 +116,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag == "accessories")
             {
-                IEnumerable<AccessoriesDTO> accessoriesDTO = _accessoriesBusiness.GetAllAccessoriesByOrgId(User.OrgId).Where(s => (name == "" || name == null) || (s.AccessoriesName.Contains(name) || s.AccessoriesCode.Contains(name))).Select(access => new AccessoriesDTO
+                IEnumerable<AccessoriesDTO> accessoriesDTO = _accessoriesBusiness.GetAllAccessoriesByOrgId(User.OrgId).Where(s => (name == "" || name == null) || (s.AccessoriesName.Contains(name) || s.AccessoriesName.Contains(name))).Select(access => new AccessoriesDTO
                 {
                     AccessoriesId = access.AccessoriesId,
                     AccessoriesName = access.AccessoriesName,

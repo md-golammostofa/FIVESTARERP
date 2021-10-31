@@ -259,7 +259,7 @@ Where 1=1 and ri.OrganizationId={0} and ri.RSRInfoId={1}", orgId, reqId)).Single
                 {
                     reqInfo.ApprovedDate = DateTime.Now;
                     reqInfo.ApprovedBy = userId;
-                    reqInfo.StateStatus = status;
+                    reqInfo.StateStatus = "HandOver";
                     _repairSectionRequisitionInfoRepository.Update(reqInfo);
                 }
                 else if (status == RequisitionStatus.Rejected)

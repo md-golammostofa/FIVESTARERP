@@ -398,6 +398,14 @@
             loadData();
 
         })
+
+        //
+        txtIMEI.change(function () {
+            $('.error').addClass('hide');
+            if ($.trim(txtHandsetIMEI.val()) != "" && $.trim(txtHandsetIMEI.val()).length == 15 && $.trim(txtHandsetIMEI1.val()) != "" && $.trim(txtHandsetIMEI1.val()).length == 15) {
+                data = JSON.stringify({ imei: txtIMEI.val().trim() });
+            }
+        });
         //show/hide
         $('#ddlCustomerSupport').change(function () {
             if ($('#ddlCustomerSupport').val() == 'Handset') {

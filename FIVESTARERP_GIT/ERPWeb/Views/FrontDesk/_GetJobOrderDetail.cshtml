@@ -76,9 +76,9 @@
                 <td>@CloseDate</td>
             </tr>
             <tr>
-                <td class="text-purple">TS Name</td>
+                <td class="text-purple">Eng. Name</td>
                 <td>@Model.TSName</td>
-                <td class="text-purple">Issued by</td>
+                <td class="text-purple">Received by</td>
                 <td>@Model.EntryUser</td>
                 <td class="text-purple">Close by</td>
                 <td>@Model.CloseUser</td>
@@ -166,7 +166,7 @@
     </div>
     <div class="col-md-12">
         <div class="modal-footer">
-            @if ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.TsRepairStatus == "RETURN WITHOUT REPAIR") || (Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.IsReturn == true) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.JobOrderType=="Warrenty") && (Model.IsReturn==true || Model.IsTransfer==null)) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.InvoiceCode !=null)) || (Model.StateStatus == "HandSetChange" && Model.TsRepairStatus == "MODULE SWAP") ||(Model.StateStatus==ERPBLL.Common.JobOrderStatus.RepairDone && Model.TsRepairStatus== "REPAIR AND RETURN" && User.BranchId == Model.TransferBranchId))
+            @if ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.TsRepairStatus == "RETURN FOR ENGINEER HEAD") || (Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.IsReturn == true) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.JobOrderType=="Warrenty") && (Model.IsReturn==true || Model.IsTransfer==null)) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.InvoiceCode !=null)) || (Model.StateStatus == "HandSetChange" && Model.TsRepairStatus == "MODULE SWAP") ||(Model.StateStatus==ERPBLL.Common.JobOrderStatus.RepairDone && Model.TsRepairStatus== "REPAIR AND RETURN" && User.BranchId == Model.TransferBranchId))
             {
                 <button type="button" class="btn btn-sm btn-success btnDeliveryDone">Delivery</button>
             }

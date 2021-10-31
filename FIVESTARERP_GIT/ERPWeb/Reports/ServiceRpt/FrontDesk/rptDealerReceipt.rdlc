@@ -951,9 +951,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox29</rd:DefaultName>
-            <Top>0.54167in</Top>
+            <Top>0.55269in</Top>
+            <Left>3.735in</Left>
             <Height>0.25in</Height>
-            <Width>1in</Width>
+            <Width>0.91208in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -1066,10 +1067,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox29</rd:DefaultName>
-            <Top>0.54583in</Top>
-            <Left>1in</Left>
+            <Top>0.55685in</Top>
+            <Left>4.64708in</Left>
             <Height>0.25in</Height>
-            <Width>10.14792in</Width>
+            <Width>6.50084in</Width>
             <ZIndex>5</ZIndex>
             <Style>
               <Border>
@@ -1357,6 +1358,79 @@
             <Height>0.25in</Height>
             <Width>2.72458in</Width>
             <ZIndex>13</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox37">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>ProbablyDate</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox29</rd:DefaultName>
+            <Top>0.54296in</Top>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>14</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox40">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>: </Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Label>Probably Date</Label>
+                    <Value>=First(Fields!ProbablyDate.Value, "DealerReceipt")</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                      <Format>dd MMM yyyy</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox29</rd:DefaultName>
+            <Top>0.54296in</Top>
+            <Left>1in</Left>
+            <Height>0.25in</Height>
+            <Width>2.72in</Width>
+            <ZIndex>15</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1736,10 +1810,14 @@
           <DataField>MultipleDeliveryCode</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ProbablyDate">
+          <DataField>ProbablyDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ServicesDS</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\User\source\repos\Yeasin-Ahmed\FIVESTAR-ERP\FIVESTARERP_GIT\ERPWeb\Reports\DataSets\ServicesDS.xsd</rd:SchemaPath>
+        <rd:SchemaPath>E:\GITHUBALLPROJECT\FIVESTARERP\FIVESTARERP_GIT\ERPWeb\Reports\DataSets\ServicesDS.xsd</rd:SchemaPath>
         <rd:TableName>JobOrder</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

@@ -178,7 +178,7 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
                     OrganizationId = orgId,
                     EUserId = userId,
                     EntryDate = DateTime.Now,
-                    DescriptionId = info.DescriptionId
+                    DescriptionId = item.DescriptionId
                 };
                 details.Add(detail);
                 //MobilePartStockDetailDTO stockOutItem = new MobilePartStockDetailDTO

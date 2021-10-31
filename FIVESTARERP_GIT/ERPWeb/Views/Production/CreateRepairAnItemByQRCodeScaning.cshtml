@@ -470,13 +470,17 @@
                 console.log(data);
                 //return;
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveFaultyItemByQRCodeScaning', data, getToken())).then(function (res, status) {
-                    console.log(res);
+                    //alert(res.IsSuccess);
+                    //return console.log(res.IsSuccess);
                     console.log(status);
-                    if (res === true || status === "success") {
+                    if (res == true) {
                         toastrSuccessAlert("Faulty item added");
+                        
                         fnGetFaultyItemsAfterSubmit(FaultyInfo.QRCode, FaultyInfo.TransferId);
                         $("#btnFaulty").hide();
                         $("#btnRepairDone").show();
+                    } else {
+                        toastrErrorAlert("Stock Not Available");
                     }
                     enable('.btn-Action');
 

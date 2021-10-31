@@ -595,6 +595,13 @@
             }
         })
 
+        
+        ddlModelNameRequisition.change(function () {
+            clearDropdown("ddlItemsRequisition");
+            if (ddlModelNameRequisition.val() != "") {
+                LoadDropDown('/Production/GetAllItemByModel', 'POST', ddlItemsRequisition, JSON.stringify({ model: ddlModelNameRequisition.val() }));
+            }
+        })
         function getItemDetailsByReq() {
             warehouseReq = '';
             itemTypeReq = '';
@@ -898,6 +905,7 @@
             })
             return itemObj;
         }
+        
 
         // Requisition List //
 

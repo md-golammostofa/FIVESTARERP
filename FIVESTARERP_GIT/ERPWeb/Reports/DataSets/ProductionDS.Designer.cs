@@ -449,6 +449,10 @@ namespace ERPWeb.Reports.DataSets {
             
             private global::System.Data.DataColumn columnReportImage;
             
+            private global::System.Data.DataColumn columnAssemblyLineName;
+            
+            private global::System.Data.DataColumn columnUserName;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public ProductionRequisitionDataTable() {
@@ -604,6 +608,22 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn AssemblyLineNameColumn {
+                get {
+                    return this.columnAssemblyLineName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn UserNameColumn {
+                get {
+                    return this.columnUserName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -639,7 +659,24 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public ProductionRequisitionRow AddProductionRequisitionRow(string ReqInfoCode, string RequisitionType, string ModelName, System.DateTime EntryDate, string RequisitionBy, string LineNumber, string WarehouseName, string ItemTypeName, string ItemName, long Quantity, string UnitName, string Remarks, string StateStatus, string OrganizationName, byte[] ReportImage) {
+            public ProductionRequisitionRow AddProductionRequisitionRow(
+                        string ReqInfoCode, 
+                        string RequisitionType, 
+                        string ModelName, 
+                        System.DateTime EntryDate, 
+                        string RequisitionBy, 
+                        string LineNumber, 
+                        string WarehouseName, 
+                        string ItemTypeName, 
+                        string ItemName, 
+                        long Quantity, 
+                        string UnitName, 
+                        string Remarks, 
+                        string StateStatus, 
+                        string OrganizationName, 
+                        byte[] ReportImage, 
+                        string AssemblyLineName, 
+                        string UserName) {
                 ProductionRequisitionRow rowProductionRequisitionRow = ((ProductionRequisitionRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ReqInfoCode,
@@ -656,7 +693,9 @@ namespace ERPWeb.Reports.DataSets {
                         Remarks,
                         StateStatus,
                         OrganizationName,
-                        ReportImage};
+                        ReportImage,
+                        AssemblyLineName,
+                        UserName};
                 rowProductionRequisitionRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowProductionRequisitionRow);
                 return rowProductionRequisitionRow;
@@ -694,6 +733,8 @@ namespace ERPWeb.Reports.DataSets {
                 this.columnStateStatus = base.Columns["StateStatus"];
                 this.columnOrganizationName = base.Columns["OrganizationName"];
                 this.columnReportImage = base.Columns["ReportImage"];
+                this.columnAssemblyLineName = base.Columns["AssemblyLineName"];
+                this.columnUserName = base.Columns["UserName"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -729,6 +770,10 @@ namespace ERPWeb.Reports.DataSets {
                 base.Columns.Add(this.columnOrganizationName);
                 this.columnReportImage = new global::System.Data.DataColumn("ReportImage", typeof(byte[]), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnReportImage);
+                this.columnAssemblyLineName = new global::System.Data.DataColumn("AssemblyLineName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAssemblyLineName);
+                this.columnUserName = new global::System.Data.DataColumn("UserName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUserName);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2409,6 +2454,39 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string AssemblyLineName {
+                get {
+                    try {
+                        return ((string)(this[this.tableProductionRequisition.AssemblyLineNameColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'AssemblyLineName\' in table \'ProductionRequisition\' is DBNul" +
+                                "l.", e);
+                    }
+                }
+                set {
+                    this[this.tableProductionRequisition.AssemblyLineNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string UserName {
+                get {
+                    try {
+                        return ((string)(this[this.tableProductionRequisition.UserNameColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'UserName\' in table \'ProductionRequisition\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableProductionRequisition.UserNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsReqInfoCodeNull() {
                 return this.IsNull(this.tableProductionRequisition.ReqInfoCodeColumn);
             }
@@ -2585,6 +2663,30 @@ namespace ERPWeb.Reports.DataSets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetReportImageNull() {
                 this[this.tableProductionRequisition.ReportImageColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsAssemblyLineNameNull() {
+                return this.IsNull(this.tableProductionRequisition.AssemblyLineNameColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetAssemblyLineNameNull() {
+                this[this.tableProductionRequisition.AssemblyLineNameColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsUserNameNull() {
+                return this.IsNull(this.tableProductionRequisition.UserNameColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetUserNameNull() {
+                this[this.tableProductionRequisition.UserNameColumn] = global::System.Convert.DBNull;
             }
         }
         

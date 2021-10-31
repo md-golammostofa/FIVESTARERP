@@ -338,7 +338,7 @@ Group By al.AssemblyLineId,fsd.ItemId,i.ItemName", orgId, item.AssemblyLineId);
                 item.AssemblyFaultys = this._productionDb.Db.Database.SqlQuery<DashBoardAssemblyFaultyDTO>(assemblyFaulty).ToList();
 
                 string AssemblyProblems = string.Format(@"Select al.AssemblyLineId,al.AssemblyLineName,f.CaseId 'ProblemId',f.ProblemDescription,COUNT(*) 'Count' From tblQRCodeProblem qp
-Inner Join tblFaultyCase f on f.CaseId = qp.ProblemId
+Inner Join tblFaultyCase f on f.QRCode = qp.ProblemId and f.OrganizationId=qp.OrganizationId
 Inner Join [Production].dbo.tblAssemblyLines al on qp.AssemblyLineId = al.AssemblyLineId
 Where 1= 1 and qp.OrganizationId={0} and qp.AssemblyLineId={1}
 Group By al.AssemblyLineId,al.AssemblyLineName,f.CaseId,f.ProblemDescription", orgId, item.AssemblyLineId);
@@ -346,6 +346,19 @@ Group By al.AssemblyLineId,al.AssemblyLineName,f.CaseId,f.ProblemDescription", o
                 item.AssemblyProblems = this._productionDb.Db.Database.SqlQuery<DashBoardAssemblyProblemDTO>(AssemblyProblems).ToList();
 
             }
+            return data;
+        }
+
+        public IEnumerable<RequsitionInfoDTO> GetReqInfoDataForReport(long infoId, long orgId)
+        {
+            var data= this._productionDb.Db.Database.SqlQuery<RequsitionInfoDTO>(
+                string.Format(@"Select rf.ReqInfoCode,li.LineNumber,wh.WarehouseName,rf.StateStatus,d.DescriptionName'ModelName',rf.RequisitionType,asbly.AssemblyLineName,rf.EntryDate,u.UserName From tblRequsitionInfo rf
+Left Join tblProductionLines li on rf.LineId=li.LineId
+Left Join [Inventory].dbo.tblWarehouses wh on rf.WarehouseId=wh.Id
+Left Join [Inventory].dbo.tblDescriptions d on rf.DescriptionId=d.DescriptionId
+Left join tblAssemblyLines asbly on rf.AssemblyLineId=asbly.AssemblyLineId
+Left join [ControlPanel].dbo.tblApplicationUsers u on rf.EUserId=u.UserId
+Where rf.ReqInfoId={0} and rf.OrganizationId={1}", infoId, orgId)).ToList();
             return data;
         }
     }

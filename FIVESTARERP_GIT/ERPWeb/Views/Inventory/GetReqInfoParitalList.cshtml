@@ -48,7 +48,7 @@
                         }
                         @if (privilege != null && privilege.Report)
                         {
-                            <a href="#" class="btn btn-sm btn-outline-danger data-report-item" title="Pdf Report" data-report-item="@info.ReqInfoId"><i class="fas fa-file-pdf"></i></a>
+                            <a href="@Url.Action("GetRequsitionDetailsReport", "Report", new { @infoId = info.ReqInfoId })" target="_blank" class="btn btn-sm btn-outline-danger" title="Download Report"><i class="fas fa-file-pdf"></i></a>
                         }
 
                     </td>

@@ -325,7 +325,7 @@
           </Line>
           <Line Name="Line6">
             <Left>1.04102in</Left>
-            <Height>3.05626in</Height>
+            <Height>3.34445in</Height>
             <Width>0in</Width>
             <ZIndex>5</ZIndex>
             <Style>
@@ -1663,12 +1663,94 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
+          <Line Name="Line13">
+            <Top>3.05765in</Top>
+            <Left>0.01042in</Left>
+            <Height>0in</Height>
+            <Width>7.16436in</Width>
+            <ZIndex>47</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+                <Width>0.25pt</Width>
+              </Border>
+            </Style>
+          </Line>
+          <Textbox Name="Textbox64">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Label>JobCode</Label>
+                    <Value>Remarks</Value>
+                    <Style>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox23</rd:DefaultName>
+            <Top>3.09654in</Top>
+            <Left>0.03809in</Left>
+            <Height>0.20402in</Height>
+            <Width>0.94737in</Width>
+            <ZIndex>48</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox65">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Label>Remarks</Label>
+                    <Value>=First(Fields!Remarks.Value, "JobCreateReceipt")</Value>
+                    <Style>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>9pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox23</rd:DefaultName>
+            <Top>3.09932in</Top>
+            <Left>1.08546in</Left>
+            <Height>0.20402in</Height>
+            <Width>6.06848in</Width>
+            <ZIndex>49</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>1.1243in</Top>
         <Left>0.06874in</Left>
-        <Height>3.05626in</Height>
-        <Width>7.16436in</Width>
+        <Height>3.34445in</Height>
+        <Width>7.17478in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -1678,7 +1760,7 @@
         </Style>
       </Rectangle>
     </ReportItems>
-    <Height>4.25in</Height>
+    <Height>4.61458in</Height>
     <Style />
   </Body>
   <Width>7.27in</Width>
@@ -1871,10 +1953,14 @@
           <DataField>ProbablyDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
+        <Field Name="Remarks">
+          <DataField>Remarks</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ServicesDS</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\User\source\repos\Yeasin-Ahmed\FIVESTAR-ERP\FIVESTARERP_GIT\ERPWeb\Reports\DataSets\ServicesDS.xsd</rd:SchemaPath>
+        <rd:SchemaPath>E:\GITHUBALLPROJECT\FIVESTARERP\FIVESTARERP_GIT\ERPWeb\Reports\DataSets\ServicesDS.xsd</rd:SchemaPath>
         <rd:TableName>JobCreateReceipt</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

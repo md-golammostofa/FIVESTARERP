@@ -741,7 +741,7 @@ Where 1 = 1{0}) tbl Order By JobOrderCode desc
                 param += string.Format(@" and ((jo.BranchId= {0} 
 and (IsTransfer is null or IsTransfer = 'False')) OR (IsTransfer = 'True' and TransferBranchId={0}))", branchId);
             }
-            if (roleName== "Technical Services")
+            if (roleName== "Engineer")
             {
                 param += string.Format(@" and jo.TSId ={0}", userId);
             }
@@ -1039,7 +1039,7 @@ Group By parts.MobilePartId,parts.MobilePartName) tbl", orgId, branchId, jobOrde
             JobOrderDTO jobOrder = new JobOrderDTO();
             if (UpdateJobOrderDeliveryStatus(jobOrderId, userId, orgId, branchId))
             {
-                jobOrder= _jobOrderReportBusiness.GetReceiptForJobOrder(jobOrderId, orgId, branchId);
+                jobOrder= _jobOrderReportBusiness.GetReceiptForJobOrder(jobOrderId, orgId);
             }
             return jobOrder;
         }
@@ -1560,7 +1560,7 @@ Where StateStatus='Job-Initiated' and Cast(EntryDate as Date) = Cast(jo.EntryDat
 Where TsRepairStatus='REPAIR AND RETURN' and Cast(EntryDate as Date) = Cast(jo.EntryDate as Date))'RepairAndReturn',
 
 (Select count(TsRepairStatus) From tblJobOrders
-Where TsRepairStatus='RETURN WITHOUT REPAIR' and Cast(EntryDate as Date) = Cast(jo.EntryDate as Date))'ReturnWithoutRepair',
+Where TsRepairStatus='RETURN FOR ENGINEER HEAD' and Cast(EntryDate as Date) = Cast(jo.EntryDate as Date))'ReturnWithoutRepair',
 
 (Select count(TsRepairStatus) From tblJobOrders
 Where TsRepairStatus='WORK IN PROGRESS' and Cast(EntryDate as Date) = Cast(jo.EntryDate as Date))'WorkInProgress',
@@ -2001,7 +2001,7 @@ Inner Join [Configuration].dbo.tblModelSS de on jo.DescriptionId = de.ModelId
 Inner Join [ControlPanel].dbo.tblApplicationUsers ap on jo.EUserId = ap.UserId
 Left Join [ControlPanel].dbo.tblBranch bb on jo.JobLocation=bb.BranchId
 
-Where 1 = 1{0} and jo.CustomerType='Dealer' and ((jo.TsRepairStatus='REPAIR AND RETURN' and jo.StateStatus='Repair-Done' and jo.JobOrderType='Warrenty') or (jo.TsRepairStatus='REPAIR AND RETURN' and jo.StateStatus='Repair-Done' and jo.JobOrderType='Billing'and jo.InvoiceCode !=null) or (jo.TsRepairStatus='RETURN WITHOUT REPAIR' and jo.StateStatus='Job-Initiated') or jo.StateStatus='HandSetChange')) tbl Order By JobOrderCode desc
+Where 1 = 1{0} and jo.CustomerType='Dealer' and ((jo.TsRepairStatus='REPAIR AND RETURN' and jo.StateStatus='Repair-Done' and jo.JobOrderType='Warrenty') or (jo.TsRepairStatus='REPAIR AND RETURN' and jo.StateStatus='Repair-Done' and jo.JobOrderType='Billing'and jo.InvoiceCode !=null) or (jo.TsRepairStatus='RETURN FOR ENGINEER HEAD' and jo.StateStatus='Job-Initiated') or jo.StateStatus='HandSetChange')) tbl Order By JobOrderCode desc
 ", Utility.ParamChecker(param));
             return query;
         }
@@ -2133,22 +2133,23 @@ where MultipleDeliveryCode='{0}' and jo.BranchId={1} and jo.OrganizationId={2}) 
                         CustomerName = dealer.DealerName,
                         MobileNo = job.MobileNo,
                         Address = job.Address,
-                        IMEI=job.IMEI,
-                        IMEI2=job.IMEI2,
-                        Type=job.Type,
-                        CustomerType="Dealer",
-                        MultipleJobOrderCode= multiplejobCode,
-                        ModelColor =job.ModelColor,
-                        DescriptionId=job.DescriptionId,
-                        JobOrderType=job.JobOrderType,
-                        JobLocation=branchId,
-                        Remarks=job.Remarks,
-                        CourierName=job.CourierName,
-                        CourierNumber=job.CourierNumber,
-                        ApproxBill=job.ApproxBill,
-                        StateStatus= JobOrderStatus.JobInitiated,
-                        JobSource=job.JobSource,
-                        EntryDate=job.EntryDate,
+                        IMEI = job.IMEI,
+                        IMEI2 = job.IMEI2,
+                        Type = job.Type,
+                        CustomerType = "Dealer",
+                        MultipleJobOrderCode = multiplejobCode,
+                        ModelColor = job.ModelColor,
+                        DescriptionId = job.DescriptionId,
+                        JobOrderType = job.JobOrderType,
+                        JobLocation = branchId,
+                        Remarks = job.Remarks,
+                        CourierName = job.CourierName,
+                        CourierNumber = job.CourierNumber,
+                        ApproxBill = job.ApproxBill,
+                        StateStatus = JobOrderStatus.JobInitiated,
+                        JobSource = job.JobSource,
+                        EntryDate = job.EntryDate,
+                        ProbablyDate = job.ProbablyDate,
                         BranchId=branchId,
                         OrganizationId=orgId,
                         EUserId=userId,
@@ -2207,9 +2208,9 @@ where MultipleDeliveryCode='{0}' and jo.BranchId={1} and jo.OrganizationId={2}) 
 CloseDate,TSRemarks,
 SUBSTRING(FaultName,1,LEN(FaultName)-1) 'FaultName',SUBSTRING(ServiceName,1,LEN(ServiceName)-1) 'ServiceName',
 SUBSTRING(AccessoriesNames,1,LEN(AccessoriesNames)-1) 'AccessoriesNames',SUBSTRING(PartsName,1,LEN(PartsName)-1) 'PartsName',
-SUBSTRING(Problems,1,LEN(Problems)-1) 'Problems',TSId,TSName,RepairDate,
+SUBSTRING(Problems,1,LEN(Problems)-1) 'Problems',TSId,TSName,RepairDate,ProbablyDate,
 IMEI,[Type],ModelColor,WarrantyDate,Remarks,ReferenceNumber,IMEI2,CloseUser,InvoiceCode,InvoiceInfoId,CustomerType,CourierNumber,CourierName,ApproxBill,IsTransfer,JobLocationB,IsReturn,CustomerApproval,CallCenterRemarks
-From (Select jo.JodOrderId,jo.CustomerName,jo.MobileNo,jo.[Address],de.ModelName,bn.BrandName,jo.IsWarrantyAvailable,jo.InvoiceInfoId,jo.IsWarrantyPaperEnclosed,jo.IsHandset,jo.JobOrderType,jo.StateStatus,jo.EntryDate,ap.UserName'EntryUser',jo.CloseDate,jo.InvoiceCode,jo.CustomerType,jo.CourierNumber,jo.CourierName,jo.ApproxBill,jo.IsTransfer,jo.IsReturn,bb.BranchName'JobLocationB',jo.CustomerApproval,jo.CallCenterRemarks,mo.ModelName'CSModelName',co.ColorName'CSColorName',jo.CSIMEI1,jo.CSIMEI2,jo.CustomerSupportStatus,
+From (Select jo.JodOrderId,jo.CustomerName,jo.MobileNo,jo.[Address],de.ModelName,bn.BrandName,jo.IsWarrantyAvailable,jo.InvoiceInfoId,jo.IsWarrantyPaperEnclosed,jo.IsHandset,jo.JobOrderType,jo.StateStatus,jo.EntryDate,ap.UserName'EntryUser',jo.CloseDate,jo.InvoiceCode,jo.CustomerType,jo.CourierNumber,jo.CourierName,jo.ApproxBill,jo.IsTransfer,jo.IsReturn,bb.BranchName'JobLocationB',jo.CustomerApproval,jo.CallCenterRemarks,mo.ModelName'CSModelName',co.ColorName'CSColorName',jo.CSIMEI1,jo.CSIMEI2,jo.CustomerSupportStatus,jo.ProbablyDate,
 
 Cast((Select FaultName+',' From [Configuration].dbo.tblFault fa
 Inner Join tblJobOrderFault jof on fa.FaultId = jof.FaultId

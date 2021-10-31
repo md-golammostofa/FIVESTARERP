@@ -1074,8 +1074,8 @@ namespace ERPWeb.Controllers
         [HttpPost]
         public ActionResult IsExistLotInAssembly(string qrCode)
         {
-            DateTime date = DateTime.Today;
-            var IsExist = _tempQRCodeTraceBusiness.IsExistQRCodeWithStatus(qrCode, date, QRCodeStatus.Assembly, User.OrgId);
+            //DateTime date = DateTime.Today;
+            var IsExist = _tempQRCodeTraceBusiness.IsExistQRCodeWithStatus(qrCode, QRCodeStatus.Assembly, User.OrgId);
             return Json(IsExist);
         }
         [HttpPost]

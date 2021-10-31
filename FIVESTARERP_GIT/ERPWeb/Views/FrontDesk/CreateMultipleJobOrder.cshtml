@@ -141,7 +141,16 @@
                         </div>
                     </div>
                     <div class="row text-sm">
-                        
+                        <div class="col-md-3">
+                            <label for="dptProbabilyDate" class="control-label font-weight-bold">Probabily Date</label>
+                            <div class="input-group input-group-sm ">
+                                <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptProbabilyDate" placeholder="Job Probabily Date" />
+                                <div class="input-group-prepend cursor-pointer remove-date dptProbabilyDate" style="cursor:pointer">
+                                    <span class="input-group-text">&#10008;</span>
+                                </div>
+                            </div>
+                            <span class="error hide require-JobprobabalDate font-weight-bold">Date No is required !</span>
+                        </div>
                         <div class="col-md-2 hide" id="chkWarrantyPaper">
                             <label for="" style="visibility:hidden;">Enclosed</label>
                             <div class="form-control form-control-sm clearfix">
@@ -151,7 +160,7 @@
                             </div>
                         </div>
                         <div class="col-md-1">
-                            <label for="ddlJobSource" class="control-label font-weight-bold" style="visibility:hidden">Source</label>
+                            <label for="ddlJobSource" class="control-label font-weight-bold" style="visibility:hidden">Sourceeeeeeeeeee</label>
                             <button type="button" id="btnAddToList" class="btn btn-sm btn-primary" title="Add To List"><i class="fas fa-plus"> </i> </button>
                         </div>
                     </div>
@@ -231,6 +240,7 @@
         var ddlDealerName = $("#ddlDealerName");
         var ddlJobSource = $("#ddlJobSource");
         var hdfJobOrderId = 0;
+        var dptProbabilyDate = $("#dptProbabilyDate");
 
         $(document).ready(function () {
             var date = new Date();
@@ -253,9 +263,11 @@
             dptWarrantyDate.prop('readonly', true);
             dptWarrantyEndDate.prop('readonly', true);
             dptJobEntryDate.prop('readonly', true);
+            dptProbabilyDate.prop('readonly', true);
             dptWarrantyDate.css("background-color", "#fff");
             dptWarrantyEndDate.css("background-color", "#fff");
             dptJobEntryDate.css("background-color", "#fff");
+            dptProbabilyDate.css("background-color", "#fff");
             $('#dptWarrantyDate').datepicker({
                 format: "dd MM yyyy",
                 orientation: "bottom auto",
@@ -270,6 +282,12 @@
             });
 
             $('#dptJobEntryDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+            $('#dptProbabilyDate').datepicker({
                 format: "dd MM yyyy",
                 orientation: "bottom auto",
                 todayHighlight: true,
@@ -393,7 +411,10 @@
                 $(".require-JobentryDate").removeClass("hide");
                 isValid = false;
             }
-            
+            if (dptProbabilyDate.val() === "") {
+                $(".require-JobprobabalDate").removeClass("hide");
+                isValid = false;
+            }
             if (ddlProblems.val().length === 0) {
                 $(".require-problem").removeClass("hide");
                 isValid = false;
@@ -407,7 +428,7 @@
         }
 
         
-
+        //require-JobprobabalDate
         $("#btnAddToList").click(function (e) {
             e.preventDefault()
             if (validateForm() == true) {
@@ -426,6 +447,7 @@
                 disable("#txtAddress");
                 disable("#txtCourierName");
                 disable("#txtCourierNumber");
+                disable("#dptProbabilyDate");
                 var sl = $("#tblMultipleJobOrder tbody tr").length;
                 var td1 = "<td class='text-center text-bold'>" + (sl + 1) + "</td>";
                 var td2 = "<td class='hide'>" + ddlDescriptions.val() + "</td>";
@@ -518,7 +540,7 @@
                                 WarrantyDate: td.eq(16).html(),
                                 AccessoriesId: td.eq(11).html(),
                                 ProblemId: td.eq(9).html(),
-
+                                ProbablyDate: dptProbabilyDate.val(),
                             });
                             //problemlist.push({
                             //    ProblemId: td.eq(9).html(),

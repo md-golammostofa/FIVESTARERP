@@ -30,6 +30,8 @@
               <xs:element name="StateStatus" msprop:Generator_ColumnVarNameInTable="columnStateStatus" msprop:Generator_ColumnPropNameInRow="StateStatus" msprop:Generator_ColumnPropNameInTable="StateStatusColumn" msprop:Generator_UserColumnName="StateStatus" type="xs:string" minOccurs="0" />
               <xs:element name="OrganizationName" msprop:Generator_ColumnVarNameInTable="columnOrganizationName" msprop:Generator_ColumnPropNameInRow="OrganizationName" msprop:Generator_ColumnPropNameInTable="OrganizationNameColumn" msprop:Generator_UserColumnName="OrganizationName" type="xs:string" minOccurs="0" />
               <xs:element name="ReportImage" msprop:Generator_ColumnVarNameInTable="columnReportImage" msprop:Generator_ColumnPropNameInRow="ReportImage" msprop:Generator_ColumnPropNameInTable="ReportImageColumn" msprop:Generator_UserColumnName="ReportImage" type="xs:base64Binary" minOccurs="0" />
+              <xs:element name="AssemblyLineName" msprop:Generator_ColumnVarNameInTable="columnAssemblyLineName" msprop:Generator_ColumnPropNameInRow="AssemblyLineName" msprop:Generator_ColumnPropNameInTable="AssemblyLineNameColumn" msprop:Generator_UserColumnName="AssemblyLineName" type="xs:string" minOccurs="0" />
+              <xs:element name="UserName" msprop:Generator_ColumnVarNameInTable="columnUserName" msprop:Generator_ColumnPropNameInRow="UserName" msprop:Generator_ColumnPropNameInTable="UserNameColumn" msprop:Generator_UserColumnName="UserName" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

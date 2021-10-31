@@ -159,7 +159,7 @@ Where 1 = 1{0}
             return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(QueryForJobOrderReport(mobileNo, modelId, status, jobOrderId, jobCode, iMEI, iMEI2, orgId, branchId,  fromDate,  toDate)).ToList();
         }
 
-        public JobOrderDTO GetReceiptForJobOrder(long jobOrderId, long orgId, long branchId)
+        public JobOrderDTO GetReceiptForJobOrder(long jobOrderId, long orgId)
         {
             var data= this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(
                 string.Format(@"Select JodOrderId,TsRepairStatus,JobOrderCode,CustomerName,MobileNo,[Address],ModelName,BrandName,IsWarrantyAvailable,IsWarrantyPaperEnclosed,StateStatus,JobOrderType,EntryDate,EntryUser,
@@ -214,7 +214,7 @@ Inner Join [Configuration].dbo.tblModelSS de on jo.DescriptionId = de.ModelId
 Inner Join [ControlPanel].dbo.tblApplicationUsers ap on jo.EUserId = ap.UserId
 Inner Join [Configuration].dbo.tblBrandSS bn on de.BrandId=bn.BrandId
 
-Where jo.JodOrderId={0} and  jo.OrganizationId={1} and jo.BranchId={2}) tbl Order By EntryDate desc", jobOrderId, orgId, branchId)).FirstOrDefault();
+Where jo.JodOrderId={0} and  jo.OrganizationId={1}) tbl Order By EntryDate desc", jobOrderId, orgId)).FirstOrDefault();
             return data;
         }
     }

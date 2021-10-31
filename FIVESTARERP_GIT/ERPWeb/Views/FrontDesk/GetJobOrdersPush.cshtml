@@ -20,7 +20,7 @@
                 @Html.AntiForgeryToken()
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select T.S Name--", new { @class = "form-control ctrl-changed select2 select2-danger ctrl-changed" })
+                        @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select Eng. Name--", new { @class = "form-control ctrl-changed select2 select2-danger ctrl-changed" })
                     </div>
                     <div class="col-md-2">
                         <input type="text" id="txtReceiveId" class="form-control form-control-sm" placeholder="Search By Receive Id" name="recId" />
@@ -140,7 +140,7 @@
             var isValid = true;
             if (ddlTechnicalServicesName.val() === "") {
                 isValid = false;
-                bootbox.alert("Select a T.S");
+                bootbox.alert("Select a Engineer");
             }
             if (count == 0) {
                 isValid = false;

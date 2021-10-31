@@ -24,5 +24,6 @@ namespace ERPBLL.Inventory.Interface
         IEnumerable<ItemDomainDTO> GetItemsByQuery(long? itemId, long? itemTypeId, long? warehouseId, long? unitId, string itemName,string itemCode,long orgId);
 
         IEnumerable<WarehouseStockInfoDTO> GetItemWithKeys(long orgId);
+        IEnumerable<ItemDetailDTO> GetAllItemDetails(long model,long orgId);
     }
 }

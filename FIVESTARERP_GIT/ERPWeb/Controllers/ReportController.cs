@@ -28,11 +28,16 @@ namespace ERPWeb.Controllers
         private readonly IWarehouseBusiness _warehouseBusiness;
         private readonly ISupplierBusiness _supplierBusiness;
         private readonly IQRCodeProblemBusiness _qRCodeProblemBusiness;
+        private readonly IRequsitionDetailBusiness _requsitionDetailBusiness;
+        private readonly IRequsitionInfoBusiness _requsitionInfoBusiness;
 
-        public ReportController(IProductionReportBusiness productionReportBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, IInventoryReportBusiness inventoryReportBusiness, IDescriptionBusiness descriptionBusiness, IWarehouseBusiness warehouseBusiness, ISupplierBusiness supplierBusiness, IQRCodeProblemBusiness qRCodeProblemBusiness)
+        public ReportController(IProductionReportBusiness productionReportBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, IInventoryReportBusiness inventoryReportBusiness, IDescriptionBusiness descriptionBusiness, IWarehouseBusiness warehouseBusiness, ISupplierBusiness supplierBusiness, IQRCodeProblemBusiness qRCodeProblemBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IRequsitionInfoBusiness requsitionInfoBusiness)
         {
             this._productionReportBusiness = productionReportBusiness;
             this._qRCodeProblemBusiness = qRCodeProblemBusiness;
+            this._requsitionDetailBusiness = requsitionDetailBusiness;
+            this._requsitionInfoBusiness = requsitionInfoBusiness;
+
 
             #region Inventory
             this._warehouseStockDetailBusiness = warehouseStockDetailBusiness;
@@ -220,6 +225,50 @@ namespace ERPWeb.Controllers
             //var base64 = Convert.ToBase64String(renderedBytes);
             //var file = String.Format("{0}", base64);
             //return Json(new { File = file });
+            return File(renderedBytes, mimeType);
+        }
+
+        public ActionResult GetRequsitionDetailsReport(long infoId)
+        {
+            var detailsdata = _requsitionDetailBusiness.GetRequsitionDetailsForReport(infoId, User.OrgId);
+
+            // var detailsdata = _invoiceDetailBusiness.InvoiceDetailsReport(infoId,User.OrgId, User.BranchId);
+            var infodata = _requsitionInfoBusiness.GetReqInfoDataForReport(infoId, User.OrgId);
+
+            //ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            //reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            //List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            //servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptRequsitionDetails.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+            }
+            ReportDataSource dataSource1 = new ReportDataSource("ReqDetails", detailsdata);
+            ReportDataSource dataSource2 = new ReportDataSource("ReqInfo", infodata);
+            //ReportDataSource dataSource3 = new ReportDataSource("ReportHead", servicesReportHeads);
+            localReport.DataSources.Add(dataSource1);
+            localReport.DataSources.Add(dataSource2);
+            //localReport.DataSources.Add(dataSource3);
+
+            string reportType = "PDF";
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            Warning[] warnings;
+            string[] streams;
+
+            var renderedBytes = localReport.Render(
+                reportType,
+                "",
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings
+                );
             return File(renderedBytes, mimeType);
         }
         #endregion

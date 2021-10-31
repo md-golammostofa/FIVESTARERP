@@ -62,6 +62,7 @@ namespace ERPBO.Production.ViewModels
         public string AssemblyLineName { get; set; }
         [StringLength(100)]
         public string PackagingLineName { get; set; }
+        public string UserName { get; set; }
         public List<RequisitionItemInfoViewModel> RequisitionItemInfos { get; set; }
         public List<RequsitionDetailViewModel> RequisitionDetails { get; set; }
     }

@@ -1292,7 +1292,7 @@
                     console.log(status);
                     console.log(res);
                     if (res == true) {
-                                $('.toastrDefaultSuccess').trigger('click');
+                        toastrSuccessAlert(execuStatus.successSave);
                                 setTimeout(function () {
                                     redirectPage('@Url.Action("AccessoriesList")');
                                 }, 500);

@@ -16,7 +16,7 @@
         <hr />
     </div>
 </div>
-@if (User.RoleName == "User")
+@if (User.RoleName == "User" || User.RoleName == "Care Engineer (All in One)" || User.RoleName == "Administrator")
 {
     <div class="row">
         @Html.AntiForgeryToken()
@@ -688,7 +688,7 @@
     </div>
 }
 
-@if (User.RoleName == "FrontDesk")
+@if (User.RoleName == "Front Desk")
 {
     <div class="row text-sm">
         @Html.AntiForgeryToken()
@@ -958,7 +958,7 @@
         </div>
     </div>
 }
-@if (User.RoleName == "Technical Services")
+@if (User.RoleName == "Engineer")
 {
     <div class="row">
         <div class="col-md-12">
@@ -1456,7 +1456,7 @@
 }
 
 
-@if (User.RoleName == "Warehouse")
+@if (User.RoleName == "Ware House")
 {
     <div class="row">
 

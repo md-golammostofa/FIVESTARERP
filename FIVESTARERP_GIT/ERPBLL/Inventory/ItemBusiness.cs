@@ -35,6 +35,17 @@ namespace ERPBLL.Inventory
             return itemRepository.GetAll(item => item.OrganizationId == orgId).ToList();
         }
 
+        public IEnumerable<ItemDetailDTO> GetAllItemDetails(long model, long orgId)
+        {
+            IEnumerable<ItemDetailDTO> details = new List<ItemDetailDTO>();
+            details = this._inventoryDb.Db.Database.SqlQuery<ItemDetailDTO>(string.Format(@"Select (Cast(i.ItemId as nvarchar(100))+'#'+Cast(it.ItemId as nvarchar(100))+'#'+Cast(w.Id as nvarchar(100))) 'ItemId',(i.ItemName+' ['+it.ItemName+'-'+w.WarehouseName+']') as 'ItemName' From tblItems i
+Inner Join tblItemTypes it on i.ItemTypeId = it.ItemId
+Inner Join tblWarehouses w on it.WarehouseId = w.Id
+Where 1=1 and i.DescriptionId={0} and i.OrganizationId={1}
+Order By w.WarehouseName,it.ItemName,i.ItemName", model,orgId)).ToList();
+            return details;
+        }
+
         public IEnumerable<ItemDomainDTO> GetAllItemsInProductionStockByLineId(long lineId, long orgId)
         {
            var items= _productionStockInfoBusiness.GetAllProductionStockInfoByOrgId(orgId).Where(l => l.LineId == lineId).Select(s => s.ItemId).Distinct().ToList();

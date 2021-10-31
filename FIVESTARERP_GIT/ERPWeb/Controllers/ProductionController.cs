@@ -4409,6 +4409,8 @@ namespace ERPWeb.Controllers
         public ActionResult SaveFaultyItemByQRCodeScaning(FaultyInfoByQRCodeViewModel model)
         {
             bool IsSuccess = false;
+            //var qrCodeInfo =_qRCodeTransferToRepairInfoBusiness.GetQRCodeWiseItemInfo(model.QRCode, string.Format(@"'Received'"), User.OrgId);
+            //var stockAvailable = _qRCodeTransferToRepairInfoBusiness.CheckingAvailabilityOfSparepartsWithRepairLineStock(model.ModelId, model.ItemId, qrCodeInfo.RepairLineId, User.OrgId);
             if (ModelState.IsValid && model.FaultyItems.Count > 0)
             {
                 FaultyInfoByQRCodeDTO dto = new FaultyInfoByQRCodeDTO();
@@ -4537,6 +4539,13 @@ namespace ERPWeb.Controllers
                 return PartialView("_GetRequisitionItemDetail", viewModel);
             }
             return View();
+        }
+        //GetAllItemDetails
+        public ActionResult GetAllItemByModel(long model)
+        {
+            var allItems = _itemBusiness.GetAllItemDetails(model,User.OrgId);
+            var dropDown = allItems.Where(s => s.ItemName.Contains("Warehouse 3")).Select(s => new Dropdown { text = s.ItemName, value = s.ItemId.ToString() }).ToList();
+            return Json(dropDown);
         }
 
         [HttpPost, ValidateJsonAntiForgeryToken]
@@ -5325,8 +5334,8 @@ namespace ERPWeb.Controllers
                 dto = _lotInLogBusiness.GetAllDataByDateWise(fromDate, toDate, qrCode).OrderByDescending(s => s.LotInLogId).ToList();
             }
 
-            ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
-            dto = dto.Skip((page - 1) * 15).Take(15).ToList();
+            //ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+            //dto = dto.Skip((page - 1) * 15).Take(15).ToList();
 
             IEnumerable<LotInLogViewModel> viewModel = new List<LotInLogViewModel>();
             AutoMapper.Mapper.Map(dto, viewModel);

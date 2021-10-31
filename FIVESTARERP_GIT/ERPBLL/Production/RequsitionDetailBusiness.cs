@@ -131,6 +131,14 @@ Where 1=1 {0}",Utility.ParamChecker(param));
             return query;
         }
 
-        
+        public IEnumerable<RequsitionDetailDTO> GetRequsitionDetailsForReport(long infoId, long orgId)
+        {
+            var data = this._productionDb.Db.Database.SqlQuery<RequsitionDetailDTO>(string.Format(@"Select it.ItemName'ItemTypeName',i.ItemName,rd.Quantity,u.UnitName From tblRequsitionDetails rd
+Left Join [Inventory].dbo.tblItemTypes it on rd.ItemTypeId=it.ItemId
+Left Join [Inventory].dbo.tblItems i on rd.ItemId=i.ItemId
+Left Join [Inventory].dbo.tblUnits u on rd.UnitId=u.UnitId
+Where rd.ReqInfoId={0} and rd.OrganizationId={1}", infoId, orgId)).ToList();
+            return data;
+        }
     }
 }

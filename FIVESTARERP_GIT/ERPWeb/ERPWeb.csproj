@@ -1047,6 +1047,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Reports\ERPRpt\Production\rptQRCodeProblemList.rdlc" />
+    <Content Include="Reports\ERPRpt\Production\rptRequsitionDetails.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Reports\ServiceRpt\Configuration\rptOtherBranchRequsition - Copy.rdlc" />
     <Content Include="Reports\ServiceRpt\FrontDesk\rptHandsetChangeInformation.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

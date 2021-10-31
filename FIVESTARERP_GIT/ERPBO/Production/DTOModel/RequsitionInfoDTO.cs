@@ -55,6 +55,7 @@ namespace ERPBO.Production.DTOModel
         public string AssemblyLineName { get; set; }
         [StringLength(100)]
         public string PackagingLineName { get; set; }
+        public string UserName { get; set; }
 
         public List<RequisitionItemInfoDTO> RequisitionItemInfos { get; set; }
         public List<RequsitionDetailDTO> RequisitionDetails { get; set; }
