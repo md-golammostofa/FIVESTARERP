@@ -113,23 +113,23 @@
                             </div>
                         </div>*@
                         <div class="row">
-                            <div class="col-md-11">
-                                <table class="table table-bordered table-striped table-sm table-responsive-lg">
+                            <div class="col-md-10">
+                                <table class="table table-bordered table-striped table-sm table-responsive-lg" id="tblSymptomlist">
                                     <tbody>
                                         <tr>
+                                            @foreach (var item in Problems)
+                                            {
+                                                problem += item.ProblemName + ",";
+                                            }
+                                            @{
+                                                if (Problems.Count() > 0)
+                                                {
+                                                    problem = problem.Substring(0, problem.Length - 1);
+                                                }
+
+                                            }
                                             <td>
                                                 <b>Problem:</b>
-                                                @foreach (var item in Problems)
-                                                {
-                                                    problem += item.ProblemName + ",";
-                                                }
-                                                @{
-                                                    if (Problems.Count() > 0)
-                                                    {
-                                                        problem = problem.Substring(0, problem.Length - 1);
-                                                    }
-
-                                                }
                                                 @problem
                                             </td>
                                         </tr>
@@ -138,6 +138,9 @@
                             </div>
                             <div class="col-md-1">
                                 <button type="button" id="btnSymptom" class="btn btn-sm btn-primary" title="Add New Symptom"><i class="fas fa-plus"> </i> </button>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" id="btnSymptomEdit" class="btn btn-sm btn-warning" title="Update Symptom"><i class="fas fa-pen"> </i> </button>
                             </div>
                         </div>
                         <div class="row">
@@ -169,7 +172,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-11">
+                            <div class="col-md-10">
                                 <table class="table table-bordered table-striped table-sm table-responsive-lg">
                                     <tbody>
                                         <tr>
@@ -194,6 +197,9 @@
                             </div>
                             <div class="col-md-1">
                                 <button type="button" id="btnService" class="btn btn-sm btn-primary" title="Add New Service"><i class="fas fa-plus"> </i> </button>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" id="btnServiceEdit" class="btn btn-sm btn-warning" title="Update Service"><i class="fas fa-pen"> </i> </button>
                             </div>
                         </div>
                         <div class="row">
@@ -446,7 +452,7 @@
                         @*<a href="#" class="btn btn-outline-primary btn-sm float-lg-right" id="btnJobSave"><i></i> Save</a>*@
                     </div>
                     <div id="btnjobsign">
-                        <a href="#" class="btn btn-danger btn-sm float-lg-right" id="btnJobSingOut"><i class="fas fa-sign-out"></i>Job Sing Out</a>
+                        <a href="#" class="btn btn-danger btn-sm float-lg-right" id="btnJobSingOut"><i class="fas fa-sign-out"></i>Job Sign Out</a>
                     </div>
                     <div id="btnHandsetchange" class="hide">
                         <a href="#" class="btn btn-danger btn-sm float-lg-right" id="btnHandsetchangeJobSingOut"><i class="fas fa-sign-out"></i>Job-Sing-Out</a>
@@ -497,6 +503,49 @@
                 </div>
                 <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
                 <button type="submit" class="btn btn-sm btn-success float-right" id="btnSubmitSymptom"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSymptomEdit" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary" style="height:60px">
+                <h4 id="modalHeading" class="modal-title"><span id="spanModalHead">Update Symptom</span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCustomer">
+                    <input type="hidden" name="Id" id="hdfSymptomId" />
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ddlSymptomNameEdit" class="control-label font-weight-bold">Symptom Name<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlSymptomNameEdit", (IEnumerable<SelectListItem>)ViewBag.ddlSymptomNameEdit, new { @class = "form-control form-control-sm select2 select2-danger", @multiple = "multiple" })
+                            <span class="error hide required-Symptom font-weight-bold">Input Symptom!</span>
+                            <span class="error hide duplicate-Symptom font-weight-bold">Alrady Symptom Exist!</span>
+                        </div>
+                    </div>
+                    @*<div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="txtFaultRemarks" class="control-label font-weight-bold">Remarks</label>
+                                <input type="text" name="remarks" value="" id="txtFaultRemarks" class="form-control form-control-sm" />
+                            </div>
+                        </div>*@
+                </form>
+            </div>
+
+            <div class="modal-footer btn-light">
+                <div class="col-md-6">
+                    <div id="msg1" class="alert alert-success hide float-left">
+                        Data has been saved Successful!
+                    </div>
+                    <div id="msg2" class="alert alert-danger hide float-left">
+                        Data has been failed to save!
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
+                <button type="submit" class="btn btn-sm btn-success float-right" id="btnSubmitSymptomEdit"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
             </div>
         </div>
     </div>
@@ -583,6 +632,49 @@
                 </div>
                 <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
                 <button type="submit" class="btn btn-sm btn-success float-right" id="btnSubmitService"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalServicesEdit" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary" style="height:60px">
+                <h4 id="modalHeading" class="modal-title"><span id="spanModalHead">Update Service</span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCustomer">
+                    <input type="hidden" name="Id" id="hdfServicesId" />
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ddlServiceNameEdit" class="control-label font-weight-bold">Service Name<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlServiceNameEdit", (IEnumerable<SelectListItem>)ViewBag.ddlServiceNameEdit, new { @class = "form-control form-control-sm select2 select2-danger", @multiple = "multiple" })
+                            <span class="error hide required-ServiceName font-weight-bold">Input Service!</span>
+                            <span class="error hide duplicate-servicesName font-weight-bold">Alrady Service Exist!</span>
+                        </div>
+                    </div>
+                    @*<div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="txtServiceRemarks" class="control-label font-weight-bold">Remarks</label>
+                                <input type="text" name="remarks" value="" id="txtServiceRemarks" class="form-control form-control-sm" />
+                            </div>
+                        </div>*@
+                </form>
+            </div>
+
+            <div class="modal-footer btn-light">
+                <div class="col-md-6">
+                    <div id="msg1" class="alert alert-success hide float-left">
+                        Data has been saved Successful!
+                    </div>
+                    <div id="msg2" class="alert alert-danger hide float-left">
+                        Data has been failed to save!
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
+                <button type="submit" class="btn btn-sm btn-success float-right" id="btnSubmitServiceEdit"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
             </div>
         </div>
     </div>
@@ -888,10 +980,16 @@
         var hdfServicesId = $("#hdfServicesId");
         var ddlServiceName = $("#ddlServiceName");
         var txtServiceRemarks = $("#txtServiceRemarks");
+        var ddlServiceNameEdit = $("#ddlServiceNameEdit");
 
         function OpenServicesModal() {
             clearCtrlService();
             $("#modalServices").modal("show");
+            $(".error").addClass("hide");
+        }
+        function OpenServicesModalEdit() {
+            //clearCtrlService();
+            $("#modalServicesEdit").modal("show");
             $(".error").addClass("hide");
         }
 
@@ -899,6 +997,11 @@
            e.preventDefault();
            clearCtrlService();
            OpenServicesModal();
+        })
+        $("#btnServiceEdit").click(function (e) {
+            e.preventDefault();
+            //clearCtrlService();
+            OpenServicesModalEdit();
         })
         function clearCtrlService() {
                hdfServicesId.val('0');
@@ -924,6 +1027,25 @@
 
               }
            return isValid;
+        }
+        function validateServiceFormEdit() {
+            var isValid = true;
+            $(".error").addClass('hide');
+            if (ddlServiceNameEdit.val() === "") {
+                $(".required-ServiceName").removeClass("hide");
+                isValid = false;
+            }
+            //else {
+            //    var id = TryParseInt(hdfJobOrderId.val(), 0);
+            //    $.each(ddlServiceName.val(), function (index, item) {
+            //        if (ajaxBooleanChecker(JSON.stringify({ id: id, servicesId: TryParseInt(item, 0) }), '/Common2/IsDuplicateServicesId', getToken()) == true) {
+            //            $(".duplicate-servicesName").removeClass("hide");
+            //            isValid = false;
+            //        }
+            //    });
+
+            //}
+            return isValid;
         }
 
         $("#btnSubmitService").click(function (e) {
@@ -965,20 +1087,63 @@
                      });
                 }
         });
+        $("#btnSubmitServiceEdit").click(function (e) {
+                                e.preventDefault();
+                                if (validateServiceFormEdit()) {
+                                    var aryService = []; aryService.length = 0;
+                                    var Service = ddlServiceNameEdit.val();
+                                    for (var i = 0; i < Service.length; i++) {
+                                        aryService.push({
+                                        ServiceId: Service[i],
+                        JobOrderId: hdfJobOrderId.val()
+                                    });
+                                }
+
+                                var data = JSON.stringify({ jobOrderServiceViewModels: aryService });
+                                    console.log("Service List");
+                                    //return console.log(data);
+
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/FrontDesk/SaveJobOrderServiceEdit', data, getToken())).then(function (res, status) {
+                                    if (res === true && status === "success") {
+                        $('.toastrDefaultSuccess').trigger('click');
+                                        setTimeout(function () {
+                                            redirectPage('@Url.Action("ServicesDetails","FrontDesk",new { @joborderId = jobOrder.JodOrderId })');
+                                        }, 1000);
+                                    }
+                                    else {
+                        $('.toastrDefaultError').trigger('click');
+                                    }
+                                }).fail(function (error) {
+                                    console.log(error);
+                    $('.toastrDefaultError').trigger('click');
+                     });
+                }
+        });
         //symptom
         var hdfSymptomId = $("#hdfSymptomId");
         var ddlSymptomName = $("#ddlSymptomName");
+        var ddlSymptomNameEdit = $("#ddlSymptomNameEdit");
 
         function OpenSymptomModal() {
             clearCtrlSymptom();
             $("#modalSymptom").modal("show");
             $(".error").addClass("hide");
         }
-
+        function OpenSymptomModalEdit() {
+            //clearCtrlSymptom();
+            $("#modalSymptomEdit").modal("show");
+            $(".error").addClass("hide");
+        }
         $("#btnSymptom").click(function (e) {
              e.preventDefault();
              clearCtrlSymptom();
              OpenSymptomModal();
+        })
+        $("#btnSymptomEdit").click(function (e) {
+            e.preventDefault();
+            //clearCtrlSymptom();
+            OpenSymptomModalEdit();
+
         })
         function clearCtrlSymptom() {
              hdfSymptomId.val('0');
@@ -1004,6 +1169,25 @@
          return isValid;
         }
 
+        function validateSymptomFormEdit() {
+            var isValid = true;
+            $(".error").addClass('hide');
+            if (ddlSymptomNameEdit.val() === "") {
+                $(".required-SymptomName").removeClass("hide");
+                isValid = false;
+            }
+            //else {
+            //    var id = TryParseInt(hdfJobOrderId.val(), 0);
+            //    $.each(ddlSymptomNameEdit.val(), function (index, item) {
+            //        if (ajaxBooleanChecker(JSON.stringify({ id: id, prblmId: TryParseInt(item, 0) }), '/Common2/IsDuplicateSymptomId', getToken()) == true) {
+            //            $(".duplicate-Symptom").removeClass("hide");
+            //            isValid = false;
+            //        }
+            //    });
+
+            //}
+            return isValid;
+        }
         $("#btnSubmitSymptom").click(function (e) {
            e.preventDefault();
           if (validateSymptomForm()) {
@@ -1015,7 +1199,7 @@
              //    JobOrderId: hdfJobOrderId.val()
              //});
                var arySymptom = []; arySymptom.length = 0;
-               var symptom = ddlSymptomName.val();
+              var symptom = ddlSymptomName.val();
                for (var i = 0; i < symptom.length; i++) {
                    arySymptom.push({
                     ProblemId: symptom[i],
@@ -1028,6 +1212,37 @@
                 console.log(data);
 
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/FrontDesk/SaveJobOrderProblem', data, getToken())).then(function (res, status) {
+                       if (res === true && status === "success") {
+                         $('.toastrDefaultSuccess').trigger('click');
+                          setTimeout(function () {
+                            redirectPage('@Url.Action("ServicesDetails","FrontDesk",new { @joborderId = jobOrder.JodOrderId })');
+                            }, 1000);
+                          }
+                       else {
+                         $('.toastrDefaultError').trigger('click');
+                            }
+                       }).fail(function (error) {
+                        console.log(error);
+                    $('.toastrDefaultError').trigger('click');
+                        });
+                 }
+        });
+        $("#btnSubmitSymptomEdit").click(function (e) {
+           e.preventDefault();
+          if (validateSymptomFormEdit()) {
+               var arySymptom = []; arySymptom.length = 0;
+               var symptom = ddlSymptomNameEdit.val();
+               for (var i = 0; i < symptom.length; i++) {
+                   arySymptom.push({
+                    ProblemId: symptom[i],
+                    JobOrderId: hdfJobOrderId.val()
+                   });
+               }
+                var data = JSON.stringify({ jobOrderProblemViewModels: arySymptom });
+              console.log("Problem List");
+              //return console.log(data);
+
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/FrontDesk/SaveJobOrderProblemEdit', data, getToken())).then(function (res, status) {
                        if (res === true && status === "success") {
                          $('.toastrDefaultSuccess').trigger('click');
                           setTimeout(function () {

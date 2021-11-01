@@ -14,5 +14,6 @@ namespace ERPBLL.FrontDesk.Interface
         JobOrderService GetJobOrderServiceByJobId(long joborderId, long orgId);
        IEnumerable< JobOrderService> GetJobOrderServiceByJobOrderId(long joborderId, long orgId);
         bool IsDuplicateServicesName(long jobOrderId, long serviceId, long orgId);
+        bool SaveJobOrderServicveEdit(List<JobOrderServiceDTO> jobOrderServices, long userId, long orgId);
     }
 }

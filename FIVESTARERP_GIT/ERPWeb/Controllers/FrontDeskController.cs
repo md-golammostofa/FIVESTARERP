@@ -1236,6 +1236,8 @@ namespace ERPWeb.Controllers
 
             ViewBag.ddlServiceName = _serviceBusiness.GetAllServiceByOrgId(User.OrgId).Select(service => new SelectListItem { Text = service.ServiceName, Value = service.ServiceId.ToString() }).ToList();
 
+            ViewBag.ddlServiceNameEdit = _serviceBusiness.GetAllServiceByOrgId(User.OrgId).Select(service => new SelectListItem { Text = service.ServiceName, Value = service.ServiceId.ToString() }).ToList();
+
             ViewBag.ddlRepairName = _repairBusiness.GetAllRepairByOrgId(User.OrgId).Select(re => new SelectListItem { Text = re.RepairName, Value = re.RepairId.ToString() }).ToList();
 
             ViewBag.ddlServicesWarehouse = _servicesWarehouseBusiness.GetAllServiceWarehouseByOrgId(User.OrgId, User.BranchId).Select(ware => new SelectListItem { Text = ware.ServicesWarehouseName, Value = ware.SWarehouseId.ToString() }).ToList();
@@ -1243,6 +1245,8 @@ namespace ERPWeb.Controllers
             ViewBag.ddlMobilePart = _mobilePartBusiness.GetAllMobilePartAndCode(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.MobilePartName, Value = mobile.MobilePartId.ToString() }).ToList();
 
             ViewBag.ddlSymptomName = _clientProblemBusiness.GetAllClientProblemByOrgId(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.ProblemName, Value = mobile.ProblemId.ToString() }).ToList();
+
+            ViewBag.ddlSymptomNameEdit = _clientProblemBusiness.GetAllClientProblemByOrgId(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.ProblemName, Value = mobile.ProblemId.ToString() }).ToList();
             //New Handset//
             //ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.DescriptionName, Value = mobile.DescriptionId.ToString() }).ToList();
 
@@ -1412,6 +1416,20 @@ namespace ERPWeb.Controllers
             return Json(IsSuccess);
         }
         [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult SaveJobOrderServiceEdit(List<JobOrderServiceViewModel> jobOrderServiceViewModels)
+        {
+            bool IsSuccess = false;
+            if (ModelState.IsValid && jobOrderServiceViewModels.Count > 0)
+            {
+                List<JobOrderServiceDTO> listjobOrderServiceDTO = new List<JobOrderServiceDTO>();
+
+                AutoMapper.Mapper.Map(jobOrderServiceViewModels, listjobOrderServiceDTO);
+
+                IsSuccess = _jobOrderServiceBusiness.SaveJobOrderServicveEdit(listjobOrderServiceDTO, User.UserId, User.OrgId);
+            }
+            return Json(IsSuccess);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult SaveJobOrderRepair(List<JobOrderRepairViewModel> jobOrderRepairViewModels,long jobOrderId)
         {
             bool IsSuccess = false;
@@ -1435,6 +1453,19 @@ namespace ERPWeb.Controllers
                 AutoMapper.Mapper.Map(jobOrderProblemViewModels, listjobOrderProblemDTO);
 
                 IsSuccess = _jobOrderProblemBusiness.SaveJobOrderProblem(listjobOrderProblemDTO, User.UserId, User.OrgId);
+            }
+            return Json(IsSuccess);
+        }
+        public ActionResult SaveJobOrderProblemEdit(List<JobOrderProblemViewModel> jobOrderProblemViewModels)
+        {
+            bool IsSuccess = false;
+            if (ModelState.IsValid && jobOrderProblemViewModels.Count > 0)
+            {
+                List<JobOrderProblemDTO> listjobOrderProblemDTO = new List<JobOrderProblemDTO>();
+
+                AutoMapper.Mapper.Map(jobOrderProblemViewModels, listjobOrderProblemDTO);
+
+                IsSuccess = _jobOrderProblemBusiness.SaveJobOrderProblemEdit(listjobOrderProblemDTO, User.UserId, User.OrgId);
             }
             return Json(IsSuccess);
         }
