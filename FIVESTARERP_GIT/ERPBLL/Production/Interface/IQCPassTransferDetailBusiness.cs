@@ -12,5 +12,6 @@ namespace ERPBLL.Production.Interface
     {
         IEnumerable<QCPassTransferDetail> GetQCPassTransferDetails(long orgId);
         IEnumerable<QCPassTransferDetailDTO> GetQCPassTransferDetailsByQuery(long? floorId, long? assemblyId, long? qcLineId, string qrCode, string transferCode, string status, string date,long? qcPassId, long? userId, long orgId);
+        IEnumerable<QCPassTransferDetail> GetAllQCPassLogDataByAssemblyIdWithTimeWise(long assemlyId, DateTime time, long orgId);
     }
 }

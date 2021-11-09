@@ -69,7 +69,8 @@ Order By w.WarehouseName,it.ItemName,i.ItemName", model,orgId)).ToList();
                 ItemTypeId = it.ItemTypeId,
                 UnitId = it.UnitId,
                 IsActive = it.IsActive,
-                Remarks = it.Remarks
+                Remarks = it.Remarks,
+                ColorId = it.ColorId,
             }).FirstOrDefault();
         }
 

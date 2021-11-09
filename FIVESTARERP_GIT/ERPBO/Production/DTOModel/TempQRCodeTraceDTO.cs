@@ -65,5 +65,6 @@ namespace ERPBO.Production.DTOModel
         public string PackagingLineName { get; set; }
         [StringLength(100)]
         public string CartonNo { get; set; }
+        public string BrandName { get; set; }
     }
 }

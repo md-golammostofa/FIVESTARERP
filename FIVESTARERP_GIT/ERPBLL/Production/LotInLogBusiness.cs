@@ -66,5 +66,9 @@ Where 1=1 {0}", Utility.ParamChecker(param));
         {
             return lotInLogRepository.GetAll(s => s.EUserId == userId && s.OrganizationId == orgId && DbFunctions.TruncateTime(s.EntryDate) == DbFunctions.TruncateTime(date)).ToList();
         }
+        public IEnumerable<LotInLog> GetAllLotInLogDataByAssemblyIdWithTimeWise(long assemlyId, DateTime time, long orgId)
+        {
+            return lotInLogRepository.GetAll(s => s.AssemblyId == assemlyId && DbFunctions.TruncateTime(s.EntryDate) == DbFunctions.TruncateTime(time) && s.OrganizationId == orgId);
+        }
     }
 }

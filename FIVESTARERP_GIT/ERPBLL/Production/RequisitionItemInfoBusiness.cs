@@ -1,4 +1,5 @@
 ﻿using ERPBLL.Common;
+using ERPBLL.Inventory.Interface;
 using ERPBLL.Production.Interface;
 using ERPBO.Production.DomainModels;
 using ERPBO.Production.DTOModel;
@@ -21,7 +22,10 @@ namespace ERPBLL.Production
         private readonly IQRCodeTraceBusiness _qRCodeTraceBusiness;
         private readonly IAssemblyLineStockDetailBusiness _assemblyLineStockDetailBusiness;
         private readonly IPackagingLineStockDetailBusiness _packagingLineStockDetailBusiness;
-        public RequisitionItemInfoBusiness(IProductionUnitOfWork productionDb, RequisitionItemInfoRepository requisitionItemInfoRepository, IRequsitionInfoBusiness requsitionInfoBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IRequisitionItemDetailBusiness requisitionItemDetailBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness)
+        #region Inventory
+        private readonly IItemBusiness _itemBusiness;
+        #endregion
+        public RequisitionItemInfoBusiness(IProductionUnitOfWork productionDb, RequisitionItemInfoRepository requisitionItemInfoRepository, IRequsitionInfoBusiness requsitionInfoBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IRequisitionItemDetailBusiness requisitionItemDetailBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, IItemBusiness itemBusiness)
         {
             this._productionDb = productionDb;
             this._requisitionItemInfoRepository = requisitionItemInfoRepository;
@@ -31,6 +35,7 @@ namespace ERPBLL.Production
             this._assemblyLineStockDetailBusiness = assemblyLineStockDetailBusiness;
             this._requisitionItemDetailBusiness = requisitionItemDetailBusiness;
             this._packagingLineStockDetailBusiness = packagingLineStockDetailBusiness;
+            this._itemBusiness = itemBusiness;
         }
         public IEnumerable<RequisitionItemInfo> GetRequisitionItemInfos(long orgId)
         {
@@ -270,7 +275,7 @@ Where 1= 1 and ri.OrganizationId={0} and ri.ReqInfoId = {1}", orgId, refNo)).ToL
                         EntryDate = DateTime.Now,
                         ReferenceId = reqItemDto[i].ReqInfoId.ToString(),
                         ReferenceNumber = reqItemDto[i].ReqInfoCode,
-                        ColorId = 0,
+                        ColorId = _itemBusiness.GetItemById(reqItemDto[i].ItemId, orgId).ColorId.Value,
                         ModelName = reqItemDto[i].ModelName,
                         WarehouseName = reqItemDto[i].WarehouseName,
                         ItemTypeName = reqItemDto[i].ItemTypeName,
