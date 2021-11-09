@@ -491,11 +491,11 @@ namespace ERPWeb.Controllers
             HttpResponseMessage response = client.GetAsync(apiUrl + string.Format("/fsm/activation.php?imei={0}", imei)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var data =await response.Content.ReadAsStringAsync();
-                char[] charsToTrim = { '\n', ' ', '\'','\r','\t' };
-              
+                var data = await response.Content.ReadAsStringAsync();
+                char[] charsToTrim = { '\n', ' ', '\'', '\r', '\t' };
+
                 string result = data.Trim(charsToTrim);
-                if(result== "Not Found")
+                if (result == "Not Found")
                 {
                     jobOd.Remarks = "Not Found";
                 }
@@ -504,7 +504,7 @@ namespace ERPWeb.Controllers
                     DateTime enteredDate = DateTime.Parse(result);
                     jobOd.WarrantyDate = enteredDate;
                 }
-                
+
             }
             return Json(jobOd);
         }
