@@ -8,6 +8,7 @@ using ERPBO.Production.DTOModel;
 using ERPDAL.ProductionDAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,11 @@ namespace ERPBLL.Production
         private readonly TransferFromQCInfoRepository _transferFromQCInfoRepository;
         private readonly TransferFromQCDetailRepository _transferFromQCDetailRepository;
         private readonly QRCodeTransferToRepairInfoRepository _qRCodeTransferToRepairInfoRepository;
+        private readonly QC1InfoRepository _qC1InfoRepository;
+        private readonly QC2InfoRepository _qC2InfoRepository;
+        private readonly QC3InfoRepository _qC3InfoRepository;
+        private readonly RepairInRepository _repairInRepository;
+
         public QRCodeTransferToRepairInfoBusiness(IProductionUnitOfWork productionDb, ITransferFromQCInfoBusiness transferFromQCInfoBusiness, ITransferFromQCDetailBusiness transferFromQCDetailBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IQCItemStockInfoBusiness qCItemStockInfoBusiness, IQCItemStockDetailBusiness qCItemStockDetailBusiness, IRepairLineStockDetailBusiness repairLineStockDetailBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IItemBusiness itemBusiness, IRepairLineStockInfoBusiness repairLineStockInfoBusiness, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness)
         {
             this._productionDb = productionDb;
@@ -54,6 +60,10 @@ namespace ERPBLL.Production
             this._transferFromQCDetailRepository = new TransferFromQCDetailRepository(this._productionDb);
             this._assemblyLineStockDetailBusiness = assemblyLineStockDetailBusiness;
             this._tempQRCodeTraceBusiness = tempQRCodeTraceBusiness;
+            this._qC1InfoRepository = new QC1InfoRepository(this._productionDb);
+            this._qC2InfoRepository = new QC2InfoRepository(this._productionDb);
+            this._qC3InfoRepository = new QC3InfoRepository(this._productionDb);
+            this._repairInRepository = new RepairInRepository(this._productionDb);
         }
 
 
@@ -290,8 +300,151 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
                                 qRCodeProblems.Add(qRCodeProblem);
                             }
                             qRCodeTransferToRepairInfo.QRCodeProblems = qRCodeProblems;
-                            _qRCodeTransferToRepairInfoRepository.Insert(qRCodeTransferToRepairInfo);
-                            IsSuccess = await _qRCodeTransferToRepairInfoRepository.SaveAsync();
+
+                            if (dto.SubQCId == 1)
+                            {
+                                QC1Info qC1Info = new QC1Info
+                                {
+                                    FloorId = dto.FloorId,
+                                    AssemblyLineId = dto.AssemblyLineId,
+                                    DescriptionId = dto.DescriptionId,
+                                    RepairLineId = dto.RepairLineId,
+                                    WarehouseId = dto.WarehouseId,
+                                    ItemTypeId = dto.ItemTypeId,
+                                    ItemId = dto.ItemId,
+                                    QCLineId = dto.QCLineId,
+                                    SubQCId = dto.SubQCId,
+                                    OrganizationId = orgId,
+                                    StateStatus = FinishGoodsSendStatus.Send,
+                                    EntryDate = DateTime.Now,
+                                    EUserId = userId,
+                                    QRCode = dto.QRCode,
+                                    TransferCode = code,
+                                    TransferId = transferInfo.TFQInfoId
+                                };
+                                List<QC1Detail> qC1Details = new List<QC1Detail>();
+                                foreach (var item in dto.QRCodeProblems)
+                                {
+                                    QC1Detail qC1Detail = new QC1Detail
+                                    {
+                                        FloorId = dto.FloorId,
+                                        AssemblyLineId = dto.AssemblyLineId,
+                                        DescriptionId = dto.DescriptionId,
+                                        RepairLineId = dto.RepairLineId,
+                                        QCLineId = dto.QCLineId,
+                                        SubQCId = dto.SubQCId,
+                                        OrganizationId = orgId,
+                                        QRCode = dto.QRCode,
+                                        ProblemId = item.ProblemId,
+                                        ProblemName = item.ProblemName,
+                                        EntryDate = DateTime.Now,
+                                        EUserId = userId,
+                                        TransferCode = transferInfo.TransferCode,
+                                        TransferId = transferInfo.TFQInfoId
+                                    };
+                                    qC1Details.Add(qC1Detail);
+                                }
+                                qC1Info.QC1Details = qC1Details;
+                                _qC1InfoRepository.Insert(qC1Info);
+                            }
+                            if (dto.SubQCId == 2)
+                            {
+                                QC2Info qC2Info = new QC2Info
+                                {
+                                    FloorId = dto.FloorId,
+                                    AssemblyLineId = dto.AssemblyLineId,
+                                    DescriptionId = dto.DescriptionId,
+                                    RepairLineId = dto.RepairLineId,
+                                    WarehouseId = dto.WarehouseId,
+                                    ItemTypeId = dto.ItemTypeId,
+                                    ItemId = dto.ItemId,
+                                    QCLineId = dto.QCLineId,
+                                    SubQCId = dto.SubQCId,
+                                    OrganizationId = orgId,
+                                    StateStatus = FinishGoodsSendStatus.Send,
+                                    EntryDate = DateTime.Now,
+                                    EUserId = userId,
+                                    QRCode = dto.QRCode,
+                                    TransferCode = code,
+                                    TransferId = transferInfo.TFQInfoId
+                                };
+                                List<QC2Detail> qC2Details = new List<QC2Detail>();
+                                foreach (var item in dto.QRCodeProblems)
+                                {
+                                    QC2Detail qC2Detail = new QC2Detail
+                                    {
+                                        FloorId = dto.FloorId,
+                                        AssemblyLineId = dto.AssemblyLineId,
+                                        DescriptionId = dto.DescriptionId,
+                                        RepairLineId = dto.RepairLineId,
+                                        QCLineId = dto.QCLineId,
+                                        SubQCId = dto.SubQCId,
+                                        OrganizationId = orgId,
+                                        QRCode = dto.QRCode,
+                                        ProblemId = item.ProblemId,
+                                        ProblemName = item.ProblemName,
+                                        EntryDate = DateTime.Now,
+                                        EUserId = userId,
+                                        TransferCode = transferInfo.TransferCode,
+                                        TransferId = transferInfo.TFQInfoId
+                                    };
+                                    qC2Details.Add(qC2Detail);
+                                }
+                                qC2Info.QC2Details = qC2Details;
+                                _qC2InfoRepository.Insert(qC2Info);
+                            }
+                            if (dto.SubQCId == 3)
+                            {
+                                QC3Info qC3Info = new QC3Info
+                                {
+                                    FloorId = dto.FloorId,
+                                    AssemblyLineId = dto.AssemblyLineId,
+                                    DescriptionId = dto.DescriptionId,
+                                    RepairLineId = dto.RepairLineId,
+                                    WarehouseId = dto.WarehouseId,
+                                    ItemTypeId = dto.ItemTypeId,
+                                    ItemId = dto.ItemId,
+                                    QCLineId = dto.QCLineId,
+                                    SubQCId = dto.SubQCId,
+                                    OrganizationId = orgId,
+                                    StateStatus = FinishGoodsSendStatus.Send,
+                                    EntryDate = DateTime.Now,
+                                    EUserId = userId,
+                                    QRCode = dto.QRCode,
+                                    TransferCode = code,
+                                    TransferId = transferInfo.TFQInfoId
+                                };
+                                List<QC3Detail> qC3Details = new List<QC3Detail>();
+                                foreach (var item in dto.QRCodeProblems)
+                                {
+                                    QC3Detail qC3Detail = new QC3Detail
+                                    {
+                                        FloorId = dto.FloorId,
+                                        AssemblyLineId = dto.AssemblyLineId,
+                                        DescriptionId = dto.DescriptionId,
+                                        RepairLineId = dto.RepairLineId,
+                                        QCLineId = dto.QCLineId,
+                                        SubQCId = dto.SubQCId,
+                                        OrganizationId = orgId,
+                                        QRCode = dto.QRCode,
+                                        ProblemId = item.ProblemId,
+                                        ProblemName = item.ProblemName,
+                                        EntryDate = DateTime.Now,
+                                        EUserId = userId,
+                                        TransferCode = transferInfo.TransferCode,
+                                        TransferId = transferInfo.TFQInfoId
+                                    };
+                                    qC3Details.Add(qC3Detail);
+                                }
+                                qC3Info.QC3Details = qC3Details;
+                                _qC3InfoRepository.Insert(qC3Info);
+                            }
+
+                            if (await _qC1InfoRepository.SaveAsync() || await _qC2InfoRepository.SaveAsync() || await _qC3InfoRepository.SaveAsync())
+                            {
+                                _qRCodeTransferToRepairInfoRepository.Insert(qRCodeTransferToRepairInfo);
+                                IsSuccess = await _qRCodeTransferToRepairInfoRepository.SaveAsync();
+                            }
                         }
                     }
                 }
@@ -305,12 +458,35 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
             if (_transferFromQCInfoBusiness.SaveTransferInfoStateStatus(transferId, status, userId, orgId))
             {
                 var qrCodesInDb = GetQRCodeTransferToRepairInfoByTransferId(transferId, orgId);
-
+                List<RepairIn> repairIns = new List<RepairIn>();
                 foreach (var item in qrCodesInDb)
                 {
                     item.StateStatus = FinishGoodsSendStatus.Received;
                     item.UpdateDate = DateTime.Now;
                     item.UpUserId = userId;
+
+                    RepairIn repairIn = new RepairIn()
+                    {
+                        FloorId = item.FloorId,
+                        AssemblyLineId = item.AssemblyLineId,
+                        DescriptionId = item.DescriptionId,
+                        RepairLineId = item.RepairLineId,
+                        WarehouseId = item.WarehouseId,
+                        ItemTypeId = item.ItemTypeId,
+                        ItemId = item.ItemId,
+                        QCLineId = item.QCLineId,
+                        SubQCId = item.SubQCId,
+                        OrganizationId = orgId,
+                        StateStatus = FinishGoodsSendStatus.Received,
+                        EntryDate = DateTime.Now,
+                        EUserId = userId,
+                        QRCode = item.QRCode,
+                        TransferCode = item.TransferCode,
+                        TransferId = item.TransferId,
+                        QRTRInfoId = item.QRTRInfoId,
+                    };
+
+                    _repairInRepository.Insert(repairIn);
                     _qRCodeTransferToRepairInfoRepository.Update(item);
                 }
             }
@@ -602,6 +778,11 @@ Where qrc.StateStatus='Received' and 1=1{0}", Utility.ParamChecker(param));
         public IEnumerable<QRCodeTransferToRepairInfo> GetQRCodeByQRCode(string qrCode,string status, long orgId)
         {
             return _qRCodeTransferToRepairInfoRepository.GetAll(qr => qr.QRCode == qrCode && qr.StateStatus== status && qr.OrganizationId == orgId).ToList();
+        }
+
+        public IEnumerable<QRCodeTransferToRepairInfo> GetAllRepairInDataByAssemblyIdWithTimeWise(long assemlyId, DateTime time, long orgId)
+        {
+            return _qRCodeTransferToRepairInfoRepository.GetAll(s => s.AssemblyLineId == assemlyId && DbFunctions.TruncateTime(s.EntryDate) == DbFunctions.TruncateTime(time) && s.OrganizationId == orgId);
         }
     }
 }

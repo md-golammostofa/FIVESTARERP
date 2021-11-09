@@ -121,9 +121,10 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="ddlSubQC" class="control-label font-weight-bold">QC</label>
-                                                <select id="ddlSubQC" class="form-control form-control-sm select2">
+                                                @Html.DropDownList("ddlSubQC", (IEnumerable<SelectListItem>)ViewBag.ddlSubQC, "--- Select QC ---", new { @class = "form-control form-control-sm select2" })
+                                                @*<select id="ddlSubQC" class="form-control form-control-sm select2">
                                                     <option value="0">--Select QC--</option>
-                                                </select>
+                                                </select>*@
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="ddlRepairLine" class="control-label font-weight-bold">Repair Line</label>
@@ -595,18 +596,18 @@
         ddlProductionFloor.change(function () {
             clearDropdown("ddlRepairLine");
             clearDropdown("ddlQCLine");
-            clearDropdown("ddlSubQC");
+            //clearDropdown("ddlSubQC");
             if (ddlProductionFloor.val() != "") {
                 LoadDropDown('/Common/GetQCByLine', 'POST', ddlQCLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
                 LoadDropDown('/Common/GetRepairLineByLine', 'POST', ddlRepairLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
             }
         })
-        ddlQCLine.change(function () {
-            clearDropdown("ddlSubQC");
-            if (ddlProductionFloor.val() != "" && ddlQCLine.val() != "") {
-                LoadDropDown('/Common/GetSubQCByQCLine', 'POST', ddlSubQC, JSON.stringify({ qcline: ddlQCLine.val() }));
-            }
-        })
+        //ddlQCLine.change(function () {
+        //    clearDropdown("ddlSubQC");
+        //    if (ddlProductionFloor.val() != "" && ddlQCLine.val() != "") {
+        //        LoadDropDown('/Common/GetSubQCByQCLine', 'POST', ddlSubQC, JSON.stringify({ qcline: ddlQCLine.val() }));
+        //    }
+        //})
 
         function fnProblemsData() {
             problemsObj.length = 0;

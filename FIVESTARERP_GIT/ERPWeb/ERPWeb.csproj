@@ -169,6 +169,7 @@
     <Content Include="Content\dist\css\adminlte.css" />
     <Content Include="Content\dist\css\adminlte.min.css" />
     <Content Include="Content\dist\css\bootstrap-datepicker3.css" />
+    <Content Include="Content\dist\css\dashboardCSS.css" />
     <Content Include="Content\dist\css\dataTables.bootstrap4.css" />
     <Content Include="Content\dist\css\icheck-bootstrap.min.css" />
     <Content Include="Content\dist\css\OverlayScrollbars.css" />
@@ -926,6 +927,7 @@
     <Content Include="Views\Configuration\_GetFaultyStockReceive.cshtml" />
     <Content Include="Views\FrontDesk\_GetIMEICountReport.cshtml" />
     <Content Include="Views\FrontDesk\GetIMEICountReport.cshtml" />
+    <Content Include="Views\User\OLD_INDEX.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1146,6 +1148,13 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
+    <ItemGroup>
+      <RoslynFiles Include="$(CscToolPath)\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />
+    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+  </Target>
   <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
     <ItemGroup>
       <RoslynFiles Include="$(CscToolPath)\*" />

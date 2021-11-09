@@ -309,8 +309,8 @@ namespace ERPWeb.Controllers
                 {
                     SubQCId = q.SubQCId,
                     SubQCName = q.SubQCName,
-                    QCId = q.QCId,
-                    QCLineNo = _qualityControlBusiness.GetQualityControlById(q.QCId, User.OrgId).QCName,
+                    //QCId = q.QCId,
+                    //QCLineNo = _qualityControlBusiness.GetQualityControlById(q.QCId, User.OrgId).QCName,
                     Remarks=q.Remarks,
                     EntryUser = UserForEachRecord(q.EUserId.Value).UserName,
                 }).ToList();
@@ -4321,6 +4321,7 @@ namespace ERPWeb.Controllers
             if (string.IsNullOrEmpty(flag))
             {
                 ViewBag.ddlProductionFloor = _productionLineBusiness.GetAllProductionLineByOrgId(User.OrgId).Select(line => new SelectListItem { Text = line.LineNumber, Value = line.LineId.ToString() }).ToList();
+                ViewBag.ddlSubQC = _subQCBusiness.GetAllQCByOrgId(User.OrgId).Select(s => new SelectListItem { Text = s.SubQCName, Value = s.QCId.ToString() }).ToList();
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "Problems")
             {

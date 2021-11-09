@@ -21,6 +21,7 @@ namespace ERPBLL.Production
         private readonly TransferRepairItemToQcDetailRepository _transferRepairItemToQcDetailRepository;
         private readonly QRCodeTransferToRepairInfoRepository _qRCodeTransferToRepairInfoRepository;
         private readonly TempQRCodeTraceRepository _tempQRCodeTraceRepository;
+        private readonly RepairOutRepository _repairOutRepository;
 
         // Business
         private readonly ITransferRepairItemToQcDetailBusiness _transferRepairItemToQcDetailBusiness;
@@ -46,6 +47,7 @@ namespace ERPBLL.Production
             this._transferRepairItemToQcDetailRepository = new TransferRepairItemToQcDetailRepository(this._productionDb);
             this._qRCodeTransferToRepairInfoRepository = new QRCodeTransferToRepairInfoRepository(this._productionDb);
             this._tempQRCodeTraceRepository = new TempQRCodeTraceRepository(this._productionDb);
+            this._repairOutRepository = new RepairOutRepository(this._productionDb);
 
             // Business class
             this._qCLineStockDetailBusiness = qCLineStockDetailBusiness;
@@ -293,15 +295,15 @@ namespace ERPBLL.Production
                 }
                 // QRCode //
                 var qrCode = _tempQRCodeTraceBusiness.GetTempQRCodeTraceByCode(dto.QRCode, orgId);
-                if(qrCode != null)
+                if (qrCode != null)
                 {
-                    qrCode.StateStatus= QRCodeStatus.LotIn;
+                    qrCode.StateStatus = QRCodeStatus.LotIn;
                     qrCode.UpdateDate = DateTime.Now;
                     qrCode.UpUserId = user;
                     _tempQRCodeTraceRepository.Update(qrCode);
                     _tempQRCodeTraceRepository.Save();
                 }
-                
+
                 // Repair Speare Parts Stock
                 List<RepairLineStockDetailDTO> repairLineStocks = new List<RepairLineStockDetailDTO>();
                 foreach (var item in itemPreparationDetail)
@@ -356,23 +358,46 @@ namespace ERPBLL.Production
 
                     //if (await _repairLineStockDetailBusiness.SaveRepairLineStockOutAsync(repairLineStocks, user, orgId, string.Empty))
                     //{
-                        if (transferInfo.TRQInfoId > 0)
-                        {
-                            _transferRepairItemToQcInfoRepository.Update(transferInfo);
-                            _transferRepairItemToQcDetailRepository.InsertAll(transferRepairItemDetails);
-                        }
-                        else
-                        {
-                            _transferRepairItemToQcInfoRepository.Insert(transferInfo);
-                        }
+                    if (transferInfo.TRQInfoId > 0)
+                    {
+                        _transferRepairItemToQcInfoRepository.Update(transferInfo);
+                        _transferRepairItemToQcDetailRepository.InsertAll(transferRepairItemDetails);
+                    }
+                    else
+                    {
+                        _transferRepairItemToQcInfoRepository.Insert(transferInfo);
+                    }
 
-                        var qrCodeInfoInDb = await _qRCodeTransferToRepairInfoBusiness.GetQRCodeTransferToRepairInfoByIdAsync(QrCodeInfoDto.QRTRInfoId, orgId);
-                        qrCodeInfoInDb.StateStatus = "Repair-Done";
-                        qrCodeInfoInDb.UpdateDate = DateTime.Now;
-                        qrCodeInfoInDb.UpUserId = user;
-                        _qRCodeTransferToRepairInfoRepository.Update(qrCodeInfoInDb);
+                    var qrCodeInfoInDb = await _qRCodeTransferToRepairInfoBusiness.GetQRCodeTransferToRepairInfoByIdAsync(QrCodeInfoDto.QRTRInfoId, orgId);
+                    qrCodeInfoInDb.StateStatus = "Repair-Done";
+                    qrCodeInfoInDb.UpdateDate = DateTime.Now;
+                    qrCodeInfoInDb.UpUserId = user;
 
-                        return await _transferRepairItemToQcInfoRepository.SaveAsync();
+                    RepairOut repairOut = new RepairOut()
+                    {
+                        FloorId = qrCodeInfoInDb.FloorId,
+                        AssemblyLineId = qrCodeInfoInDb.AssemblyLineId,
+                        DescriptionId = qrCodeInfoInDb.DescriptionId,
+                        RepairLineId = qrCodeInfoInDb.RepairLineId,
+                        WarehouseId = qrCodeInfoInDb.WarehouseId,
+                        ItemTypeId = qrCodeInfoInDb.ItemTypeId,
+                        ItemId = qrCodeInfoInDb.ItemId,
+                        QCLineId = qrCodeInfoInDb.QCLineId,
+                        SubQCId = qrCodeInfoInDb.SubQCId,
+                        OrganizationId = orgId,
+                        StateStatus = "Repair-Done",
+                        EntryDate = DateTime.Now,
+                        EUserId = user,
+                        QRCode = qrCodeInfoInDb.QRCode,
+                        TransferCode = qrCodeInfoInDb.TransferCode,
+                        TransferId = qrCodeInfoInDb.TransferId,
+                        QRTRInfoId = qrCodeInfoInDb.QRTRInfoId,
+                    };
+
+                    _repairOutRepository.Insert(repairOut);
+                    _qRCodeTransferToRepairInfoRepository.Update(qrCodeInfoInDb);
+
+                    return await _transferRepairItemToQcInfoRepository.SaveAsync();
                     //}
                 }
             }
@@ -476,7 +501,7 @@ Where 1= 1 {0} Order By ti.EntryDate desc", param);
             //Transfer Info
             var transferInDb = await GetTransferRepairItemToQcInfoByIdAsync(transferId, orgId);
 
-            if(transferInDb != null && transferInDb.StateStatus == RequisitionStatus.Approved && status == RequisitionStatus.Accepted)
+            if (transferInDb != null && transferInDb.StateStatus == RequisitionStatus.Approved && status == RequisitionStatus.Accepted)
             {
                 // Transfer Info
                 transferInDb.StateStatus = RequisitionStatus.Accepted;
@@ -537,7 +562,7 @@ Where 1= 1 {0} Order By ti.EntryDate desc", param);
 
                 // QRCode //
                 var qrCodes = transferDetail.Select(s => s.QRCode).ToList();
-                var getQRCodeForUpdate =await _tempQRCodeTraceBusiness.GetTempQRCodeTracesByQRCodesAsync(qrCodes, orgId);
+                var getQRCodeForUpdate = await _tempQRCodeTraceBusiness.GetTempQRCodeTracesByQRCodesAsync(qrCodes, orgId);
                 foreach (var item in getQRCodeForUpdate)
                 {
                     item.StateStatus = QRCodeStatus.LotIn;
@@ -547,9 +572,9 @@ Where 1= 1 {0} Order By ti.EntryDate desc", param);
                 _transferRepairItemToQcInfoRepository.Update(transferInDb);
                 if (await _transferRepairItemToQcInfoRepository.SaveAsync())
                 {
-                    if(await _assemblyLineStockDetailBusiness.SaveAssemblyLineStockInAsync(assemblyLineStocks, userId, orgId))
+                    if (await _assemblyLineStockDetailBusiness.SaveAssemblyLineStockInAsync(assemblyLineStocks, userId, orgId))
                     {
-                        if(await _qcItemStockDetailBusiness.SaveQCItemStockInAsync(qCItemStocks, userId, orgId))
+                        if (await _qcItemStockDetailBusiness.SaveQCItemStockInAsync(qCItemStocks, userId, orgId))
                         {
                             return await _tempQRCodeTraceBusiness.UpdateQRCodeBatchAsync(getQRCodeForUpdate.ToList(), orgId);
                         }

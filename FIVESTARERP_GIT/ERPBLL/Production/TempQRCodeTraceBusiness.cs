@@ -219,5 +219,32 @@ namespace ERPBLL.Production
             _tempQRCodeTraceRepository.Update(qrCodeInDb);
             return await _tempQRCodeTraceRepository.SaveAsync();
         }
+        public IEnumerable<TempQRCodeTraceDTO> GetAssemblyLineWiseDataForDashBoard(long assemblyId, long orgId)
+        {
+            var queryForLotIn = _productionDb.Db.Database.SqlQuery<TempQRCodeTraceDTO>(string.Format(@"Select b.BrandName,tqrt.ItemName,des.DescriptionName'ModelName',cl.ColorName From tblLotInLog lil
+Left Join [Production].dbo.tblTempQRCodeTrace tqrt on tqrt.CodeId = lil.CodeId
+Left Join [Inventory].dbo.tblDescriptions des on lil.DescriptionId = des.DescriptionId
+Left Join [Inventory].dbo.tblBrand b on des.BrandId = b.BrandId
+Left Join [Inventory].dbo.tblColors cl on tqrt.ColorId = cl.ColorId
+where CAST(lil.EntryDate as date) = CAST(GETDATE() as date) and lil.AssemblyId={0} and lil.OrganizationId={1} and
+lil.StateStatus = 'Lot-In' order by lil.LotInLogId desc", assemblyId, orgId)).ToList();
+            if (queryForLotIn.Count() == 0)
+            {
+                return _productionDb.Db.Database.SqlQuery<TempQRCodeTraceDTO>(string.Format(@"Select b.BrandName,tqrt.ItemName,des.DescriptionName'ModelName',cl.ColorName From tblTempQRCodeTrace tqrt
+Left Join [Inventory].dbo.tblDescriptions des on tqrt.DescriptionId = des.DescriptionId
+Left Join [Inventory].dbo.tblBrand b on des.BrandId = b.BrandId
+Left Join [Inventory].dbo.tblColors cl on tqrt.ColorId = cl.ColorId
+where CAST(tqrt.UpdateDate as date) = CAST(GETDATE() as date) and tqrt.AssemblyId={0} and tqrt.OrganizationId={1} Order By tqrt.UpdateDate Desc", assemblyId, orgId));
+            }
+            return queryForLotIn;
+            //            return _productionDb.Db.Database.SqlQuery<TempQRCodeTraceDTO>(string.Format(@"Select * From tblTempQRCodeTrace tqrt
+            //Left Join [Inventory-MC].dbo.tblDescriptions des on tqrt.DescriptionId = des.DescriptionId
+            //Left Join [Inventory-MC].dbo.tblBrand b on des.BrandId = b.BrandId
+            //where CAST(tqrt.UpdateDate as date) = CAST(GETDATE() as date) and tqrt.AssemblyId={0} and tqrt.OrganizationId={1} Order By tqrt.UpdateDate Desc", assemblyId, orgId));
+        }
+        public DashboardAssemblyLineWiseDataDTO GetAssemblyDashBoard(long assemblyId, long orgId)
+        {
+            return _productionDb.Db.Database.SqlQuery<DashboardAssemblyLineWiseDataDTO>(string.Format(@"EXEC spAssemblyDashboard {0},{1}", assemblyId, orgId)).FirstOrDefault();
+        }
     }
 }

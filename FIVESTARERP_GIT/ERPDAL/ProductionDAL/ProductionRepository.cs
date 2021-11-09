@@ -499,4 +499,36 @@ namespace ERPDAL.ProductionDAL
     {
         public SubQCRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
     }
+    public class QC1InfoRepository : ProductionBaseRepository<QC1Info>
+    {
+        public QC1InfoRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
+    public class QC1DetailRepository : ProductionBaseRepository<QC1Detail>
+    {
+        public QC1DetailRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
+    public class QC2InfoRepository : ProductionBaseRepository<QC2Info>
+    {
+        public QC2InfoRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
+    public class QC2DetailRepository : ProductionBaseRepository<QC2Detail>
+    {
+        public QC2DetailRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
+    public class QC3InfoRepository : ProductionBaseRepository<QC3Info>
+    {
+        public QC3InfoRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
+    public class QC3DetailRepository : ProductionBaseRepository<QC3Detail>
+    {
+        public QC3DetailRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
+    public class RepairInRepository : ProductionBaseRepository<RepairIn>
+    {
+        public RepairInRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
+    public class RepairOutRepository : ProductionBaseRepository<RepairOut>
+    {
+        public RepairOutRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
 }

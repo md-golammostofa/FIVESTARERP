@@ -7,6 +7,7 @@ using ERPBO.Common;
 using ERPBO.FrontDesk.DTOModels;
 using ERPBO.FrontDesk.ViewModels;
 using ERPBO.Production.DTOModel;
+using ERPBO.Production.ReportModels;
 using ERPBO.Production.ViewModels;
 using ERPWeb.Filters;
 using System;
@@ -35,8 +36,17 @@ namespace ERPWeb.Controllers
         private readonly IDescriptionBusiness _descriptionBusiness;
         private readonly IPackagingLineBusiness _packagingLineBusiness;
         private readonly IModelSSBusiness _modelSSBusiness;
+        private readonly IAssemblyLineBusiness _assemblyLineBusiness;
+        private readonly ITempQRCodeTraceBusiness _tempQRCodeTraceBusiness;
+        private readonly ILotInLogBusiness _lotInLogBusiness;
+        private readonly IQCPassTransferDetailBusiness _qCPassTransferDetailBusiness;
+        private readonly IRepairOutBusiness _repairOutBusiness;
+        private readonly IRepairInBusiness _repairInBusiness;
+        private readonly IQC1DetailBusiness _qC1DetailBusiness;
+        private readonly IQC2DetailBusiness _qC2DetailBusiness;
+        private readonly IQC3DetailBusiness _qC3DetailBusiness;
 
-        public UserController (IRequsitionInfoBusiness requsitionInfoBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IProductionLineBusiness productionLineBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness,IItemReturnInfoBusiness itemReturnInfoBusiness, IJobOrderBusiness jobOrderBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, IMobilePartBusiness mobilePartBusiness, IDescriptionBusiness descriptionBusiness, IPackagingLineBusiness packagingLineBusiness, IModelSSBusiness modelSSBusiness)
+        public UserController (IRequsitionInfoBusiness requsitionInfoBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IProductionLineBusiness productionLineBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness,IItemReturnInfoBusiness itemReturnInfoBusiness, IJobOrderBusiness jobOrderBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, IMobilePartBusiness mobilePartBusiness, IDescriptionBusiness descriptionBusiness, IPackagingLineBusiness packagingLineBusiness, IModelSSBusiness modelSSBusiness, IAssemblyLineBusiness assemblyLineBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, ILotInLogBusiness lotInLogBusiness, IQCPassTransferDetailBusiness qCPassTransferDetailBusiness, IRepairOutBusiness repairOutBusiness, IRepairInBusiness repairInBusiness, IQC1DetailBusiness qC1DetailBusiness, IQC2DetailBusiness qC2DetailBusiness, IQC3DetailBusiness qC3DetailBusiness)
         {
             this._requsitionInfoBusiness = requsitionInfoBusiness;
             this._finishGoodsStockInfoBusiness = finishGoodsStockInfoBusiness;
@@ -52,11 +62,24 @@ namespace ERPWeb.Controllers
             this._descriptionBusiness = descriptionBusiness;
             this._packagingLineBusiness = packagingLineBusiness;
             this._modelSSBusiness = modelSSBusiness;
+            this._assemblyLineBusiness = assemblyLineBusiness;
+            this._tempQRCodeTraceBusiness = tempQRCodeTraceBusiness;
+            this._lotInLogBusiness = lotInLogBusiness;
+            this._qCPassTransferDetailBusiness = qCPassTransferDetailBusiness;
+            this._repairInBusiness = repairInBusiness;
+            this._repairOutBusiness = repairOutBusiness;
+            this._qC1DetailBusiness = qC1DetailBusiness;
+            this._qC2DetailBusiness = qC2DetailBusiness;
+            this._qC3DetailBusiness = qC3DetailBusiness;
         }
-        public ActionResult Index()
+        public ActionResult Index(string flag)
         {
             if(User.AppType == ApplicationType.ERP)
             {
+                if (string.IsNullOrEmpty(flag))
+                {
+                    ViewBag.ddlAssemblyLine = _assemblyLineBusiness.GetAssemblyLines(User.OrgId).Select(s => new SelectListItem { Text = s.AssemblyLineName, Value = s.AssemblyLineId.ToString() }).ToList();
+                }
                 // Requisition Summery
                 IEnumerable<DashboardRequisitionSummeryDTO> dto = _requsitionInfoBusiness.DashboardRequisitionSummery(User.OrgId);
                 IEnumerable<DashboardRequisitionSummeryViewModel> viewModel = new List<DashboardRequisitionSummeryViewModel>();
@@ -241,6 +264,339 @@ namespace ERPWeb.Controllers
             {
                 return View("Index3");
             }
+        }
+
+        public ActionResult GetAssemblyLineWiseDashboardData(long assemblyId)
+        {
+            var tempData = _tempQRCodeTraceBusiness.GetAssemblyLineWiseDataForDashBoard(assemblyId, User.OrgId).FirstOrDefault();
+            var result = _tempQRCodeTraceBusiness.GetAssemblyDashBoard(assemblyId, User.OrgId);
+            return Json(new { BrandName = tempData != null ? tempData.BrandName : "", ItemName = tempData != null ? tempData.ItemName : "", ModelName = tempData != null ? tempData.ModelName : "", ColorName = tempData != null ? tempData.ColorName : "", Time = DateTime.Now.ToString("hh:mm tt"), Date = DateTime.Now.Date.ToString("dd-MMM-yyyy"), LotIn = result.TotalLotIn, QCPass = result.TotalQCPass, Pending = (result.TotalLotIn) - result.TotalQCPass/*(result.TotalQCPass + result.TotalQCFail - result.TotalRepairDone)*/, QCFail = result.TotalQCFail, TotalQC1 = result.TotalQC1, TotalQC2 = result.TotalQC2, TotalQC3 = result.TotalQC3, RepairDone = result.TotalRepairDone, RepairPending = (result.TotalQC1 + result.TotalQC2 + result.TotalQC3) - result.TotalRepairDone, TotalItem = result.TotalHandset, TotalMiniWarehouseReceived = result.MiniStockReceivedQty });
+        }
+
+        public ActionResult GetINPUT_OUTPUTBarchart(long assemblyId)
+        {
+            var qcPass = _qCPassTransferDetailBusiness.GetAllQCPassLogDataByAssemblyIdWithTimeWise(assemblyId, DateTime.Today, User.OrgId);
+            var queryForQCPass = qcPass.AsEnumerable()
+                .GroupBy(row => row.EntryDate.Value.ToString("HH:00"))
+                .Select(grp => new
+                {
+                    Hour = grp.Key,
+                    Count = grp.Count()
+                }).ToList().OrderBy(s => s.Hour).ToList();
+
+            var lotIn = _lotInLogBusiness.GetAllLotInLogDataByAssemblyIdWithTimeWise(assemblyId, DateTime.Today, User.OrgId);
+            var queryForLotIn = lotIn.AsEnumerable()
+                .GroupBy(row => row.EntryDate.Value.ToString("HH:00"))
+                .Select(grp => new
+                {
+                    Hour = grp.Key,
+                    Count = grp.Count()
+                }).ToList().OrderBy(s => s.Hour).ToList();
+
+            List<BarChatTimeWiseData> barChatTimeWiseDatas = new List<BarChatTimeWiseData>(); List<BarChatTimeWiseData> listBar = new List<BarChatTimeWiseData>();
+            List<string> hour = new List<string>();
+            List<int> qcPassCount = new List<int>();
+            List<int> lotInCount = new List<int>();
+            List<QCPassAndLotInHourSameData> sameTimesForLotIn = new List<QCPassAndLotInHourSameData>();
+            List<QCPassAndLotInHourSameData> sameTimesForQCPass = new List<QCPassAndLotInHourSameData>();
+
+            if (queryForQCPass.Count() > 0)
+            {
+                foreach (var item in queryForQCPass)
+                {
+                    foreach (var item2 in queryForLotIn)
+                    {
+                        if (item.Hour == item2.Hour)
+                        {
+                            BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                            {
+                                Hour = item.Hour,
+                                QCPassCount = item.Count,
+                                LotInCount = item2.Count,
+                            };
+                            barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                            //queryForLotIn.RemoveAll(s => s.Hour == item2.Hour);
+                            QCPassAndLotInHourSameData sameTimeForLotIn = new QCPassAndLotInHourSameData()
+                            {
+                                Hour = item2.Hour,
+                                Count = item2.Count,
+                            };
+                            sameTimesForLotIn.Add(sameTimeForLotIn);
+                            QCPassAndLotInHourSameData sameTimeForQCPass = new QCPassAndLotInHourSameData()
+                            {
+                                Hour = item.Hour,
+                                Count = item.Count,
+                            };
+                            sameTimesForQCPass.Add(sameTimeForQCPass);
+                        }
+                    }
+                }
+
+                foreach (var item in sameTimesForLotIn)
+                {
+                    queryForLotIn.RemoveAll(s => s.Hour == item.Hour);
+                }
+
+                foreach (var item in queryForLotIn)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        //QCPassCount = item2.Count,
+                        LotInCount = item.Count
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                    //listBar.Add(barChatTimeWiseData);
+                }
+
+                foreach (var item in sameTimesForQCPass)
+                {
+                    queryForQCPass.RemoveAll(s => s.Hour == item.Hour);
+                }
+
+                foreach (var item in queryForQCPass)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        QCPassCount = item.Count,
+                        //LotInCount = item.Count
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                    //listBar.Add(barChatTimeWiseData);
+                }
+            }
+            else
+            {
+                foreach (var item in queryForLotIn)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        //QCPassCount = 0,
+                        LotInCount = item.Count
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                    //listBar.Add(barChatTimeWiseData);
+                }
+            }
+
+            var list = barChatTimeWiseDatas.ToList().OrderBy(s => s.Hour);
+            foreach (var item in list)
+            {
+                hour.Add(Convert.ToDateTime(item.Hour).ToString("hh:00"));
+                qcPassCount.Add(item.QCPassCount);
+                lotInCount.Add(item.LotInCount);
+            }
+            ViewBag.Hour = hour.ToList();
+            ViewBag.QCPassCount = qcPassCount.ToList();
+            ViewBag.LotInCount = lotInCount.ToList();
+
+            return Json(new { Hour = ViewBag.Hour, QCPassCount = ViewBag.QCPassCount, LotInCount = ViewBag.LotInCount });
+        }
+
+        public ActionResult GetREPAIRIN_OUTBarchart(long assemblyId)
+        {
+            var repairIn = _repairInBusiness.GetAllRepairInDataByAssemblyIdWithTimeWise(assemblyId, DateTime.Today, User.OrgId);
+            var queryForRepairIn = repairIn.AsEnumerable()
+                .GroupBy(row => row.EntryDate.Value.ToString("HH:00"))
+                .Select(grp => new
+                {
+                    Hour = grp.Key,
+                    Count = grp.Count()
+                }).ToList().OrderBy(s => s.Hour).ToList();
+
+            var repairOut = _repairOutBusiness.GetAllRepairOutDataByAssemblyIdWithTimeWise(assemblyId, DateTime.Today, User.OrgId);
+            var queryForRepairOut = repairOut.AsEnumerable()
+                .GroupBy(row => row.EntryDate.Value.ToString("HH:00"))
+                .Select(grp => new
+                {
+                    Hour = grp.Key,
+                    Count = grp.Count()
+                }).ToList().OrderBy(s => s.Hour).ToList();
+
+            List<BarChatTimeWiseData> barChatTimeWiseDatas = new List<BarChatTimeWiseData>(); List<BarChatTimeWiseData> listBar = new List<BarChatTimeWiseData>();
+            List<string> hour = new List<string>();
+            List<int> repairInCount = new List<int>();
+            List<int> repairOutCount = new List<int>();
+            List<RepairInAndRepairOutHourSameData> sameTimesForRepairIn = new List<RepairInAndRepairOutHourSameData>();
+            List<RepairInAndRepairOutHourSameData> sameTimesForRepairOut = new List<RepairInAndRepairOutHourSameData>();
+
+            if (queryForRepairIn.Count() > 0)
+            {
+                foreach (var item in queryForRepairIn)
+                {
+                    foreach (var item2 in queryForRepairOut)
+                    {
+                        if (item.Hour == item2.Hour)
+                        {
+                            BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                            {
+                                Hour = item.Hour,
+                                RepairInCount = item.Count,
+                                RepairOutCount = item2.Count,
+                            };
+                            barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                            //queryForLotIn.RemoveAll(s => s.Hour == item2.Hour);
+                            RepairInAndRepairOutHourSameData sameTimeForRepairOut = new RepairInAndRepairOutHourSameData()
+                            {
+                                Hour = item2.Hour,
+                                Count = item2.Count,
+                            };
+                            sameTimesForRepairOut.Add(sameTimeForRepairOut);
+                            RepairInAndRepairOutHourSameData sameTimeForRepairIn = new RepairInAndRepairOutHourSameData()
+                            {
+                                Hour = item.Hour,
+                                Count = item.Count,
+                            };
+                            sameTimesForRepairIn.Add(sameTimeForRepairIn);
+                        }
+                    }
+                }
+
+                foreach (var item in sameTimesForRepairOut)
+                {
+                    queryForRepairOut.RemoveAll(s => s.Hour == item.Hour);
+                }
+
+                foreach (var item in queryForRepairOut)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        //QCPassCount = item2.Count,
+                        RepairOutCount = item.Count
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                    //listBar.Add(barChatTimeWiseData);
+                }
+
+                foreach (var item in sameTimesForRepairIn)
+                {
+                    queryForRepairIn.RemoveAll(s => s.Hour == item.Hour);
+                }
+
+                foreach (var item in queryForRepairIn)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        RepairInCount = item.Count,
+                        //LotInCount = item.Count
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                    //listBar.Add(barChatTimeWiseData);
+                }
+            }
+            else
+            {
+                foreach (var item in queryForRepairOut)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        //QCPassCount = item2.Count,
+                        RepairOutCount = item.Count,
+                        //RepairInCount = 0,
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                    //listBar.Add(barChatTimeWiseData);
+                }
+            }
+
+            var list = barChatTimeWiseDatas.ToList().OrderBy(s => s.Hour);
+            foreach (var item in list)
+            {
+                hour.Add(Convert.ToDateTime(item.Hour).ToString("hh:00"));
+                repairInCount.Add(item.RepairInCount);
+                repairOutCount.Add(item.RepairOutCount);
+            }
+            ViewBag.Hour = hour.ToList();
+            ViewBag.RepairInCount = repairInCount.ToList();
+            ViewBag.RepairOutCount = repairOutCount.ToList();
+
+            return Json(new { Hour = ViewBag.Hour, RepairInCount = ViewBag.RepairInCount, RepairOutCount = ViewBag.RepairOutCount });
+        }
+        public ActionResult QC_1_Problem_HorizontalBarChart(long assemblyId)
+        {
+            var qrCodeProblem = _qC1DetailBusiness.GetAllQC1ProblemByAssemblyId(assemblyId, DateTime.Today, User.OrgId);
+            List<string> repetedProblemName = new List<string>();
+            List<int> repetedProblem = new List<int>();
+            List<QRCodeProblemCountWithProblem> countWithProblem = new List<QRCodeProblemCountWithProblem>();
+            var problems = qrCodeProblem.Select(s => s.ProblemName).Distinct();
+            foreach (var item in problems)
+            {
+                QRCodeProblemCountWithProblem pro = new QRCodeProblemCountWithProblem()
+                {
+                    Value = qrCodeProblem.Count(s => s.ProblemName == item),
+                    Text = qrCodeProblem.Where(s => s.ProblemName == item).FirstOrDefault().ProblemName,
+                };
+                countWithProblem.Add(pro);
+            }
+            countWithProblem = countWithProblem.OrderByDescending(x => x.Value).ThenBy(s => s.Text).ToList();
+            var takeTopTen = countWithProblem.ToList().Take(10);
+            foreach (var item in takeTopTen)
+            {
+                repetedProblemName.Add(item.Text);
+                repetedProblem.Add(item.Value);
+            }
+            ViewBag.ProblemNames = repetedProblemName.ToList();
+            ViewBag.RepetedProblems = repetedProblem.ToList();
+            return Json(new { ProblemNames = ViewBag.ProblemNames, RepetedProblems = ViewBag.RepetedProblems });
+        }
+        public ActionResult QC_2_Problem_HorizontalBarChart(long assemblyId)
+        {
+            var qrCodeProblem = _qC2DetailBusiness.GetAllQC2ProblemByAssemblyId(assemblyId, DateTime.Today, User.OrgId);
+            List<string> repetedProblemName = new List<string>();
+            List<int> repetedProblem = new List<int>();
+            List<QRCodeProblemCountWithProblem> countWithProblem = new List<QRCodeProblemCountWithProblem>();
+            var problems = qrCodeProblem.Select(s => s.ProblemName).Distinct();
+            foreach (var item in problems)
+            {
+                QRCodeProblemCountWithProblem pro = new QRCodeProblemCountWithProblem()
+                {
+                    Value = qrCodeProblem.Count(s => s.ProblemName == item),
+                    Text = qrCodeProblem.Where(s => s.ProblemName == item).FirstOrDefault().ProblemName,
+                };
+                countWithProblem.Add(pro);
+            }
+            countWithProblem = countWithProblem.OrderByDescending(x => x.Value).ThenBy(s => s.Text).ToList();
+            var takeTopTen = countWithProblem.ToList().Take(10);
+            foreach (var item in takeTopTen)
+            {
+                repetedProblemName.Add(item.Text);
+                repetedProblem.Add(item.Value);
+            }
+            ViewBag.ProblemNames = repetedProblemName.ToList();
+            ViewBag.RepetedProblems = repetedProblem.ToList();
+            return Json(new { ProblemNames = ViewBag.ProblemNames, RepetedProblems = ViewBag.RepetedProblems });
+        }
+        public ActionResult QC_3_Problem_HorizontalBarChart(long assemblyId)
+        {
+            var qrCodeProblem = _qC3DetailBusiness.GetAllQC3ProblemByAssemblyId(assemblyId, DateTime.Today, User.OrgId);
+            List<string> repetedProblemName = new List<string>();
+            List<int> repetedProblem = new List<int>();
+            List<QRCodeProblemCountWithProblem> countWithProblem = new List<QRCodeProblemCountWithProblem>();
+            var problems = qrCodeProblem.Select(s => s.ProblemName).Distinct();
+            foreach (var item in problems)
+            {
+                QRCodeProblemCountWithProblem pro = new QRCodeProblemCountWithProblem()
+                {
+                    Value = qrCodeProblem.Count(s => s.ProblemName == item),
+                    Text = qrCodeProblem.Where(s => s.ProblemName == item).FirstOrDefault().ProblemName,
+                };
+                countWithProblem.Add(pro);
+            }
+            countWithProblem = countWithProblem.OrderByDescending(x => x.Value).ThenBy(s => s.Text).ToList();
+            var takeTopTen = countWithProblem.ToList().Take(10);
+            foreach (var item in takeTopTen)
+            {
+                repetedProblemName.Add(item.Text);
+                repetedProblem.Add(item.Value);
+            }
+            ViewBag.ProblemNames = repetedProblemName.ToList();
+            ViewBag.RepetedProblems = repetedProblem.ToList();
+            return Json(new { ProblemNames = ViewBag.ProblemNames, RepetedProblems = ViewBag.RepetedProblems });
         }
 
         [HttpPost,ValidateJsonAntiForgeryToken]

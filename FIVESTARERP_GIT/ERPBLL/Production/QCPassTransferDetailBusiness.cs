@@ -5,6 +5,7 @@ using ERPBO.Production.DTOModel;
 using ERPDAL.ProductionDAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -85,6 +86,10 @@ Inner Join [Production].dbo.tblQualityControl qc on qci.QCLineId = qc.QCId
 Where 1=1 {0}", Utility.ParamChecker(param));
 
             return query;
+        }
+        public IEnumerable<QCPassTransferDetail> GetAllQCPassLogDataByAssemblyIdWithTimeWise(long assemlyId, DateTime time, long orgId)
+        {
+            return _qCPassTransferDetailRepository.GetAll(s => s.AssemblyLineId == assemlyId && DbFunctions.TruncateTime(s.EntryDate) == DbFunctions.TruncateTime(time) && s.OrganizationId == orgId);
         }
     }
 }

@@ -31,5 +31,7 @@ namespace ERPBLL.Production.Interface
         Task<TempQRCodeTrace> GetIMEIWithOutThisQRCode(string imei, long codeId, long orgId);
         bool IsExistQRCodeWithStatus(string qrCode, DateTime date, string status, long orgId);
         bool SaveQRCodeStatusByLotIn(string qrCode, long orgId, long userId);
+        IEnumerable<TempQRCodeTraceDTO> GetAssemblyLineWiseDataForDashBoard(long assemblyId, long orgId);
+        DashboardAssemblyLineWiseDataDTO GetAssemblyDashBoard(long assemblyId, long orgId);
     }
 }

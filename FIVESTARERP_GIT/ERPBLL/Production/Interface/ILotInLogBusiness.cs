@@ -12,5 +12,6 @@ namespace ERPBLL.Production.Interface
     {
         IEnumerable<LotInLog> GetAllLotInByToDay(long userId, long orgId, DateTime date);
         IEnumerable<LotInLogDTO> GetAllDataByDateWise(string fromDate, string toDate, string qrCode);
+        IEnumerable<LotInLog> GetAllLotInLogDataByAssemblyIdWithTimeWise(long assemlyId, DateTime time, long orgId);
     }
 }

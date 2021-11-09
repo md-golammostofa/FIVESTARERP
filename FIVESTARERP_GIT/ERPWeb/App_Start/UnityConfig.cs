@@ -71,7 +71,13 @@ namespace ERPWeb
 
             // Production Database
             #region Production
-
+            container.RegisterType<IRepairInBusiness, RepairInBusiness>();
+            container.RegisterType<IRepairOutBusiness, RepairOutBusiness>();
+            container.RegisterType<IQC1DetailBusiness, QC1DetailBusiness>();
+            container.RegisterType<IQC2InfoBusiness, QC2InfoBusiness>();
+            container.RegisterType<IQC2DetailBusiness, QC2DetailBusiness>();
+            container.RegisterType<IQC3InfoBusiness, QC3InfoBusiness>();
+            container.RegisterType<IQC3DetailBusiness, QC3DetailBusiness>();
             container.RegisterType<ISubQCBusiness, SubQCBusiness>();
             container.RegisterType<IRepairSectionSemiFinishTransferDetailsBusiness, RepairSectionSemiFinishTransferDetailsBusiness>();
             container.RegisterType<IRepairSectionSemiFinishTransferInfoBusiness, RepairSectionSemiFinishTransferInfoBusiness>();
