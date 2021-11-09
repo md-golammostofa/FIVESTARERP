@@ -65,6 +65,11 @@
                     </div>
                     <div class="row text-sm">
                         <div class="col-md-2">
+                            <label for="ddlJobOrderType" class="control-label font-weight-bold">JobOrder Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlJobOrderType", (IEnumerable<SelectListItem>)ViewBag.ddlJobOrderType, new { @class = "form-control form-control-sm ddlJobOrderType" })
+                            <span class="error hide require-type font-weight-bold">JobOrderType is required !</span>
+                        </div>
+                        <div class="col-md-2">
                             <label for="ddlDescriptions" class="control-label font-weight-bold">Model<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                             @Html.DropDownList("ddlDescriptions", (IEnumerable<SelectListItem>)ViewBag.ddlDescriptions, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger" })
                             <span class="error hide require-modelName font-weight-bold">Model is required !</span>
@@ -97,12 +102,8 @@
                             @Html.DropDownList("ddlModelColor", (IEnumerable<SelectListItem>)ViewBag.ddlModelColor, "--Select Color--", new { @class = "form-control form-control-sm ctrl-changed" })
                             <span class="error hide require-ModelColor font-weight-bold">Mobile ModelColor is required !</span>
                         </div>
-                        
-                        <div class="col-md-2">
-                            <label for="ddlJobOrderType" class="control-label font-weight-bold">JobOrder Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
-                            @Html.DropDownList("ddlJobOrderType", (IEnumerable<SelectListItem>)ViewBag.ddlJobOrderType, "Select JobOrder Type", new { @class = "form-control form-control-sm ddlJobOrderType" })
-                            <span class="error hide require-type font-weight-bold">JobOrderType is required !</span>
-                        </div>
+
+
                     </div>
                     <div class="row text-sm">
                         <div class="col-md-3">
@@ -248,7 +249,7 @@
             //$('#dptJobEntryDate').datepicker('setDate', today);
             ////$('#dptJobEntryDate').()
             ////alert(date.getDate());
-            $("#warrantydate").hide();
+            $("#warrantydate").show();
             $("#chkWarrantyPaper").hide();
             $("#divApproxBill").hide();
             $("#ddlAccessories").attr("data-placeholder", "Select Accessories");
@@ -315,6 +316,29 @@
             }
             disable("#txtMobileNumber");
             disable("#txtAddress");
+        });
+        //Active Date Check
+        txtIMEI.change(function (e) {
+            e.preventDefault();
+            if ($.trim(txtIMEI.val()).length == 15 && ddlJobOrderType.val() == "Warrenty") {
+                var data = JSON.stringify({ imei: txtIMEI.val() });
+                console.log("Date")
+                //return console.log(data);
+                $.when(postReqWithData(dataType.applicationJson, dataType.json, type.post, '/Common2/GetWarrentyDateByIMEI', data)).then(function (res, status) {
+                    console.log(res);
+                    console.log(status);
+                    if (status === 'success') {
+                        if (res.WarrantyDate != null) {
+                            dptWarrantyDate.val(getDateFromJson(res.WarrantyDate));
+                        }
+                        else {
+                            bootbox.alert('Data Not Found');
+                        }
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                })
+            }
         });
         //show hide
         $('#ddlJobOrderType').change(function () {

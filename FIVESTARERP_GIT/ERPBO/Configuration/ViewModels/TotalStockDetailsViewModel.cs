@@ -18,5 +18,6 @@ namespace ERPBO.Configuration.ViewModels
         public int FaultyStock { get; set; }
         public int ScrapStock { get; set; }
         public int CareTransfer { get; set; }
+        public int DustStock { get; set; }
     }
 }

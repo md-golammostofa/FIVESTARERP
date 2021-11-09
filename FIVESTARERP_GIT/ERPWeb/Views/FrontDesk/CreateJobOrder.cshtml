@@ -97,9 +97,9 @@
                             <span class="error hide require-address font-weight-bold">Mobile No is required !</span>
                         </div>
                         <div class="col-md-3">
-                            <label for="ddlCustomerType" class="control-label font-weight-bold">Customer Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
-                            @Html.DropDownList("ddlCustomerType", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, new { @class = "form-control form-control-sm ctrl-changed" })
-                            <span class="error hide require-customerType font-weight-bold">Customer Type is required !</span>
+                            <label for="ddlJobOrderType" class="control-label font-weight-bold">JobOrder Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlJobOrderType", (IEnumerable<SelectListItem>)ViewBag.ddlJobOrderType, new { @class = "form-control form-control-sm ddlJobOrderType" })
+                            <span class="error hide require-type font-weight-bold">JobOrderType is required !</span>
                         </div>
                     </div>
                     <div class="row text-sm">
@@ -145,10 +145,11 @@
                             <span class="error hide require-accessories font-weight-bold">Accessories is required !</span>
                         </div>
                         <div class="col-md-3">
-                            <label for="ddlJobOrderType" class="control-label font-weight-bold">JobOrder Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
-                            @Html.DropDownList("ddlJobOrderType", (IEnumerable<SelectListItem>)ViewBag.ddlJobOrderType, "Select JobOrder Type", new { @class = "form-control form-control-sm ddlJobOrderType" })
-                            <span class="error hide require-type font-weight-bold">JobOrderType is required !</span>
+                            <label for="ddlCustomerType" class="control-label font-weight-bold">Customer Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlCustomerType", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, new { @class = "form-control form-control-sm ctrl-changed" })
+                            <span class="error hide require-customerType font-weight-bold">Customer Type is required !</span>
                         </div>
+                        
                     </div>
                     <div class="row text-sm">
                         <div class="col-md-3">
@@ -344,8 +345,8 @@
             //$('#dptJobEntryDate').datepicker('setDate', today);
             ////$('#dptJobEntryDate').()
             ////alert(date.getDate());
-            $('#warrantydate').hide();
-            $('#chkWarrantyPaper').hide();
+            $('#warrantydate').show();
+            $('#chkWarrantyPaper').show();
             $('#chkHandset').hide();
             $("#divCustomerSupportIMEI1").hide();
             //Initialize Select2 Elements
@@ -400,10 +401,34 @@
         })
 
         //
-        txtIMEI.change(function () {
-            $('.error').addClass('hide');
-            if ($.trim(txtHandsetIMEI.val()) != "" && $.trim(txtHandsetIMEI.val()).length == 15 && $.trim(txtHandsetIMEI1.val()) != "" && $.trim(txtHandsetIMEI1.val()).length == 15) {
-                data = JSON.stringify({ imei: txtIMEI.val().trim() });
+        //txtIMEI.change(function () {
+        //    $('.error').addClass('hide');
+        //    if ($.trim(txtHandsetIMEI.val()) != "" && $.trim(txtHandsetIMEI.val()).length == 15 && $.trim(txtHandsetIMEI1.val()) != "" && $.trim(txtHandsetIMEI1.val()).length == 15) {
+        //        data = JSON.stringify({ imei: txtIMEI.val().trim() });
+        //    }
+        //});
+
+        //warrenty Date
+        txtIMEI.change(function (e) {
+            e.preventDefault();
+            if ($.trim(txtIMEI.val()).length == 15 && ddlJobOrderType.val() == "Warrenty") {
+                var data = JSON.stringify({ imei: txtIMEI.val() });
+                console.log("Date")
+                //return console.log(data);
+                $.when(postReqWithData(dataType.applicationJson, dataType.json, type.post, '/Common2/GetWarrentyDateByIMEI', data)).then(function (res, status) {
+                    console.log(res);
+                    console.log(status);
+                    if (status === 'success') {
+                        if (res.WarrantyDate != null) {
+                            dptWarrantyDate.val(getDateFromJson(res.WarrantyDate));
+                        }
+                        else {
+                            bootbox.alert('Data Not Found');
+                        }
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                })
             }
         });
         //show/hide
@@ -620,6 +645,8 @@
                 console.log(error);
             })
         }
+
+        
         //Get Serch By IMEI1
         $("#SearchIMEI").click(function (e) {
             e.preventDefault();

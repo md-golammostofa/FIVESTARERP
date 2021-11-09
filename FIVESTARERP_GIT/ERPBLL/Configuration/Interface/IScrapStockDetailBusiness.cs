@@ -11,5 +11,6 @@ namespace ERPBLL.Configuration.Interface
     {
         bool SaveScrapStockIn(List<ScrapStockDetailDTO> dto, long userId, long orgId, long branchId);
         bool SaveFaultyScrapedStock(List<ScrapStockDetailDTO> dto, long userId, long orgId, long branchId);
+        bool SaveScrapStockOut(List<ScrapStockDetailDTO> dto, long userId, long orgId, long branchId);
     }
 }

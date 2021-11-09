@@ -10,7 +10,10 @@ using ERPBO.FrontDesk.ViewModels;
 using ERPWeb.Filters;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -479,6 +482,31 @@ namespace ERPWeb.Controllers
             //price.MobilePartStockInfoId = detailDTO.MobilePartStockDetailId;
             //price.SellPrice = detailDTO.SellPrice;
             return Json(price.SellPrice);
+        }
+        public async Task<ActionResult> GetWarrentyDateByIMEI(string imei)
+        {
+            string apiUrl = "http://103.108.140.249:85";
+            JobOrderViewModel jobOd = new JobOrderViewModel();
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(apiUrl + string.Format("/fsm/activation.php?imei={0}", imei)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var data =await response.Content.ReadAsStringAsync();
+                char[] charsToTrim = { '\n', ' ', '\'','\r','\t' };
+              
+                string result = data.Trim(charsToTrim);
+                if(result== "Not Found")
+                {
+                    jobOd.Remarks = "Not Found";
+                }
+                else
+                {
+                    DateTime enteredDate = DateTime.Parse(result);
+                    jobOd.WarrantyDate = enteredDate;
+                }
+                
+            }
+            return Json(jobOd);
         }
 
         #endregion

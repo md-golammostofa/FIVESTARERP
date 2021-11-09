@@ -152,4 +152,12 @@ namespace ERPDAL.ConfigurationDAL
     {
         public FaultyStockTransferDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
     }
+    public class DustStockInfoRepository : ConfigurationBaseRepository<DustStockInfo>
+    {
+        public DustStockInfoRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
+    public class DustStockDetailsRepository : ConfigurationBaseRepository<DustStockDetails>
+    {
+        public DustStockDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
 }

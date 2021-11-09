@@ -138,5 +138,52 @@ namespace ERPBLL.Configuration
             _scrapStockDetailRepository.InsertAll(scrapStockDetail);
             return _scrapStockDetailRepository.Save();
         }
+
+        public bool SaveScrapStockOut(List<ScrapStockDetailDTO> dto, long userId, long orgId, long branchId)
+        {
+            List<ScrapStockDetail> scrapStockDetail = new List<ScrapStockDetail>();
+            foreach (var item in dto)
+            {
+                ScrapStockDetail detail = new ScrapStockDetail()
+                {
+                    BranchId = branchId,
+                    EntryDate = DateTime.Now,
+                    EUserId = userId,
+                    DescriptionId = item.DescriptionId,
+                    StockStatus = StockStatus.StockOut,
+                    Quantity = item.Quantity,
+                    PartsId = item.PartsId,
+                    OrganizationId = orgId,
+                };
+                scrapStockDetail.Add(detail);
+                var scrapInfo = _scrapStockInfoBusiness.GetOneScrapedByModel(item.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
+                if (scrapInfo != null)
+                {
+                    scrapInfo.ScrapOutQty += item.Quantity;
+                    scrapInfo.UpdateDate = DateTime.Now;
+                    scrapInfo.UpUserId = userId;
+                    _scrapStockInfoRepository.Update(scrapInfo);
+                }
+                else
+                {
+                    ScrapStockInfo info = new ScrapStockInfo()
+                    {
+                        BranchId = branchId,
+                        CostPrice = 0,
+                        SellPrice = 0,
+                        EntryDate = DateTime.Now,
+                        EUserId = userId,
+                        DescriptionId = item.DescriptionId,
+                        ScrapQuantity = item.Quantity,
+                        PartsId = item.PartsId,
+                        OrganizationId = orgId,
+                    };
+                    _scrapStockInfoRepository.Insert(info);
+                    _scrapStockInfoRepository.Save();
+                }
+            }
+            _scrapStockDetailRepository.InsertAll(scrapStockDetail);
+            return _scrapStockDetailRepository.Save();
+        }
     }
 }

@@ -52,18 +52,21 @@ namespace ERPWeb.Controllers
         private readonly IScrapStockInfoBusiness _scrapStockInfoBusiness;
         private readonly IScrapStockDetailBusiness _scrapStockDetailBusiness;
         private readonly IFaultyStockTransferDetailsBusiness _faultyStockTransferDetailsBusiness;
+        private readonly IDustStockDetailsBusiness _dustStockDetailsBusiness;
+        private readonly IDustStockInfoBusiness _dustStockInfoBusiness;
 
 
         // Inventory //
         private readonly IDescriptionBusiness _descriptionBusiness;
         private readonly IColorBusiness _colorBusiness;
         private readonly IFaultyStockTransferInfoBusiness _faultyStockTransferInfoBusiness;
+        
         //ControlPanel
         private readonly IRoleBusiness _roleBusiness;
         //Front Desk
         private readonly IFaultyStockAssignTSBusiness _faultyStockAssignTSBusiness;
 
-        public ConfigurationController(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, ICustomerServiceBusiness customerServiceBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, IBranchBusiness2 branchBusiness, ITransferInfoBusiness transferInfoBusiness, ITransferDetailBusiness transferDetailBusiness, IBranchBusiness branchBusinesss, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IWorkShopBusiness workShopBusiness, IRepairBusiness repairBusiness, IDescriptionBusiness descriptionBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IColorBusiness colorBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IMissingStockBusiness missingStockBusiness, IStockTransferDetailModelToModelBusiness stockTransferDetailModelToModelBusiness, IStockTransferInfoModelToModelBusiness stockTransferInfoModelToModelBusiness, IRoleBusiness roleBusiness, IFaultyStockAssignTSBusiness faultyStockAssignTSBusiness, IScrapStockInfoBusiness scrapStockInfoBusiness, IDealerSSBusiness dealerSSBusiness, IColorSSBusiness colorSSBusiness, IBrandSSBusiness brandSSBusiness, IModelSSBusiness modelSSBusiness, IFaultyStockDetailBusiness faultyStockDetailBusiness, IScrapStockDetailBusiness scrapStockDetailBusiness, IFaultyStockTransferInfoBusiness faultyStockTransferInfoBusiness, IFaultyStockTransferDetailsBusiness faultyStockTransferDetailsBusiness)
+        public ConfigurationController(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, ICustomerServiceBusiness customerServiceBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, IBranchBusiness2 branchBusiness, ITransferInfoBusiness transferInfoBusiness, ITransferDetailBusiness transferDetailBusiness, IBranchBusiness branchBusinesss, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IWorkShopBusiness workShopBusiness, IRepairBusiness repairBusiness, IDescriptionBusiness descriptionBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IColorBusiness colorBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IMissingStockBusiness missingStockBusiness, IStockTransferDetailModelToModelBusiness stockTransferDetailModelToModelBusiness, IStockTransferInfoModelToModelBusiness stockTransferInfoModelToModelBusiness, IRoleBusiness roleBusiness, IFaultyStockAssignTSBusiness faultyStockAssignTSBusiness, IScrapStockInfoBusiness scrapStockInfoBusiness, IDealerSSBusiness dealerSSBusiness, IColorSSBusiness colorSSBusiness, IBrandSSBusiness brandSSBusiness, IModelSSBusiness modelSSBusiness, IFaultyStockDetailBusiness faultyStockDetailBusiness, IScrapStockDetailBusiness scrapStockDetailBusiness, IFaultyStockTransferInfoBusiness faultyStockTransferInfoBusiness, IFaultyStockTransferDetailsBusiness faultyStockTransferDetailsBusiness, IDustStockDetailsBusiness dustStockDetailsBusiness, IDustStockInfoBusiness dustStockInfoBusiness)
         {
             this._accessoriesBusiness = accessoriesBusiness;
             this._clientProblemBusiness = clientProblemBusiness;
@@ -99,7 +102,9 @@ namespace ERPWeb.Controllers
             this._scrapStockDetailBusiness = scrapStockDetailBusiness;
             this._faultyStockTransferInfoBusiness = faultyStockTransferInfoBusiness;
             this._faultyStockTransferDetailsBusiness = faultyStockTransferDetailsBusiness;
-            
+            this._dustStockDetailsBusiness = dustStockDetailsBusiness;
+            this._dustStockInfoBusiness = dustStockInfoBusiness;
+
 
             #region Inventory
             this._descriptionBusiness = descriptionBusiness;
@@ -878,6 +883,22 @@ namespace ERPWeb.Controllers
                 AutoMapper.Mapper.Map(dto, ViewModels);
                 return PartialView("_FaultyStockScrapList", ViewModels);
             }
+            else if(!string.IsNullOrEmpty(flag) && flag.Trim() !="" && flag == "DustStock"){
+                var dto = _dustStockInfoBusiness.GetAllStockForList(User.OrgId, User.BranchId).Select(d => new DustStockInfoDTO
+                {
+                    ModelId = d.ModelId,
+                    ModelName = _modelSSBusiness.GetModelById(d.ModelId, User.OrgId).ModelName,
+                    PartsId = d.PartsId,
+                    PartsName = _mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartName,
+                    PartsCode = _mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartCode,
+                    StockInQty = d.StockInQty,
+                    StockOutQty = d.StockOutQty,
+                    StockQty = (d.StockInQty - d.StockOutQty),
+                }).ToList();
+                List<DustStockInfoViewModel> viewModels = new List<DustStockInfoViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetDustStockList", viewModels);
+            }
             return View();
         }
 
@@ -1347,7 +1368,7 @@ namespace ERPWeb.Controllers
                     StateStatus = trans.StateStatus
                 }).AsEnumerable();
 
-                transferInfoDTO = transferInfoDTO.Where(s => (sWerehouseId == null || sWerehouseId == 0 || s.SWarehouseId == sWerehouseId)).ToList();
+                //transferInfoDTO = transferInfoDTO.Where(s => (sWerehouseId == null || sWerehouseId == 0 || s.SWarehouseId == sWerehouseId)).ToList();
 
                 List<TransferInfoViewModel> transferInfoViewModels = new List<TransferInfoViewModel>();
                 AutoMapper.Mapper.Map(transferInfoDTO, transferInfoViewModels);
@@ -1999,6 +2020,51 @@ namespace ERPWeb.Controllers
                 IsSuccess = _faultyStockTransferDetailsBusiness.SaveFaultyStockReceive(transferId, User.UserId, User.OrgId, User.BranchId);
             }
             return Json(IsSuccess);
+        }
+        #endregion
+
+        #region DustStock
+        public ActionResult CreateDustStockTransfer()
+        {
+            ViewBag.ddlMobilePart = _mobilePartBusiness.GetAllMobilePartAndCode(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.MobilePartName, Value = mobile.MobilePartId.ToString() }).ToList();
+
+            ViewBag.ddlModels = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
+            return View();
+        }
+        public ActionResult SaveDustStockTransfer(List<DustStockDetailsViewModel> details)
+        {
+            bool IsSuccess = false;
+            if (details.Count()>0)
+            {
+                List<DustStockDetailsDTO> dto = new List<DustStockDetailsDTO>();
+                AutoMapper.Mapper.Map(details, dto);
+                IsSuccess = _dustStockDetailsBusiness.SaveDustStock(dto, User.UserId, User.BranchId, User.OrgId);
+            }
+            return Json(IsSuccess);
+        }
+        public ActionResult GetDustStockList(string flag)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _dustStockInfoBusiness.GetAllStockForList(User.OrgId, User.BranchId).Select(d => new DustStockInfoDTO
+                {
+                    ModelId = d.ModelId,
+                    ModelName = _modelSSBusiness.GetModelById(d.ModelId, User.OrgId).ModelName,
+                    PartsId = d.PartsId,
+                    PartsName = _mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartName,
+                    PartsCode = _mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartCode,
+                    StockInQty = d.StockInQty,
+                    StockOutQty = d.StockOutQty,
+                    StockQty = (d.StockInQty - d.StockOutQty),
+                }).ToList();
+                List<DustStockInfoViewModel> viewModels = new List<DustStockInfoViewModel>();
+                AutoMapper.Mapper.Map(dto,viewModels);
+                return PartialView("_GetDustStockList", viewModels);
+            }
         }
         #endregion
     }

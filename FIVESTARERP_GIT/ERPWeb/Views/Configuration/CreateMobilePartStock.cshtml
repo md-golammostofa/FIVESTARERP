@@ -97,6 +97,8 @@
                                 <tr class="btn-dark text-center">
                                     <th>#SL</th>
                                     <th class="hide"></th>
+                                    <th>Model</th>
+                                    <th class="hide"></th>
                                     <th>Parts Name</th>
                                     <th>Cost Price</th>
                                     <th>Sell Price</th>
@@ -164,18 +166,20 @@
             e.preventDefault();
             if (validateInput() == true) {
                 disable("#ddlServicesWarehouse");
-                disable("#ddlModels");
+                //disable("#ddlModels");
                 var sl = $("#tblServicesWarehouseStock tbody tr").length;
                 var td1 = "<td class='text-center text-bold'>" + (sl + 1) + "</td>"
-                var td2 = "<td class='hide'>" + ddlMobilePart.val() + "</td>";
-                var td3 = "<td>" + $("#ddlMobilePart option:selected").text() + "</td>";
-                var td4 = "<td class='text-center'>" + txtCostPrice.val() + "</td>";
-                var td5 = "<td class='text-center'>" + txtSellPrice.val() + "</td>";
-                var td6 = "<td class='text-center'>" + txtStockInQty.val() + "</td>";
-                var td7 = "<td>" + txtRemarks.val() + "</td>";
-                var td8 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i> Delete</a></td>";
+                var td2 = "<td class='hide'>" + ddlModels.val() + "</td>";
+                var td3 = "<td>" + $("#ddlModels option:selected").text() + "</td>";
+                var td4 = "<td class='hide'>" + ddlMobilePart.val() + "</td>";
+                var td5 = "<td>" + $("#ddlMobilePart option:selected").text() + "</td>";
+                var td6 = "<td class='text-center'>" + txtCostPrice.val() + "</td>";
+                var td7 = "<td class='text-center'>" + txtSellPrice.val() + "</td>";
+                var td8 = "<td class='text-center'>" + txtStockInQty.val() + "</td>";
+                var td9 = "<td>" + txtRemarks.val() + "</td>";
+                var td10 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i> Delete</a></td>";
 
-                var tr = "<tr>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8 + "</tr>";
+                var tr = "<tr>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8 + td9 + td10 + "</tr>";
                 if ($("#tblServicesWarehouseStock tbody tr").length == 0) {
                     $("#tblServicesWarehouseStock tbody").append(tr);
                 }
@@ -188,6 +192,7 @@
 
         function clearCtrl() {
             ddlMobilePart.val('');
+            ddlMobilePart.trigger('change');
             txtStockStatus.val('');
             txtCostPrice.val('');
             txtSellPrice.val('');
@@ -221,17 +226,18 @@
                             var td = $(this).children('td');
                             reqData.push({
                                 SWarehouseId: ddlServicesWarehouse.val(),
-                                DescriptionId: TryParseInt(ddlModels.val(), 0),
-                                MobilePartId: td.eq(1).html(),
-                                CostPrice: td.eq(3).html(),
-                                SellPrice: td.eq(4).html(),
-                                Quantity: td.eq(5).html(),
-                                Remarks: td.eq(6).html()
+                                //DescriptionId: TryParseInt(ddlModels.val(), 0),
+                                DescriptionId: td.eq(1).html(),
+                                MobilePartId: td.eq(3).html(),
+                                CostPrice: td.eq(5).html(),
+                                SellPrice: td.eq(6).html(),
+                                Quantity: td.eq(7).html(),
+                                Remarks: td.eq(8).html()
                             });
                         })
                         reqData = JSON.stringify({ models: reqData });
                         console.log(reqData);
-
+                        //return console.log(reqData);
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Configuration/SaveMobilePartStockIn', reqData, getToken())).then(function (res, status)
                         {
                             if (res == true) {

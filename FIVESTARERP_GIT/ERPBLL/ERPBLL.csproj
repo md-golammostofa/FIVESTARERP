@@ -121,6 +121,8 @@
     <Compile Include="Configuration\CustomerBusiness.cs" />
     <Compile Include="Configuration\CustomerServiceBusiness.cs" />
     <Compile Include="Configuration\DealerSSBusiness.cs" />
+    <Compile Include="Configuration\DustStockDetailsBusiness.cs" />
+    <Compile Include="Configuration\DustStockInfoBusiness.cs" />
     <Compile Include="Configuration\FaultBusiness.cs" />
     <Compile Include="Configuration\FaultyStockDetailBusiness.cs" />
     <Compile Include="Configuration\FaultyStockInfoBusiness.cs" />
@@ -135,6 +137,8 @@
     <Compile Include="Configuration\Interface\ICustomerBusiness.cs" />
     <Compile Include="Configuration\Interface\ICustomerServiceBusiness.cs" />
     <Compile Include="Configuration\Interface\IDealerSSBusiness.cs" />
+    <Compile Include="Configuration\Interface\IDustStockDetailsBusiness.cs" />
+    <Compile Include="Configuration\Interface\IDustStockInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\IFaultBusiness.cs" />
     <Compile Include="Configuration\Interface\IFaultyStockDetailBusiness.cs" />
     <Compile Include="Configuration\Interface\IFaultyStockInfoBusiness.cs" />

@@ -11523,6 +11523,8 @@ namespace ERPWeb.Reports.DataSets {
             
             private global::System.Data.DataColumn columnCareTransfer;
             
+            private global::System.Data.DataColumn columnDustStock;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public TotalStockDataTable() {
@@ -11622,6 +11624,14 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn DustStockColumn {
+                get {
+                    return this.columnDustStock;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -11657,7 +11667,7 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public TotalStockRow AddTotalStockRow(string ModelName, string PartsName, string PartsCode, string Stock, string GoodStock, string FaultyStock, string ScrapStock, string CareTransfer) {
+            public TotalStockRow AddTotalStockRow(string ModelName, string PartsName, string PartsCode, string Stock, string GoodStock, string FaultyStock, string ScrapStock, string CareTransfer, string DustStock) {
                 TotalStockRow rowTotalStockRow = ((TotalStockRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ModelName,
@@ -11667,7 +11677,8 @@ namespace ERPWeb.Reports.DataSets {
                         GoodStock,
                         FaultyStock,
                         ScrapStock,
-                        CareTransfer};
+                        CareTransfer,
+                        DustStock};
                 rowTotalStockRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowTotalStockRow);
                 return rowTotalStockRow;
@@ -11698,6 +11709,7 @@ namespace ERPWeb.Reports.DataSets {
                 this.columnFaultyStock = base.Columns["FaultyStock"];
                 this.columnScrapStock = base.Columns["ScrapStock"];
                 this.columnCareTransfer = base.Columns["CareTransfer"];
+                this.columnDustStock = base.Columns["DustStock"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -11719,6 +11731,8 @@ namespace ERPWeb.Reports.DataSets {
                 base.Columns.Add(this.columnScrapStock);
                 this.columnCareTransfer = new global::System.Data.DataColumn("CareTransfer", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCareTransfer);
+                this.columnDustStock = new global::System.Data.DataColumn("DustStock", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDustStock);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -22106,6 +22120,22 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string DustStock {
+                get {
+                    try {
+                        return ((string)(this[this.tableTotalStock.DustStockColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DustStock\' in table \'TotalStock\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTotalStock.DustStockColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsModelNameNull() {
                 return this.IsNull(this.tableTotalStock.ModelNameColumn);
             }
@@ -22198,6 +22228,18 @@ namespace ERPWeb.Reports.DataSets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetCareTransferNull() {
                 this[this.tableTotalStock.CareTransferColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsDustStockNull() {
+                return this.IsNull(this.tableTotalStock.DustStockColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetDustStockNull() {
+                this[this.tableTotalStock.DustStockColumn] = global::System.Convert.DBNull;
             }
         }
         

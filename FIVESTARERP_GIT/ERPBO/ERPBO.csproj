@@ -108,6 +108,8 @@
     <Compile Include="Configuration\DomainModels\ColorSS.cs" />
     <Compile Include="Configuration\DomainModels\Customer.cs" />
     <Compile Include="Configuration\DomainModels\CustomerService.cs" />
+    <Compile Include="Configuration\DomainModels\DustStockDetails.cs" />
+    <Compile Include="Configuration\DomainModels\DustStockInfo.cs" />
     <Compile Include="Configuration\DomainModels\Fault.cs" />
     <Compile Include="Configuration\DomainModels\FaultyStockDetails.cs" />
     <Compile Include="Configuration\DomainModels\FaultyStockInfo.cs" />
@@ -136,6 +138,8 @@
     <Compile Include="Configuration\DTOModels\ColorSSDTO.cs" />
     <Compile Include="Configuration\DTOModels\CustomerDTO.cs" />
     <Compile Include="Configuration\DTOModels\CustomerServiceDTO.cs" />
+    <Compile Include="Configuration\DTOModels\DustStockDetailsDTO.cs" />
+    <Compile Include="Configuration\DTOModels\DustStockInfoDTO.cs" />
     <Compile Include="Configuration\DTOModels\FaultDTO.cs" />
     <Compile Include="Configuration\DTOModels\FaultyStockDetailDTO.cs" />
     <Compile Include="Configuration\DTOModels\FaultyStockInfoDTO.cs" />
@@ -167,6 +171,8 @@
     <Compile Include="Configuration\ViewModels\ColorSSViewModel.cs" />
     <Compile Include="Configuration\ViewModels\CustomerServiceViewModel.cs" />
     <Compile Include="Configuration\ViewModels\CustomerViewModel.cs" />
+    <Compile Include="Configuration\ViewModels\DustStockDetailsViewModel.cs" />
+    <Compile Include="Configuration\ViewModels\DustStockInfoViewModel.cs" />
     <Compile Include="Configuration\ViewModels\FaultViewModel.cs" />
     <Compile Include="Configuration\ViewModels\FaultyStockDetailViewModel.cs" />
     <Compile Include="Configuration\ViewModels\FaultyStockInfoViewModel.cs" />

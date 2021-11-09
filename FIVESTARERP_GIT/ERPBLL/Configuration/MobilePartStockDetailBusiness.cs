@@ -446,14 +446,15 @@ namespace ERPBLL.Configuration
                 param += string.Format(@" and sti.MobilePartId ={0}", partsId);
             }
 
-            query = string.Format(@"Select DescriptionId,MobilePartId,ModelName,PartsName,PartsCode,(GoodStock+FaultyStock+ScrapStock+CareTransfer)'Stock',GoodStock,FaultyStock,ScrapStock,CareTransfer From( Select sti.DescriptionId,sti.MobilePartId, m.ModelName,ps.MobilePartName'PartsName',ps.MobilePartCode'PartsCode',sti.StockInQty,ISNULL((sti.StockInQty-sti.StockOutQty),0)'GoodStock',ISNULL((ISNULL(fs.StockInQty,0)-ISNULL(fs.StockOutQty,0)),0)'FaultyStock',ISNULL(sc.ScrapQuantity,0)'ScrapStock',Sum(ISNULL(tsb.IssueQty,0))'CareTransfer' From [Configuration].dbo.tblMobilePartStockInfo sti
+            query = string.Format(@"Select DescriptionId,MobilePartId,ModelName,PartsName,PartsCode,(GoodStock+FaultyStock+ScrapStock+CareTransfer+DustStock)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer From( Select sti.DescriptionId,sti.MobilePartId, m.ModelName,ps.MobilePartName'PartsName',ps.MobilePartCode'PartsCode',sti.StockInQty,ISNULL((sti.StockInQty-sti.StockOutQty),0)'GoodStock',ISNULL((ISNULL(fs.StockInQty,0)-ISNULL(fs.StockOutQty,0)),0)'FaultyStock',ISNULL((ISNULL(sc.ScrapQuantity,0)-ISNULL(sc.ScrapOutQty,0)),0)'ScrapStock',ISNULL(ds.StockInQty,0)'DustStock',Sum(ISNULL(tsb.IssueQty,0))'CareTransfer' From [Configuration].dbo.tblMobilePartStockInfo sti
 Left Join [Configuration].dbo.tblModelSS m on sti.DescriptionId=m.ModelId
 Left Join [Configuration].dbo.tblMobileParts ps on sti.MobilePartId=ps.MobilePartId
 Left Join [Configuration].dbo.tblFaultyStockInfo fs on sti.DescriptionId=fs.DescriptionId and sti.MobilePartId=fs.PartsId and sti.BranchId=fs.BranchId
 Left Join [Configuration].dbo.tblScrapStockInfo sc on sti.DescriptionId=sc.DescriptionId and sti.MobilePartId=sc.PartsId and sti.BranchId=sc.BranchId
 Left Join [Configuration].dbo.tblTransferDetails tsb on sti.DescriptionId=tsb.DescriptionId and sti.MobilePartId=tsb.PartsId and sti.BranchId=tsb.BranchTo
+Left Join [Configuration].dbo.tblDustStockInfo ds on sti.DescriptionId=ds.ModelId and sti.MobilePartId=ds.PartsId and sti.BranchId=ds.BranchId
 Where 1=1{0}
-Group By sti.DescriptionId,sti.MobilePartId,m.ModelName,ps.MobilePartName,ps.MobilePartCode,sti.StockInQty,sti.StockOutQty,fs.StockInQty,fs.StockOutQty,sc.ScrapQuantity) tbl1
+Group By sti.DescriptionId,sti.MobilePartId,m.ModelName,ps.MobilePartName,ps.MobilePartCode,sti.StockInQty,sti.StockOutQty,fs.StockInQty,fs.StockOutQty,sc.ScrapQuantity,sc.ScrapOutQty,ds.StockInQty) tbl1
 ", Utility.ParamChecker(param));
             return query;
         }
