@@ -1460,7 +1460,16 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Dealer Receipt</Value>
+                <Value>Dealer Receipt-</Value>
+                <Style>
+                  <FontFamily>times New Roman</FontFamily>
+                  <FontSize>14pt</FontSize>
+                  <TextDecoration>Underline</TextDecoration>
+                </Style>
+              </TextRun>
+              <TextRun>
+                <Label>RecevingId</Label>
+                <Value>=First(Fields!MultipleJobOrderCode.Value, "DealerReceipt")</Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
                   <FontSize>14pt</FontSize>
@@ -1475,9 +1484,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox46</rd:DefaultName>
         <Top>0.86066in</Top>
-        <Left>3.7003in</Left>
+        <Left>2.46072in</Left>
         <Height>0.31597in</Height>
-        <Width>3.34239in</Width>
+        <Width>5.96262in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -1813,6 +1822,10 @@
         <Field Name="ProbablyDate">
           <DataField>ProbablyDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="MultipleJobOrderCode">
+          <DataField>MultipleJobOrderCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>

@@ -54,5 +54,25 @@ namespace ERPBLL.FrontDesk
             jobOrderServiceRepository.InsertAll(listjobOrderService);
             return jobOrderServiceRepository.Save();
         }
+        public bool SaveJobOrderServicveEdit(List<JobOrderServiceDTO> jobOrderServices, long userId, long orgId)
+        {
+            List<JobOrderService> listjobOrderService = new List<JobOrderService>();
+            var serviceslist = GetJobOrderServiceByJobOrderId(jobOrderServices.FirstOrDefault().JobOrderId, orgId).ToList();
+            jobOrderServiceRepository.DeleteAll(serviceslist);
+            foreach (var item in jobOrderServices)
+            {
+                JobOrderService jobOrderService = new JobOrderService
+                {
+                    ServiceId = item.ServiceId,
+                    EntryDate = DateTime.Now,
+                    EUserId = userId,
+                    OrganizationId = orgId,
+                    JobOrderId = item.JobOrderId
+                };
+                listjobOrderService.Add(jobOrderService);
+            }
+            jobOrderServiceRepository.InsertAll(listjobOrderService);
+            return jobOrderServiceRepository.Save();
+        }
     }
 }

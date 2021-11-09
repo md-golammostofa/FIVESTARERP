@@ -35,5 +35,6 @@ namespace ERPBO.Configuration.DTOModels
         public int IssueQty { get; set; }
         public string PartsCode { get; set; }
         public int AvailableQty { get; set; }
+        public string Model { get; set; }
     }
 }

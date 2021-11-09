@@ -87,7 +87,7 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
                     EUserId = userId,
                     BranchId = branchId,
                     ReferrenceNumber = reqInfo.TransferCode,
-                    DescriptionId = reqInfo.DescriptionId
+                    DescriptionId = item.DescriptionId
                 };
                 receiveStockInItems.Add(stockInItem);
             }
@@ -227,7 +227,7 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
             }
             foreach(var item in dto.TransferDetails)
             {
-                var partsPrice = _mobilePartStockInfoBusiness.GetPriceByModel(dto.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
+                var partsPrice = _mobilePartStockInfoBusiness.GetPriceByModel(item.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
                 var reqDetails = _transferDetailBusiness.GetOneByDetailId(item.TransferDetailId, orgId, branchId);
                 if(reqDetails != null)
                 {
@@ -252,7 +252,7 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
                     EUserId = userId,
                     BranchId = branchId,
                     ReferrenceNumber = reqInfo.TransferCode,
-                    DescriptionId = reqInfo.DescriptionId
+                    DescriptionId = item.DescriptionId
                 };
                 TransferStockOutItems.Add(stockOutItem);
             }

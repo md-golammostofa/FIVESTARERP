@@ -1172,6 +1172,8 @@ namespace ERPWeb.Reports.DataSets {
             
             private global::System.Data.DataColumn columnProbablyDate;
             
+            private global::System.Data.DataColumn columnMultipleJobOrderCode;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public JobOrderDataTable() {
@@ -1559,6 +1561,14 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn MultipleJobOrderCodeColumn {
+                get {
+                    return this.columnMultipleJobOrderCode;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1638,7 +1648,8 @@ namespace ERPWeb.Reports.DataSets {
                         string CourierNumber, 
                         string ApproxBill, 
                         string MultipleDeliveryCode, 
-                        System.DateTime ProbablyDate) {
+                        System.DateTime ProbablyDate, 
+                        string MultipleJobOrderCode) {
                 JobOrderRow rowJobOrderRow = ((JobOrderRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         JodOrderId,
@@ -1684,7 +1695,8 @@ namespace ERPWeb.Reports.DataSets {
                         CourierNumber,
                         ApproxBill,
                         MultipleDeliveryCode,
-                        ProbablyDate};
+                        ProbablyDate,
+                        MultipleJobOrderCode};
                 rowJobOrderRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowJobOrderRow);
                 return rowJobOrderRow;
@@ -1751,6 +1763,7 @@ namespace ERPWeb.Reports.DataSets {
                 this.columnApproxBill = base.Columns["ApproxBill"];
                 this.columnMultipleDeliveryCode = base.Columns["MultipleDeliveryCode"];
                 this.columnProbablyDate = base.Columns["ProbablyDate"];
+                this.columnMultipleJobOrderCode = base.Columns["MultipleJobOrderCode"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1844,6 +1857,8 @@ namespace ERPWeb.Reports.DataSets {
                 base.Columns.Add(this.columnMultipleDeliveryCode);
                 this.columnProbablyDate = new global::System.Data.DataColumn("ProbablyDate", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnProbablyDate);
+                this.columnMultipleJobOrderCode = new global::System.Data.DataColumn("MultipleJobOrderCode", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMultipleJobOrderCode);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -12550,6 +12565,22 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string MultipleJobOrderCode {
+                get {
+                    try {
+                        return ((string)(this[this.tableJobOrder.MultipleJobOrderCodeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'MultipleJobOrderCode\' in table \'JobOrder\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableJobOrder.MultipleJobOrderCodeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsJodOrderIdNull() {
                 return this.IsNull(this.tableJobOrder.JodOrderIdColumn);
             }
@@ -13074,6 +13105,18 @@ namespace ERPWeb.Reports.DataSets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetProbablyDateNull() {
                 this[this.tableJobOrder.ProbablyDateColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsMultipleJobOrderCodeNull() {
+                return this.IsNull(this.tableJobOrder.MultipleJobOrderCodeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetMultipleJobOrderCodeNull() {
+                this[this.tableJobOrder.MultipleJobOrderCodeColumn] = global::System.Convert.DBNull;
             }
         }
         

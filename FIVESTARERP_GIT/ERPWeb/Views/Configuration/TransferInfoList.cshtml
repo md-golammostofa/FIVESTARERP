@@ -197,12 +197,14 @@
                     var tds = $(this).children('td');
                     var infoId = tds.eq('1').html();
                     var detId = tds.eq('2').html();
-                    var partsId = tds.eq('3').html();
-                    var issuQty = tds.eq('7').html();
+                    var model = tds.eq('3').html();
+                    var partsId = tds.eq('4').html();
+                    var issuQty = tds.eq('8').html();
 
                     details.push({
                         TransferInfoId: TryParseInt(infoId, 0),
-                        TransferDetailId: TryParseInt(detId,0),
+                        TransferDetailId: TryParseInt(detId, 0),
+                        DescriptionId: TryParseInt(model,0),
                         PartsId: TryParseInt(partsId, 0),
                         IssueQty: TryParseInt(issuQty, 0),
                     })

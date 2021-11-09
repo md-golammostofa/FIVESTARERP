@@ -37,7 +37,7 @@ namespace ERPBLL.Configuration
 
         public IEnumerable<TransferDetailDTO> GetAllTransferDetailDataByInfoId(long requsitionId, long orgId, long branchId)
         {
-            return this._configurationDb.Db.Database.SqlQuery<TransferDetailDTO>(string.Format(@"Select details.TransferDetailId,details.TransferInfoId,details.DescriptionId,m.ModelName,details.PartsId,p.MobilePartName'PartsName',p.MobilePartCode'PartsCode',details.Quantity,details.IssueQty,ISNULL((ISNULL(ms.StockInQty,0)-ISNULL(ms.StockOutQty,0)),0)'AvailableQty'  From tblTransferDetails details
+            return this._configurationDb.Db.Database.SqlQuery<TransferDetailDTO>(string.Format(@"Select details.TransferDetailId,details.TransferInfoId,details.DescriptionId,m.ModelName'Model',details.PartsId,p.MobilePartName'PartsName',p.MobilePartCode'PartsCode',details.Quantity,details.IssueQty,ISNULL((ISNULL(ms.StockInQty,0)-ISNULL(ms.StockOutQty,0)),0)'AvailableQty'  From tblTransferDetails details
 Left Join tblModelSS m on details.DescriptionId=m.ModelId
 Left Join tblMobileParts p on details.PartsId=p.MobilePartId
 Left Join tblMobilePartStockInfo ms on details.DescriptionId=ms.DescriptionId and details.PartsId=ms.MobilePartId and details.BranchTo=ms.BranchId

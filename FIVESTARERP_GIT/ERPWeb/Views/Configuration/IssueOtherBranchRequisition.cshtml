@@ -61,8 +61,8 @@
                                     <td style="width:15%; background-color:#e1dada">@Model.TransferCode</td>
                                     <td class="alert-primary" style="width:10%">Branch</td>
                                     <td style="width:15%; background-color:#e1dada">@Model.BranchName</td>
-                                    <td class="alert-primary" style="width:12%">Model</td>
-                                    <td style="width:16%; background-color:#e1dada">@Model.ModelName</td>
+                                    @*<td class="alert-primary" style="width:12%">Model</td>
+                                    <td style="width:16%; background-color:#e1dada">@Model.ModelName</td>*@
                                     <td class="alert-primary" style="width:10%">StateStatus</td>
                                     <td style="width:12%; background-color:#e1dada">@Model.StateStatus</td>
                                 </tr>
@@ -136,8 +136,9 @@
                             details.push({
                                 TransferDetailId: tds.eq(1).html(),
                                 PartsId: tds.eq(2).html(),
-                                Quantity: tds.eq(5).html(),
-                                IssueQty: tds.eq(6).children('input[type="number"]').val()
+                                DescriptionId: tds.eq(3).html(),
+                                Quantity: tds.eq(7).html(),
+                                IssueQty: tds.eq(8).children('input[type="number"]').val()
                             })
                         })
 

@@ -1457,6 +1457,8 @@ namespace ERPWeb.Controllers
                 OrganizationId = details.OrganizationId,
                 EUserId = details.EUserId,
                 EntryDate = details.EntryDate,
+                DescriptionId=details.DescriptionId,
+                Model = _modelSSBusiness.GetModelById(details.DescriptionId.Value, User.OrgId).ModelName,
             }).ToList();
             ViewBag.infoStateStatus = info.StateStatus;
             //ViewBag.ddlServicesWarehouse = _servicesWarehouseBusiness.GetAllServiceWarehouseByOrgId(User.OrgId, info.BranchTo.Value).Select(ware => new SelectListItem { Text = ware.ServicesWarehouseName, Value = ware.SWarehouseId.ToString() }).ToList();
@@ -1527,6 +1529,7 @@ namespace ERPWeb.Controllers
                 EntryDate = details.EntryDate,
                 //
                 IssueQty=details.IssueQty,
+                Model = _modelSSBusiness.GetModelById(details.DescriptionId.Value, User.OrgId).ModelName,
             }).ToList();
 
             ViewBag.ddlServicesWarehouse = _servicesWarehouseBusiness.GetAllServiceWarehouseByOrgId(User.OrgId, info.BranchTo.Value).Select(ware => new SelectListItem { Text = ware.ServicesWarehouseName, Value = ware.SWarehouseId.ToString() }).ToList();
