@@ -22,6 +22,12 @@
                     <li class="nav-item hide">
                         <a class="nav-link" id="custom-tabs-two-receivedReturnJobList-tab" data-toggle="pill" href="#custom-tabs-two-receivedReturnJobList" role="tab" aria-controls="custom-tabs-two-receivedReturnJobList" aria-selected="false">Receive Return Job</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-two-transferJobList-tab" data-toggle="pill" href="#custom-tabs-two-transferJobList" role="tab" aria-controls="custom-tabs-two-transferJobList" aria-selected="false">Transfer Job List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-two-returnJobList-tab" data-toggle="pill" href="#custom-tabs-two-returnJobList" role="tab" aria-controls="custom-tabs-two-returnJobList" aria-selected="false">Return Job List</a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body shadow">
@@ -291,6 +297,88 @@
                                         <div class="row">
                                             <div class="col-md-12 text-sm text-sm" id="dataContainer4" style="overflow-y:scroll">
                                                 @*@{Html.RenderAction("ReceiveReturnJobOrder", new { @flag = "view" });}*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-transferJobList" role="tabpanel" aria-labelledby="custom-tabs-two-transferJobList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card shadow card-gray-dark">
+                                    <div class="card-header shadow">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    Transfer Job List
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card shadow card-navy">
+                                    <div class="card-body text-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 text-sm text-sm" id="dataContainer5" style="overflow-y:scroll">
+                                                @{Html.RenderAction("JobTransferList", new { @flag = "view" });}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-returnJobList" role="tabpanel" aria-labelledby="custom-tabs-two-returnJobList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card shadow card-gray-dark">
+                                    <div class="card-header shadow">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    Return Job List
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card shadow card-navy">
+                                    <div class="card-body text-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 text-sm text-sm" id="dataContainer5" style="overflow-y:scroll">
+                                                @{Html.RenderAction("JobReturnList", new { @flag = "view" });}
                                             </div>
                                         </div>
                                     </div>

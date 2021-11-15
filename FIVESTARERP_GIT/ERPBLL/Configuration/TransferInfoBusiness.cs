@@ -258,7 +258,7 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
             }
             if (transferInfoRepository.Save() == true)
             {
-                IsSuccess = _mobilePartStockDetailBusiness.SaveMobilePartStockOut(TransferStockOutItems, userId, orgId, branchId);
+                IsSuccess = _mobilePartStockDetailBusiness.SaveMobilePartStockOut(TransferStockOutItems, orgId, branchId, userId);
             }
             return IsSuccess;
         }

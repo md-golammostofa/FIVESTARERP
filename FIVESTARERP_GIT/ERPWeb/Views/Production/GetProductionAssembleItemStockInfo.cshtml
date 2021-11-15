@@ -23,6 +23,9 @@
                     <li class="nav-item">
                         <a class="nav-link" id="custom-tabs-three-repairSectionNonSemiFinishGoodStockList-tab" data-toggle="pill" href="#custom-tabs-three-repairSectionNonSemiFinishGoodStockList" role="tab" aria-controls="custom-tabs-three-repairSectionNonSemiFinishGoodStockList" aria-selected="true">Non-Semi Finish Stock(R S)</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-three-halfDoneProductTransferStockList-tab" data-toggle="pill" href="#custom-tabs-three-halfDoneProductTransferStockList" role="tab" aria-controls="custom-tabs-three-halfDoneProductTransferStockList" aria-selected="true">Half Done Transfer List</a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body text-sm">
@@ -275,8 +278,8 @@
                                 <div class="col-md-12" style="margin-top:-10px">
                                     <div class="card card-navy">
                                         @*<div class="card-header">
-                                            <h6 class="card-title">Search By</h6>
-                                        </div>*@
+                            <h6 class="card-title">Search By</h6>
+                        </div>*@
                                         <div class="card-body">
                                             <div class="row" style="margin-top:-15px">
                                             </div>
@@ -311,9 +314,7 @@
                                                     <h5 class="text-center text-bold">Repair Section Non-Semi Finish Good Stock Info</h5>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <a href="/Production/CreateHalfDoneProduct" style="background-color:darkblue" class="float-right btn btn-sm btn-outline-primary" title="Details View">
-                                                        <i class="fas fa-plus"></i> Transfer To W
-                                                    </a>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -358,6 +359,51 @@
                                             <div class="card-body">
                                                 <div class="col-md-12" id="dataContainer5">
                                                     @{Html.RenderAction("GetRepairSectionSemiFinishGoodStockInfoList", new { @flag = "View" });}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="custom-tabs-three-halfDoneProductTransferStockList" role="tabpanel" aria-labelledby="custom-tabs-three-halfDoneProductTransferStockList-tab">
+                            <div class="row" style="margin-top:-15px">
+                                <div class="col-md-12">
+                                    <div class="card card-gray-dark">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h5 class="text-center text-bold">Half Done Product Transfer List</h5>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <a href="/Production/CreateHalfDoneProductTransferToWarehouse" style="background-color:darkblue" class="float-right btn btn-sm btn-outline-primary" title="Transfer">
+                                                        <i class="fas fa-plus"></i> Transfer To W
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="margin-top:-10px">
+                                    <div class="card card-navy">
+                                        <div class="card-header">
+                                            <h6 class="card-title">Search By</h6>
+                                        </div>
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top:-10px">
+                                    <div class="card">
+                                        <div class="row">
+                                            <div class="card-body">
+                                                <div class="col-md-12" id="dataContainer6">
+                                                    @{Html.RenderAction("GetMiniStockTransferList", new { @flag = "View" });}
                                                 </div>
                                             </div>
                                         </div>

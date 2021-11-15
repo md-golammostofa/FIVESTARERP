@@ -932,6 +932,13 @@
     <Content Include="Views\FrontDesk\_GetIMEICountReport.cshtml" />
     <Content Include="Views\FrontDesk\GetIMEICountReport.cshtml" />
     <Content Include="Views\User\OLD_INDEX.cshtml" />
+    <Content Include="Views\FrontDesk\_JobTransferList.cshtml" />
+    <Content Include="Views\Configuration\CreateDustStockTransfer.cshtml" />
+    <Content Include="Views\Configuration\_GetDustStockList.cshtml" />
+    <Content Include="Views\FrontDesk\_FaultyStockAssignTSList.cshtml" />
+    <Content Include="Views\FrontDesk\_JobReturnList.cshtml" />
+    <Content Include="Views\Production\_GetMiniStockTransferList.cshtml" />
+    <Content Include="Views\Production\CreateHalfDoneProductTransferToWarehouse.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

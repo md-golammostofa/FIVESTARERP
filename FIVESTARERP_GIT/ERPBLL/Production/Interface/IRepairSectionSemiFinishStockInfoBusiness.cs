@@ -18,6 +18,7 @@ namespace ERPBLL.Production.Interface
         bool UpdateStockAndReceiveQRCodeMiniStock(string qrCode,long userId,long orgId);
         RepairSectionSemiFinishStockInfo GetInfoQRCodeStocKByQRCode(long flId, long assId, long rpId, long qcId, long orgId);
         RepairSectionSemiFinishStockDetails GetDetailsQRCodeStocKByQRCode(string qrCode, long orgId);
+        RepairSectionSemiFinishStockInfo GetStockByAllId(long flId, long assId, long rpId, long qcId,long model,long orgId);
 
     }
 }

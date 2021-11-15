@@ -333,5 +333,13 @@ left join [ControlPanel].dbo.tblBranch b on b.BranchId=jrd.FromBranch
 where JobStatus='Repair-Done' and 1=1 {0}", Utility.ParamChecker(param));
             return query;
         }
+
+        public IEnumerable<JobOrderReturnDetailDTO> JobReturnList(long orgId, long branchId)
+        {
+            var data = this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderReturnDetailDTO>(string.Format(@"Select TransferCode,JobOrderCode,TransferStatus,BranchName From tblJobOrderReturnDetails jod
+Left Join [ControlPanel].dbo.tblBranch b on jod.ToBranch=b.BranchId
+Where jod.OrganizationId={0} and jod.BranchId={1}", orgId, branchId)).ToList();
+            return data;
+        }
     }
 }

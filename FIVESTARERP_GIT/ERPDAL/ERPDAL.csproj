@@ -901,6 +901,14 @@
     <Compile Include="ProductionContextMigrations\202111080801474_Production_add_tblRepairIn_tblRepairOut.Designer.cs">
       <DependentUpon>202111080801474_Production_add_tblRepairIn_tblRepairOut.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProductionContextMigrations\202111131038444_Production_MiniStockTransferToWarehouse.cs" />
+    <Compile Include="ProductionContextMigrations\202111131038444_Production_MiniStockTransferToWarehouse.Designer.cs">
+      <DependentUpon>202111131038444_Production_MiniStockTransferToWarehouse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202111140940066_Production_MiniStockQCLineAdd.cs" />
+    <Compile Include="ProductionContextMigrations\202111140940066_Production_MiniStockQCLineAdd.Designer.cs">
+      <DependentUpon>202111140940066_Production_MiniStockQCLineAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProductionContextMigrations\Configuration.cs" />
     <Compile Include="ProductionDAL\ProductionRepository.cs" />
     <Compile Include="ProductionDAL\ProductionUnitOfWork.cs" />
@@ -1619,6 +1627,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202111080801474_Production_add_tblRepairIn_tblRepairOut.resx">
       <DependentUpon>202111080801474_Production_add_tblRepairIn_tblRepairOut.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202111131038444_Production_MiniStockTransferToWarehouse.resx">
+      <DependentUpon>202111131038444_Production_MiniStockTransferToWarehouse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202111140940066_Production_MiniStockQCLineAdd.resx">
+      <DependentUpon>202111140940066_Production_MiniStockQCLineAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.resx">
       <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>

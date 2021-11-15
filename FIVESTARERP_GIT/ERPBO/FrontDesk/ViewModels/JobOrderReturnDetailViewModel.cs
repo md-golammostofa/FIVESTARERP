@@ -33,5 +33,6 @@ namespace ERPBO.FrontDesk.ViewModels
         public string CourierName { get; set; }
         public string CourierNumber { get; set; }
         public string ApproxBill { get; set; }
+        public string BranchName { get; set; }
     }
 }

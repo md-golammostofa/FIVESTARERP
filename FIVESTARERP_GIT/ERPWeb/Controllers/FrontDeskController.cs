@@ -812,6 +812,35 @@ namespace ERPWeb.Controllers
             }
             return Json(IsSuccess);
         }
+        public ActionResult JobTransferList(string flag)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderTransferDetailBusiness.JobOrderTransferList(User.OrgId, User.BranchId);
+                List<JobOrderTransferDetailViewModel> viewModels = new List<JobOrderTransferDetailViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_JobTransferList", viewModels);
+            }
+            
+        }
+        public ActionResult JobReturnList(string flag)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderReturnDetailBusiness.JobReturnList(User.OrgId, User.BranchId);
+                List<JobOrderReturnDetailViewModel> viewModels = new List<JobOrderReturnDetailViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_JobReturnList",viewModels);
+            }
+        }
         #endregion
 
         #region JobOrderTS

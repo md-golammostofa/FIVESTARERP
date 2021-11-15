@@ -233,5 +233,10 @@ Order By rsinfo.EntryDate desc", orgId, Utility.ParamChecker(param));
         {
             return _repairSectionSemiFinishStockDetailsRepository.GetOneByOrg(d =>d.QRCode==qrCode && d.OrganizationId == orgId);
         }
+
+        public RepairSectionSemiFinishStockInfo GetStockByAllId(long flId, long assId, long rpId, long qcId, long model, long orgId)
+        {
+            return _repairSectionSemiFinishStockInfoRepository.GetOneByOrg(h => h.ProductionFloorId == flId && h.AssemblyLineId == assId && h.RepairLineId == rpId && h.QCId == qcId && h.DescriptionId == model && h.OrganizationId == orgId);
+        }
     }
 }

@@ -2035,7 +2035,7 @@
         })
 
         function LoadDealerDataTable() {
-            var data = { flag: "dealer", name: $.trim(searchByDealer.val()), page: pageNo }
+            var data = { flag: "dealer", name: $.trim(searchByDealer.val())}
             $.when(getReqWithData(dataType.html, type.get, '/Configuration/AccessoriesList', data)).then(function (res, status) {
                 console.log(res);
                 if (status === "success") {
@@ -2519,10 +2519,10 @@
                     pageNo = $(this).attr('data-page-no');
                     LoadRepairDataTable();
                 }
-                else if ($(this).parent().parents('div').hasClass('dealer')) {
-                    pageNo = $(this).attr('data-page-no');
-                    LoadDealerDataTable();
-                }
+                //else if ($(this).parent().parents('div').hasClass('dealer')) {
+                //    pageNo = $(this).attr('data-page-no');
+                //    LoadDealerDataTable();
+                //}
                 else if ($(this).parent().parents('div').hasClass('color')) {
                     pageNo = $(this).attr('data-page-no');
                     LoadColorDataTable();

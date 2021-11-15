@@ -169,6 +169,12 @@ namespace ERPWeb.Controllers
                 var jobOrdeAssignToTS = dto.FirstOrDefault(req => req.StateStatus == JobOrderStatus.AssignToTS);
                 ViewBag.JobOrdeAssignToTS = (jobOrdeAssignToTS == null) ? new DashboardRequisitionSummeryViewModel { StateStatus = JobOrderStatus.AssignToTS, TotalCount = 0 } : new DashboardRequisitionSummeryViewModel { StateStatus = jobOrdeAssignToTS.StateStatus, TotalCount = jobOrdeAssignToTS.TotalCount };
 
+                var jobOrdeAssignToQC = dto.FirstOrDefault(req => req.StateStatus == JobOrderStatus.QCAssigned);
+                ViewBag.JobOrdeAssignToQC = (jobOrdeAssignToQC == null) ? new DashboardRequisitionSummeryViewModel { StateStatus = JobOrderStatus.QCAssigned, TotalCount = 0 } : new DashboardRequisitionSummeryViewModel { StateStatus = jobOrdeAssignToQC.StateStatus, TotalCount = jobOrdeAssignToQC.TotalCount };
+
+                var jobOrdeHandsetChange = dto.FirstOrDefault(req => req.StateStatus == JobOrderStatus.HandSetChange);
+                ViewBag.JobOrdeHandsetChange = (jobOrdeHandsetChange == null) ? new DashboardRequisitionSummeryViewModel { StateStatus = JobOrderStatus.HandSetChange, TotalCount = 0 } : new DashboardRequisitionSummeryViewModel { StateStatus = jobOrdeHandsetChange.StateStatus, TotalCount = jobOrdeHandsetChange.TotalCount };
+
                 // Daily Job Orders
                 IEnumerable<DashboardDailyReceiveJobOrderDTO> dashboardJobOrders = _jobOrderBusiness.DashboardDailyJobOrder(User.OrgId,User.BranchId);
                 IEnumerable<DashboardDailyReceiveJobOrderViewModel> dashboardJob = new List<DashboardDailyReceiveJobOrderViewModel>();
