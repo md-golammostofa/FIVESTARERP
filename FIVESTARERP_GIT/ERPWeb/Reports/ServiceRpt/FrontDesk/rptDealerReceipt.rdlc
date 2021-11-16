@@ -185,7 +185,7 @@
               <Width>0.90333in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.66958in</Width>
+              <Width>1.01333in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.19095in</Width>
@@ -200,10 +200,10 @@
               <Width>2.40458in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.09624in</Width>
+              <Width>1.96082in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.40917in</Width>
+              <Width>1.20084in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -291,7 +291,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Color</Value>
+                              <Value>Job Code</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -610,14 +610,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="ModelColor">
+                    <Textbox Name="JobOrderCode">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!ModelColor.Value</Value>
+                              <Value>=Fields!JobOrderCode.Value</Value>
                               <Style>
                                 <FontFamily>times New Roman</FontFamily>
                               </Style>
@@ -628,7 +628,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>ModelColor</rd:DefaultName>
+                      <rd:DefaultName>JobOrderCode</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>

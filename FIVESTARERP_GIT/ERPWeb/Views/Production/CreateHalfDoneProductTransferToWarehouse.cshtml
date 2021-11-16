@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewBag.Title = "Half-Done Transfer To Warehouse";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3">
+                <a href="/Production/GetProductionAssembleItemStockInfo" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            </div>
+            <div class="col-md-6 text-center">
+                <h4 style="color:darkblue"><b>Create Mini Stock Transfer To Warehouse</b></h4>
+            </div>
+            <div class="col-md-3">
+                @*<button class="btn btn-outline-danger btn-sm float-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i></button>*@
+            </div>
+        </div>
+        <hr />
+    </div>
+    <div class="col-md-6">
+        <div class="card card-navy">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="control-label">Floor</label>
+                        @Html.DropDownList("ddlProductionFloor", (IEnumerable<SelectListItem>)ViewBag.ddlProductionFloor, "--- Select Floor ---", new { @class = "form-control form-control-sm select2" })
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="ddlAssblyLine" class="control-label font-weight-bold">Assbly Line</label>
+                        <select id="ddlAssblyLine" class="form-control form-control-sm select2">
+                            <option value="0">--Select Assbly Line--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="ddlQCLine" class="control-label font-weight-bold">QC Line</label>
+                        <select id="ddlQCLine" class="form-control form-control-sm select2">
+                            <option value="0">--Select QC Line--</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ddlRepairLine" class="control-label font-weight-bold">Repair Line</label>
+                        <select id="ddlRepairLine" class="form-control form-control-sm select2">
+                            <option value="0">--Select Repair Line--</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="ddlModelNames" class="control-label font-weight-bold">Model</label>
+                        @Html.DropDownList("ddlModelNames", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger ctrl-changed" })
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txtStockInQty" class="control-label font-weight-bold">Qty.(<span id="txtCheckStock" style="color:red">0</span>)</label>
+                        <div class="input-group">
+                            <div class="col-sm-8">
+                                <input type="number" placeholder="Qty" name="quantity" id="txtStockInQty" class="form-control form-control-sm" />
+                            </div>
+                            <span id="unitName" class="font-weight-bold mt-3" style="color:darkblue"> </span>
+                        </div>
+                        <span class="error hide required-qty font-weight-bold">Quantity is required !</span>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="clearfix">
+                            <label for="txtRemarks" class="control-label font-weight-bold" style="visibility:hidden">Remarks444444444</label>
+                            <button class="btn btn-success btn-sm float-lg-left" id="btnSubmit">SAVE <i class="fas fa-paper-plane"></i> </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var ddlProductionFloor = $("#ddlProductionFloor");
+        var ddlAssblyLine = $("#ddlAssblyLine");
+        var ddlQCLine = $("#ddlQCLine");
+        var ddlRepairLine = $("#ddlRepairLine");
+        var ddlModelNames = $("#ddlModelNames");
+        var txtStockInQty = $("#txtStockInQty");
+        var txtCheckStock = $("#txtCheckStock");
+
+        $(document).ready(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        })
+
+        ddlProductionFloor.change(function () {
+            clearDropdown("ddlRepairLine");
+            clearDropdown("ddlQCLine");
+            clearDropdown("ddlAssblyLine");
+            if (ddlProductionFloor.val() != "") {
+                LoadDropDown('/Common/GetAssblyByLine', 'POST', ddlAssblyLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
+                LoadDropDown('/Common/GetQCByLine', 'POST', ddlQCLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
+                LoadDropDown('/Common/GetRepairLineByLine', 'POST', ddlRepairLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
+            }
+        })
+
+        ddlModelNames.change(function () {
+            $("#txtCheckStock").text('');
+            if (ddlProductionFloor.val() != "", ddlAssblyLine.val() != "", ddlQCLine.val() != "", ddlRepairLine.val() != "", ddlModelNames.val() != "") {
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common/GetHalfDoneProductStock', JSON.stringify({ floor: TryParseInt(ddlProductionFloor.val(), 0), assbly: TryParseInt(ddlAssblyLine.val(), 0), qcline: TryParseInt(ddlQCLine.val(), 0), repair: TryParseInt(ddlRepairLine.val(), 0), model: TryParseInt(ddlModelNames.val(),0) }), getToken())).then(function (res, status) {
+                    console.log(res);
+                    console.log(status);
+                    if (status == "success") {
+                        $("#txtCheckStock").text(res);
+                    }
+                }).fail(function (error) {
+                    consoleLog(error);
+                })
+            }
+        });
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            $(".error").addClass("hide");
+                bootbox.confirm("Are you sure you want to save?", function (result) {
+                    if (result) {
+                        disable("#btnSubmit");
+                        var info = {
+                            FloorId: TryParseInt(ddlProductionFloor.val(), 0),
+                            AssemblyLineId: TryParseInt(ddlAssblyLine.val(), 0),
+                            QCLine: TryParseInt(ddlQCLine.val(), 0),
+                            RepairLineId: TryParseInt(ddlRepairLine.val(), 0),
+                            DescriptionId: TryParseInt(ddlModelNames.val(),0)
+                        };
+                        var details = {
+                            Quantity: TryParseInt(txtStockInQty.val(), 0)
+                        }
+                        info.MiniStockTransferToWarehouseDetails = details;
+                        var data = JSON.stringify({ info: info });
+                        console.log("Transfer Stock Data");
+                        return console.log(data);
+
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Production/SaveMiniStockTransferToWarehouse', data, getToken())).then(function (res, status) {
+                            console.log(res);
+                            console.log(status);
+                            enable("#btnSubmit");
+                            if (res == true) {
+                                $('.toastrDefaultSuccess').trigger('click');
+
+                                setTimeout(function () {
+                                    redirectPage('@Url.Action("GetProductionAssembleItemStockInfo")');
+                                }, 1000);
+                            }
+                            else {
+                                $('.toastrDefaultError').trigger('click');
+                            }
+                        }).fail(function (error) {
+                            consoleLog(error)
+                        })
+                        enable("#btnSubmit");
+                    }
+                });
+        });
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>    
+}

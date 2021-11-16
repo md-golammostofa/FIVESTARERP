@@ -260,7 +260,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag == "dealer")
             {
-                IEnumerable<DealerSSDTO> dealers = _dealerSSBusiness.GetAllDealerByOrgId(User.OrgId).Where(r => (name == "" || name == null) || (r.DealerName.Contains(name) || r.MobileNo.Contains(name) || r.TelephoneNo.Contains(name) || r.DivisionName.Contains(name) || r.DistrictName.Contains(name) || r.ZoneName.Contains(name))).Select(model => new DealerSSDTO
+                IEnumerable<DealerSSDTO> dealers = _dealerSSBusiness.GetAllDealerByOrgId(User.OrgId).Where(r => (name == "" || name == null) || (r.DealerName.Contains(name) || r.MobileNo.Contains(name) || r.DivisionName.Contains(name) || r.DistrictName.Contains(name) || r.ZoneName.Contains(name))).Select(model => new DealerSSDTO
                 {
                     DealerId = model.DealerId,
                     DealerName = model.DealerName,
@@ -279,11 +279,13 @@ namespace ERPWeb.Controllers
                     EUserId = model.EUserId,
                     EntryDate = model.EntryDate,
                     EntryUser = UserForEachRecord(model.EUserId.Value).UserName,
+                    BrandId=model.BrandId.Value,
+                    BrandName=_brandSSBusiness.GetOneBrandById(model.BrandId.Value,User.OrgId).BrandName,
                 }).ToList();
                 List<DealerSSViewModel> viewModels = new List<DealerSSViewModel>();
                 // Pagination //
-                ViewBag.PagerData = GetPagerData(dealers.Count(), 10, page);
-                dealers = dealers.Skip((page - 1) * 10).Take(10).ToList();
+                //ViewBag.PagerData = GetPagerData(dealers.Count(), 10, page);
+                //dealers = dealers.Skip((page - 1) * 10).Take(10).ToList();
                 //-----------------//
                 AutoMapper.Mapper.Map(dealers, viewModels);
                 return PartialView("_DealerSS", viewModels);
@@ -950,7 +952,7 @@ namespace ERPWeb.Controllers
             bool isSuccess = false;
             var pre = UserPrivilege("Configuration", "MobilePartStockInfoList");
             var permission = ((pre.Add) || (pre.Edit));
-            if (ModelState.IsValid && models.Count > 0 && permission)
+            if (ModelState.IsValid && models.Count > 0)
             {
                 try
                 {

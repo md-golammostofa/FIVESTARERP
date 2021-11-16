@@ -2,6 +2,7 @@
 @{ 
     Layout = null;
     int sl = 0;
+    int stock = 0;
 }
 <table class="table table-bordered table-sm table-striped table-responsive-lg" id="tblTotalStockDetails">
     <thead class="btn-dark">
@@ -24,20 +25,42 @@
         @foreach (var item in Model)
         {
             sl = sl + 1;
-        <tr>
-            <td class="text-center"><b>@sl</b></td>
-            <td class="hide">@item.DescriptionId</td>
-            <td class="hide">@item.MobilePartId</td>
-            <td>@item.ModelName</td>
-            <td>@item.PartsName</td>
-            <td>@item.PartsCode</td>
-            <td class="text-center">@item.Stock</td>
-            <td class="text-center">@item.GoodStock</td>
-            <td class="text-center">@item.FaultyStock</td>
-            <td class="text-center">@item.ScrapStock</td>
-            <td class="text-center">@item.DustStock</td>
-            <td class="text-center">@item.CareTransfer</td>
-        </tr>
+            stock = item.GoodStock;
+            if (stock < 20)
+            {
+                <tr style="background-color:#fd8773">
+                    <td class="text-center"><b>@sl</b></td>
+                    <td class="hide">@item.DescriptionId</td>
+                    <td class="hide">@item.MobilePartId</td>
+                    <td>@item.ModelName</td>
+                    <td>@item.PartsName</td>
+                    <td>@item.PartsCode</td>
+                    <td class="text-center">@item.Stock</td>
+                    <td class="text-center">@item.GoodStock</td>
+                    <td class="text-center">@item.FaultyStock</td>
+                    <td class="text-center">@item.ScrapStock</td>
+                    <td class="text-center">@item.DustStock</td>
+                    <td class="text-center">@item.CareTransfer</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td class="text-center"><b>@sl</b></td>
+                    <td class="hide">@item.DescriptionId</td>
+                    <td class="hide">@item.MobilePartId</td>
+                    <td>@item.ModelName</td>
+                    <td>@item.PartsName</td>
+                    <td>@item.PartsCode</td>
+                    <td class="text-center">@item.Stock</td>
+                    <td class="text-center">@item.GoodStock</td>
+                    <td class="text-center">@item.FaultyStock</td>
+                    <td class="text-center">@item.ScrapStock</td>
+                    <td class="text-center">@item.DustStock</td>
+                    <td class="text-center">@item.CareTransfer</td>
+                </tr>
+            }
+
         }
         @if (Model.Count() == 0)
         {

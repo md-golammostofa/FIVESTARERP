@@ -227,38 +227,41 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
             }
             foreach(var item in dto.TransferDetails)
             {
-                var partsPrice = _mobilePartStockInfoBusiness.GetPriceByModel(item.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
-                var reqDetails = _transferDetailBusiness.GetOneByDetailId(item.TransferDetailId, orgId, branchId);
-                if(reqDetails != null)
+                if(item.IssueQty != 0)
                 {
-                    reqDetails.CostPrice = partsPrice.CostPrice;
-                    reqDetails.SellPrice = partsPrice.SellPrice;
-                    reqDetails.IssueQty = item.IssueQty;
-                    reqDetails.UpdateDate = DateTime.Now;
-                    reqDetails.UpUserId = userId;
+                    var partsPrice = _mobilePartStockInfoBusiness.GetPriceByModel(item.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
+                    var reqDetails = _transferDetailBusiness.GetOneByDetailId(item.TransferDetailId, orgId, branchId);
+                    if (reqDetails != null)
+                    {
+                        reqDetails.CostPrice = partsPrice.CostPrice;
+                        reqDetails.SellPrice = partsPrice.SellPrice;
+                        reqDetails.IssueQty = item.IssueQty;
+                        reqDetails.UpdateDate = DateTime.Now;
+                        reqDetails.UpUserId = userId;
+                    }
+                    transferDetailRepository.Update(reqDetails);
+                    MobilePartStockDetailDTO stockOutItem = new MobilePartStockDetailDTO
+                    {
+                        SWarehouseId = partsPrice.SWarehouseId,
+                        MobilePartId = item.PartsId,
+                        CostPrice = partsPrice.CostPrice,
+                        SellPrice = partsPrice.SellPrice,
+                        Quantity = item.IssueQty,
+                        Remarks = reqInfo.TransferCode,
+                        StockStatus = StockStatus.StockOut,
+                        OrganizationId = orgId,
+                        EntryDate = DateTime.Now,
+                        EUserId = userId,
+                        BranchId = branchId,
+                        ReferrenceNumber = reqInfo.TransferCode,
+                        DescriptionId = item.DescriptionId
+                    };
+                    TransferStockOutItems.Add(stockOutItem);
                 }
-                transferDetailRepository.Update(reqDetails);
-                MobilePartStockDetailDTO stockOutItem = new MobilePartStockDetailDTO
-                {
-                    SWarehouseId = partsPrice.SWarehouseId,
-                    MobilePartId = item.PartsId,
-                    CostPrice = partsPrice.CostPrice,
-                    SellPrice = partsPrice.SellPrice,
-                    Quantity = item.IssueQty,
-                    Remarks = reqInfo.TransferCode,
-                    StockStatus = StockStatus.StockOut,
-                    OrganizationId = orgId,
-                    EntryDate = DateTime.Now,
-                    EUserId = userId,
-                    BranchId = branchId,
-                    ReferrenceNumber = reqInfo.TransferCode,
-                    DescriptionId = item.DescriptionId
-                };
-                TransferStockOutItems.Add(stockOutItem);
             }
             if (transferInfoRepository.Save() == true)
             {
-                IsSuccess = _mobilePartStockDetailBusiness.SaveMobilePartStockOut(TransferStockOutItems, userId, orgId, branchId);
+                IsSuccess = _mobilePartStockDetailBusiness.SaveMobilePartStockOut(TransferStockOutItems, orgId, branchId, userId);
             }
             return IsSuccess;
         }

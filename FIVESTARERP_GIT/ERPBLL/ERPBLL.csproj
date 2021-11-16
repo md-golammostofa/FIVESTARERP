@@ -289,6 +289,8 @@
     <Compile Include="Production\Interface\IIMEITransferToRepairDetailBusiness.cs" />
     <Compile Include="Production\Interface\IIMEITransferToRepairInfoBusiness.cs" />
     <Compile Include="Production\Interface\ILotInLogBusiness.cs" />
+    <Compile Include="Production\Interface\IMiniStockTransferToWarehouseDetailsBusiness.cs" />
+    <Compile Include="Production\Interface\IMiniStockTransferToWarehouseInfoBusiness.cs" />
     <Compile Include="Production\Interface\IPackagingFaultyStockDetailBusiness.cs" />
     <Compile Include="Production\Interface\IMiniStockTransferDetailBusiness.cs" />
     <Compile Include="Production\Interface\IMiniStockTransferInfoBusiness.cs" />
@@ -334,6 +336,8 @@
     <Compile Include="Production\LotInLogBusiness.cs" />
     <Compile Include="Production\MiniStockTransferDetailBusiness.cs" />
     <Compile Include="Production\MiniStockTransferInfoBusiness.cs" />
+    <Compile Include="Production\MiniStockTransferToWarehouseDetailsBusiness.cs" />
+    <Compile Include="Production\MiniStockTransferToWarehouseInfoBusiness.cs" />
     <Compile Include="Production\PackagingFaultyStockDetailBusiness.cs" />
     <Compile Include="Production\PackagingFaultyStockInfoBusiness.cs" />
     <Compile Include="Production\PackagingRepairItemStockDetailBusiness.cs" />

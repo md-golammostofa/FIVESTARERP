@@ -71,6 +71,8 @@ namespace ERPWeb
 
             // Production Database
             #region Production
+            container.RegisterType<IMiniStockTransferToWarehouseDetailsBusiness, MiniStockTransferToWarehouseDetailsBusiness>();
+            container.RegisterType<IMiniStockTransferToWarehouseInfoBusiness, MiniStockTransferToWarehouseInfoBusiness>();
             container.RegisterType<IRepairInBusiness, RepairInBusiness>();
             container.RegisterType<IRepairOutBusiness, RepairOutBusiness>();
             container.RegisterType<IQC1DetailBusiness, QC1DetailBusiness>();

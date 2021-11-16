@@ -129,16 +129,16 @@
         function validateInput() {
             $('.error').addClass('hide');
             var isValid = true;
-            var count = $("#tblServicesWarehouseStock tbody tr").length;
-            if (count > 0) {
-                $.each($("#tblServicesWarehouseStock tbody tr"), function (index, item) {
-                    var partsId = $(this).children('td').eq(1).html();
-                    if (partsId == ddlMobilePart.val()) {
-                        isValid = false;
-                        $(".duplicate-parts").removeClass('hide');
-                    }
-                })
-            }
+            //var count = $("#tblServicesWarehouseStock tbody tr").length;
+            //if (count > 0) {
+            //    $.each($("#tblServicesWarehouseStock tbody tr"), function (index, item) {
+            //        var partsId = $(this).children('td').eq(1).html();
+            //        if (partsId == ddlMobilePart.val()) {
+            //            isValid = false;
+            //            $(".duplicate-parts").removeClass('hide');
+            //        }
+            //    })
+            //}
             if (TryParseInt(ddlServicesWarehouse.val(), 0) <= 0) {
                 isValid = false;
                 $(".require-warehouse").removeClass("hide");

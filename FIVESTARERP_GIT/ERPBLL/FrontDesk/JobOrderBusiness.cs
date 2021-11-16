@@ -1569,7 +1569,7 @@ Where TsRepairStatus='WORK IN PROGRESS' and Cast(EntryDate as Date) = Cast(jo.En
 Where TsRepairStatus='PENDING FOR SPARE PARTS' and Cast(EntryDate as Date) = Cast(jo.EntryDate as Date))'PendingForSpareParts',
 
 (Select count(TsRepairStatus) From tblJobOrders
-Where TsRepairStatus='PENDING FOR APPROVAL' and Cast(EntryDate as Date) = Cast(jo.EntryDate as Date))'PendingForApproval',
+Where TsRepairStatus='CALL CENTER' and Cast(EntryDate as Date) = Cast(jo.EntryDate as Date))'PendingForApproval',
 
 (Select count(StateStatus) From tblJobOrders
 Where StateStatus='Delivery-Done' and JobOrderType='Warrenty' and Cast(EntryDate as Date) = Cast(jo.EntryDate as Date))'WarrentyDelivery',
@@ -1678,7 +1678,7 @@ and StateStatus='Job-Initiated' ", orgId, branchId)).ToList();
         {
             return this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(
                 string.Format(@"Select JodOrderId,JobOrderCode,CustomerApproval from tblJobOrders
-Where OrganizationId={0} and BranchId={1} and TsRepairStatus='PENDING FOR APPROVAL' and (CustomerApproval='Approved' or CustomerApproval='DisApproved') and TSId={2}", orgId, branchId,userId)).ToList();
+Where OrganizationId={0} and BranchId={1} and TsRepairStatus='CALL CENTER' and (CustomerApproval='Approved' or CustomerApproval='DisApproved') and TSId={2}", orgId, branchId,userId)).ToList();
         }
 
         public IEnumerable<JobOrderDTO> GetJobOrderForQc(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string recId)

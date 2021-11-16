@@ -137,35 +137,96 @@ namespace ERPBLL.Configuration
             mobilePartStockDetailRepository.InsertAll(mobilePartStockDetails);
             return mobilePartStockDetailRepository.Save();
         }
+        //Branch Transfer Stock out
+        //public bool SaveMobilePartStockOut(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId)
+        //{
+        //    List<MobilePartStockDetail> mobilePartStockDetails = new List<MobilePartStockDetail>();
+        //    foreach (var item in mobilePartStockDetailDTO)
+        //    {
+        //        MobilePartStockDetail StockDetail = new MobilePartStockDetail();
+        //        StockDetail.MobilePartStockDetailId = item.MobilePartStockDetailId;
+        //        StockDetail.MobilePartId = item.MobilePartId;
+        //        StockDetail.SWarehouseId = item.SWarehouseId;
+        //        StockDetail.CostPrice = item.CostPrice;
+        //        StockDetail.SellPrice = item.SellPrice;
+        //        StockDetail.Quantity = item.Quantity;
+        //        StockDetail.Remarks = item.Remarks;
+        //        StockDetail.OrganizationId = orgId;
+        //        StockDetail.BranchId = branchId;
+        //        StockDetail.EUserId = userId;
+        //        StockDetail.EntryDate = DateTime.Now;
+        //        StockDetail.StockStatus = StockStatus.StockOut;
+        //        StockDetail.ReferrenceNumber = item.ReferrenceNumber;
+        //        StockDetail.DescriptionId = item.DescriptionId; //Nishad
 
-        public bool SaveMobilePartStockOut(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId)
+        //        var warehouseInfo = _mobilePartStockInfoBusiness.GetMobilePartStockInfoByModelAndMobilePartsAndCostPrice(item.DescriptionId.Value,item.MobilePartId.Value,item.CostPrice,orgId,branchId);  //_mobilePartStockInfoBusiness.GetAllMobilePartStockInfoById(orgId, branchId).Where(o => item.SWarehouseId == item.SWarehouseId && o.MobilePartId == item.MobilePartId && o.CostPrice == item.CostPrice).FirstOrDefault();
+        //        warehouseInfo.StockOutQty += item.Quantity;
+        //        warehouseInfo.UpUserId = userId;
+        //        mobilePartStockInfoRepository.Update(warehouseInfo);
+        //        mobilePartStockDetails.Add(StockDetail);
+        //    }
+        //    mobilePartStockDetailRepository.InsertAll(mobilePartStockDetails);
+        //    return mobilePartStockDetailRepository.Save();
+        //}
+        public bool SaveMobilePartStockOut(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long orgId, long branchId, long userId)
         {
-            List<MobilePartStockDetail> mobilePartStockDetails = new List<MobilePartStockDetail>();
+            bool IsSuccess = false;
+            var warehouse = _servicesWarehouseBusiness.GetAllServiceWarehouseByOrgId(orgId, branchId).FirstOrDefault();
+            List<MobilePartStockDetail> stockDetails = new List<MobilePartStockDetail>();
+
             foreach (var item in mobilePartStockDetailDTO)
             {
-                MobilePartStockDetail StockDetail = new MobilePartStockDetail();
-                StockDetail.MobilePartStockDetailId = item.MobilePartStockDetailId;
-                StockDetail.MobilePartId = item.MobilePartId;
-                StockDetail.SWarehouseId = item.SWarehouseId;
-                StockDetail.CostPrice = item.CostPrice;
-                StockDetail.SellPrice = item.SellPrice;
-                StockDetail.Quantity = item.Quantity;
-                StockDetail.Remarks = item.Remarks;
-                StockDetail.OrganizationId = orgId;
-                StockDetail.BranchId = branchId;
-                StockDetail.EUserId = userId;
-                StockDetail.EntryDate = DateTime.Now;
-                StockDetail.StockStatus = StockStatus.StockOut;
-                StockDetail.ReferrenceNumber = item.ReferrenceNumber;
-                StockDetail.DescriptionId = item.DescriptionId; //Nishad
+                var reqQty = item.Quantity;
+                var partsInStock = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoByModelAndBranch(orgId, item.DescriptionId.Value, branchId).Where(i => i.MobilePartId == item.MobilePartId && (i.StockInQty - i.StockOutQty) > 0).OrderBy(i => i.MobilePartStockInfoId).ToList();
 
-                var warehouseInfo = _mobilePartStockInfoBusiness.GetMobilePartStockInfoByModelAndMobilePartsAndCostPrice(item.DescriptionId.Value,item.MobilePartId.Value,item.CostPrice,orgId,branchId);  //_mobilePartStockInfoBusiness.GetAllMobilePartStockInfoById(orgId, branchId).Where(o => item.SWarehouseId == item.SWarehouseId && o.MobilePartId == item.MobilePartId && o.CostPrice == item.CostPrice).FirstOrDefault();
-                warehouseInfo.StockOutQty += item.Quantity;
-                warehouseInfo.UpUserId = userId;
-                mobilePartStockInfoRepository.Update(warehouseInfo);
-                mobilePartStockDetails.Add(StockDetail);
+                if (partsInStock.Count() > 0)
+                {
+                    int remainQty = reqQty;
+                    foreach (var stock in partsInStock)
+                    {
+
+                        var totalStockqty = (stock.StockInQty - stock.StockOutQty); // total stock
+                        var stockOutQty = 0;
+                        if (totalStockqty <= remainQty)
+                        {
+                            stock.StockOutQty += totalStockqty;
+                            stockOutQty = totalStockqty.Value;
+                            remainQty -= totalStockqty.Value;
+                        }
+                        else
+                        {
+                            stockOutQty = remainQty;
+                            stock.StockOutQty += remainQty;
+                            remainQty = 0;
+                        }
+
+
+                        MobilePartStockDetail stockDetail = new MobilePartStockDetail()
+                        {
+                            DescriptionId = item.DescriptionId,
+                            SWarehouseId = warehouse.SWarehouseId,
+                            MobilePartId = item.MobilePartId,
+                            CostPrice = stock.CostPrice,
+                            SellPrice = stock.SellPrice,
+                            Quantity = stockOutQty,
+                            Remarks = item.Remarks,
+                            OrganizationId = orgId,
+                            BranchId = branchId,
+                            EUserId = userId,
+                            EntryDate = DateTime.Now,
+                            StockStatus = StockStatus.StockOut,
+                            //ReferrenceNumber = reqInfo.RequsitionCode
+                        };
+                        stockDetails.Add(stockDetail);
+                        mobilePartStockInfoRepository.Update(stock);
+                        if (remainQty == 0)
+                        {
+                            break;
+                        }
+                    }
+                }
             }
-            mobilePartStockDetailRepository.InsertAll(mobilePartStockDetails);
+            mobilePartStockDetailRepository.InsertAll(stockDetails);
             return mobilePartStockDetailRepository.Save();
         }
 

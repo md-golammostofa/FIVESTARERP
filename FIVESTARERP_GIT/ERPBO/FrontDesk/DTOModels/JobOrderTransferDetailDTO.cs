@@ -32,5 +32,6 @@ namespace ERPBO.FrontDesk.DTOModels
         public string CourierName { get; set; }
         public string CourierNumber { get; set; }
         public string ApproxBill { get; set; }
+        public string BranchName { get; set; }
     }
 }

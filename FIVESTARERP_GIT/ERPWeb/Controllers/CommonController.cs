@@ -827,6 +827,16 @@ namespace ERPWeb.Controllers
             return Json(data);
         }
         [HttpPost]
+        public ActionResult GetAssblyByLine(long lineId)
+        {
+            var data = _assemblyLineBusiness.GetAssemblyLines(User.OrgId).Where(a => a.ProductionLineId == lineId).Select(i => new Dropdown
+            {
+                value = i.AssemblyLineId.ToString(),
+                text = i.AssemblyLineName
+            }).ToList();
+            return Json(data);
+        }
+        [HttpPost]
         public ActionResult GetSubQCByQCLine(long qcline)
         {
             var data = _subQCBusiness.GetAllQCByOrgId(User.OrgId).Where(a => a.QCId == qcline).Select(i => new Dropdown
@@ -1221,6 +1231,18 @@ namespace ERPWeb.Controllers
         {
             ExecutionStateWithText execution = _iMEITransferToRepairInfoBusiness.CheckingAvailabilityOfPackagingRepairRawStock(modelId, itemId,packagingLineId, User.OrgId);
             return Json(execution);
+        }
+        //[HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetHalfDoneProductStock(long floor, long assbly,long qcline,long repair,long model)
+        {
+            // var jobOrder = _jobOrderBusiness.GetJobOrderById(jobOrderId, User.OrgId);
+            var stockQty = 0;
+            var stock = _repairSectionSemiFinishStockInfoBusiness.GetStockByAllId(floor, assbly, qcline, repair, model,User.OrgId);
+            if (stock != null)
+            {
+                stockQty = (stock.StockInQty - stock.StockOutQty);
+            }
+            return Json(stockQty);
         }
 
         #endregion
