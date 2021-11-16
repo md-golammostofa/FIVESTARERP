@@ -279,6 +279,8 @@ namespace ERPWeb.Controllers
                     EUserId = model.EUserId,
                     EntryDate = model.EntryDate,
                     EntryUser = UserForEachRecord(model.EUserId.Value).UserName,
+                    BrandId=model.BrandId.Value,
+                    BrandName=_brandSSBusiness.GetOneBrandById(model.BrandId.Value,User.OrgId).BrandName,
                 }).ToList();
                 List<DealerSSViewModel> viewModels = new List<DealerSSViewModel>();
                 // Pagination //

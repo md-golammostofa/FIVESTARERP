@@ -292,6 +292,10 @@
     <Compile Include="ConfigurationContextMigrations\202111020744507_Configuration_DustStock.Designer.cs">
       <DependentUpon>202111020744507_Configuration_DustStock.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigurationContextMigrations\202111151210507_Configuration_BrandAdd_Dealer.cs" />
+    <Compile Include="ConfigurationContextMigrations\202111151210507_Configuration_BrandAdd_Dealer.Designer.cs">
+      <DependentUpon>202111151210507_Configuration_BrandAdd_Dealer.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigurationContextMigrations\Configuration.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationBaseRepository.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationDbContext.cs" />
@@ -1186,6 +1190,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigurationContextMigrations\202111020744507_Configuration_DustStock.resx">
       <DependentUpon>202111020744507_Configuration_DustStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202111151210507_Configuration_BrandAdd_Dealer.resx">
+      <DependentUpon>202111151210507_Configuration_BrandAdd_Dealer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ControlPanelContextMigrations\202006151000333_ControlPanel_AllEntities_16-May-2020.resx">
       <DependentUpon>202006151000333_ControlPanel_AllEntities_16-May-2020.cs</DependentUpon>

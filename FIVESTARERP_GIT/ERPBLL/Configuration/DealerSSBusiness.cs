@@ -71,6 +71,7 @@ namespace ERPBLL.Configuration
                 dealer.BranchId = branchId;
                 dealer.EUserId = userId;
                 dealer.EntryDate = DateTime.Now;
+                dealer.BrandId = dto.BrandId;
                 dealerSSRepository.Insert(dealer);
             }
             else
@@ -91,6 +92,7 @@ namespace ERPBLL.Configuration
                 dealerId.Flag = dto.Flag;
                 dealerId.UpUserId = userId;
                 dealerId.UpdateDate = DateTime.Now;
+                dealerId.BrandId = dto.BrandId;
                 dealerSSRepository.Update(dealerId);
             }
             return dealerSSRepository.Save();

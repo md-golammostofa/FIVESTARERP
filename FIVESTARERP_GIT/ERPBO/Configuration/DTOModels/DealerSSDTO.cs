@@ -31,5 +31,7 @@ namespace ERPBO.Configuration.DTOModels
         public string EntryUser { get; set; }
         public string Dealer { get; set; }
         public int Qty { get; set; }
+        public long? BrandId { get; set; }
+        public string BrandName { get; set; }
     }
 }

@@ -11,6 +11,7 @@
                     <th style="vertical-align:middle" class="hide"></th>
                     <th style="vertical-align:middle">Name</th>
                     <th style="vertical-align:middle">Code</th>
+                    <th style="vertical-align:middle">Brand</th>
                     <th style="vertical-align:middle">Address</th>
                     <th style="vertical-align:middle">Mobile</th>
                     <th style="vertical-align:middle">Tel No.</th>
@@ -23,6 +24,7 @@
                     <th style="vertical-align:middle">Remarks</th>
                     <th style="vertical-align:middle">Entry Date</th>
                     <th style="vertical-align:middle">Entry User</th>
+                    <th class="hide" style="vertical-align:middle">Entry User</th>
                     <th style="vertical-align:middle" class="">Action</th>
                 </tr>
             </thead>
@@ -31,27 +33,29 @@
                 {
                     sl = sl + 1;
                     string entryDate = dealer.EntryDate != null ? dealer.EntryDate.Value.ToString("dd-MMM-yyy") : "";
-                    <tr>
-                        <td class="text-center" width="10%">@sl</td>
-                        <td class="hide">@dealer.DealerId</td>
-                        <td>@dealer.DealerName</td>
-                        <td>@dealer.DealerCode</td>
-                        <td>@dealer.Address</td>
-                        <td>@dealer.MobileNo</td>
-                        <td>@dealer.TelephoneNo</td>
-                        <td>@dealer.Email</td>
-                        <td>@dealer.DivisionName</td>
-                        <td>@dealer.DistrictName</td>
-                        <td>@dealer.ZoneName</td>
-                        <td>@dealer.ContactPersonName</td>
-                        <td>@dealer.ContactPersonMobile</td>
-                        <td>@dealer.Remarks</td>
-                        <td>@entryDate</td>
-                        <td>@dealer.EntryUser</td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-outline-warning btn-sm data-edit-dealer" title="Edit" data-edit-dealer="@dealer.DealerId"><i class="fas fa-pencil-alt"></i> </a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td class="text-center" width="10%">@sl</td>
+                    <td class="hide">@dealer.DealerId</td>
+                    <td>@dealer.DealerName</td>
+                    <td>@dealer.DealerCode</td>
+                    <td>@dealer.BrandName</td>
+                    <td>@dealer.Address</td>
+                    <td>@dealer.MobileNo</td>
+                    <td>@dealer.TelephoneNo</td>
+                    <td>@dealer.Email</td>
+                    <td>@dealer.DivisionName</td>
+                    <td>@dealer.DistrictName</td>
+                    <td>@dealer.ZoneName</td>
+                    <td>@dealer.ContactPersonName</td>
+                    <td>@dealer.ContactPersonMobile</td>
+                    <td>@dealer.Remarks</td>
+                    <td>@entryDate</td>
+                    <td>@dealer.EntryUser</td>
+                    <td class="hide">@dealer.BrandId</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-outline-warning btn-sm data-edit-dealer" title="Edit" data-edit-dealer="@dealer.DealerId"><i class="fas fa-pencil-alt"></i> </a>
+                    </td>
+                </tr>
                 }
                 @if (Model.Count() == 0)
                 {
