@@ -627,6 +627,7 @@
     <Compile Include="Production\DTOModel\TransferToPackagingRepairDetailDTO.cs" />
     <Compile Include="Production\DTOModel\TransferToPackagingRepairInfoDTO.cs" />
     <Compile Include="Production\ReportModels\BarChatTimeWiseData.cs" />
+    <Compile Include="Production\ReportModels\DateWiseProdusctionReport.cs" />
     <Compile Include="Production\ReportModels\ProductionRequisitionReport.cs" />
     <Compile Include="Production\ReportModels\QRCodeProblemCountWithProblem.cs" />
     <Compile Include="Production\ReportModels\QRCodesByRef.cs" />

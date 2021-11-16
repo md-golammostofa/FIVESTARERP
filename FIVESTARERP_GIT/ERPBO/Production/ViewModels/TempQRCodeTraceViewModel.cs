@@ -66,5 +66,11 @@ namespace ERPBO.Production.ViewModels
         [StringLength(100)]
         public string CartonNo { get; set; }
         public string BrandName { get; set; }
+        public int LotIn { get; set; }
+        public int QCPass { get; set; }
+        public int QC1 { get; set; }
+        public int QC2 { get; set; }
+        public int QC3 { get; set; }
+        public int Finished { get; set; }
     }
 }

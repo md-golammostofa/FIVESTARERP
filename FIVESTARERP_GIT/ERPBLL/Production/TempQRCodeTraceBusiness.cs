@@ -246,5 +246,9 @@ where CAST(tqrt.UpdateDate as date) = CAST(GETDATE() as date) and tqrt.AssemblyI
         {
             return _productionDb.Db.Database.SqlQuery<DashboardAssemblyLineWiseDataDTO>(string.Format(@"EXEC spAssemblyDashboard {0},{1}", assemblyId, orgId)).FirstOrDefault();
         }
+        public IEnumerable<TempQRCodeTraceDTO> GetDailyProductionSummeryReport(long assemblyId, long modelId, string fromDate, string toDate, long orgId)
+        {
+            return _productionDb.Db.Database.SqlQuery<TempQRCodeTraceDTO>(string.Format(@"Exec [spDailyProductionSummery] '{0}','{1}',{2},{3},{4}", fromDate, toDate, assemblyId, modelId, orgId)).ToList();
+        }
     }
 }

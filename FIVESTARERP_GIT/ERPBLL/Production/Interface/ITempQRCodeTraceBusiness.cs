@@ -33,5 +33,6 @@ namespace ERPBLL.Production.Interface
         bool SaveQRCodeStatusByLotIn(string qrCode, long orgId, long userId);
         IEnumerable<TempQRCodeTraceDTO> GetAssemblyLineWiseDataForDashBoard(long assemblyId, long orgId);
         DashboardAssemblyLineWiseDataDTO GetAssemblyDashBoard(long assemblyId, long orgId);
+        IEnumerable<TempQRCodeTraceDTO> GetDailyProductionSummeryReport(long assemblyId, long modelId, string fromDate, string toDate, long orgId);
     }
 }

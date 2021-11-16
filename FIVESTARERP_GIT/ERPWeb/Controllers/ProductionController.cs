@@ -6,8 +6,10 @@ using ERPBO.Inventory.DTOModel;
 using ERPBO.Inventory.ViewModels;
 using ERPBO.Production.DomainModels;
 using ERPBO.Production.DTOModel;
+using ERPBO.Production.ReportModels;
 using ERPBO.Production.ViewModels;
 using ERPWeb.Filters;
+using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -5344,7 +5346,60 @@ namespace ERPWeb.Controllers
         }
         #endregion
 
+        #region Reports UI
+        public ActionResult GetDailyProductionSummery()
+        {
+            ViewBag.ddlModel = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(s=> new SelectListItem { Text = s.DescriptionName, Value = s.DescriptionId.ToString()});
+            ViewBag.ddlAssembly = _assemblyLineBusiness.GetAssemblyLines(User.OrgId).Select(s => new SelectListItem { Text = s.AssemblyLineName, Value = s.AssemblyLineId.ToString() });
+            return View();
+        }
+        #endregion
+
         #region Reports
+
+        public ActionResult GetDailyProductionSummeryReport(long assemblyId, long modelId, string fromDate, string toDate, string rptType)
+        {
+            List<DateWiseProdusctionReport> dateWiseSales = new List<DateWiseProdusctionReport>();
+            DateWiseProdusctionReport dateWise = new DateWiseProdusctionReport()
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+            };
+            dateWiseSales.Add(dateWise);
+
+            var data = _tempQRCodeTraceBusiness.GetDailyProductionSummeryReport(assemblyId, modelId, fromDate, toDate, User.OrgId).Where(s => s.LotIn != 0 || s.QCPass != 0 || s.QC1 != 0 || s.QC2 != 0 || s.QC3 != 0 || s.Finished != 0).ToList();
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptDailyProductionSummery.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+            }
+
+            ReportDataSource dataSource1 = new ReportDataSource("dsDailyProductionSummery", data);
+            localReport.DataSources.Add(dataSource1);
+
+            ReportDataSource reportDataSource2 = new ReportDataSource("dsDateWiseProduction", dateWiseSales);
+            localReport.DataSources.Add(reportDataSource2);
+
+            string reportType = rptType;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            Warning[] warnings;
+            string[] streams;
+
+            var renderedBytes = localReport.Render(
+                reportType,
+                "",
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings
+                );
+            return File(renderedBytes, mimeType);
+        }
         public ActionResult QRCodeProblemList(string flag,long? qcLine,long? modelId,long? qcId, string qrCode = "", string prbName = "")
         {
             if (string.IsNullOrEmpty(flag))
