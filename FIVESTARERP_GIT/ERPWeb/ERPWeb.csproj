@@ -325,6 +325,17 @@
     <Content Include="Reports\DataSets\Accounts.xss">
       <DependentUpon>Accounts.xsd</DependentUpon>
     </Content>
+    <Content Include="Reports\DataSets\dsDailyProductionSummery.xsc">
+      <DependentUpon>dsDailyProductionSummery.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\DataSets\dsDailyProductionSummery.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsDailyProductionSummery.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Reports\DataSets\dsDailyProductionSummery.xss">
+      <DependentUpon>dsDailyProductionSummery.xsd</DependentUpon>
+    </Content>
     <None Include="Reports\DataSets\InventoryDS.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -429,6 +440,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Accounts.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSets\dsDailyProductionSummery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsDailyProductionSummery.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reports\DataSets\InventoryDS.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1059,6 +1075,7 @@
     <Content Include="Reports\ERPRpt\Production\rptLotInBarcodeSticker.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Reports\ERPRpt\Production\rptDailyProductionSummery.rdlc" />
     <EmbeddedResource Include="Reports\ERPRpt\Production\rptQRCodeProblemList.rdlc" />
     <Content Include="Reports\ERPRpt\Production\rptRequsitionDetails.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
