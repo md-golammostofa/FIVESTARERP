@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ERPBO.Production.ViewModels.MiniStockTransferToSemiFinishGoodsWarehouseViewModel>
+@{
+    var pagerData = (ERPWeb.Infrastructure.PagerData)ViewBag.PagerData;
+    int sl = pagerData.Serial;
+    string badge = string.Empty;
+    string updateDate = string.Empty;
+
+}
+
+<div class="row">
+    <div class="col-md-12" style="overflow-y:scroll">
+        <table class="table table-bordered table-sm table-striped text-sm">
+            <thead class="btn-dark">
+                <tr class="text-center">
+                    <th style="vertical-align:middle">#SL</th>
+                    <th class="hide"></th>
+                    <th style="vertical-align:middle">Floor</th>
+                    <th style="vertical-align:middle">Model</th>
+                    <th style="vertical-align:middle">Warehouse</th>
+                    <th style="vertical-align:middle">ItemType</th>
+                    <th style="vertical-align:middle">Item Name</th>
+                    <th style="vertical-align:middle">Quantity</th>
+                    <th style="vertical-align:middle">StateStatus</th>
+                    <th style="vertical-align:middle">Entry User</th>
+                    <th style="vertical-align:middle">Entry Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    sl = sl + 1;
+                    badge = item.StateStatus == "Received" ? "badge bg-success" : "badge bg-warning";
+                    <tr>
+                        <td class="text-center text-bold">@sl</td>
+                        <td class="hide">@item.MSTSFGWId</td>
+                        <td>@item.FloorName</td>
+                        <td>@item.ModelName</td>
+                        <td>@item.WarehouseName</td>
+                        <td>@item.ItemTypeName</td>
+                        <td>@item.ItemName</td>
+                        <td class="text-center text-bold">@item.Quantity</td>
+                        <td class="text-center " data-val="@item.StateStatus">
+                            <span class="@badge">@item.StateStatus</span>
+                        </td>
+                        <td class="text-center">@item.EntryUser</td>
+                        <td class="text-center">@item.EntryDate.Value.ToString("dd-MMM-yyyy hh:mm tt")</td>
+                    </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="empty-row text-sm text-bold text-center">
+                        <td colspan="15">
+                            No data found in the table
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="divMiniStockTransferToWarehouse">
+    @Html.Partial("_Pagination", pagerData)
+</div>
+

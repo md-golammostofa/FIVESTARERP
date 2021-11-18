@@ -21,5 +21,6 @@ namespace ERPBLL.Inventory.Interface
         IEnumerable<Dropdown> GetModelsByBrand(long brandId, long orgId);
         IEnumerable<Dropdown> GetModelsByBrandAndCategory(long brandId,long categoryId, long orgId);
         bool IsDuplicateModel(long id, string modelName, long orgId);
+        IEnumerable<DescriptionDTO> GetAllModelsInMiniStockByLineId(long lineId, long orgId);
     }
 }

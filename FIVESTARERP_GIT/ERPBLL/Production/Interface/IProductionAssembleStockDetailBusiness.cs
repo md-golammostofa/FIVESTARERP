@@ -14,5 +14,6 @@ namespace ERPBLL.Production.Interface
         bool SaveProductionAssembleStockDetailStockIn(List<ProductionAssembleStockDetailDTO> stockDetails, long userId, long orgId);
         bool SaveProductionAssembleStockDetailStockOut(List<ProductionAssembleStockDetailDTO> stockDetails, long userId, long orgId);
         bool SaveReceiveQCItems(long qcPassId, string status, long userId, long orgId);
+        bool SaveProductionAssembleStockDetailStockTransfer(List<ProductionAssembleStockDetailDTO> stockDetailDTOs, long userId, long orgId);
     }
 }

@@ -25,5 +25,6 @@ namespace ERPBLL.Inventory.Interface
 
         IEnumerable<WarehouseStockInfoDTO> GetItemWithKeys(long orgId);
         IEnumerable<ItemDetailDTO> GetAllItemDetails(long model,long orgId);
+        IEnumerable<ItemDomainDTO> GetAllItemsInMiniStockByLineIdWithModel(long lineId, long modelId, long orgId);
     }
 }

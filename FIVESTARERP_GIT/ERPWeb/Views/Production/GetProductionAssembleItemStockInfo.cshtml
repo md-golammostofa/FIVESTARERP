@@ -15,6 +15,9 @@
                         <a class="nav-link" id="custom-tabs-three-paStock-tab" data-toggle="pill" href="#custom-tabs-three-paStock" role="tab" aria-controls="custom-tabs-three-paStock" aria-selected="true">Mini Stock</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-three-miniStockTransferToWarehouse-tab" data-toggle="pill" href="#custom-tabs-three-miniStockTransferToWarehouse" role="tab" aria-controls="custom-tabs-three-miniStockTransferToWarehouse" aria-selected="true">Transfer To Warehouse</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" id="custom-tabs-three-transferList-tab" data-toggle="pill" href="#custom-tabs-three-transferList" role="tab" aria-controls="custom-tabs-three-transferList" aria-selected="true">Mini Stock Transfer</a>
                     </li>
                     <li class="nav-item">
@@ -79,23 +82,23 @@
                                                 </div>
                                             </div>
                                             @*<div class="row">
-                                <div class="col-md-3">
-                                    <label for="ddlItemType" class="control-label font-weight-bold">ItemType Name</label>
-                                    <select id="ddlItemType" class="form-control form-control-sm">
-                                        <option value="">--Select Item Type--</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="ddlItem" class="control-label font-weight-bold">Item Name</label>
-                                    <select id="ddlItem" class="form-control form-control-sm ctrl-change">
-                                        <option value="">--Select Item--</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="control-label font-weight-bold">Stock Qty (Less then / Equal)</label>
-                                    <input type="number" id="txtLessOrEq" class="form-control form-control-sm" />
-                                </div>
-                            </div>*@
+                                                    <div class="col-md-3">
+                                                        <label for="ddlItemType" class="control-label font-weight-bold">ItemType Name</label>
+                                                        <select id="ddlItemType" class="form-control form-control-sm">
+                                                            <option value="">--Select Item Type--</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label for="ddlItem" class="control-label font-weight-bold">Item Name</label>
+                                                        <select id="ddlItem" class="form-control form-control-sm ctrl-change">
+                                                            <option value="">--Select Item--</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="control-label font-weight-bold">Stock Qty (Less then / Equal)</label>
+                                                        <input type="number" id="txtLessOrEq" class="form-control form-control-sm" />
+                                                    </div>
+                                                </div>*@
                                         </div>
                                     </div>
                                 </div>
@@ -163,7 +166,67 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-12" id="dataContainer1">
-                                                    @{Html.RenderAction("GetProductionAssembleItemStockInfo", new { @flag = "View" });}
+                                                    @*@{Html.RenderAction("GetProductionAssembleItemStockInfo", new { @flag = "View" });}*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="custom-tabs-three-miniStockTransferToWarehouse" role="tabpanel" aria-labelledby="custom-tabs-three-miniStockTransferToWarehouse-tab">
+                            <div class="row" style="margin-top:-15px">
+                                <div class="col-md-12">
+                                    <div class="card card-gray-dark">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h5 class="text-center text-bold">Mini Stock Transfer To Warehouse</h5>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button class="btn btn-outline-primary float-right" id="btnMiniStockTransferToWarehouse"><i class="fas fa-plus"></i> Transfer To Warehouse</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="margin-top:-10px">
+                                    <div class="card card-navy">
+                                        <div class="card-header">
+                                            <h6 class="card-title">Search By</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row" style="margin-top:-15px">
+                                                <div class="col-md-2">
+                                                    <label for="ddlFloorForMiniStockTransferToWarehouseSearch" class="control-label font-weight-bold">Floor</label>
+                                                    @Html.DropDownList("ddlFloorForMiniStockTransferToWarehouseSearch", (IEnumerable<SelectListItem>)ViewBag.ddlLineNumber, "--Select FLoor--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="ddlModelName" class="control-label font-weight-bold">Model</label>
+                                                    @Html.DropDownList("ddlModelNameForMiniStockTransferToWarehouseSearch", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm ctrl-change select2 select2-danger" })
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="ddlItemsStockForMiniStockTransferToWarehouseSearch" class="control-label font-weight-bold">Item-Color</label>
+                                                    @Html.DropDownList("ddlItemsStockForMiniStockTransferToWarehouseSearch", (IEnumerable<SelectListItem>)ViewBag.ddlItems, "--Select Item--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="control-label font-weight-bold">Qty(Less/Eq)</label>
+                                                    <input type="number" id="txtLessOrEqForMiniStockTransferToWarehouseSearch" class="form-control form-control-sm" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top:-10px">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12" id="dataContainer7">
+
                                                 </div>
                                             </div>
                                         </div>
@@ -278,8 +341,8 @@
                                 <div class="col-md-12" style="margin-top:-10px">
                                     <div class="card card-navy">
                                         @*<div class="card-header">
-                            <h6 class="card-title">Search By</h6>
-                        </div>*@
+                                                <h6 class="card-title">Search By</h6>
+                                            </div>*@
                                         <div class="card-body">
                                             <div class="row" style="margin-top:-15px">
                                             </div>
@@ -314,7 +377,7 @@
                                                     <h5 class="text-center text-bold">Repair Section Non-Semi Finish Good Stock Info</h5>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -373,7 +436,7 @@
                                         <div class="card-header">
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                    
+
                                                 </div>
                                                 <div class="col-md-6">
                                                     <h5 class="text-center text-bold">Half Done Product Transfer List</h5>
@@ -475,7 +538,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header alert-secondary">
-                <input type="hidden"/>
+                <input type="hidden" />
                 <h4 id="modalHeading" class="modal-title">QC Pass Items</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
             </div>
@@ -502,6 +565,53 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalMiniStockTransferToWarehouse" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <h4 id="modalHeading" class="modal-title"><span id="spanModalHeadMiniStockTransferToWarehouse">Add New Transfer</span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmMiniStockTransferToWarehouse">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label font-weight-bold" for="ddlFloorForTransferToWarehouse">Floor<span class="text-danger">*</span></label>
+                            @Html.DropDownList("ddlFloorForTransferToWarehouse", (IEnumerable<SelectListItem>)ViewBag.ddlLineNumber, "--Select Floor--", new { @class = "form-control form-control-sm select2" })
+                            <span class="error hide required-floorForTW font-weight-bold">Required!</span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label font-weight-bold" for="ddlModelForTransferToWarehouse">Model<span class="text-danger">*</span></label>
+                            <select class="form-control form-control-sm select2" id="ddlModelForTransferToWarehouse">
+                                <option value="">--Select Model--</option>
+                            </select>
+                            <span class="error hide required-modelForTW font-weight-bold">Required!</span>
+                            @*@Html.DropDownList("ddlModelForTransferToWarehouse", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2" })*@
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label font-weight-bold" for="ddlItemForTransferToWarehouse">Item<span class="text-danger">*</span></label>
+                            <select class="form-control form-control-sm select2" id="ddlItemForTransferToWarehouse">
+                                <option value="">--Select Item--</option>
+                            </select>
+                            <span class="error hide required-itemForTW font-weight-bold">Required!</span>
+                            @*@Html.DropDownList("ddlItemForTransferToWarehouse", (IEnumerable<SelectListItem>)ViewBag.ddlItems, "--Select Item--", new { @class = "form-control form-control-sm select2" })*@
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label font-weight-bold" for="txtQtyForTransferToWarehouse">Quantity<span id="stockQty"></span><span class="text-danger">*</span></label>
+                            <input type="text" value="" name="" class="form-control form-control-sm" id="txtQtyForTransferToWarehouse" />
+                            <span class="error hide required-qtyForTW font-weight-bold">Required!</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer btn-light">
+                <button type="button" class="btn btn-danger btn-flat float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel</button>
+                <button type="button" class="btn btn-success btn-flat float-right" id="btnSaveMiniStockTransferToWarehouse"><i class="far fa-save"></i><span id="spanSaveMiniStockTransferToWarehouse"> Transfer</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
     <script type="text/javascript">
         var hdTransferInfoId = $("#hdTransferInfoId");
@@ -534,6 +644,18 @@
         var ddlRepairLineQRCodeRepair = $("#ddlRepairLineQRCodeRepair");
         var ddlModelNames = $("#ddlModelNames");
 
+        //Transfer To Warehouse
+        var ddlFloorForTransferToWarehouse = $("#ddlFloorForTransferToWarehouse");
+        var ddlModelForTransferToWarehouse = $("#ddlModelForTransferToWarehouse");
+        var ddlItemForTransferToWarehouse = $("#ddlItemForTransferToWarehouse");
+        var txtQtyForTransferToWarehouse = $("#txtQtyForTransferToWarehouse");
+        var ddlFloorForMiniStockTransferToWarehouseSearch = $("#ddlFloorForMiniStockTransferToWarehouseSearch");
+        var ddlModelNameForMiniStockTransferToWarehouseSearch = $("#ddlModelNameForMiniStockTransferToWarehouseSearch");
+        var ddlItemsStockForMiniStockTransferToWarehouseSearch = $("#ddlItemsStockForMiniStockTransferToWarehouseSearch");
+        var txtLessOrEqForMiniStockTransferToWarehouseSearch = $("#txtLessOrEqForMiniStockTransferToWarehouseSearch");
+        
+
+
         var pageNo = 1;
 
         $(document).ready(function () {
@@ -558,7 +680,13 @@
                 orientation: "bottom auto",
                 todayHighlight: true
             });
+            initialLoad();
         })
+
+        function initialLoad() {
+            loadMiniStockTransferToWarehouseListDataTable();
+            LoadDataTable();
+        }
 
         ddlProductionFloor.change(function () {
             LoadDataTable();
@@ -890,9 +1018,10 @@
                             if (res == true) {
                                 $('.toastrDefaultSuccess').trigger('click');
 
-                                setTimeout(function () {
+                                @*setTimeout(function () {
                                     redirectPage('@Url.Action("GetProductionAssembleItemStockInfo")');
-                                }, 1000);
+                                }, 1000);*@
+                                LoadDataTable();
                             }
                             else {
                                 $('.toastrDefaultError').trigger('click');
@@ -948,6 +1077,160 @@
         function redirectPage(page) {
             window.location.replace(page);
         }
+
+        // Mini Stock Transfer to Warehouse
+
+        function OpenModalMiniStockTRansferToWarehouse() {
+            $("#modalMiniStockTransferToWarehouse").modal("show");
+            $(".error").addClass("hide");
+        }
+
+        $("#btnMiniStockTransferToWarehouse").click(function (e) {
+            e.preventDefault();
+            OpenModalMiniStockTRansferToWarehouse();
+            clearTransferToWarehouse();
+        })
+        ddlFloorForTransferToWarehouse.change(function (e) {
+            e.preventDefault();
+            clearDropdown("ddlModelForTransferToWarehouse");
+            clearDropdown("ddlItemForTransferToWarehouse");
+            $("#stockQty").text('(0)');
+            //txtQtyForTransferToWarehouse.val("0");
+
+            if (ddlFloorForTransferToWarehouse.val() != "") {
+                LoadDropDown('/Common/GetModelsByProductionLineForMiniStock', 'POST', ddlModelForTransferToWarehouse, JSON.stringify({ lineId: ddlFloorForTransferToWarehouse.val() }));
+            }
+        })
+        ddlModelForTransferToWarehouse.change(function (e) {
+            e.preventDefault();
+            clearDropdown("ddlItemForTransferToWarehouse");
+            $("#stockQty").text('(0)');
+            //txtQtyForTransferToWarehouse.val("0");
+
+            if (ddlFloorForTransferToWarehouse.val() != "" && ddlModelForTransferToWarehouse.val() != "") {
+                LoadDropDown('/Common/GetItemsByProductionLineWithModelForMiniStock', 'POST', ddlItemForTransferToWarehouse, JSON.stringify({ lineId: ddlFloorForTransferToWarehouse.val(), modelId: ddlModelForTransferToWarehouse.val() }));
+            }
+        })
+        ddlItemForTransferToWarehouse.change(function (e) {
+            e.preventDefault();
+            //txtQtyForTransferToWarehouse.val("0");
+
+            if (ddlFloorForTransferToWarehouse.val() != "" && ddlModelForTransferToWarehouse.val() != "" && ddlItemForTransferToWarehouse.val() != "") {
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common/GetProductionAssembleStockInfoByLineAndItemAndModelId', JSON.stringify({ itemId: ddlItemForTransferToWarehouse.val(), lineId: ddlFloorForTransferToWarehouse.val(), modelId: ddlModelForTransferToWarehouse.val() }), getToken())).then(function (res, status) {
+                    if (status == "success") {
+                        $("#stockQty").text('(' + res.stockQty + ')');
+                        $("#stockQty").val(res.stockQty);
+                    }
+                }).fail(function (error) {
+                    consoleLog(error);
+                })
+            }
+        })
+
+        function clearTransferToWarehouse() {
+            ddlFloorForTransferToWarehouse.val('');
+            ddlFloorForTransferToWarehouse.trigger("change");
+            ddlModelForTransferToWarehouse.val('');
+            ddlModelForTransferToWarehouse.trigger("change");
+            ddlItemForTransferToWarehouse.val('');
+            ddlItemForTransferToWarehouse.trigger("change");
+            txtQtyForTransferToWarehouse.val('');
+            $("#stockQty").text('');
+        }
+
+        function validateMiniStockTransferToWarehouse() {
+            var isValid = true;
+            $('.error').addClass('hide');
+            if (ddlFloorForTransferToWarehouse.val() == "") {
+                $('.required-floorForTW').removeClass('hide');
+                isValid = false;
+            }
+            if (ddlModelForTransferToWarehouse.val() == "") {
+                $('.required-modelForTW').removeClass('hide');
+                isValid = false;
+            }
+            if (ddlItemForTransferToWarehouse.val() == "") {
+                $('.required-itemForTW').removeClass('hide');
+                isValid = false;
+            }
+            if (txtQtyForTransferToWarehouse.val() == "" || txtQtyForTransferToWarehouse.val() == "0") {
+                $('.required-qtyForTW').removeClass('hide');
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        $("#btnSaveMiniStockTransferToWarehouse").click(function (e) {
+            if (validateMiniStockTransferToWarehouse()) {
+                if (TryParseInt($("#stockQty").val(), 0) >= TryParseInt(txtQtyForTransferToWarehouse.val(), 0)) {
+
+                    var model = { ProductionFloorId: ddlFloorForTransferToWarehouse.val(), DescriptionId: ddlModelForTransferToWarehouse.val(), ItemId: ddlItemForTransferToWarehouse.val(), Quantity: txtQtyForTransferToWarehouse.val() }
+
+                    var data = JSON.stringify({ model: model });
+
+                    disable("#btnSaveMiniStockTransferToWarehouse");
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, "/Production/SaveMiniStockTransferToSemiFinishGoodsWarehouse", data, getToken())).then(function (res, status) {
+                        if (res === true && status === "success") {
+                            toastrSuccessAlert(execuStatus.successSave);
+                            $("#modalMiniStockTransferToWarehouse").modal("toggle");
+                            clearTransferToWarehouse();
+                            loadMiniStockTransferToWarehouseListDataTable();
+                            LoadDataTable();
+                        }
+                        else {
+                            toastrErrorAlert(execuStatus.fail);
+                        }
+                        enable("#btnSaveMiniStockTransferToWarehouse");
+                    }).fail(function (err) {
+                        console.log(err);
+                        enable("#btnSaveMiniStockTransferToWarehouse");
+                    })
+                }
+                else {
+                    bootbox.alert("Stock Not Available");
+                }
+            }
+        })
+
+        ddlFloorForMiniStockTransferToWarehouseSearch.change(function () {
+            loadMiniStockTransferToWarehouseListDataTable();
+        })
+        ddlModelNameForMiniStockTransferToWarehouseSearch.change(function () {
+            loadMiniStockTransferToWarehouseListDataTable();
+        })
+        ddlItemsStockForMiniStockTransferToWarehouseSearch.change(function () {
+            loadMiniStockTransferToWarehouseListDataTable();
+        })
+        txtLessOrEqForMiniStockTransferToWarehouseSearch.keyup(function () {
+            loadMiniStockTransferToWarehouseListDataTable();
+        })
+        function loadMiniStockTransferToWarehouseListDataTable() {
+            var item = ddlItemsStockForMiniStockTransferToWarehouseSearch.val() != "" ? ddlItemsStockForMiniStockTransferToWarehouseSearch.val().split("#") : ["0", "0", "0"];
+            var data = { flag: "MiniStockTransferToWarehouse", floorId: ddlFloorForMiniStockTransferToWarehouseSearch.val(), modelId: ddlModelNameForMiniStockTransferToWarehouseSearch.val(), warehouseId: TryParseInt(item[2], 0), itemTypeId: TryParseInt(item[1], 0), itemId: TryParseInt(item[0], 0), lessOrEq: txtLessOrEqForMiniStockTransferToWarehouseSearch.val() }
+            $.when(getReqWithData('html', 'GET', '/Production/GetProductionAssembleItemStockInfo', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer7").fadeOut('500', function () {
+                        $("#dataContainer7").empty();
+                        $("#dataContainer7").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+            pageNo = 1;
+        }
+        //Pagination
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).parent().hasClass('current-page')) {
+                if ($(this).parent().parents('div').hasClass('divMiniStockTransferToWarehouse')) {
+                    pageNo = $(this).attr('data-page-no');
+                    loadMiniStockTransferToWarehouseListDataTable();
+                }
+            }
+        })
+
     </script>
 }
 

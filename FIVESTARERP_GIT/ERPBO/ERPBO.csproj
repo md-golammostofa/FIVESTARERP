@@ -377,6 +377,7 @@
     <Compile Include="Production\DomainModels\FaultyCase.cs" />
     <Compile Include="Production\DomainModels\GeneratedIMEI.cs" />
     <Compile Include="Production\DomainModels\LotInLog.cs" />
+    <Compile Include="Production\DomainModels\MiniStockTransferToSemiFinishGoodsWarehouse.cs" />
     <Compile Include="Production\DomainModels\MiniStockTransferToWarehouseDetails.cs" />
     <Compile Include="Production\DomainModels\MiniStockTransferToWarehouseInfo.cs" />
     <Compile Include="Production\DomainModels\PackagingFaultyStockDetail.cs" />
@@ -520,6 +521,7 @@
     <Compile Include="Production\DTOModel\LotInLogDTO.cs" />
     <Compile Include="Production\DTOModel\MiniStockTransferDetailDTO.cs" />
     <Compile Include="Production\DTOModel\MiniStockTransferInfoDTO.cs" />
+    <Compile Include="Production\DTOModel\MiniStockTransferToSemiFinishGoodsWarehouseDTO.cs" />
     <Compile Include="Production\DTOModel\MiniStockTransferToWarehouseDetailsDTO.cs" />
     <Compile Include="Production\DTOModel\MiniStockTransferToWarehouseInfoDTO.cs" />
     <Compile Include="Production\DTOModel\PackagingFaultyStockDetailDTO.cs" />
@@ -668,6 +670,7 @@
     <Compile Include="Production\ViewModels\LotInLogViewModel.cs" />
     <Compile Include="Production\ViewModels\MiniStockTransferDetailViewModel.cs" />
     <Compile Include="Production\ViewModels\MiniStockTransferInfoViewModel.cs" />
+    <Compile Include="Production\ViewModels\MiniStockTransferToSemiFinishGoodsWarehouseViewModel.cs" />
     <Compile Include="Production\ViewModels\MiniStockTransferToWarehouseDetailsViewModel.cs" />
     <Compile Include="Production\ViewModels\MiniStockTransferToWarehouseInfoViewModel.cs" />
     <Compile Include="Production\ViewModels\PackagingFaultyStockDetailViewModel.cs" />

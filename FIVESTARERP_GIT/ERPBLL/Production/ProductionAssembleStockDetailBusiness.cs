@@ -92,7 +92,6 @@ namespace ERPBLL.Production
             }
             this._productionAssembleStockDetailRepository.InsertAll(stockDetails);
             return this._productionAssembleStockDetailRepository.Save();
-
         }
         public bool SaveProductionAssembleStockDetailStockOut(List<ProductionAssembleStockDetailDTO> stockDetailDTOs, long userId, long orgId)
         {
@@ -130,6 +129,46 @@ namespace ERPBLL.Production
                     info.UpdateDate = DateTime.Now;
                     this._productionAssembleStockInfoRepository.Update(info);
                 
+            }
+            this._productionAssembleStockDetailRepository.InsertAll(stockDetails);
+            return this._productionAssembleStockDetailRepository.Save();
+        }
+        public bool SaveProductionAssembleStockDetailStockTransfer(List<ProductionAssembleStockDetailDTO> stockDetailDTOs, long userId, long orgId)
+        {
+            List<ProductionAssembleStockDetail> stockDetails = new List<ProductionAssembleStockDetail>();
+
+            foreach (var item in stockDetailDTOs)
+            {
+                ProductionAssembleStockDetail stockDetail = new ProductionAssembleStockDetail()
+                {
+                    ProductionFloorId = item.ProductionFloorId,
+                    DescriptionId = item.DescriptionId,
+                    WarehouseId = item.WarehouseId,
+                    ItemTypeId = item.ItemTypeId,
+                    ItemId = item.ItemId,
+                    PackagingLineId = item.PackagingLineId,
+                    PackagingLineName = item.PackagingLineName,
+                    QCLineId = item.QCLineId,
+                    QCLineName = item.QCLineName,
+                    UnitId = item.UnitId,
+                    UnitName = item.UnitName,
+                    OrganizationId = orgId,
+                    RefferenceNumber = item.RefferenceNumber,
+                    Quantity = item.Quantity,
+                    StockStatus = StockStatus.Transfer,
+                    Remarks = "",
+                    EntryDate = DateTime.Now,
+                    EUserId = userId
+                };
+                stockDetails.Add(stockDetail);
+
+                var info = _productionAssembleStockInfoBusiness.productionAssembleStockInfoByFloorAndModelAndItem(item.ProductionFloorId, item.DescriptionId, item.ItemId, orgId);
+
+                info.StockOutQty += item.Quantity;
+                info.UpUserId = userId;
+                info.UpdateDate = DateTime.Now;
+                this._productionAssembleStockInfoRepository.Update(info);
+
             }
             this._productionAssembleStockDetailRepository.InsertAll(stockDetails);
             return this._productionAssembleStockDetailRepository.Save();

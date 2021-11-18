@@ -88,6 +88,7 @@ namespace ERPBLL.Common
         public static readonly string StockIn = "Stock-In";
         public static readonly string StockOut = "Stock-Out";
         public static readonly string StockReturn = "Stock-Return";
+        public static readonly string Transfer = "Transfer";
     }
     public class ReturnType
     {

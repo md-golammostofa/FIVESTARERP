@@ -22,12 +22,14 @@ namespace ERPBLL.Inventory
         private readonly ItemRepository itemRepository; // repo
         private readonly IProductionStockInfoBusiness _productionStockInfoBusiness;
         private readonly IItemTypeBusiness _itemTypeBusiness;
-        public ItemBusiness(IInventoryUnitOfWork inventoryDb, IProductionStockInfoBusiness productionStockInfoBusiness, IItemTypeBusiness itemTypeBusiness)
+        private readonly IProductionAssembleStockInfoBusiness _productionAssembleStockInfoBusiness;
+        public ItemBusiness(IInventoryUnitOfWork inventoryDb, IProductionStockInfoBusiness productionStockInfoBusiness, IItemTypeBusiness itemTypeBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness)
         {
             this._inventoryDb = inventoryDb;
             itemRepository = new ItemRepository(this._inventoryDb);
             this._productionStockInfoBusiness = productionStockInfoBusiness;
             this._itemTypeBusiness = itemTypeBusiness;
+            this._productionAssembleStockInfoBusiness = productionAssembleStockInfoBusiness;
         }
 
         public IEnumerable<Item> GetAllItemByOrgId(long orgId)
@@ -51,6 +53,20 @@ Order By w.WarehouseName,it.ItemName,i.ItemName", model,orgId)).ToList();
            var items= _productionStockInfoBusiness.GetAllProductionStockInfoByOrgId(orgId).Where(l => l.LineId == lineId).Select(s => s.ItemId).Distinct().ToList();
 
          return GetAllItemByOrgId(orgId).Where(it => items.Contains(it.ItemId)).Select(it => new ItemDomainDTO
+            {
+                ItemId = it.ItemId,
+                ItemName = it.ItemName,
+                ItemTypeId = it.ItemTypeId,
+                UnitId = it.UnitId,
+                IsActive = it.IsActive,
+                Remarks = it.Remarks
+            }).ToList();
+        }
+        public IEnumerable<ItemDomainDTO> GetAllItemsInMiniStockByLineIdWithModel(long lineId, long modelId, long orgId)
+        {
+            var items = _productionAssembleStockInfoBusiness.GetProductionAssembleStockInfos(orgId).Where(l => l.ProductionFloorId == lineId && l.DescriptionId == modelId).Select(s => s.ItemId).Distinct().ToList();
+
+            return GetAllItemByOrgId(orgId).Where(it => items.Contains(it.ItemId)).Select(it => new ItemDomainDTO
             {
                 ItemId = it.ItemId,
                 ItemName = it.ItemName,

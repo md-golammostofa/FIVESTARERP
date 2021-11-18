@@ -955,6 +955,7 @@
     <Content Include="Views\FrontDesk\_JobReturnList.cshtml" />
     <Content Include="Views\Production\_GetMiniStockTransferList.cshtml" />
     <Content Include="Views\Production\CreateHalfDoneProductTransferToWarehouse.cshtml" />
+    <Content Include="Views\Production\_GetMiniStockTransferToSemiFinishGoodsWarehouse.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

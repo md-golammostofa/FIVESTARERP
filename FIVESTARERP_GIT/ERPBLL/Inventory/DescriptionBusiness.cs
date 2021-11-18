@@ -25,8 +25,9 @@ namespace ERPBLL.Inventory
         private readonly IItemBusiness _itemBusiness;
         private readonly IColorBusiness _colorBusiness;
         private readonly IModelColorBusiness _modelColorBusiness;
+        private readonly IProductionAssembleStockInfoBusiness _productionAssembleStockInfoBusiness;
 
-        public DescriptionBusiness(IInventoryUnitOfWork inventoryDb, IProductionStockInfoBusiness productionStockInfoBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IItemBusiness itemBusiness, IColorBusiness colorBusiness, IModelColorBusiness modelColorBusiness)
+        public DescriptionBusiness(IInventoryUnitOfWork inventoryDb, IProductionStockInfoBusiness productionStockInfoBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IItemBusiness itemBusiness, IColorBusiness colorBusiness, IModelColorBusiness modelColorBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness)
         {
             this._inventoryDb = inventoryDb;
             descriptionRepository = new DescriptionRepository(this._inventoryDb);
@@ -37,6 +38,7 @@ namespace ERPBLL.Inventory
             this._itemBusiness = itemBusiness;
             this._colorBusiness = colorBusiness;
             this._modelColorBusiness = modelColorBusiness;
+            this._productionAssembleStockInfoBusiness = productionAssembleStockInfoBusiness;
         }
 
         public IEnumerable<Dropdown> GetAllDescriptionsInProductionStock(long orgId)
@@ -385,6 +387,18 @@ Where mc.DescriptionId = {0} and mc.OrganizationId={1}", modelId, orgId)).ToList
         public bool IsDuplicateModel(long id, string modelName, long orgId)
         {
             return descriptionRepository.GetOneByOrg(m => m.DescriptionName == modelName && m.DescriptionId != id && m.OrganizationId == orgId) != null ? true : false;
+        }
+        public IEnumerable<DescriptionDTO> GetAllModelsInMiniStockByLineId(long lineId, long orgId)
+        {
+            var models = _productionAssembleStockInfoBusiness.GetProductionAssembleStockInfos(orgId).Where(l => l.ProductionFloorId == lineId).Select(s => s.DescriptionId).Distinct().ToList();
+
+            return GetDescriptionByOrgId(orgId).Where(it => models.Contains(it.DescriptionId)).Select(it => new DescriptionDTO
+            {
+                DescriptionId = it.DescriptionId,
+                DescriptionName = it.DescriptionName,
+                IsActive = it.IsActive,
+                Remarks = it.Remarks
+            }).ToList();
         }
     }
 }

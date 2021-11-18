@@ -913,6 +913,10 @@
     <Compile Include="ProductionContextMigrations\202111140940066_Production_MiniStockQCLineAdd.Designer.cs">
       <DependentUpon>202111140940066_Production_MiniStockQCLineAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProductionContextMigrations\202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.cs" />
+    <Compile Include="ProductionContextMigrations\202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.Designer.cs">
+      <DependentUpon>202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProductionContextMigrations\Configuration.cs" />
     <Compile Include="ProductionDAL\ProductionRepository.cs" />
     <Compile Include="ProductionDAL\ProductionUnitOfWork.cs" />
@@ -1640,6 +1644,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202111140940066_Production_MiniStockQCLineAdd.resx">
       <DependentUpon>202111140940066_Production_MiniStockQCLineAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.resx">
+      <DependentUpon>202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.resx">
       <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>

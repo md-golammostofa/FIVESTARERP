@@ -1095,7 +1095,26 @@ namespace ERPWeb.Controllers
             var IsExist = _repairSectionSemiFinishStockInfoBusiness.QRCodeCheckMiniStock(qrCode, status, User.OrgId);
             return Json(IsExist);
         }
-
+        [HttpPost]
+        public ActionResult GetItemsByProductionLineWithModelForMiniStock(long lineId, long modelId)
+        {
+            var data = _itemBusiness.GetAllItemsInMiniStockByLineIdWithModel(lineId, modelId, User.OrgId).Select(i => new Dropdown
+            {
+                value = i.ItemId.ToString(),
+                text = i.ItemName
+            }).ToList();
+            return Json(data);
+        }
+        [HttpPost]
+        public ActionResult GetModelsByProductionLineForMiniStock(long lineId)
+        {
+            var data = _descriptionBusiness.GetAllModelsInMiniStockByLineId(lineId, User.OrgId).Select(i => new Dropdown
+            {
+                value = i.DescriptionId.ToString(),
+                text = i.DescriptionName
+            }).ToList();
+            return Json(data);
+        }
         #endregion
 
         #region Inventory Module
