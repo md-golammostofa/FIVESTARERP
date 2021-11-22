@@ -24,6 +24,8 @@ namespace ERPWeb.Controllers
     {
         // GET: Production
         #region Production Business Classes
+        private readonly IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness _miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness;
+        private readonly IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness _miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness;
         private readonly IMiniStockTransferToSemiFinishGoodsWarehouseBusiness _miniStockTransferToSemiFinishGoodsWarehouseBusiness;
         private readonly IRequsitionInfoBusiness _requsitionInfoBusiness;
         private readonly IRequsitionDetailBusiness _requsitionDetailBusiness;
@@ -133,9 +135,11 @@ namespace ERPWeb.Controllers
         private readonly IWarehouseStockDetailBusiness _warehouseStockDetailBusiness;
         #endregion
 
-        public ProductionController(IRequsitionInfoBusiness requsitionInfoBusiness, IWarehouseBusiness warehouseBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IProductionLineBusiness productionLineBusiness, IItemBusiness itemBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IProductionStockDetailBusiness productionStockDetailBusiness, IProductionStockInfoBusiness productionStockInfoBusiness, IItemReturnInfoBusiness itemReturnInfoBusiness, IItemReturnDetailBusiness itemReturnDetailBusiness, IDescriptionBusiness descriptionBusiness, IFinishGoodsInfoBusiness finishGoodsInfoBusiness, IFinishGoodsRowMaterialBusiness finishGoodsRowMaterialBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness, IFinishGoodsSendToWarehouseInfoBusiness finishGoodsSendToWarehouseInfoBusiness, IFinishGoodsSendToWarehouseDetailBusiness finishGoodsSendToWarehouseDetailBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IAssemblyLineBusiness assemblyLineBusiness, ITransferStockToAssemblyInfoBusiness transferStockToAssemblyInfoBusiness, ITransferStockToAssemblyDetailBusiness transferStockToAssemblyDetailBusiness, IAssemblyLineStockInfoBusiness assemblyLineStockInfoBusiness, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IQualityControlBusiness qualityControlBusiness, ITransferStockToQCInfoBusiness transferStockToQCInfoBusiness, ITransferStockToQCDetailBusiness transferStockToQCDetailBusiness, IQCLineStockInfoBusiness qCLineStockInfoBusiness, IQCLineStockDetailBusiness qCLineStockDetailBusiness, IRepairLineBusiness repairLineBusiness, IPackagingLineBusiness packagingLineBusiness, ITransferFromQCInfoBusiness transferFromQCInfoBusiness, ITransferFromQCDetailBusiness transferFromQCDetailBusiness, IPackagingLineStockInfoBusiness packagingLineStockInfoBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, ITransferStockToPackagingLine2InfoBusiness transferStockToPackagingLine2InfoBusiness, ITransferStockToPackagingLine2DetailBusiness transferStockToPackagingLine2DetailBusiness, IRepairLineStockInfoBusiness repairLineStockInfoBusiness, IRepairLineStockDetailBusiness repairLineStockDetailBusiness, ITransferRepairItemToQcInfoBusiness transferRepairItemToQcInfoBusiness, ITransferRepairItemToQcDetailBusiness transferRepairItemToQcDetailBusiness, IQCItemStockInfoBusiness qCItemStockInfoBusiness, IQCItemStockDetailBusiness qCItemStockDetailBusiness, IRepairItemStockInfoBusiness repairItemStockInfoBusiness, IRepairItemStockDetailBusiness repairItemStockDetailBusiness, IPackagingItemStockInfoBusiness packagingItemStockInfoBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IFaultyItemStockInfoBusiness faultyItemStockInfoBusiness, IFaultyCaseBusiness faultyCaseBusiness, IRepairItemBusiness repairItemBusiness, IRepairSectionFaultyItemTransferInfoBusiness repairSectionFaultyItemTransferInfoBusiness, IRepairSectionRequisitionInfoBusiness repairSectionRequisitionInfoBusiness, IRepairSectionRequisitionDetailBusiness repairSectionRequisitionDetailBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IProductionFaultyStockDetailBusiness productionFaultyStockDetailBusiness, IProductionFaultyStockInfoBusiness productionFaultyStockInfoBusiness, IRepairSectionFaultyItemTransferDetailBusiness repairSectionFaultyItemTransferDetailBusiness, IQCPassTransferInformationBusiness qCPassTransferInformationBusiness, IProductionAssembleStockDetailBusiness productionAssembleStockDetailBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness, IProductionToPackagingStockTransferInfoBusiness productionToPackagingStockTransferInfoBusiness, IProductionToPackagingStockTransferDetailBusiness productionToPackagingStockTransferDetailBusiness, IQRCodeTransferToRepairInfoBusiness qRCodeTransferToRepairInfoBusiness, IQRCodeProblemBusiness qRCodeProblemBusiness, IRequisitionItemInfoBusiness requisitionItemInfoBusiness, IRequisitionItemDetailBusiness requisitionItemDetailBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IQCPassTransferDetailBusiness qCPassTransferDetailBusiness, IMiniStockTransferInfoBusiness miniStockTransferInfoBusiness, IMiniStockTransferDetailBusiness miniStockTransferDetailBusiness, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, ITransferToPackagingRepairInfoBusiness transferToPackagingRepairInfoBusiness, ITransferToPackagingRepairDetailBusiness transferToPackagingRepairDetailBusiness, IPackagingRepairRawStockInfoBusiness packagingRepairRawStockInfoBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness, IPackagingRepairItemStockInfoBusiness packagingRepairItemStockInfoBusiness, IPackagingRepairItemStockDetailBusiness packagingRepairItemStockDetailBusiness, IIMEITransferToRepairDetailBusiness iMEITransferToRepairDetailBusiness, ITransferPackagingRepairItemToQcInfoBusiness transferPackagingRepairItemToQcInfoBusiness, ITransferPackagingRepairItemToQcDetailBusiness transferPackagingRepairItemToQcDetailBusiness, IPackagingFaultyStockInfoBusiness packagingFaultyStockInfoBusiness, IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness, IIMEIGenerator iMEIGenerator, IGeneratedIMEIBusiness generatedIMEIBusiness, IStockItemReturnInfoBusiness stockItemReturnInfoBusiness, IStockItemReturnDetailBusiness stockItemReturnDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, ILotInLogBusiness lotInLogBusiness, IRepairSectionSemiFinishTransferInfoBusiness repairSectionSemiFinishTransferInfoBusiness, IRepairSectionSemiFinishTransferDetailsBusiness repairSectionSemiFinishTransferDetailsBusiness, IRepairSectionSemiFinishStockInfoBusiness repairSectionSemiFinishStockInfoBusiness, ISubQCBusiness subQCBusiness, IMiniStockTransferToWarehouseInfoBusiness miniStockTransferToWarehouseInfoBusiness, IMiniStockTransferToWarehouseDetailsBusiness miniStockTransferToWarehouseDetailsBusiness, IMiniStockTransferToSemiFinishGoodsWarehouseBusiness miniStockTransferToSemiFinishGoodsWarehouseBusiness)
+        public ProductionController(IRequsitionInfoBusiness requsitionInfoBusiness, IWarehouseBusiness warehouseBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IProductionLineBusiness productionLineBusiness, IItemBusiness itemBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IProductionStockDetailBusiness productionStockDetailBusiness, IProductionStockInfoBusiness productionStockInfoBusiness, IItemReturnInfoBusiness itemReturnInfoBusiness, IItemReturnDetailBusiness itemReturnDetailBusiness, IDescriptionBusiness descriptionBusiness, IFinishGoodsInfoBusiness finishGoodsInfoBusiness, IFinishGoodsRowMaterialBusiness finishGoodsRowMaterialBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness, IFinishGoodsSendToWarehouseInfoBusiness finishGoodsSendToWarehouseInfoBusiness, IFinishGoodsSendToWarehouseDetailBusiness finishGoodsSendToWarehouseDetailBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IAssemblyLineBusiness assemblyLineBusiness, ITransferStockToAssemblyInfoBusiness transferStockToAssemblyInfoBusiness, ITransferStockToAssemblyDetailBusiness transferStockToAssemblyDetailBusiness, IAssemblyLineStockInfoBusiness assemblyLineStockInfoBusiness, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IQualityControlBusiness qualityControlBusiness, ITransferStockToQCInfoBusiness transferStockToQCInfoBusiness, ITransferStockToQCDetailBusiness transferStockToQCDetailBusiness, IQCLineStockInfoBusiness qCLineStockInfoBusiness, IQCLineStockDetailBusiness qCLineStockDetailBusiness, IRepairLineBusiness repairLineBusiness, IPackagingLineBusiness packagingLineBusiness, ITransferFromQCInfoBusiness transferFromQCInfoBusiness, ITransferFromQCDetailBusiness transferFromQCDetailBusiness, IPackagingLineStockInfoBusiness packagingLineStockInfoBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, ITransferStockToPackagingLine2InfoBusiness transferStockToPackagingLine2InfoBusiness, ITransferStockToPackagingLine2DetailBusiness transferStockToPackagingLine2DetailBusiness, IRepairLineStockInfoBusiness repairLineStockInfoBusiness, IRepairLineStockDetailBusiness repairLineStockDetailBusiness, ITransferRepairItemToQcInfoBusiness transferRepairItemToQcInfoBusiness, ITransferRepairItemToQcDetailBusiness transferRepairItemToQcDetailBusiness, IQCItemStockInfoBusiness qCItemStockInfoBusiness, IQCItemStockDetailBusiness qCItemStockDetailBusiness, IRepairItemStockInfoBusiness repairItemStockInfoBusiness, IRepairItemStockDetailBusiness repairItemStockDetailBusiness, IPackagingItemStockInfoBusiness packagingItemStockInfoBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IFaultyItemStockInfoBusiness faultyItemStockInfoBusiness, IFaultyCaseBusiness faultyCaseBusiness, IRepairItemBusiness repairItemBusiness, IRepairSectionFaultyItemTransferInfoBusiness repairSectionFaultyItemTransferInfoBusiness, IRepairSectionRequisitionInfoBusiness repairSectionRequisitionInfoBusiness, IRepairSectionRequisitionDetailBusiness repairSectionRequisitionDetailBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IProductionFaultyStockDetailBusiness productionFaultyStockDetailBusiness, IProductionFaultyStockInfoBusiness productionFaultyStockInfoBusiness, IRepairSectionFaultyItemTransferDetailBusiness repairSectionFaultyItemTransferDetailBusiness, IQCPassTransferInformationBusiness qCPassTransferInformationBusiness, IProductionAssembleStockDetailBusiness productionAssembleStockDetailBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness, IProductionToPackagingStockTransferInfoBusiness productionToPackagingStockTransferInfoBusiness, IProductionToPackagingStockTransferDetailBusiness productionToPackagingStockTransferDetailBusiness, IQRCodeTransferToRepairInfoBusiness qRCodeTransferToRepairInfoBusiness, IQRCodeProblemBusiness qRCodeProblemBusiness, IRequisitionItemInfoBusiness requisitionItemInfoBusiness, IRequisitionItemDetailBusiness requisitionItemDetailBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IQCPassTransferDetailBusiness qCPassTransferDetailBusiness, IMiniStockTransferInfoBusiness miniStockTransferInfoBusiness, IMiniStockTransferDetailBusiness miniStockTransferDetailBusiness, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, ITransferToPackagingRepairInfoBusiness transferToPackagingRepairInfoBusiness, ITransferToPackagingRepairDetailBusiness transferToPackagingRepairDetailBusiness, IPackagingRepairRawStockInfoBusiness packagingRepairRawStockInfoBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness, IPackagingRepairItemStockInfoBusiness packagingRepairItemStockInfoBusiness, IPackagingRepairItemStockDetailBusiness packagingRepairItemStockDetailBusiness, IIMEITransferToRepairDetailBusiness iMEITransferToRepairDetailBusiness, ITransferPackagingRepairItemToQcInfoBusiness transferPackagingRepairItemToQcInfoBusiness, ITransferPackagingRepairItemToQcDetailBusiness transferPackagingRepairItemToQcDetailBusiness, IPackagingFaultyStockInfoBusiness packagingFaultyStockInfoBusiness, IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness, IIMEIGenerator iMEIGenerator, IGeneratedIMEIBusiness generatedIMEIBusiness, IStockItemReturnInfoBusiness stockItemReturnInfoBusiness, IStockItemReturnDetailBusiness stockItemReturnDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, ILotInLogBusiness lotInLogBusiness, IRepairSectionSemiFinishTransferInfoBusiness repairSectionSemiFinishTransferInfoBusiness, IRepairSectionSemiFinishTransferDetailsBusiness repairSectionSemiFinishTransferDetailsBusiness, IRepairSectionSemiFinishStockInfoBusiness repairSectionSemiFinishStockInfoBusiness, ISubQCBusiness subQCBusiness, IMiniStockTransferToWarehouseInfoBusiness miniStockTransferToWarehouseInfoBusiness, IMiniStockTransferToWarehouseDetailsBusiness miniStockTransferToWarehouseDetailsBusiness, IMiniStockTransferToSemiFinishGoodsWarehouseBusiness miniStockTransferToSemiFinishGoodsWarehouseBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness)
         {
             #region Production
+            this._miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness = miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness;
+            this._miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness = miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness;
             this._miniStockTransferToSemiFinishGoodsWarehouseBusiness = miniStockTransferToSemiFinishGoodsWarehouseBusiness;
             this._requsitionInfoBusiness = requsitionInfoBusiness;
             this._requsitionDetailBusiness = requsitionDetailBusiness;
@@ -1119,7 +1123,7 @@ namespace ERPWeb.Controllers
         }
 
         // Production Assemble Stock Info
-        public ActionResult GetProductionAssembleItemStockInfo(string flag, long? floorId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq, int page = 1)
+        public ActionResult GetProductionAssembleItemStockInfo(string flag, long? floorId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq, string reqNo, string status, string fromDate, string toDate, int page = 1)
         {
             if (string.IsNullOrEmpty(flag))
             {
@@ -1144,12 +1148,21 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "MiniStockTransferToWarehouse")
             {
-                var dto = _miniStockTransferToSemiFinishGoodsWarehouseBusiness.GetMiniStockTransferToSemiFinishGoodsWarehouseByQuery(floorId , modelId, warehouseId, itemTypeId, itemId, lessOrEq, User.OrgId);
-                ViewBag.PagerData = GetPagerData(dto.Count(), pageSize, page);
-                dto = dto.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                var dto = _miniStockTransferToSemiFinishGoodsWarehouseBusiness.GetMiniStockTransferToSemiFinishGoodsWarehouseByQuery(floorId , modelId, warehouseId, itemTypeId, itemId,null, lessOrEq, User.OrgId);
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<MiniStockTransferToSemiFinishGoodsWarehouseViewModel> viewModels = new List<MiniStockTransferToSemiFinishGoodsWarehouseViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetMiniStockTransferToSemiFinishGoodsWarehouse", viewModels);
+            }
+            else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "MiniStockRequisitionToWarehouseForSemiFinish")
+            {
+                var dto = _miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness.GetMiniStockRequisitionInfoByQuery(reqNo, status,lessOrEq, fromDate, toDate, User.OrgId);
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
+                List<MiniStockRequisitionToSemiFinishGoodsWarehouseInfoViewModel> viewModels = new List<MiniStockRequisitionToSemiFinishGoodsWarehouseInfoViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetMiniStockRequisitionToSemiFinishGoodsWarehouse", viewModels);
             }
             else /*if(!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "search")*/
             {
@@ -5460,14 +5473,6 @@ namespace ERPWeb.Controllers
             }
         }
 
-        public ActionResult CreateHalfDoneProductTransferToWarehouse()
-        {
-            ViewBag.ddlProductionFloor = _productionLineBusiness.GetAllProductionLineByOrgId(User.OrgId).Select(line => new SelectListItem { Text = line.LineNumber, Value = line.LineId.ToString() }).ToList();
-
-            ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(des => new SelectListItem { Text = des.DescriptionName, Value = des.DescriptionId.ToString() }).ToList();
-            return View();
-        }
-
         public ActionResult SaveMiniStockTransferToSemiFinishGoodsWarehouse(MiniStockTransferToSemiFinishGoodsWarehouseViewModel model)
         {
             bool isSuccess = false;
@@ -5480,6 +5485,60 @@ namespace ERPWeb.Controllers
             return Json(isSuccess);
         }
 
+        #endregion
+
+        #region Mini Stock Requisition To Warehouse For Semi Finish Goods
+        public ActionResult CreateMiniStockRequisitionToWarehouseForSemiFinishGoods(string flag)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                ViewBag.ddlProductionFloor = _productionLineBusiness.GetAllProductionLineByOrgId(User.OrgId).Select(line => new SelectListItem { Text = line.LineNumber, Value = line.LineId.ToString() }).ToList();
+                ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(des => new SelectListItem { Text = des.DescriptionName, Value = des.DescriptionId.ToString() }).ToList();
+                ViewBag.ddlItems = _productionAssembleStockInfoBusiness.GetAllItemsInStock(User.OrgId).Select(des => new SelectListItem { Text = des.text, Value = des.value }).ToList();
+                return View();
+            }
+            return View();
+        }
+        public ActionResult SaveMiniStockRequisitionToWarehouse(List<MiniStockRequisitionToSemiFinishGoodsWarehouseDetailViewModel> model, int totalQty)
+        {
+            bool isSuccess = false;
+            if (ModelState.IsValid && totalQty > 0)
+            {
+                List<MiniStockRequisitionToSemiFinishGoodsWarehouseDetailDTO> dto = new List<MiniStockRequisitionToSemiFinishGoodsWarehouseDetailDTO>();
+                AutoMapper.Mapper.Map(model, dto);
+                isSuccess = _miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness.SaveMiniStockRequisitionToWarehouse(dto, totalQty, User.UserId, User.OrgId);
+            }
+            return Json(isSuccess);
+        }
+        public ActionResult GetMiniStockRequisitionToSemiFinishGoodsWarehouseDetails(long reqInfoId)
+        {
+            ViewBag.RequisitionInfo = _miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness.GetRequisitionInfoById(reqInfoId, User.OrgId);
+
+            var dto = _miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness.GetMiniStockRequisitionDetailByQuery(reqInfoId, null, null, null, null, null, User.OrgId);
+            List<MiniStockRequisitionToSemiFinishGoodsWarehouseDetailViewModel> viewModels = new List<MiniStockRequisitionToSemiFinishGoodsWarehouseDetailViewModel>();
+            AutoMapper.Mapper.Map(dto, viewModels);
+            return PartialView("_MiniStockRequisitionToSemiFinishGoodsWarehouseDetails",viewModels);
+        }
+
+        public ActionResult UpdateMiniWarehouseRequisitionStatus(long reqInfoId)
+        {
+            bool isSuccess = false;
+            if (reqInfoId > 0)
+            {
+                isSuccess = _miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness.UpdateMiniWarehouseRequisitionStatusForMiniWarehouseStock(reqInfoId, User.UserId, User.OrgId);
+            }
+            return Json(isSuccess);
+        }
+        #endregion
+
+        #region Half-Done Transfer To Warehouse
+        public ActionResult CreateHalfDoneProductTransferToWarehouse()
+        {
+            ViewBag.ddlProductionFloor = _productionLineBusiness.GetAllProductionLineByOrgId(User.OrgId).Select(line => new SelectListItem { Text = line.LineNumber, Value = line.LineId.ToString() }).ToList();
+
+            ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(des => new SelectListItem { Text = des.DescriptionName, Value = des.DescriptionId.ToString() }).ToList();
+            return View();
+        }
         #endregion
 
         public ActionResult GetStockReturnItemsDetail(long returnId)

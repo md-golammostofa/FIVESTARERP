@@ -39,6 +39,8 @@ namespace ERPWeb
             // e.g. container.RegisterType<ITestService, TestService>();
             // Inventory Database
             #region Inventory
+            container.RegisterType<ISemiFinishGoodsWarehouseStockDetailBusiness, SemiFinishGoodsWarehouseStockDetailBusiness>();
+            container.RegisterType<ISemiFinishGoodsWarehouseStockInfoBusiness, SemiFinishGoodsWarehouseStockInfoBusiness>();
             container.RegisterType<ISTransferDetailsMToMBusiness, STransferDetailsMToMBusiness>();
             container.RegisterType<ISTransferInfoMToMBusiness, STransferInfoMToMBusiness>();
             container.RegisterType<IIQCStockDetailBusiness, IQCStockDetailBusiness>();
@@ -71,6 +73,8 @@ namespace ERPWeb
 
             // Production Database
             #region Production
+            container.RegisterType<IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness, MiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness>();
+            container.RegisterType<IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness, MiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness>();
             container.RegisterType<IMiniStockTransferToSemiFinishGoodsWarehouseBusiness, MiniStockTransferToSemiFinishGoodsWarehouseBusiness>();
             container.RegisterType<IMiniStockTransferToWarehouseDetailsBusiness, MiniStockTransferToWarehouseDetailsBusiness>();
             container.RegisterType<IMiniStockTransferToWarehouseInfoBusiness, MiniStockTransferToWarehouseInfoBusiness>();

@@ -143,4 +143,12 @@ namespace ERPDAL.InventoryDAL
     {
         public STransferDetailsMToMRepository(IInventoryUnitOfWork inventoryUnitOfWork) : base(inventoryUnitOfWork) { }
     }
+    public class SemiFinishGoodsWarehouseStockInfoRepository : InventoryBaseRepository<SemiFinishGoodsWarehouseStockInfo>
+    {
+        public SemiFinishGoodsWarehouseStockInfoRepository(IInventoryUnitOfWork inventoryUnitOfWork) : base(inventoryUnitOfWork) { }
+    }
+    public class SemiFinishGoodsWarehouseStockDetailRepository : InventoryBaseRepository<SemiFinishGoodsWarehouseStockDetail>
+    {
+        public SemiFinishGoodsWarehouseStockDetailRepository(IInventoryUnitOfWork inventoryUnitOfWork) : base(inventoryUnitOfWork) { }
+    }
 }

@@ -39,5 +39,7 @@ namespace ERPDAL.InventoryDAL
         public DbSet<HandSetStock> tblHandSetStock { get; set; }
         public DbSet<StockTransferInfoMToM> tblSTransferInfoMToM { get; set; }
         public DbSet<StockTransferDetailsMToM> tblSTransferDetailsMToM { get; set; }
+        public DbSet<SemiFinishGoodsWarehouseStockInfo> tblSemiFinishGoodsWarehouseStockInfo { get; set; }
+        public DbSet<SemiFinishGoodsWarehouseStockDetail> tblSemiFinishGoodsWarehouseStockDetail { get; set; }
     }
 }

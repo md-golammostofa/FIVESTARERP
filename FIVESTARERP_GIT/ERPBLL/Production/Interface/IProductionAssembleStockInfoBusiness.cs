@@ -16,5 +16,7 @@ namespace ERPBLL.Production.Interface
         List<Dropdown> GetAllItemsInStock(long orgId);
 
         IEnumerable<ProductionAssembleStockInfoDTO> GetProductionAssembleStockInfoByQuery(long? floorId, long? modelId, long? warehouse, long? itemTypeId, long? itemId, string lessOrEq, long orgId);
+        List<Dropdown> GetAllModelsInStockByFloor(long floorId, long orgId);
+        List<Dropdown> GetAllItemsInStockByFloorWithModel(long floorId, long model, long orgId);
     }
 }

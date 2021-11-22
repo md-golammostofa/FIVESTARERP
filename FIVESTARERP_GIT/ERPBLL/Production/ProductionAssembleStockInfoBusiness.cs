@@ -33,6 +33,25 @@ Inner Join [Inventory].dbo.tblWarehouses w on stock.WarehouseId = w.Id
 Where stock.OrganizationId={0}", orgId)).ToList();
         }
 
+        public List<Dropdown> GetAllModelsInStockByFloor(long floorId, long orgId)
+        {
+            return this._productionDb.Db.Database.SqlQuery<Dropdown>(string.Format(@"Select des.DescriptionName'text',Cast(des.DescriptionId as nvarchar(50))'value'
+From tblProductionAssembleStockInfo stock
+Inner Join [Inventory].dbo.tblDescriptions des on stock.DescriptionId =des.DescriptionId
+Where stock.ProductionFloorId = {0} and stock.OrganizationId={1}", floorId, orgId)).ToList();
+        }
+
+        public List<Dropdown> GetAllItemsInStockByFloorWithModel(long floorId, long model, long orgId)
+        {
+            return this._productionDb.Db.Database.SqlQuery<Dropdown>(string.Format(@"Select (i.ItemName+ ' ['+it.ItemName+'-'+w.WarehouseName+']') 'text',
+(Cast(i.ItemId as nvarchar(50))+'#'+Cast(it.ItemId as nvarchar(50))+'#'+Cast(w.Id as nvarchar(50))) 'value'
+From tblProductionAssembleStockInfo stock
+Inner Join [Inventory].dbo.tblItems i on stock.ItemId =i.ItemId
+Inner Join [Inventory].dbo.tblItemTypes it on stock.ItemTypeId = it.ItemId
+Inner Join [Inventory].dbo.tblWarehouses w on stock.WarehouseId = w.Id
+Where stock.ProductionFloorId = {0} and stock.DescriptionId = {1} and stock.OrganizationId={2}", floorId, model, orgId)).ToList();
+        }
+
         public IEnumerable<ProductionAssembleStockInfoDTO> GetProductionAssembleStockInfoByQuery(long? floorId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq, long orgId)
         {
             return this._productionDb.Db.Database.SqlQuery<ProductionAssembleStockInfoDTO>(QueryForProductionAssembleStockInfo(floorId, modelId, warehouseId, itemTypeId, itemId, lessOrEq, orgId)).ToList();

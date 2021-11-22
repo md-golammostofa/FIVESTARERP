@@ -1,0 +1,271 @@
+﻿
+@{
+    ViewBag.Title = "Requisition To Warehouse";
+}
+
+<div class="row" style="margin-top:-20px">
+    <div class="col-md-12">
+        <div class="card card-gray-dark">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="/Production/GetProductionAssembleItemStockInfo" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-center text-bold">Mini Stock Requisition To Warehouse</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-danger btn-sm float-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-navy">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label">Floor</label>
+                                @Html.DropDownList("ddlProductionFloor", (IEnumerable<SelectListItem>)ViewBag.ddlProductionFloor, "--- Select Floor ---", new { @class = "form-control form-control-sm select2" })
+                                <span class="error hide required-floor font-weight-bold">Floor is required !</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ddlModelNames" class="control-label font-weight-bold">Model</label>
+                                <select id="ddlModelNames" class="form-control form-control-sm select2 select2-danger">
+                                    <option value="">--Select Model--</option>
+                                </select>
+                                @*@Html.DropDownList("ddlModelNames", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger ctrl-changed" })*@
+                                <span class="error hide required-model font-weight-bold">Model is required !</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="ddlItems" class="control-label font-weight-bold">Item</label>
+                                <select id="ddlItems" class="form-control form-control-sm select2 select2-danger">
+                                    <option value="">--Select Item--</option>
+                                </select>
+                                @*@Html.DropDownList("ddlItems", (IEnumerable<SelectListItem>)ViewBag.ddlItems, "--Select Item--", new { @class = "form-control form-control-sm select2 select2-danger ctrl-changed" })*@
+                                <span class="error hide required-item font-weight-bold">Item is required !</span>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtQty" class="control-label font-weight-bold">Qty</label>
+                                <input type="number" placeholder="Qty" name="quantity" id="txtQty" class="form-control form-control-sm" />
+                                <span class="error hide required-qty font-weight-bold">Quantity is required !</span>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="clearfix">
+                                    <label for="btnSubmit" class="control-label font-weight-bold" style="visibility:hidden">Save</label>
+                                    <button class="btn btn-warning btn-sm float-right" id="btnAddToList"><i class="fas fa-plus"></i> ADD</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-navy">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 mt-2" style="overflow-y:scroll">
+                                <table class="table table-bordered table-sm text-sm table-striped table-responsive-lg" id="tblRequisitionToWarehouse">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="9">
+                                                <button class="btn btn-success btn-sm float-lg-right" id="btnSubmit">SAVE <i class="fas fa-paper-plane"></i> </button>
+                                            </th>
+                                        </tr>
+                                        <tr class="btn-dark text-center">
+                                            <th>#SL</th>
+                                            <th>Floor</th>
+                                            <th>Model</th>
+                                            <th>Item</th>
+                                            <th>Qty</th>
+                                            <th>Action</th>
+                                            <th class="hide item"></th>
+                                            <th class="hide itemType"></th>
+                                            <th class="hide warehouse"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        var ddlProductionFloor = $("#ddlProductionFloor");
+        var ddlModelNames = $("#ddlModelNames");
+        var ddlItems = $("#ddlItems");
+        var txtQty = $("#txtQty");
+
+        $(document).ready(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        })
+
+        ddlProductionFloor.change(function (e) {
+            e.preventDefault();
+            clearDropdown("ddlModelNames");
+            clearDropdown("ddlItems");
+            if (ddlProductionFloor.val() != "") {
+                LoadDropDown('/Common/GetMiniStockModelsByFloor', 'POST', ddlModelNames, JSON.stringify({ floorId: ddlProductionFloor.val() }));
+            }
+        })
+        ddlModelNames.change(function (e) {
+            e.preventDefault();
+            clearDropdown("ddlItems");
+            if (ddlProductionFloor.val() != "" && ddlModelNames.val() != "") {
+                LoadDropDown('/Common/GetMiniStockItemsByFloorWithModels', 'POST', ddlItems, JSON.stringify({ floorId: ddlProductionFloor.val(), modelId: ddlModelNames.val() }));
+            }
+        })
+
+        function validateInput() {
+            $('.error').addClass('hide');
+            var isValid = true;
+            var count = $("#tblRequisitionToWarehouse tbody tr").length;
+            console.log(count);
+            if (count > 0) {
+                $.each($("#tblRequisitionToWarehouse tbody tr"), function (index, item) {
+                    var floorId = $(this).children('td').eq(1).attr('data-val');
+                    var modelId = $(this).children('td').eq(2).attr('data-val');
+                    var items = ddlItems.val() != "" ? ddlItems.val().split("#") : ["0", "0", "0"];
+                    var itemId = $(this).children('td').eq(6).html();
+                    var itemTypeId = $(this).children('td').eq(7).html();
+                    var warehouseId = $(this).children('td').eq(8).html();
+                    if (itemId == items[0] && itemTypeId == items[1] && warehouseId == items[2] && floorId == ddlProductionFloor.val() && modelId == ddlModelNames.val()) {
+                        isValid = false;
+                        toastrErrorAlert("This Item Already Exists!")
+                    }
+                })
+            }
+            if (TryParseInt(ddlProductionFloor.val(), 0) <= 0) {
+                isValid = false;
+                $(".required-floor").removeClass("hide");
+            }
+            if (TryParseInt(ddlModelNames.val(), 0) <= 0) {
+                isValid = false;
+                $(".required-model").removeClass("hide");
+            }
+            if (ddlItems.val() == "") {
+                isValid = false;
+                $(".required-item").removeClass("hide");
+            }
+            if (TryParseInt(txtQty.val(), 0) <= 0) {
+                isValid = false;
+                $(".required-qty").removeClass("hide");
+            }
+
+            return isValid;
+        }
+        $("#btnAddToList").click(function (e) {
+            e.preventDefault();
+            if (validateInput()) {
+                var items = ddlItems.val() != "" ? ddlItems.val().split("#") : ["0", "0", "0"];
+                var sl = $("#tblRequisitionToWarehouse tbody tr").length;
+                var td1 = "<td class='text-center text-bold'>" + (sl + 1) + "</td>"
+                var td2 = "<td class='text-center' data-val='" + ddlProductionFloor.val() + "'>" + dropDownSelectedText("ddlProductionFloor") + "</td>";
+                var td3 = "<td class='text-center' data-val='" + ddlModelNames.val() + "'>" + dropDownSelectedText("ddlModelNames") + "</td>";
+                var td4 = "<td class='text-center'>" + dropDownSelectedText("ddlItems") + "</td>";
+                var td5 = "<td class='text-center'>" + txtQty.val() + "</td>";
+                var td6 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger btn-flat data-onfly-del' title='Remove this item'><i class='fa fa-trash'></i></a></td>";
+                var td7 = "<td class='text-center hide'>" + items[0] + "</td>";
+                var td8 = "<td class='text-center hide'>" + items[1] + "</td>";
+                var td9 = "<td class='text-center hide'>" + items[2] + "</td>";
+
+                var tr = "<tr>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8 + td9 + "</tr>";
+                $("#tblRequisitionToWarehouse tbody").append(tr);
+                txtQty.val('');
+            }
+        });
+
+        $(document).on("click", "a.data-onfly-del", function (e) {
+            e.preventDefault();
+            var index = $(this).parent().parents('tbody tr').index();
+            removeTableRow("#tblRequisitionToWarehouse tbody", index);
+            fnFixTheTbodyRowSerial("#tblRequisitionToWarehouse", index);
+        })
+
+        function clearCtrl() {
+            ddlItems.val('');
+            ddlItems.trigger('change');
+            ddlModelNames.val('');
+            ddlModelNames.trigger('change');
+            ddlProductionFloor.val('');
+            ddlProductionFloor.trigger('change');
+            txtQty.val('');
+            $("#tblRequisitionToWarehouse tbody tr").empty();
+        }
+
+        $("#btnReset").click(function (e) {
+            e.preventDefault();
+            clearCtrl();
+        })
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            $(".error").addClass("hide");
+            bootbox.confirm("Are you sure you want to save?", function (result) {
+                if (result) {
+                    disable("#btnSubmit");
+                    var reqDetails = []; reqDetails.length = 0;
+                    var totalQty = 0;
+                    $.each($("#tblRequisitionToWarehouse tbody tr"), function (index, item) {
+                        var tds = $(this).children('td');
+
+                        reqDetails.push({
+                            ProductionFloorId: tds.eq('1').attr('data-val'),
+                            DescriptionId: tds.eq('2').attr('data-val'),
+                            ItemId: tds.eq('6').html(),
+                            ItemTypeId: tds.eq('7').html(),
+                            WarehouseId: tds.eq('8').html(),
+                            Quantity: tds.eq('4').html(),
+                        });
+                        var qty = TryParseInt(tds.eq('4').html(), 0);
+                        totalQty += qty;
+                    })
+
+                    var data = JSON.stringify({ model: reqDetails, totalQty: totalQty });
+
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Production/SaveMiniStockRequisitionToWarehouse', data, getToken())).then(function (res, status) {
+                        enable("#btnSubmit");
+                        if (res == true && status == "success") {
+                            $('.toastrDefaultSuccess').trigger('click');
+                            enable("#btnSubmit");
+                            clearCtrl();
+                        }
+                        else {
+                            $('.toastrDefaultError').trigger('click');
+                            enable("#btnSubmit");
+                        }
+                    }).fail(function (error) {
+                        consoleLog(error);
+                        $('.toastrDefaultError').trigger('click');
+                        enable("#btnSubmit");
+                    })
+                }
+            });
+        });
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+
+    </script>
+}

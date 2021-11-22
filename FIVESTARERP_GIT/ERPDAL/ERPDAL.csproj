@@ -610,6 +610,10 @@
     <Compile Include="InventoryContextMigrations\202103231316087_Inventory_TransferCode.Designer.cs">
       <DependentUpon>202103231316087_Inventory_TransferCode.cs</DependentUpon>
     </Compile>
+    <Compile Include="InventoryContextMigrations\202111201142588_Inventory_add_tblSemiFinishGoodsWarehouseStockInfo_Detail.cs" />
+    <Compile Include="InventoryContextMigrations\202111201142588_Inventory_add_tblSemiFinishGoodsWarehouseStockInfo_Detail.Designer.cs">
+      <DependentUpon>202111201142588_Inventory_add_tblSemiFinishGoodsWarehouseStockInfo_Detail.cs</DependentUpon>
+    </Compile>
     <Compile Include="InventoryContextMigrations\Configuration.cs" />
     <Compile Include="InventoryDAL\InventoryUnitOfWork.cs" />
     <Compile Include="InventoryDAL\WarehouseRepository.cs" />
@@ -916,6 +920,10 @@
     <Compile Include="ProductionContextMigrations\202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.cs" />
     <Compile Include="ProductionContextMigrations\202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.Designer.cs">
       <DependentUpon>202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202111211235039_Production_add_tblMiniStockRequisitionToWarehouse.cs" />
+    <Compile Include="ProductionContextMigrations\202111211235039_Production_add_tblMiniStockRequisitionToWarehouse.Designer.cs">
+      <DependentUpon>202111211235039_Production_add_tblMiniStockRequisitionToWarehouse.cs</DependentUpon>
     </Compile>
     <Compile Include="ProductionContextMigrations\Configuration.cs" />
     <Compile Include="ProductionDAL\ProductionRepository.cs" />
@@ -1420,6 +1428,9 @@
     <EmbeddedResource Include="InventoryContextMigrations\202103231316087_Inventory_TransferCode.resx">
       <DependentUpon>202103231316087_Inventory_TransferCode.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202111201142588_Inventory_add_tblSemiFinishGoodsWarehouseStockInfo_Detail.resx">
+      <DependentUpon>202111201142588_Inventory_add_tblSemiFinishGoodsWarehouseStockInfo_Detail.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202006271621248_Production_AllEntities_27-Jun-2020.resx">
       <DependentUpon>202006271621248_Production_AllEntities_27-Jun-2020.cs</DependentUpon>
     </EmbeddedResource>
@@ -1647,6 +1658,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.resx">
       <DependentUpon>202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202111211235039_Production_add_tblMiniStockRequisitionToWarehouse.resx">
+      <DependentUpon>202111211235039_Production_add_tblMiniStockRequisitionToWarehouse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.resx">
       <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>

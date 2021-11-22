@@ -1,0 +1,531 @@
+﻿
+@{
+    ViewBag.Title = "Semi Finish Goods Stock";
+}
+
+<div class="row text-sm">
+    <div class="col-md-12" style="margin-top:-20px">
+        <div class="card card-primary card-outline card-outline-tabs">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-one" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-one-semiFinsishGoddsStock-tab" data-toggle="pill" href="#custom-tabs-one-semiFinsishGoddsStock" role="tab" aria-controls="custom-tabs-one-semiFinsishGoddsStock" aria-selected="true">Semi Finish Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-one-semiFinsishGoddsStockReceive-tab" data-toggle="pill" href="#custom-tabs-one-semiFinsishGoddsStockReceive" role="tab" aria-controls="custom-tabs-one-semiFinsishGoddsStockReceive" aria-selected="true">Semi Finish Receive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-one-miniWarehouseRequisitionReceive-tab" data-toggle="pill" href="#custom-tabs-one-miniWarehouseRequisitionReceive" role="tab" aria-controls="custom-tabs-one-miniWarehouseRequisitionReceive" aria-selected="true">Mini Warehouse Requisition</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <div class="tab-pane fade show active" id="custom-tabs-one-semiFinsishGoddsStock" role="tabpanel" aria-labelledby="custom-tabs-one-semiFinsishGoddsStock-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">Semi Finish Goods Stock</h5>
+                                            </div>
+                                            <div class="col-md-3">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <h6 class="card-title">Search By:</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-2">
+                                                <label for="ddlFloorForMiniStockTransferToWarehouseSearch" class="control-label font-weight-bold">Floor</label>
+                                                @Html.DropDownList("ddlFloorForSemiFinishGoodsStockSearch", (IEnumerable<SelectListItem>)ViewBag.ddlLineNumber, "--Select FLoor--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlModelNameForSemiFinishGoodsStockSearch" class="control-label font-weight-bold">Model</label>
+                                                @Html.DropDownList("ddlModelNameForSemiFinishGoodsStockSearch", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm ctrl-change select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="ddlItemsStockForSemiFinishGoodsStockSearch" class="control-label font-weight-bold">Item-Color</label>
+                                                @Html.DropDownList("ddlItemsStockForSemiFinishGoodsStockSearch", (IEnumerable<SelectListItem>)ViewBag.ddlItems, "--Select Item--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">Qty(Less/Eq)</label>
+                                                <input type="number" id="txtLessOrEqForSemiFinishGoodsStockSearch" class="form-control form-control-sm" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12" id="dataContainer1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-one-semiFinsishGoddsStockReceive" role="tabpanel" aria-labelledby="custom-tabs-one-semiFinsishGoddsStockReceive-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">Semi Finish Goods Receive</h5>
+                                            </div>
+                                            <div class="col-md-3">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <h6 class="card-title">Search By:</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-2">
+                                                <label for="ddlFloorForMiniStockTransferToWarehouseSearch" class="control-label font-weight-bold">Floor</label>
+                                                @Html.DropDownList("ddlFloorForMiniStockTransferToWarehouseSearch", (IEnumerable<SelectListItem>)ViewBag.ddlLineNumber, "--Select FLoor--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlModelName" class="control-label font-weight-bold">Model</label>
+                                                @Html.DropDownList("ddlModelNameForMiniStockTransferToWarehouseSearch", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm ctrl-change select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="ddlItemsStockForMiniStockTransferToWarehouseSearch" class="control-label font-weight-bold">Item-Color</label>
+                                                @Html.DropDownList("ddlItemsStockForMiniStockTransferToWarehouseSearch", (IEnumerable<SelectListItem>)ViewBag.ddlItems, "--Select Item--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlStatusStockForMiniStockTransferToWarehouseSearch" class="control-label font-weight-bold">Item-Color</label>
+                                                @Html.DropDownList("ddlStatusStockForMiniStockTransferToWarehouseSearch", (IEnumerable<SelectListItem>)ViewBag.ddlStateStatus, "--Select Status--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">Qty(Less/Eq)</label>
+                                                <input type="number" id="txtLessOrEqForMiniStockTransferToWarehouseSearch" class="form-control form-control-sm" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12" id="dataContainer2">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-one-miniWarehouseRequisitionReceive" role="tabpanel" aria-labelledby="custom-tabs-one-miniWarehouseRequisitionReceive-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">Mini Warehouse Requisition</h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <h6 class="card-title">Search By:</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">Req.No</label>
+                                                <input type="text" id="txtRequisitionCodeForMiniStockRequisitionToWarehouseSearch" class="form-control form-control-sm" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlStateStatusForRequisitionToSemiFinishGoodsWarehouse" class="control-label font-weight-bold">State Status</label>
+                                                <select class="form-control form-control-sm" id="ddlStateStatusForRequisitionToSemiFinishGoodsWarehouse">
+                                                    <option value="">Select Status</option>
+                                                    <option value="Send">Send</option>
+                                                    <option value="Approved">Approved</option>
+                                                    <option value="Accepted">Accepted</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">Qty(Less/Eq)</label>
+                                                <input type="number" id="txtLessOrEqForMiniStockRequisitionToWarehouseSearch" class="form-control form-control-sm" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">From Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker-reqToSemiWarehouse ctrl-changed" id="dptFromDateForRequisitionToSemiFinishGoodsWarehouse" />
+                                                    <div class="input-group-prepend cursor-pointer remove-date-reqToSemiWarehouse dptFromDate" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">To Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker-reqToSemiWarehouse ctrl-changed" id="dptToDateForRequisitionToSemiFinishGoodsWarehouse" />
+                                                    <div class="input-group-prepend remove-date-reqToSemiWarehouse dptToDate" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="row">
+                                        <div class="card-body">
+                                            <div class="col-md-12" id="dataContainer3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalMiniStockRequisitionToSemiFinishWarehouseDetails" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <input type="hidden" />
+                <h4 id="modalHeading" class="modal-title">Requisition Details</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="modalContainer1">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+            initialLoad();
+
+            dptFromDateForRequisitionToSemiFinishGoodsWarehouse.prop('readonly', true);
+            dptToDateForRequisitionToSemiFinishGoodsWarehouse.prop('readonly', true);
+            dptFromDateForRequisitionToSemiFinishGoodsWarehouse.css("background-color", "#fff");
+            dptToDateForRequisitionToSemiFinishGoodsWarehouse.css("background-color", "#fff");
+            $('#dptFromDateForRequisitionToSemiFinishGoodsWarehouse').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+            $('#dptToDateForRequisitionToSemiFinishGoodsWarehouse').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+        })
+
+        function initialLoad() {
+            loadMiniStockTransferToWarehouseListDataTable();
+            loadSemiFinishGoodsStockListDataTable();
+            loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+        }
+
+        //#region Semi Finish Goods Stock
+        var ddlFloorForSemiFinishGoodsStockSearch = $("#ddlFloorForSemiFinishGoodsStockSearch");
+        var ddlModelNameForSemiFinishGoodsStockSearch = $("#ddlModelNameForSemiFinishGoodsStockSearch");
+        var ddlItemsStockForSemiFinishGoodsStockSearch = $("#ddlItemsStockForSemiFinishGoodsStockSearch");
+        var txtLessOrEqForSemiFinishGoodsStockSearch = $("#txtLessOrEqForSemiFinishGoodsStockSearch");
+
+        ddlFloorForSemiFinishGoodsStockSearch.change(function (e) {
+            loadSemiFinishGoodsStockListDataTable();
+        })
+        ddlModelNameForSemiFinishGoodsStockSearch.change(function (e) {
+            loadSemiFinishGoodsStockListDataTable();
+        })
+        ddlItemsStockForSemiFinishGoodsStockSearch.change(function (e) {
+            loadSemiFinishGoodsStockListDataTable();
+        })
+        txtLessOrEqForSemiFinishGoodsStockSearch.keyup(function (e) {
+            loadSemiFinishGoodsStockListDataTable();
+        })
+
+        function loadSemiFinishGoodsStockListDataTable() {
+            var item = ddlItemsStockForSemiFinishGoodsStockSearch.val() != "" ? ddlItemsStockForSemiFinishGoodsStockSearch.val().split("#") : ["0", "0", "0"];
+            var data = { flag: "SemiFinishGoodsWarehouseStock", floorId: ddlFloorForSemiFinishGoodsStockSearch.val(), modelId: ddlModelNameForSemiFinishGoodsStockSearch.val(), warehouseId: TryParseInt(item[2], 0), itemTypeId: TryParseInt(item[1], 0), itemId: TryParseInt(item[0], 0), lessOrEq: txtLessOrEqForSemiFinishGoodsStockSearch.val() }
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetSemiFinishGoodsStock', data)).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer1").fadeOut('500', function () {
+                        $("#dataContainer1").empty();
+                        $("#dataContainer1").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+            pageNo = 1;
+        }
+        //Pagination
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).parent().hasClass('current-page')) {
+                if ($(this).parent().parents('div').hasClass('divSemiFinishGoodsStock')) {
+                    pageNo = $(this).attr('data-page-no');
+                    loadSemiFinishGoodsStockListDataTable();
+                }
+            }
+        })
+
+        //#endregion
+
+        //#region Semi Finish Goods Stock Receive From Mini Warehouse
+        var ddlFloorForMiniStockTransferToWarehouseSearch = $("#ddlFloorForMiniStockTransferToWarehouseSearch");
+        var ddlModelNameForMiniStockTransferToWarehouseSearch = $("#ddlModelNameForMiniStockTransferToWarehouseSearch");
+        var ddlItemsStockForMiniStockTransferToWarehouseSearch = $("#ddlItemsStockForMiniStockTransferToWarehouseSearch");
+        var ddlStatusStockForMiniStockTransferToWarehouseSearch = $("#ddlStatusStockForMiniStockTransferToWarehouseSearch");
+        var txtLessOrEqForMiniStockTransferToWarehouseSearch = $("#txtLessOrEqForMiniStockTransferToWarehouseSearch");
+
+        ddlFloorForMiniStockTransferToWarehouseSearch.change(function () {
+            loadMiniStockTransferToWarehouseListDataTable();
+        })
+        ddlModelNameForMiniStockTransferToWarehouseSearch.change(function () {
+            loadMiniStockTransferToWarehouseListDataTable();
+        })
+        ddlItemsStockForMiniStockTransferToWarehouseSearch.change(function () {
+            loadMiniStockTransferToWarehouseListDataTable();
+        })
+        ddlStatusStockForMiniStockTransferToWarehouseSearch.change(function () {
+            loadMiniStockTransferToWarehouseListDataTable();
+        })
+        txtLessOrEqForMiniStockTransferToWarehouseSearch.keyup(function () {
+            loadMiniStockTransferToWarehouseListDataTable();
+        })
+        function loadMiniStockTransferToWarehouseListDataTable() {
+            var item = ddlItemsStockForMiniStockTransferToWarehouseSearch.val() != "" ? ddlItemsStockForMiniStockTransferToWarehouseSearch.val().split("#") : ["0", "0", "0"];
+            var data = { flag: "MiniStockTransferToWarehouse", floorId: ddlFloorForMiniStockTransferToWarehouseSearch.val(), modelId: ddlModelNameForMiniStockTransferToWarehouseSearch.val(), warehouseId: TryParseInt(item[2], 0), itemTypeId: TryParseInt(item[1], 0), itemId: TryParseInt(item[0], 0), status: ddlStatusStockForMiniStockTransferToWarehouseSearch.val(), lessOrEq: txtLessOrEqForMiniStockTransferToWarehouseSearch.val() }
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetSemiFinishGoodsStock', data)).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer2").fadeOut('500', function () {
+                        $("#dataContainer2").empty();
+                        $("#dataContainer2").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+            pageNo = 1;
+        }
+        //Pagination
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).parent().hasClass('current-page')) {
+                if ($(this).parent().parents('div').hasClass('divMiniStockTransferToWarehouse')) {
+                    pageNo = $(this).attr('data-page-no');
+                    loadMiniStockTransferToWarehouseListDataTable();
+                }
+            }
+        })
+
+        $(document).on('click', 'a.btnSemiFinishReceive', function (e) {
+            e.preventDefault();
+            var id = $(this).attr('data-item-semiFinishReceive-val');
+            if (id > 0) {
+                bootbox.confirm("Are you sure You Want to Accept this Item?", function (result) {
+                    if (result) {
+                        consoleLog(id);
+                        var data = JSON.stringify({ semiFinsihTransferId: id });
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/SaveSemiFinishGoodsStock', data, getToken())).then(function (res, status) {
+                            if (res === true && status == "success") {
+                                $('.toastrDefaultSuccess').trigger('click');
+                                loadMiniStockTransferToWarehouseListDataTable();
+                                loadSemiFinishGoodsStockListDataTable();
+                            }
+                        }).fail(function (error) {
+                            console.log(error);
+                            $('.toastrDefaultError').trigger('click');
+                        })
+                    }
+                })
+            }
+        })
+        //#endregion
+
+        //#region Mini Stock Requisition To Semi Finish Warehouse
+
+        var txtRequisitionCodeForMiniStockRequisitionToWarehouseSearch = $("#txtRequisitionCodeForMiniStockRequisitionToWarehouseSearch");
+        var ddlStateStatusForRequisitionToSemiFinishGoodsWarehouse = $("#ddlStateStatusForRequisitionToSemiFinishGoodsWarehouse");
+        var txtLessOrEqForMiniStockRequisitionToWarehouseSearch = $("#txtLessOrEqForMiniStockRequisitionToWarehouseSearch");
+        var dptFromDateForRequisitionToSemiFinishGoodsWarehouse = $("#dptFromDateForRequisitionToSemiFinishGoodsWarehouse");
+        var dptToDateForRequisitionToSemiFinishGoodsWarehouse = $("#dptToDateForRequisitionToSemiFinishGoodsWarehouse");
+
+        $(document).on('click', 'div.remove-date-reqToSemiWarehouse', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDateForRequisitionToSemiFinishGoodsWarehouse.val() !== '') {
+                    dptToDateForRequisitionToSemiFinishGoodsWarehouse.val('');
+                    loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDateForRequisitionToSemiFinishGoodsWarehouse.val() !== '') {
+                    dptFromDateForRequisitionToSemiFinishGoodsWarehouse.val('');
+                    loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+                }
+            }
+        })
+
+        txtRequisitionCodeForMiniStockRequisitionToWarehouseSearch.keyup(function (e) {
+            e.preventDefault();
+            loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+        })
+        ddlStateStatusForRequisitionToSemiFinishGoodsWarehouse.change(function (e) {
+            e.preventDefault();
+            loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+        })
+        txtLessOrEqForMiniStockRequisitionToWarehouseSearch.keyup(function (e) {
+            e.preventDefault();
+            loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+        })
+        dptFromDateForRequisitionToSemiFinishGoodsWarehouse.change(function (e) {
+            e.preventDefault();
+            loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+        })
+        dptToDateForRequisitionToSemiFinishGoodsWarehouse.change(function (e) {
+            e.preventDefault();
+            loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+        })
+
+        function loadMiniStockRequisitionToSemiFinishWarehouseListDataTable() {
+            var data = { flag: "MiniStockRequisitionToWarehouseForSemiFinish", reqNo: txtRequisitionCodeForMiniStockRequisitionToWarehouseSearch.val(), status: ddlStateStatusForRequisitionToSemiFinishGoodsWarehouse.val(), lessOrEq: txtLessOrEqForMiniStockRequisitionToWarehouseSearch.val(), fromDate: dptFromDateForRequisitionToSemiFinishGoodsWarehouse.val(), toDate: dptToDateForRequisitionToSemiFinishGoodsWarehouse.val() }
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetSemiFinishGoodsStock', data)).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer3").fadeOut('500', function () {
+                        $("#dataContainer3").empty();
+                        $("#dataContainer3").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+            pageNo = 1;
+        }
+        //Pagination
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).parent().hasClass('current-page')) {
+                if ($(this).parent().parents('div').hasClass('divMiniStockRequisitionToWarehouse')) {
+                    pageNo = $(this).attr('data-page-no');
+                    loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+                }
+            }
+        })
+
+        $(document).on('click', 'a.data-item-semiFinishRequisition', function (e) {
+            e.preventDefault();
+            var id = $(this).attr("data-item-semiFinishRequisition-val");
+            if (id > 0) {
+                var data = { reqInfoId: id };
+                $.when(getReqWithData('html', 'GET', '/Inventory/GetMiniStockRequisitionToSemiFinishGoodsWarehouseDetails', data)).then(function (res, status) {
+                    console.log(status);
+                    if (status === "success") {
+                        $("#modalContainer1").empty();
+                        $("#modalContainer1").append(res);
+                        $("#modalMiniStockRequisitionToSemiFinishWarehouseDetails").modal("toggle");
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                });
+            }
+        })
+
+        $(document).on('click', '.btnRequisitionApprove', function (e) {
+            e.preventDefault();
+            var id = $(this).attr("btnRequisitionApprove-val");
+            if (id > 0) {
+                bootbox.confirm("Are you sure You Want to Approve this Item?", function (result) {
+                    if (result) {
+                        disable($(this));
+                        var data = JSON.stringify({ reqInfoId: id });
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Common/GetSemiFinishGoodsStock', data, getToken())).then(function (res, status) {
+                            if (res.IsSuccess == true && status === "success") {
+                                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/UpdateMiniWarehouseRequisitionStatus', data, getToken())).then(function (res, status) {
+                                    if (res == true && status === "success") {
+                                        toastrSuccessAlert(execuStatus.successSave);
+                                        loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+                                        loadSemiFinishGoodsStockListDataTable();
+                                        $("#modalMiniStockRequisitionToSemiFinishWarehouseDetails").modal("toggle");
+                                        enable($(this));
+                                    }
+                                }).fail(function (error) {
+                                    console.log(error);
+                                    enable($(this));
+                                });
+                            }
+                            else {
+                                enable($(this));
+                                bootbox.alert(res.Message);
+                            }
+                        }).fail(function (error) {
+                            console.log(error);
+                            enable($(this));
+                        });
+                    }
+                })
+            }
+        })
+
+        //#endregion
+
+
+    </script>
+}

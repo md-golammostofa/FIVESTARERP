@@ -543,5 +543,12 @@ namespace ERPDAL.ProductionDAL
     {
         public MiniStockTransferToSemiFinishGoodsWarehouseRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
     }
-    
+    public class MiniStockRequisitionToSemiFinishGoodsWarehouseDetailRepository : ProductionBaseRepository<MiniStockRequisitionToSemiFinishGoodsWarehouseDetail>
+    {
+        public MiniStockRequisitionToSemiFinishGoodsWarehouseDetailRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
+    public class MiniStockRequisitionToSemiFinishGoodsWarehouseInfoRepository : ProductionBaseRepository<MiniStockRequisitionToSemiFinishGoodsWarehouseInfo>
+    {
+        public MiniStockRequisitionToSemiFinishGoodsWarehouseInfoRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+    }
 }
