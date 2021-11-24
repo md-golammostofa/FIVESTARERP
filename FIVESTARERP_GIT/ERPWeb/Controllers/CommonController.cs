@@ -1125,6 +1125,26 @@ namespace ERPWeb.Controllers
             return Json(_productionAssembleStockInfoBusiness.GetAllModelsInStockByFloor(floorId, User.OrgId));
         }
         [HttpPost]
+        public ActionResult GetHalfDoneStockAssemblyByFloor(long floorId)
+        {
+            return Json(_repairSectionSemiFinishStockInfoBusiness.GetAllAssemblyInStockByFloor(floorId, User.OrgId));
+        }
+        [HttpPost]
+        public ActionResult GetHalfDoneStockQCLineByFloorAndAssembly(long floorId, long assemblyId)
+        {
+            return Json(_repairSectionSemiFinishStockInfoBusiness.GetAllQCLineInStockByFloorAndAssembly(floorId, assemblyId, User.OrgId));
+        }
+        [HttpPost]
+        public ActionResult GetHalfDoneStockRepairLineByFloorAndAssemblyAndQC(long floorId, long assemblyId, long qcId)
+        {
+            return Json(_repairSectionSemiFinishStockInfoBusiness.GetAllRepairLineInStockByFloorAndAssemblyAndQC(floorId, assemblyId, qcId, User.OrgId));
+        }
+        [HttpPost]
+        public ActionResult GetHalfDoneStockModelByFloorAndAssemblyAndQCAndRepair(long floorId, long assemblyId, long qcId, long repairId)
+        {
+            return Json(_repairSectionSemiFinishStockInfoBusiness.GetAllModelsInStockByFloorAndAssemblyAndQCAndRepair(floorId, assemblyId, qcId, repairId, User.OrgId));
+        }
+        [HttpPost]
         public ActionResult GetMiniStockItemsByFloorWithModels(long floorId, long modelId)
         {
             return Json(_productionAssembleStockInfoBusiness.GetAllItemsInStockByFloorWithModel(floorId, modelId, User.OrgId));
@@ -1216,6 +1236,13 @@ namespace ERPWeb.Controllers
         }
 
         #region DropdownList
+        [HttpPost]
+        public ActionResult GetDescriptions()
+        {
+            var items = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).AsEnumerable();
+            var dropDown = items.Select(i => new Dropdown { text = i.DescriptionName, value = i.DescriptionId.ToString() }).ToList();
+            return Json(dropDown);
+        }
 
         [HttpPost]
         public ActionResult GetItemDetailsForDDL()
@@ -1294,7 +1321,7 @@ namespace ERPWeb.Controllers
         {
             // var jobOrder = _jobOrderBusiness.GetJobOrderById(jobOrderId, User.OrgId);
             var stockQty = 0;
-            var stock = _repairSectionSemiFinishStockInfoBusiness.GetStockByAllId(floor, assbly, qcline, repair, model,User.OrgId);
+            var stock = _repairSectionSemiFinishStockInfoBusiness.GetStockByAllId(floor, assbly, repair, qcline, model,User.OrgId);
             if (stock != null)
             {
                 stockQty = (stock.StockInQty - stock.StockOutQty);

@@ -1,5 +1,6 @@
 ﻿using ERPBLL.Common;
 using ERPBLL.Production.Interface;
+using ERPBO.Common;
 using ERPBO.Production.DomainModels;
 using ERPBO.Production.DTOModel;
 using ERPDAL.ProductionDAL;
@@ -63,7 +64,7 @@ namespace ERPBLL.Production
                 param += string.Format(@" and rsinfo.WarehouseId={0}", warId);
             }
             query = string.Format(@"Select fl.LineNumber'FloorName',asl.AssemblyLineName,de.DescriptionName'ModelName',qc.QCName'QCLineName',rp.RepairLineName,rsinfo.StockInQty,
-rsinfo.StockOutQty,Sum(rsinfo.StockInQty-rsinfo.StockOutQty)'StockQty',war.WarehouseName,rsinfo.ProductionFloorId,rsinfo.AssemblyLineId,rsinfo.QCId,rsinfo.RepairLineId,rsinfo.DescriptionId From tblRepairSectionSemiFinishStockInfo rsinfo
+rsinfo.StockOutQty,Sum(rsinfo.StockInQty-rsinfo.StockOutQty)'StockQty',rsinfo.WarehouseId,war.WarehouseName,rsinfo.ProductionFloorId,rsinfo.AssemblyLineId,rsinfo.QCId,rsinfo.RepairLineId,rsinfo.DescriptionId From tblRepairSectionSemiFinishStockInfo rsinfo
 Left Join tblProductionLines fl on rsinfo.ProductionFloorId=fl.LineId
 Left Join tblAssemblyLines asl on rsinfo.AssemblyLineId=asl.AssemblyLineId
 Left Join [Inventory].dbo.tblDescriptions de on rsinfo.DescriptionId=de.DescriptionId
@@ -72,7 +73,7 @@ Left Join tblRepairLine rp on rsinfo.RepairLineId=rp.RepairLineId
 Left Join [Inventory].dbo.tblWarehouses war on rsinfo.WarehouseId=war.Id
 Where rsinfo.OrganizationId={0} {1}
 Group By fl.LineNumber,asl.AssemblyLineName,de.DescriptionName,qc.QCName,rp.RepairLineName,rsinfo.StockInQty,
-rsinfo.StockOutQty,war.WarehouseName,rsinfo.ProductionFloorId,rsinfo.AssemblyLineId,rsinfo.QCId,rsinfo.RepairLineId,rsinfo.DescriptionId", orgId, Utility.ParamChecker(param));
+rsinfo.StockOutQty,war.WarehouseName,rsinfo.ProductionFloorId,rsinfo.AssemblyLineId,rsinfo.QCId,rsinfo.RepairLineId,rsinfo.DescriptionId,rsinfo.WarehouseId", orgId, Utility.ParamChecker(param));
             return query;
         }
 
@@ -84,63 +85,187 @@ rsinfo.StockOutQty,war.WarehouseName,rsinfo.ProductionFloorId,rsinfo.AssemblyLin
         public bool SaveStockRepairSectionSemiFinishGood(List<RepairSectionSemiFinishStockDetailsDTO> dtos,long infoId, long userId, long orgId)
         {
             bool isSuccess = false;
-            if (dtos.Count > 0)
+            List<RepairSectionSemiFinishStockDetails> stockDetails = new List<RepairSectionSemiFinishStockDetails>();
+            foreach (var item in dtos)
             {
-                var stock = GetStockByOneById(dtos.FirstOrDefault().FloorId,dtos.FirstOrDefault().QCLineId,dtos.FirstOrDefault().RepairLineId, dtos.FirstOrDefault().AssemblyLineId, dtos.FirstOrDefault().WarehouseId.Value, dtos.FirstOrDefault().DescriptionId,orgId);
-                if(stock != null)
+                RepairSectionSemiFinishStockDetails detail = new RepairSectionSemiFinishStockDetails()
                 {
-                    stock.StockInQty += dtos.Count;
+                    FloorId = item.FloorId,
+                    AssemblyLineId = item.AssemblyLineId,
+                    QCLineId = item.QCLineId,
+                    RepairLineId = item.RepairLineId,
+                    DescriptionId = item.DescriptionId,
+                    WarehouseId = item.WarehouseId,
+                    StateStatus = "Stock-In",
+                    QRCode = item.QRCode,
+                    OrganizationId = orgId,
+                    EUserId = userId,
+                    EntryDate = DateTime.Now,
+                };
+                stockDetails.Add(detail);
+
+                var stock = GetStockByOneById(item.FloorId, item.QCLineId, item.RepairLineId, item.AssemblyLineId, item.WarehouseId.Value, item.DescriptionId, orgId);
+                if (stock != null)
+                {
+                    stock.StockInQty += 1;
                     stock.UpdateDate = DateTime.Now;
                     stock.UpUserId = userId;
+
                     _repairSectionSemiFinishStockInfoRepository.Update(stock);
-                    _repairSectionSemiFinishStockInfoRepository.Save();
                 }
                 else
                 {
                     RepairSectionSemiFinishStockInfo info = new RepairSectionSemiFinishStockInfo();
-                    info.ProductionFloorId = dtos.FirstOrDefault().FloorId;
-                    info.AssemblyLineId = dtos.FirstOrDefault().AssemblyLineId;
-                    info.QCId = dtos.FirstOrDefault().QCLineId;
-                    info.RepairLineId = dtos.FirstOrDefault().RepairLineId;
-                    info.DescriptionId = dtos.FirstOrDefault().DescriptionId;
-                    info.WarehouseId = dtos.FirstOrDefault().WarehouseId;
-                    info.StockInQty = dtos.Count;
+                    info.ProductionFloorId = item.FloorId;
+                    info.AssemblyLineId = item.AssemblyLineId;
+                    info.QCId = item.QCLineId;
+                    info.RepairLineId = item.RepairLineId;
+                    info.DescriptionId = item.DescriptionId;
+                    info.WarehouseId = item.WarehouseId;
+                    info.StockInQty = 1;
                     info.StockOutQty = 0;
                     info.EUserId = userId;
                     info.EntryDate = DateTime.Now;
                     info.OrganizationId = orgId;
-                    _repairSectionSemiFinishStockInfoRepository.Insert(info);
-                    _repairSectionSemiFinishStockInfoRepository.Save();
-                }
 
-                List<RepairSectionSemiFinishStockDetails> details = new List<RepairSectionSemiFinishStockDetails>();
-                foreach(var item in dtos)
-                {
-                    RepairSectionSemiFinishStockDetails detail = new RepairSectionSemiFinishStockDetails()
-                    {
-                        FloorId = item.FloorId,
-                        AssemblyLineId = item.AssemblyLineId,
-                        QCLineId = item.QCLineId,
-                        RepairLineId = item.RepairLineId,
-                        DescriptionId = item.DescriptionId,
-                        WarehouseId = item.WarehouseId,
-                        StateStatus = "Stock-In",
-                        QRCode = item.QRCode,
-                        OrganizationId = orgId,
-                        EUserId = userId,
-                        EntryDate = DateTime.Now,
-                    };
-                    details.Add(detail);
-                }
-                _repairSectionSemiFinishStockDetailsRepository.InsertAll(details);
-                if (_repairSectionSemiFinishStockDetailsRepository.Save() == true)
-                {
-                    isSuccess = _repairSectionSemiFinishTransferInfoBusiness.UpdateStatusRepairSection(infoId, userId, orgId);
+                    _repairSectionSemiFinishStockInfoRepository.Insert(info);
                 }
             }
+            _repairSectionSemiFinishStockDetailsRepository.InsertAll(stockDetails);
+            if (_repairSectionSemiFinishStockDetailsRepository.Save())
+            {
+                isSuccess = _repairSectionSemiFinishTransferInfoBusiness.UpdateStatusRepairSection(infoId, userId, orgId);
+            }
+
+            //Commented By Nishad
+            //if (dtos.Count > 0)
+            //{
+            //    var stock = GetStockByOneById(dtos.FirstOrDefault().FloorId,dtos.FirstOrDefault().QCLineId,dtos.FirstOrDefault().RepairLineId, dtos.FirstOrDefault().AssemblyLineId, dtos.FirstOrDefault().WarehouseId.Value, dtos.FirstOrDefault().DescriptionId,orgId);
+            //    if(stock != null)
+            //    {
+            //        stock.StockInQty += dtos.Count;
+            //        stock.UpdateDate = DateTime.Now;
+            //        stock.UpUserId = userId;
+            //        _repairSectionSemiFinishStockInfoRepository.Update(stock);
+            //        _repairSectionSemiFinishStockInfoRepository.Save();
+            //    }
+            //    else
+            //    {
+            //        RepairSectionSemiFinishStockInfo info = new RepairSectionSemiFinishStockInfo();
+            //        info.ProductionFloorId = dtos.FirstOrDefault().FloorId;
+            //        info.AssemblyLineId = dtos.FirstOrDefault().AssemblyLineId;
+            //        info.QCId = dtos.FirstOrDefault().QCLineId;
+            //        info.RepairLineId = dtos.FirstOrDefault().RepairLineId;
+            //        info.DescriptionId = dtos.FirstOrDefault().DescriptionId;
+            //        info.WarehouseId = dtos.FirstOrDefault().WarehouseId;
+            //        info.StockInQty = dtos.Count;
+            //        info.StockOutQty = 0;
+            //        info.EUserId = userId;
+            //        info.EntryDate = DateTime.Now;
+            //        info.OrganizationId = orgId;
+            //        _repairSectionSemiFinishStockInfoRepository.Insert(info);
+            //        _repairSectionSemiFinishStockInfoRepository.Save();
+            //    }
+
+            //    List<RepairSectionSemiFinishStockDetails> details = new List<RepairSectionSemiFinishStockDetails>();
+            //    foreach(var item in dtos)
+            //    {
+            //        RepairSectionSemiFinishStockDetails detail = new RepairSectionSemiFinishStockDetails()
+            //        {
+            //            FloorId = item.FloorId,
+            //            AssemblyLineId = item.AssemblyLineId,
+            //            QCLineId = item.QCLineId,
+            //            RepairLineId = item.RepairLineId,
+            //            DescriptionId = item.DescriptionId,
+            //            WarehouseId = item.WarehouseId,
+            //            StateStatus = "Stock-In",
+            //            QRCode = item.QRCode,
+            //            OrganizationId = orgId,
+            //            EUserId = userId,
+            //            EntryDate = DateTime.Now,
+            //        };
+            //        details.Add(detail);
+            //    }
+            //    _repairSectionSemiFinishStockDetailsRepository.InsertAll(details);
+            //    if (_repairSectionSemiFinishStockDetailsRepository.Save() == true)
+            //    {
+            //        isSuccess = _repairSectionSemiFinishTransferInfoBusiness.UpdateStatusRepairSection(infoId, userId, orgId);
+            //    }
+            //}
             return isSuccess;
         }
-
+        public bool SaveRepairSectionSemiFinishGoodStockInForMiniStock(List<RepairSectionSemiFinishStockDetailsDTO> dTOs, long userId, long orgId)
+        {
+            List<RepairSectionSemiFinishStockDetails> stockDetails = new List<RepairSectionSemiFinishStockDetails>();
+            foreach (var item in dTOs)
+            {
+                //RepairSectionSemiFinishStockDetails stockDetail = new RepairSectionSemiFinishStockDetails
+                //{
+                //    FloorId = item.FloorId,
+                //    AssemblyLineId = item.AssemblyLineId,
+                //    QCLineId = item.QCLineId,
+                //    RepairLineId = item.RepairLineId,
+                //    DescriptionId = item.DescriptionId,
+                //    WarehouseId = item.WarehouseId,
+                //    StateStatus = "Stock-Out",
+                //    QRCode = item.QRCode,
+                //    OrganizationId = orgId,
+                //    EUserId = userId,
+                //    EntryDate = DateTime.Now,
+                //    ItemId = item.ItemId,
+                //    ItemTypeId = item.ItemTypeId,
+                //    TransferCode = item.TransferCode,
+                //};
+                //stockDetails.Add(stockDetail);
+                var info = this.GetStockByOneById(item.FloorId, item.QCLineId, item.RepairLineId, item.AssemblyLineId, item.WarehouseId.Value, item.DescriptionId, orgId);
+                if (info != null)
+                {
+                    info.StockInQty += item.StockQty;
+                    info.UpdateDate = DateTime.Now;
+                    info.UpUserId = userId;
+                    _repairSectionSemiFinishStockInfoRepository.Update(info);
+                }
+            }
+            //_repairSectionSemiFinishStockDetailsRepository.InsertAll(stockDetails);
+            //return _repairSectionSemiFinishStockDetailsRepository.Save();
+            return _repairSectionSemiFinishStockInfoRepository.Save();
+        }
+        public bool SaveRepairSectionSemiFinishGoodStockOutForMiniStock(List<RepairSectionSemiFinishStockDetailsDTO> dTOs, long userId, long orgId)
+        {
+            List<RepairSectionSemiFinishStockDetails> stockDetails = new List<RepairSectionSemiFinishStockDetails>();
+            foreach (var item in dTOs)
+            {
+                //RepairSectionSemiFinishStockDetails stockDetail = new RepairSectionSemiFinishStockDetails
+                //{
+                //    FloorId = item.FloorId,
+                //    AssemblyLineId = item.AssemblyLineId,
+                //    QCLineId = item.QCLineId,
+                //    RepairLineId = item.RepairLineId,
+                //    DescriptionId = item.DescriptionId,
+                //    WarehouseId = item.WarehouseId,
+                //    StateStatus = "Stock-Out",
+                //    QRCode = item.QRCode,
+                //    OrganizationId = orgId,
+                //    EUserId = userId,
+                //    EntryDate = DateTime.Now,
+                //    ItemId = item.ItemId,
+                //    ItemTypeId = item.ItemTypeId,
+                //    TransferCode = item.TransferCode,
+                //};
+                //stockDetails.Add(stockDetail);
+                var info = this.GetStockByOneById(item.FloorId, item.QCLineId, item.RepairLineId, item.AssemblyLineId, item.WarehouseId.Value, item.DescriptionId, orgId);
+                if (info != null)
+                {
+                    info.StockOutQty += item.StockQty;
+                    info.UpdateDate = DateTime.Now;
+                    info.UpUserId = userId;
+                    _repairSectionSemiFinishStockInfoRepository.Update(info);
+                }
+            }
+            //_repairSectionSemiFinishStockDetailsRepository.InsertAll(stockDetails);
+            //return _repairSectionSemiFinishStockDetailsRepository.Save();
+            return _repairSectionSemiFinishStockInfoRepository.Save();
+        }
         public IEnumerable<RepairSectionSemiFinishStockDetailsDTO> GetAllDetailsRepairSectionSemiFinish(long? flId, long? qcId, long? rqId, long? assId, long? warId, long? moId, long orgId)
         {
             return this._productionDb.Db.Database.SqlQuery<RepairSectionSemiFinishStockDetailsDTO>(QueryForGetAllDetailsRepairSectionSemiFinish(flId, qcId, rqId, assId, warId, moId, orgId)).ToList();
@@ -237,6 +362,34 @@ Order By rsinfo.EntryDate desc", orgId, Utility.ParamChecker(param));
         public RepairSectionSemiFinishStockInfo GetStockByAllId(long flId, long assId, long rpId, long qcId, long model, long orgId)
         {
             return _repairSectionSemiFinishStockInfoRepository.GetOneByOrg(h => h.ProductionFloorId == flId && h.AssemblyLineId == assId && h.RepairLineId == rpId && h.QCId == qcId && h.DescriptionId == model && h.OrganizationId == orgId);
+        }
+        public List<Dropdown> GetAllAssemblyInStockByFloor(long floorId, long orgId)
+        {
+            return this._productionDb.Db.Database.SqlQuery<Dropdown>(string.Format(@"Select asm.AssemblyLineName'text',Cast(asm.AssemblyLineId as nvarchar(50))'value'
+From tblRepairSectionSemiFinishStockInfo stock
+Inner Join [Production].dbo.tblAssemblyLines asm on stock.AssemblyLineId =asm.AssemblyLineId
+Where stock.ProductionFloorId = {0} and stock.OrganizationId={1}", floorId, orgId)).ToList();
+        }
+        public List<Dropdown> GetAllQCLineInStockByFloorAndAssembly(long floorId, long assemblyId, long orgId)
+        {
+            return this._productionDb.Db.Database.SqlQuery<Dropdown>(string.Format(@"Select qc.QCName'text',Cast(qc.QCId as nvarchar(50))'value'
+From tblRepairSectionSemiFinishStockInfo stock
+Inner Join [Production].dbo.tblQualityControl qc on stock.QCId =qc.QCId
+Where stock.ProductionFloorId = {0} and stock.AssemblyLineId = {1} and stock.OrganizationId={2}", floorId, assemblyId,orgId)).ToList();
+        }
+        public List<Dropdown> GetAllRepairLineInStockByFloorAndAssemblyAndQC(long floorId, long assemblyId,long qcId, long orgId)
+        {
+            return this._productionDb.Db.Database.SqlQuery<Dropdown>(string.Format(@"Select rp.RepairLineName'text',Cast(rp.RepairLineId as nvarchar(50))'value'
+From tblRepairSectionSemiFinishStockInfo stock
+Inner Join [Production].dbo.tblRepairLine rp on stock.RepairLineId =rp.RepairLineId
+Where stock.ProductionFloorId = {0} and stock.AssemblyLineId = {1} and stock.QCId={2} and stock.OrganizationId={3}", floorId, assemblyId,qcId, orgId)).ToList();
+        }
+        public List<Dropdown> GetAllModelsInStockByFloorAndAssemblyAndQCAndRepair(long floorId, long assemblyId, long qcId, long repairId, long orgId)
+        {
+            return this._productionDb.Db.Database.SqlQuery<Dropdown>(string.Format(@"Select des.DescriptionName'text',Cast(des.DescriptionId as nvarchar(50))'value'
+From tblRepairSectionSemiFinishStockInfo stock
+Inner Join [Inventory].dbo.tblDescriptions des on stock.DescriptionId =des.DescriptionId
+Where stock.ProductionFloorId = {0} and stock.AssemblyLineId = {1} and stock.QCId={2} and stock.RepairLineId={3} and stock.OrganizationId={4}", floorId, assemblyId, qcId,repairId, orgId)).ToList();
         }
     }
 }

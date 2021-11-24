@@ -1,48 +1,52 @@
-namespace ERPDAL.ProductionContextMigrations
+namespace ERPDAL.InventoryContextMigrations
 {
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Production_MiniStockTransferToWarehouse : DbMigration
+    public partial class Inventory_add_tblHalfDoneWarehouseStockInfo_detail : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.tblMiniStockTransferToWarehouseDetails",
+                "dbo.tblHalfDoneWarehouseStockDetail",
                 c => new
                     {
-                        MSTWDetailsId = c.Long(nullable: false, identity: true),
-                        FloorId = c.Long(),
+                        HalfDoneStockDetailId = c.Long(nullable: false, identity: true),
+                        ProductionFloorId = c.Long(),
                         AssemblyLineId = c.Long(),
+                        QCId = c.Long(),
                         DescriptionId = c.Long(),
                         RepairLineId = c.Long(),
                         WarehouseId = c.Long(),
+                        ItemTypeId = c.Long(),
+                        ItemId = c.Long(),
                         Quantity = c.Int(nullable: false),
+                        StockStatus = c.String(),
                         Remarks = c.String(),
                         OrganizationId = c.Long(nullable: false),
                         EUserId = c.Long(),
                         EntryDate = c.DateTime(),
                         UpUserId = c.Long(),
                         UpdateDate = c.DateTime(),
-                        MSTWInfoId = c.Long(nullable: false),
+                        HalfDoneStockInfoId = c.Long(nullable: false),
                     })
-                .PrimaryKey(t => t.MSTWDetailsId)
-                .ForeignKey("dbo.tblMiniStockTransferToWarehouseInfo", t => t.MSTWInfoId, cascadeDelete: true)
-                .Index(t => t.MSTWInfoId);
+                .PrimaryKey(t => t.HalfDoneStockDetailId);
             
             CreateTable(
-                "dbo.tblMiniStockTransferToWarehouseInfo",
+                "dbo.tblHalfDoneWarehouseStockInfo",
                 c => new
                     {
-                        MSTWInfoId = c.Long(nullable: false, identity: true),
-                        TransferCode = c.String(),
-                        FloorId = c.Long(),
+                        HalfDoneStockInfoId = c.Long(nullable: false, identity: true),
+                        ProductionFloorId = c.Long(),
                         AssemblyLineId = c.Long(),
+                        QCId = c.Long(),
                         DescriptionId = c.Long(),
                         RepairLineId = c.Long(),
                         WarehouseId = c.Long(),
-                        TransferStatus = c.String(),
-                        ReturnStatus = c.String(),
+                        ItemTypeId = c.Long(),
+                        ItemId = c.Long(),
+                        StockInQty = c.Int(nullable: false),
+                        StockOutQty = c.Int(nullable: false),
                         Remarks = c.String(),
                         OrganizationId = c.Long(nullable: false),
                         EUserId = c.Long(),
@@ -50,16 +54,14 @@ namespace ERPDAL.ProductionContextMigrations
                         UpUserId = c.Long(),
                         UpdateDate = c.DateTime(),
                     })
-                .PrimaryKey(t => t.MSTWInfoId);
+                .PrimaryKey(t => t.HalfDoneStockInfoId);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.tblMiniStockTransferToWarehouseDetails", "MSTWInfoId", "dbo.tblMiniStockTransferToWarehouseInfo");
-            DropIndex("dbo.tblMiniStockTransferToWarehouseDetails", new[] { "MSTWInfoId" });
-            DropTable("dbo.tblMiniStockTransferToWarehouseInfo");
-            DropTable("dbo.tblMiniStockTransferToWarehouseDetails");
+            DropTable("dbo.tblHalfDoneWarehouseStockInfo");
+            DropTable("dbo.tblHalfDoneWarehouseStockDetail");
         }
     }
 }

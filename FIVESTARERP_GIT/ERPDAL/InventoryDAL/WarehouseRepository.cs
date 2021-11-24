@@ -151,4 +151,12 @@ namespace ERPDAL.InventoryDAL
     {
         public SemiFinishGoodsWarehouseStockDetailRepository(IInventoryUnitOfWork inventoryUnitOfWork) : base(inventoryUnitOfWork) { }
     }
+    public class HalfDoneWarehouseStockInfoRepository : InventoryBaseRepository<HalfDoneWarehouseStockInfo>
+    {
+        public HalfDoneWarehouseStockInfoRepository(IInventoryUnitOfWork inventoryUnitOfWork) : base(inventoryUnitOfWork) { }
+    }
+    public class HalfDoneWarehouseStockDetailRepository : InventoryBaseRepository<HalfDoneWarehouseStockDetail>
+    {
+        public HalfDoneWarehouseStockDetailRepository(IInventoryUnitOfWork inventoryUnitOfWork) : base(inventoryUnitOfWork) { }
+    }
 }

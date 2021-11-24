@@ -965,6 +965,12 @@
     <Content Include="Views\Production\_MiniStockRequisitionToSemiFinishGoodsWarehouseDetails.cshtml" />
     <Content Include="Views\Inventory\_GetMiniStockRequisitionToSemiFinishGoodsWarehouse.cshtml" />
     <Content Include="Views\Inventory\_MiniStockRequisitionToSemiFinishGoodsWarehouseDetails.cshtml" />
+    <Content Include="Views\Production\_GetHalfDoneStockTranferToWarehouse.cshtml" />
+    <Content Include="Views\Production\_HalfDoneTransferToWarehouseDetails.cshtml" />
+    <Content Include="Views\Inventory\GetHalfDoneStock.cshtml" />
+    <Content Include="Views\Inventory\_GetHalfDoneStockTranferToWarehouse.cshtml" />
+    <Content Include="Views\Inventory\_HalfDoneTransferToWarehouseDetails.cshtml" />
+    <Content Include="Views\Inventory\_GetHalfDoneWarehouseStock.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable < ERPBO.Production.ViewModels.MiniStockTransferToWarehouseInfoViewModel >
+﻿@model IEnumerable < ERPBO.Production.ViewModels.HalfDoneStockTransferToWarehouseInfoViewModel >
 @{ 
     Layout = null;
     int sl = 0;
@@ -21,7 +21,7 @@
                 @foreach (var item in Model)
                 {
                     sl = sl + 1;
-                    badge = item.TransferStatus == "Received" ? "badge bg-success" : "badge bg-Warning";
+                    @*badge = item.TransferStatus == "Received" ? "badge bg-success" : "badge bg-Warning";
                     <tr>
                         <td class="text-center text-bold">@sl</td>
                         <td class="hide">@item.MSTWInfoId</td>
@@ -30,7 +30,7 @@
                         <td class="text-center">
                             <a href="#" class="btn btn-warning btn-sm data-floor-edit" data-floor-edit="@item.MSTWInfoId"><i class="fa fa-eye"></i> Edit</a>
                         </td>
-                    </tr>
+                    </tr>*@
                 }
                 @if (Model.Count() == 0)
                 {

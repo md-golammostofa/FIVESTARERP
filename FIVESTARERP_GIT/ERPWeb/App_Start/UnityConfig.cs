@@ -39,6 +39,8 @@ namespace ERPWeb
             // e.g. container.RegisterType<ITestService, TestService>();
             // Inventory Database
             #region Inventory
+            container.RegisterType<IHalfDoneWarehouseStockInfoBusiness, HalfDoneWarehouseStockInfoBusiness>();
+            container.RegisterType<IHalfDoneWarehouseStockDetailBusiness, HalfDoneWarehouseStockDetailBusiness>();
             container.RegisterType<ISemiFinishGoodsWarehouseStockDetailBusiness, SemiFinishGoodsWarehouseStockDetailBusiness>();
             container.RegisterType<ISemiFinishGoodsWarehouseStockInfoBusiness, SemiFinishGoodsWarehouseStockInfoBusiness>();
             container.RegisterType<ISTransferDetailsMToMBusiness, STransferDetailsMToMBusiness>();
@@ -76,8 +78,8 @@ namespace ERPWeb
             container.RegisterType<IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness, MiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness>();
             container.RegisterType<IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness, MiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness>();
             container.RegisterType<IMiniStockTransferToSemiFinishGoodsWarehouseBusiness, MiniStockTransferToSemiFinishGoodsWarehouseBusiness>();
-            container.RegisterType<IMiniStockTransferToWarehouseDetailsBusiness, MiniStockTransferToWarehouseDetailsBusiness>();
-            container.RegisterType<IMiniStockTransferToWarehouseInfoBusiness, MiniStockTransferToWarehouseInfoBusiness>();
+            container.RegisterType<IHalfDoneStockTransferToWarehouseDetailBusiness, HalfDoneStockTransferToWarehouseDetailBusiness>();
+            container.RegisterType<IHalfDoneStockTransferToWarehouseInfoBusiness, HalfDoneStockTransferToWarehouseInfoBusiness>();
             container.RegisterType<IRepairInBusiness, RepairInBusiness>();
             container.RegisterType<IRepairOutBusiness, RepairOutBusiness>();
             container.RegisterType<IQC1DetailBusiness, QC1DetailBusiness>();

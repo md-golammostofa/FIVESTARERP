@@ -527,7 +527,7 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <a href="/Production/CreateHalfDoneProductTransferToWarehouse" style="background-color:darkblue" class="float-right btn btn-sm btn-outline-primary" title="Transfer">
-                                                        <i class="fas fa-plus"></i> Transfer To W
+                                                        <i class="fas fa-plus"></i> Transfer To Warehouse
                                                     </a>
                                                 </div>
                                             </div>
@@ -542,6 +542,44 @@
                                             <h6 class="card-title">Search By</h6>
                                         </div>
                                         <div class="card-body">
+                                            <div class="row" style="margin-top:-15px">
+                                                <div class="col-md-2">
+                                                    <label class="control-label font-weight-bold">Code</label>
+                                                    <input type="text" id="txtTransferCodeForHalfDoneStockTransferToWarehouseSearch" class="form-control form-control-sm" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="ddlStateStatusForHalfDoneStockTransferToWarehouseSearch" class="control-label font-weight-bold">State Status</label>
+                                                    <select class="form-control form-control-sm select2 select2-danger" id="ddlStateStatusForHalfDoneStockTransferToWarehouseSearch">
+                                                        <option value="">Select Status</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Approved">Approved</option>
+                                                        <option value="Return">Return</option>
+                                                        <option value="Received">Received</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="control-label font-weight-bold">Qty(Less/Eq)</label>
+                                                    <input type="number" id="txtLessOrEqForHalfDoneStockTransferToWarehouseSearch" class="form-control form-control-sm" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="control-label font-weight-bold">From Date</label>
+                                                    <div class="input-group input-group-sm ">
+                                                        <input type="text" class="form-control form-control-sm date-datePicker-halfDoneToWarehouse ctrl-changed" id="dptFromDateForHalfDoneStockTransferToWarehouseSearch" />
+                                                        <div class="input-group-prepend cursor-pointer remove-date-halfDoneToWarehouse dptFromDate" style="cursor:pointer">
+                                                            <span class="input-group-text">&#10008;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="control-label font-weight-bold">To Date</label>
+                                                    <div class="input-group input-group-sm ">
+                                                        <input type="text" class="form-control form-control-sm date-datePicker-halfDoneToWarehouse ctrl-changed" id="dptToDateForHalfDoneStockTransferToWarehouseSearch" />
+                                                        <div class="input-group-prepend remove-date-halfDoneToWarehouse dptToDate" style="cursor:pointer">
+                                                            <span class="input-group-text">&#10008;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -550,7 +588,7 @@
                                         <div class="row">
                                             <div class="card-body">
                                                 <div class="col-md-12" id="dataContainer6">
-                                                    @{Html.RenderAction("GetMiniStockTransferList", new { @flag = "View" });}
+                                                    @*@{Html.RenderAction("GetMiniStockTransferList", new { @flag = "View" });}*@
                                                 </div>
                                             </div>
                                         </div>
@@ -709,6 +747,20 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalHalfDoneTransferToWarehouseDetails" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <input type="hidden" />
+                <h4 id="modalHeading" class="modal-title">Transfer Details</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="modalContainer3">
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section scripts{
@@ -760,6 +812,13 @@
         var dptFromDateForRequisitionToSemiFinishGoodsWarehouse = $("#dptFromDateForRequisitionToSemiFinishGoodsWarehouse");
         var dptToDateForRequisitionToSemiFinishGoodsWarehouse = $("#dptToDateForRequisitionToSemiFinishGoodsWarehouse");
 
+        //Half Done Transfer To Warehouse
+        var txtTransferCodeForHalfDoneStockTransferToWarehouseSearch = $("#txtTransferCodeForHalfDoneStockTransferToWarehouseSearch");
+        var ddlStateStatusForHalfDoneStockTransferToWarehouseSearch = $("#ddlStateStatusForHalfDoneStockTransferToWarehouseSearch");
+        var txtLessOrEqForHalfDoneStockTransferToWarehouseSearch = $("#txtLessOrEqForHalfDoneStockTransferToWarehouseSearch");
+        var dptFromDateForHalfDoneStockTransferToWarehouseSearch = $("#dptFromDateForHalfDoneStockTransferToWarehouseSearch");
+        var dptToDateForHalfDoneStockTransferToWarehouseSearch = $("#dptToDateForHalfDoneStockTransferToWarehouseSearch");
+
 
         var pageNo = 1;
 
@@ -786,6 +845,7 @@
                 todayHighlight: true
             });
 
+            // Semi Finish
             dptFromDateForRequisitionToSemiFinishGoodsWarehouse.prop('readonly', true);
             dptToDateForRequisitionToSemiFinishGoodsWarehouse.prop('readonly', true);
             dptFromDateForRequisitionToSemiFinishGoodsWarehouse.css("background-color", "#fff");
@@ -803,6 +863,26 @@
                 todayHighlight: true
             }).on('change', function () {
                 $('.datepicker').hide();
+                });
+
+            // Half Done
+            dptFromDateForHalfDoneStockTransferToWarehouseSearch.prop('readonly', true);
+            dptToDateForHalfDoneStockTransferToWarehouseSearch.prop('readonly', true);
+            dptFromDateForHalfDoneStockTransferToWarehouseSearch.css("background-color", "#fff");
+            dptToDateForHalfDoneStockTransferToWarehouseSearch.css("background-color", "#fff");
+            $('#dptFromDateForHalfDoneStockTransferToWarehouseSearch').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+            $('#dptToDateForHalfDoneStockTransferToWarehouseSearch').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+            }).on('change', function () {
+                $('.datepicker').hide();
             });
 
             initialLoad();
@@ -812,6 +892,7 @@
             loadMiniStockTransferToWarehouseListDataTable();
             LoadDataTable();
             loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
+            loadHalfDoneStockTranferListDataTable();
         }
 
         ddlProductionFloor.change(function () {
@@ -1143,11 +1224,9 @@
                             console.log(status);
                             if (res == true) {
                                 $('.toastrDefaultSuccess').trigger('click');
-
-                                @*setTimeout(function () {
-                                    redirectPage('@Url.Action("GetProductionAssembleItemStockInfo")');
-                                }, 1000);*@
+                                $("#rsmodalTransferDetails").modal("toggle");
                                 LoadDataTable();
+                                LoadDataTableRepairSectionSemiFinishGoodStockInfo();
                             }
                             else {
                                 $('.toastrDefaultError').trigger('click');
@@ -1464,6 +1543,112 @@
             }
         })
 
+
+        //#endregion
+
+        //#region Half Done Transfer
+
+        $(document).on('click', 'div.remove-date-halfDoneToWarehouse', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDateForHalfDoneStockTransferToWarehouseSearch.val() !== '') {
+                    dptToDateForHalfDoneStockTransferToWarehouseSearch.val('');
+                    loadHalfDoneStockTranferListDataTable();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDateForHalfDoneStockTransferToWarehouseSearch.val() !== '') {
+                    dptFromDateForHalfDoneStockTransferToWarehouseSearch.val('');
+                    loadHalfDoneStockTranferListDataTable();
+                }
+            }
+        })
+
+        txtTransferCodeForHalfDoneStockTransferToWarehouseSearch.keyup(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+        ddlStateStatusForHalfDoneStockTransferToWarehouseSearch.change(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+        txtLessOrEqForHalfDoneStockTransferToWarehouseSearch.keyup(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+        dptFromDateForHalfDoneStockTransferToWarehouseSearch.change(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+        dptToDateForHalfDoneStockTransferToWarehouseSearch.change(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+
+        function loadHalfDoneStockTranferListDataTable() {
+            var data = { flag: "HalfDoneStockTranfer", reqNo: txtTransferCodeForHalfDoneStockTransferToWarehouseSearch.val(), status: ddlStateStatusForHalfDoneStockTransferToWarehouseSearch.val(), lessOrEq: txtLessOrEqForHalfDoneStockTransferToWarehouseSearch.val(), fromDate: dptFromDateForHalfDoneStockTransferToWarehouseSearch.val(), toDate: dptToDateForHalfDoneStockTransferToWarehouseSearch.val() }
+            $.when(getReqWithData('html', 'GET', '/Production/GetProductionAssembleItemStockInfo', data)).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer6").fadeOut('500', function () {
+                        $("#dataContainer6").empty();
+                        $("#dataContainer6").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+            pageNo = 1;
+        }
+        //Pagination
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).parent().hasClass('current-page')) {
+                if ($(this).parent().parents('div').hasClass('divHalfDoneTransferToWarehouse')) {
+                    pageNo = $(this).attr('data-page-no');
+                    loadHalfDoneStockTranferListDataTable();
+                }
+            }
+        })
+        $(document).on('click', 'a.data-item-halfDoneTransfer', function (e) {
+            e.preventDefault();
+            var id = $(this).attr("data-item-halfDoneTransfer-val");
+            if (id > 0) {
+                var data = { transferInfoId: id };
+                $.when(getReqWithData('html', 'GET', '/Production/GetHalfDoneTransferToWarehouseDetails', data)).then(function (res, status) {
+                    console.log(status);
+                    if (status === "success") {
+                        $("#modalContainer3").empty();
+                        $("#modalContainer3").append(res);
+                        $("#modalHalfDoneTransferToWarehouseDetails").modal("toggle");
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                });
+            }
+        })
+        $(document).on('click', '.btnHalfDoneTransferReceive', function (e) {
+            e.preventDefault();
+            var id = $(this).attr("btnHalfDoneTransferReceive-val");
+            if (TryParseInt(id, 0) > 0) {
+                bootbox.confirm("Are you sure You Want to Receive this Item?", function (result) {
+                    if (result) {
+                        disable($(this));
+                        var data = JSON.stringify({ transferInfoId: id });
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/UpdateHalfDoneTransferStatus', data, getToken())).then(function (res, status) {
+                            if (res == true && status === "success") {
+                                toastrSuccessAlert(execuStatus.successSave);
+                                loadHalfDoneStockTranferListDataTable();
+                                LoadDataTableRepairSectionSemiFinishGoodStockInfo();
+                                $("#modalHalfDoneTransferToWarehouseDetails").modal("toggle");
+                                enable($(this));
+                            }
+                        }).fail(function (error) {
+                            console.log(error);
+                            enable($(this));
+                        });
+                    }
+                })
+            }
+        })
 
         //#endregion
 

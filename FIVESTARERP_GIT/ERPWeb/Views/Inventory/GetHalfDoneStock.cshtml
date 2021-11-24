@@ -1,0 +1,428 @@
+﻿
+@{
+    ViewBag.Title = "Half Done Stock";
+}
+
+<div class="row text-sm">
+    <div class="col-md-12" style="margin-top:-20px">
+        <div class="card card-primary card-outline card-outline-tabs">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-one" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-one-halfDoneStock-tab" href="#custom-tabs-one-halfDoneStock" aria-controls="custom-tabs-one-halfDoneStock" aria-selected="true" data-toggle="pill" role="tab">Half Done Stock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-one-halfDoneStockTransfer-tab" href="#custom-tabs-one-halfDoneStockTransfer" aria-controls="custom-tabs-one-halfDoneStockTransfer" aria-selected="true" data-toggle="pill" role="tab">Half Done Stock Transfer</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <div class="tab-pane fade show active" id="custom-tabs-one-halfDoneStock" aria-labelledby="custom-tabs-one-halfDoneStock-tab" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-12" style=" margin-top:-15px">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3"></div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">Half Done Stock</h5>
+                                            </div>
+                                            <div class="col-md-3"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Search By:</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" style="margin-top:-10px">
+                                            <div class="col-md-2">
+                                                <label for="ddlFloor" class="control-label font-weight-bold">Floor</label>
+                                                @Html.DropDownList("ddlFloor", (IEnumerable<SelectListItem>)ViewBag.ddlLineNumber, "--Select Floor--", new { @class = "form-control form-control-sm ctrl-change select2 select2-danger" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlAssemblyLine" class="control-label font-weight-bold">Assembly</label>
+                                                <select id="ddlAssemblyLine" class="form-control form-control-sm select2 select2-danger">
+                                                    <option value="">--Select Assembly--</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlQCLine" class="control-label font-weight-bold">QC</label>
+                                                <select id="ddlQCLine" class="form-control form-control-sm select2 select2-danger">
+                                                    <option value="">--Select QC--</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlRepairLine" class="control-label font-weight-bold">Repair</label>
+                                                <select id="ddlRepairLine" class="form-control form-control-sm select2 select2-danger">
+                                                    <option value="">--Select Repair--</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlModelNames" class="control-label font-weight-bold">Model</label>
+                                                @Html.DropDownList("ddlModelNames", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger ctrl-changed" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="row">
+                                        <div class="card-body">
+                                            <div class="col-md-12" id="dataContainer1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-one-halfDoneStockTransfer" role="tabpanel" aria-labelledby="custom-tabs-one-halfDoneStockTransfer-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">Half Done Transfer List</h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <h6 class="card-title">Search By</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">Code</label>
+                                                <input type="text" id="txtTransferCodeForHalfDoneStockTransferToWarehouseSearch" class="form-control form-control-sm" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlStateStatusForHalfDoneStockTransferToWarehouseSearch" class="control-label font-weight-bold">State Status</label>
+                                                <select class="form-control form-control-sm select2 select2-danger" id="ddlStateStatusForHalfDoneStockTransferToWarehouseSearch">
+                                                    <option value="">Select Status</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Approved">Approved</option>
+                                                    <option value="Return">Return</option>
+                                                    <option value="Received">Received</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">Qty(Less/Eq)</label>
+                                                <input type="number" id="txtLessOrEqForHalfDoneStockTransferToWarehouseSearch" class="form-control form-control-sm" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">From Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker-halfDoneToWarehouse ctrl-changed" id="dptFromDateForHalfDoneStockTransferToWarehouseSearch" />
+                                                    <div class="input-group-prepend cursor-pointer remove-date-halfDoneToWarehouse dptFromDate" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">To Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker-halfDoneToWarehouse ctrl-changed" id="dptToDateForHalfDoneStockTransferToWarehouseSearch" />
+                                                    <div class="input-group-prepend remove-date-halfDoneToWarehouse dptToDate" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="row">
+                                        <div class="card-body">
+                                            <div class="col-md-12" id="dataContainer2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalHalfDoneTransferToWarehouseDetails" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <input type="hidden" />
+                <h4 id="modalHeading" class="modal-title">Transfer Details</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="modalContainer3">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('.select2').select2();
+            initialLoad();
+
+            // Half Done
+            dptFromDateForHalfDoneStockTransferToWarehouseSearch.prop('readonly', true);
+            dptToDateForHalfDoneStockTransferToWarehouseSearch.prop('readonly', true);
+            dptFromDateForHalfDoneStockTransferToWarehouseSearch.css("background-color", "#fff");
+            dptToDateForHalfDoneStockTransferToWarehouseSearch.css("background-color", "#fff");
+            $('#dptFromDateForHalfDoneStockTransferToWarehouseSearch').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+            $('#dptToDateForHalfDoneStockTransferToWarehouseSearch').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+        })
+        function initialLoad() {
+            LoadDataTableForHalfDoneStock();
+            loadHalfDoneStockTranferListDataTable();
+        }
+        var pageNo = 1;
+
+        //Half Done Stock
+        var ddlFloor = $("#ddlFloor");
+        var ddlAssemblyLine = $("#ddlAssemblyLine");
+        var ddlQCLine = $("#ddlQCLine");
+        var ddlRepairLine = $("#ddlRepairLine");
+        var ddlModelNames = $("#ddlModelNames");
+
+        //Half Done Transfer List
+        var txtTransferCodeForHalfDoneStockTransferToWarehouseSearch = $("#txtTransferCodeForHalfDoneStockTransferToWarehouseSearch");
+        var ddlStateStatusForHalfDoneStockTransferToWarehouseSearch = $("#ddlStateStatusForHalfDoneStockTransferToWarehouseSearch");
+        var txtLessOrEqForHalfDoneStockTransferToWarehouseSearch = $("#txtLessOrEqForHalfDoneStockTransferToWarehouseSearch");
+        var dptFromDateForHalfDoneStockTransferToWarehouseSearch = $("#dptFromDateForHalfDoneStockTransferToWarehouseSearch");
+        var dptToDateForHalfDoneStockTransferToWarehouseSearch = $("#dptToDateForHalfDoneStockTransferToWarehouseSearch");
+
+        //#region Half Done Stock
+
+        ddlFloor.change(function () {
+            LoadDataTableForHalfDoneStock();
+            clearDropdown("ddlAssemblyLine");
+            clearDropdown("ddlQCLine");
+            clearDropdown("ddlRepairLine");
+            if (ddlFloor.val() != "") {
+                LoadDropDown('/Common/GetAssblyByLine', 'POST', ddlAssemblyLine, JSON.stringify({ lineId: ddlFloor.val() }));
+                LoadDropDown('/Common/GetQCByLine', 'POST', ddlQCLine, JSON.stringify({ lineId: ddlFloor.val() }));
+                LoadDropDown('/Common/GetRepairLineByLine', 'POST', ddlRepairLine, JSON.stringify({ lineId: ddlFloor.val() }));                
+            }
+        });
+        ddlAssemblyLine.change(function (e) {
+            e.preventDefault();
+            LoadDataTableForHalfDoneStock();
+        })
+        ddlQCLine.change(function (e) {
+            e.preventDefault();
+            LoadDataTableForHalfDoneStock();
+        })
+        ddlRepairLine.change(function (e) {
+            e.preventDefault();
+            LoadDataTableForHalfDoneStock();
+        })
+        ddlModelNames.change(function (e) {
+            e.preventDefault();
+            LoadDataTableForHalfDoneStock();
+        })
+
+        function LoadDataTableForHalfDoneStock() {
+
+            var data = { flag: "HalfDoneStock", modelId: ddlModelNames.val(), floorId: ddlFloor.val(), assemblyId: ddlAssemblyLine.val(), qcId: ddlQCLine.val(), repairId: ddlRepairLine.val() };
+
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetHalfDoneStock', data)).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer1").fadeOut('500', function () {
+                        $("#dataContainer1").empty();
+                        $("#dataContainer1").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+            pageNo = 1;
+        }
+        //Pagination
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).parent().hasClass('current-page')) {
+                if ($(this).parent().parents('div').hasClass('divHalfDoneStock')) {
+                    pageNo = $(this).attr('data-page-no');
+                    LoadDataTableForHalfDoneStock();
+                }
+            }
+        })
+
+        //#endregion
+
+        //#region Half Done Transfer List
+
+        $(document).on('click', 'div.remove-date-halfDoneToWarehouse', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDateForHalfDoneStockTransferToWarehouseSearch.val() !== '') {
+                    dptToDateForHalfDoneStockTransferToWarehouseSearch.val('');
+                    loadHalfDoneStockTranferListDataTable();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDateForHalfDoneStockTransferToWarehouseSearch.val() !== '') {
+                    dptFromDateForHalfDoneStockTransferToWarehouseSearch.val('');
+                    loadHalfDoneStockTranferListDataTable();
+                }
+            }
+        })
+
+        txtTransferCodeForHalfDoneStockTransferToWarehouseSearch.keyup(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+        ddlStateStatusForHalfDoneStockTransferToWarehouseSearch.change(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+        txtLessOrEqForHalfDoneStockTransferToWarehouseSearch.keyup(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+        dptFromDateForHalfDoneStockTransferToWarehouseSearch.change(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+        dptToDateForHalfDoneStockTransferToWarehouseSearch.change(function (e) {
+            e.preventDefault();
+            loadHalfDoneStockTranferListDataTable();
+        })
+
+        function loadHalfDoneStockTranferListDataTable() {
+            var data = { flag: "HalfDoneStockTranfer", reqNo: txtTransferCodeForHalfDoneStockTransferToWarehouseSearch.val(), status: ddlStateStatusForHalfDoneStockTransferToWarehouseSearch.val(), lessOrEq: txtLessOrEqForHalfDoneStockTransferToWarehouseSearch.val(), fromDate: dptFromDateForHalfDoneStockTransferToWarehouseSearch.val(), toDate: dptToDateForHalfDoneStockTransferToWarehouseSearch.val() }
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetHalfDoneStock', data)).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer2").fadeOut('500', function () {
+                        $("#dataContainer2").empty();
+                        $("#dataContainer2").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+            pageNo = 1;
+        }
+        //Pagination
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).parent().hasClass('current-page')) {
+                if ($(this).parent().parents('div').hasClass('divHalfDoneTransferToWarehouse')) {
+                    pageNo = $(this).attr('data-page-no');
+                    loadHalfDoneStockTranferListDataTable();
+                }
+            }
+        })
+        $(document).on('click', 'a.data-item-halfDoneTransfer', function (e) {
+            e.preventDefault();
+            var id = $(this).attr("data-item-halfDoneTransfer-val");
+            if (id > 0) {
+                var data = { transferInfoId: id };
+                $.when(getReqWithData('html', 'GET', '/Inventory/GetHalfDoneTransferToWarehouseDetails', data)).then(function (res, status) {
+                    console.log(status);
+                    if (status === "success") {
+                        $("#modalContainer3").empty();
+                        $("#modalContainer3").append(res);
+                        $("#modalHalfDoneTransferToWarehouseDetails").modal("toggle");
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                });
+            }
+        })
+        $(document).on('click', '.btnHalfDoneTransferApproved', function (e) {
+            e.preventDefault();
+            var id = $(this).attr("btnHalfDoneTransferApproved-val");
+            if (TryParseInt(id, 0) > 0) {
+                bootbox.confirm("Are you sure You Want to Approve this Item?", function (result) {
+                    if (result) {
+                        disable($(this));
+                        var data = JSON.stringify({ transferInfoId: id });
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/UpdateHalfDoneTransferStatusForApproved', data, getToken())).then(function (res, status) {
+                            if (res == true && status === "success") {
+                                toastrSuccessAlert(execuStatus.successSave);
+                                loadHalfDoneStockTranferListDataTable();
+                                LoadDataTableForHalfDoneStock();
+                                $("#modalHalfDoneTransferToWarehouseDetails").modal("toggle");
+                                enable($(this));
+                            }
+                        }).fail(function (error) {
+                            console.log(error);
+                            enable($(this));
+                        });
+                    }
+                })
+            }
+        })
+
+        $(document).on('click', '.btnHalfDoneTransferReturn', function (e) {
+            e.preventDefault();
+            var id = $(this).attr("btnHalfDoneTransferReturn-val");
+            if (TryParseInt(id, 0) > 0) {
+                bootbox.confirm("Are you sure You Want to Return this Item?", function (result) {
+                    if (result) {
+                        disable($(this).addClass('.btnHalfDoneTransferReturn'));
+                        var data = JSON.stringify({ transferInfoId: id });
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/UpdateHalfDoneTransferStatusForReturn', data, getToken())).then(function (res, status) {
+                            if (res == true && status === "success") {
+                                toastrSuccessAlert(execuStatus.successSave);
+                                loadHalfDoneStockTranferListDataTable();
+                                LoadDataTableForHalfDoneStock();
+                                $("#modalHalfDoneTransferToWarehouseDetails").modal("toggle");
+                                enable($(this));
+                            }
+                        }).fail(function (error) {
+                            console.log(error);
+                            enable($(this));
+                        });
+                    }
+                })
+            }
+        })
+
+        //#endregion
+
+    </script>
+
+}
+

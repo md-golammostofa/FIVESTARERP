@@ -105,8 +105,8 @@ namespace ERPDAL.ProductionDAL
         public DbSet<QC3Detail> tblQC3Detail { get; set; }
         public DbSet<RepairIn> tblRepairIn { get; set; }
         public DbSet<RepairOut> tblRepairOut { get; set; }
-        public DbSet<MiniStockTransferToWarehouseInfo> tblMiniStockTransferToWarehouseInfo { get; set; }
-        public DbSet<MiniStockTransferToWarehouseDetails> tblMiniStockTransferToWarehouseDetails { get; set; }
+        public DbSet<HalfDoneStockTransferToWarehouseInfo> tblHalfDoneStockTransferToWarehouseInfo { get; set; }
+        public DbSet<HalfDoneStockTransferToWarehouseDetail> tblHalfDoneStockTransferToWarehouseDetail { get; set; }
         public DbSet<MiniStockTransferToSemiFinishGoodsWarehouse> tblMiniStockTransferToSemiFinishGoodsWarehouse { get; set; }
         public DbSet<MiniStockRequisitionToSemiFinishGoodsWarehouseDetail> tblMiniStockRequisitionToSemiFinishGoodsWarehouseDetail { get; set; }
         public DbSet<MiniStockRequisitionToSemiFinishGoodsWarehouseInfo> tblMiniStockRequisitionToSemiFinishGoodsWarehouseInfo { get; set; }

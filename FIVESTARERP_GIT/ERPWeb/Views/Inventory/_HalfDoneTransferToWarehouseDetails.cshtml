@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ERPBO.Production.ViewModels.HalfDoneStockTransferToWarehouseDetailViewModel>
+@{
+    int sl = 0;
+    var info = (ERPBO.Production.DomainModels.HalfDoneStockTransferToWarehouseInfo)ViewBag.TransferInfo;
+}
+
+<div class="row">
+    <div class="col-md-12" style="overflow-y:scroll">
+        <table class="table table-bordered table-sm table-striped text-sm">
+            <thead class="btn-dark">
+                <tr class="text-center">
+                    <th style="vertical-align:middle">#SL</th>
+                    <th class="hide"></th>
+                    <th style="vertical-align:middle">Floor</th>
+                    <th style="vertical-align:middle">Assembly</th>
+                    <th style="vertical-align:middle">QC</th>
+                    <th style="vertical-align:middle">Repair</th>
+                    <th style="vertical-align:middle">Model</th>
+                    <th style="vertical-align:middle">Warehouse</th>
+                    <th style="vertical-align:middle">Qty</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    sl = sl + 1;
+                    <tr>
+                        <td class="text-center text-bold">@sl</td>
+                        <td class="hide">@item.HalfDoneTransferInfoId</td>
+                        <td class="text-center">@item.FloorName</td>
+                        <td class="text-center">@item.AssemblyLineName</td>
+                        <td class="text-center">@item.QCName</td>
+                        <td class="text-center">@item.RepairLineName</td>
+                        <td class="text-center">@item.ModelName</td>
+                        <td class="text-center">@item.WarehouseName</td>
+                        <td class="text-center text-bold">@item.Quantity</td>
+                    </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="empty-row text-sm text-bold text-center">
+                        <td colspan="15">
+                            No data found in the table
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@if (info.StateStatus == "Pending")
+{
+    <button type="button" class="btn btn-sm btn-success float-right btnHalfDoneTransferApproved" btnHalfDoneTransferApproved-val="@info.HalfDoneTransferInfoId" id="btnHalfDoneTransferApproved">Approve</button>
+}
+@if (info.StateStatus == "Approved")
+{
+    <button type="button" class="btn btn-sm btn-success float-right btnHalfDoneTransferReturn" btnHalfDoneTransferReturn-val="@info.HalfDoneTransferInfoId" id="btnHalfDoneTransferReturn">Return</button>
+}
+
+

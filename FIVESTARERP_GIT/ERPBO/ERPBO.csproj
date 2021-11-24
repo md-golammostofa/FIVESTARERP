@@ -331,6 +331,8 @@
     <Compile Include="Inventory\DomainModels\BrandCategories.cs" />
     <Compile Include="Inventory\DomainModels\Category.cs" />
     <Compile Include="Inventory\DomainModels\Color.cs" />
+    <Compile Include="Inventory\DomainModels\HalfDoneWarehouseStockDetail.cs" />
+    <Compile Include="Inventory\DomainModels\HalfDoneWarehouseStockInfo.cs" />
     <Compile Include="Inventory\DomainModels\HandSetStock.cs" />
     <Compile Include="Inventory\DomainModels\IQC.cs" />
     <Compile Include="Inventory\DomainModels\IQCItemReqDetailList.cs" />
@@ -347,6 +349,8 @@
     <Compile Include="Inventory\DTOModel\CategoryDTO.cs" />
     <Compile Include="Inventory\DTOModel\ColorDTO.cs" />
     <Compile Include="Inventory\DTOModel\CommitGeneratedIMEIDTO.cs" />
+    <Compile Include="Inventory\DTOModel\HalfDoneWarehouseStockDetailDTO.cs" />
+    <Compile Include="Inventory\DTOModel\HalfDoneWarehouseStockInfoDTO.cs" />
     <Compile Include="Inventory\DTOModel\HandSetIMEI.cs" />
     <Compile Include="Inventory\DTOModel\IQCDTO.cs" />
     <Compile Include="Inventory\DTOModel\IQCItemReqDetailListDTO.cs" />
@@ -368,6 +372,8 @@
     <Compile Include="Inventory\ViewModels\CategoryViewModel.cs" />
     <Compile Include="Inventory\ViewModels\ColorViewModel.cs" />
     <Compile Include="Inventory\ViewModels\CommitGeneratedIMEIViewModel.cs" />
+    <Compile Include="Inventory\ViewModels\HalfDoneWarehouseStockDetailViewModel.cs" />
+    <Compile Include="Inventory\ViewModels\HalfDoneWarehouseStockInfoViewModel.cs" />
     <Compile Include="Inventory\ViewModels\HandSetStockViewModel.cs" />
     <Compile Include="Inventory\ViewModels\IQCItemReqDetailListViewModel.cs" />
     <Compile Include="Inventory\ViewModels\IQCItemReqInfoListViewModel.cs" />
@@ -386,8 +392,8 @@
     <Compile Include="Production\DomainModels\MiniStockRequisitionToSemiFinishGoodsWarehouseDetail.cs" />
     <Compile Include="Production\DomainModels\MiniStockRequisitionToSemiFinishGoodsWarehouseInfo.cs" />
     <Compile Include="Production\DomainModels\MiniStockTransferToSemiFinishGoodsWarehouse.cs" />
-    <Compile Include="Production\DomainModels\MiniStockTransferToWarehouseDetails.cs" />
-    <Compile Include="Production\DomainModels\MiniStockTransferToWarehouseInfo.cs" />
+    <Compile Include="Production\DomainModels\HalfDoneStockTransferToWarehouseDetail.cs" />
+    <Compile Include="Production\DomainModels\HalfDoneStockTransferToWarehouseInfo.cs" />
     <Compile Include="Production\DomainModels\PackagingFaultyStockDetail.cs" />
     <Compile Include="Production\DomainModels\PackagingFaultyStockInfo.cs" />
     <Compile Include="Production\DomainModels\PackagingRepairRawStockDetail.cs" />
@@ -532,8 +538,8 @@
     <Compile Include="Production\DTOModel\MiniStockTransferDetailDTO.cs" />
     <Compile Include="Production\DTOModel\MiniStockTransferInfoDTO.cs" />
     <Compile Include="Production\DTOModel\MiniStockTransferToSemiFinishGoodsWarehouseDTO.cs" />
-    <Compile Include="Production\DTOModel\MiniStockTransferToWarehouseDetailsDTO.cs" />
-    <Compile Include="Production\DTOModel\MiniStockTransferToWarehouseInfoDTO.cs" />
+    <Compile Include="Production\DTOModel\HalfDoneStockTransferToWarehouseDetailDTO.cs" />
+    <Compile Include="Production\DTOModel\HalfDoneStockTransferToWarehouseInfoDTO.cs" />
     <Compile Include="Production\DTOModel\PackagingFaultyStockDetailDTO.cs" />
     <Compile Include="Production\DTOModel\PackagingFaultyStockInfoDTO.cs" />
     <Compile Include="Production\DTOModel\PackagingLineDashboardDTO.cs" />
@@ -683,8 +689,8 @@
     <Compile Include="Production\ViewModels\MiniStockTransferDetailViewModel.cs" />
     <Compile Include="Production\ViewModels\MiniStockTransferInfoViewModel.cs" />
     <Compile Include="Production\ViewModels\MiniStockTransferToSemiFinishGoodsWarehouseViewModel.cs" />
-    <Compile Include="Production\ViewModels\MiniStockTransferToWarehouseDetailsViewModel.cs" />
-    <Compile Include="Production\ViewModels\MiniStockTransferToWarehouseInfoViewModel.cs" />
+    <Compile Include="Production\ViewModels\HalfDoneStockTransferToWarehouseDetailViewModel.cs" />
+    <Compile Include="Production\ViewModels\HalfDoneStockTransferToWarehouseInfoViewModel.cs" />
     <Compile Include="Production\ViewModels\PackagingFaultyStockDetailViewModel.cs" />
     <Compile Include="Production\ViewModels\PackagingFaultyStockInfoViewModel.cs" />
     <Compile Include="Production\ViewModels\PackagingItemStockDetailViewModel.cs" />

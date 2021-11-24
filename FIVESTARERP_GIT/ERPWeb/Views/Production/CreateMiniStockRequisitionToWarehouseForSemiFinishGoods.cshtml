@@ -210,7 +210,7 @@
             ddlProductionFloor.val('');
             ddlProductionFloor.trigger('change');
             txtQty.val('');
-            $("#tblRequisitionToWarehouse tbody tr").empty();
+            $("#tblRequisitionToWarehouse tbody").empty();
         }
 
         $("#btnReset").click(function (e) {
@@ -237,6 +237,7 @@
                             WarehouseId: tds.eq('8').html(),
                             Quantity: tds.eq('4').html(),
                         });
+
                         var qty = TryParseInt(tds.eq('4').html(), 0);
                         totalQty += qty;
                     })

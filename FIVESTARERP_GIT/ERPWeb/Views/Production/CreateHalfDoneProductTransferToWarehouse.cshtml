@@ -3,20 +3,23 @@
     ViewBag.Title = "Half-Done Transfer To Warehouse";
 }
 
-<div class="row">
+<div class="row" style="margin-top:-20px">
     <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-3">
-                <a href="/Production/GetProductionAssembleItemStockInfo" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
-            </div>
-            <div class="col-md-6 text-center">
-                <h4 style="color:darkblue"><b>Create Mini Stock Transfer To Warehouse</b></h4>
-            </div>
-            <div class="col-md-3">
-                @*<button class="btn btn-outline-danger btn-sm float-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i></button>*@
+        <div class="card card-gray-dark">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="/Production/GetProductionAssembleItemStockInfo" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <h5 class="text-center text-bold"><b>Half-Done Stock Transfer To Warehouse</b></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-danger btn-sm float-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
-        <hr />
     </div>
     <div class="col-md-6">
         <div class="card card-navy">
@@ -25,53 +28,89 @@
                     <div class="col-md-6">
                         <label class="control-label">Floor</label>
                         @Html.DropDownList("ddlProductionFloor", (IEnumerable<SelectListItem>)ViewBag.ddlProductionFloor, "--- Select Floor ---", new { @class = "form-control form-control-sm select2" })
+                        <span class="error hide required-floor font-weight-bold">Floor is required !</span>
                     </div>
-                    
+
                     <div class="col-md-6">
-                        <label for="ddlAssblyLine" class="control-label font-weight-bold">Assbly Line</label>
+                        <label for="ddlAssblyLine" class="control-label font-weight-bold">Assembly Line</label>
                         <select id="ddlAssblyLine" class="form-control form-control-sm select2">
-                            <option value="0">--Select Assbly Line--</option>
+                            <option value="">--Select Assembly Line--</option>
                         </select>
+                        <span class="error hide required-assembly font-weight-bold">Assembly is required !</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <label for="ddlQCLine" class="control-label font-weight-bold">QC Line</label>
                         <select id="ddlQCLine" class="form-control form-control-sm select2">
-                            <option value="0">--Select QC Line--</option>
+                            <option value="">--Select QC Line--</option>
                         </select>
+                        <span class="error hide required-qc font-weight-bold">QC is required !</span>
                     </div>
                     <div class="col-md-6">
                         <label for="ddlRepairLine" class="control-label font-weight-bold">Repair Line</label>
                         <select id="ddlRepairLine" class="form-control form-control-sm select2">
-                            <option value="0">--Select Repair Line--</option>
+                            <option value="">--Select Repair Line--</option>
                         </select>
+                        <span class="error hide required-repair font-weight-bold">Repair is required !</span>
                     </div>
-                    
+
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <label for="ddlModelNames" class="control-label font-weight-bold">Model</label>
-                        @Html.DropDownList("ddlModelNames", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger ctrl-changed" })
+                        <select id="ddlModelNames" class="form-control form-control-sm select2">
+                            <option value="">--Select Model--</option>
+                        </select>
+                        @*@Html.DropDownList("ddlModelNames", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger ctrl-changed" })*@
+                        <span class="error hide required-model font-weight-bold">Model is required !</span>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="txtStockInQty" class="control-label font-weight-bold">Qty.(<span id="txtCheckStock" style="color:red">0</span>)</label>
                         <div class="input-group">
-                            <div class="col-sm-8">
-                                <input type="number" placeholder="Qty" name="quantity" id="txtStockInQty" class="form-control form-control-sm" />
-                            </div>
+                            <input type="number" placeholder="Qty" name="quantity" id="txtStockInQty" class="form-control form-control-sm" />
                             <span id="unitName" class="font-weight-bold mt-3" style="color:darkblue"> </span>
                         </div>
                         <span class="error hide required-qty font-weight-bold">Quantity is required !</span>
                     </div>
-                    
-                </div>
-                <div class="row">
                     <div class="col-md-2">
                         <div class="clearfix">
-                            <label for="txtRemarks" class="control-label font-weight-bold" style="visibility:hidden">Remarks444444444</label>
-                            <button class="btn btn-success btn-sm float-lg-left" id="btnSubmit">SAVE <i class="fas fa-paper-plane"></i> </button>
+                            <label for="txtRemarks" class="control-label font-weight-bold" style="visibility:hidden">Add</label>
+                            <button class="btn btn-warning btn-sm float-right" id="btnAddToList" title="ADD"><i class="fas fa-plus"></i> ADD</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-navy">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 mt-2" style="overflow-y:scroll">
+                        <table class="table table-bordered table-sm text-sm table-striped table-responsive-lg" id="tblHalfDoneToWarehouse">
+                            <thead>
+                                <tr>
+                                    <th colspan="9">
+                                        <button class="btn btn-success btn-sm float-lg-right" id="btnSubmit">SAVE <i class="fas fa-paper-plane"></i> </button>
+                                    </th>
+                                </tr>
+                                <tr class="btn-dark text-center">
+                                    <th>#SL</th>
+                                    <th>Floor</th>
+                                    <th>Assembly</th>
+                                    <th>QC</th>
+                                    <th>Repair</th>
+                                    <th>Model</th>
+                                    <th>Qty</th>
+                                    <th>Action</th>
+                                    <th class="hide item"></th>
+                                    <th class="hide itemType"></th>
+                                    <th class="hide warehouse"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -102,21 +141,66 @@
             clearDropdown("ddlRepairLine");
             clearDropdown("ddlQCLine");
             clearDropdown("ddlAssblyLine");
+            clearDropdown("ddlModelNames");
+            $("#txtCheckStock").text('');
+            $("#txtCheckStock").val('');
+            txtStockInQty.val('');
             if (ddlProductionFloor.val() != "") {
                 LoadDropDown('/Common/GetAssblyByLine', 'POST', ddlAssblyLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
                 LoadDropDown('/Common/GetQCByLine', 'POST', ddlQCLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
-                LoadDropDown('/Common/GetRepairLineByLine', 'POST', ddlRepairLine, JSON.stringify({ lineId: ddlProductionFloor.val() }));
+                LoadDropDown('/Common/GetRepairLineByLine', 'POST', ddlRepairLine, JSON.stringify({ lineId: ddlProductionFloor.val() })); 
+                LoadDropDown('/Common/GetDescriptions', 'POST', ddlModelNames, null);
+                //LoadDropDown('/Common/GetHalfDoneStockAssemblyByFloor', 'POST', ddlAssblyLine, JSON.stringify({ floorId: ddlProductionFloor.val() }));
             }
+        })
+        ddlAssblyLine.change(function (e) {
+            //clearDropdown("ddlRepairLine");
+            //clearDropdown("ddlQCLine");
+            clearDropdown("ddlModelNames");
+            txtStockInQty.val('');
+            $("#txtCheckStock").val('');
+            $("#txtCheckStock").text('');
+            if (ddlProductionFloor.val() != "") {
+                LoadDropDown('/Common/GetDescriptions', 'POST', ddlModelNames, null);
+            }
+            //if (ddlProductionFloor.val() != "" && ddlAssblyLine.val() != "") {
+            //    LoadDropDown('/Common/GetHalfDoneStockQCLineByFloorAndAssembly', 'POST', ddlQCLine, JSON.stringify({ floorId: ddlProductionFloor.val(), assemblyId: ddlAssblyLine.val() }));
+            //}
+        })
+        ddlQCLine.change(function (e) {
+            //clearDropdown("ddlRepairLine");
+            clearDropdown("ddlModelNames");
+            txtStockInQty.val('');
+            $("#txtCheckStock").text('');
+            $("#txtCheckStock").val('');
+            if (ddlQCLine.val() != "") {
+                LoadDropDown('/Common/GetDescriptions', 'POST', ddlModelNames, null);
+            }
+            //if (ddlProductionFloor.val() != "" && ddlAssblyLine.val() != "" && ddlQCLine.val() != "") {
+            //    LoadDropDown('/Common/GetHalfDoneStockRepairLineByFloorAndAssemblyAndQC', 'POST', ddlRepairLine, JSON.stringify({ floorId: ddlProductionFloor.val(), assemblyId: ddlAssblyLine.val(), qcId: ddlQCLine.val() }));
+            //}
+        })
+        ddlRepairLine.change(function (e) {
+            clearDropdown("ddlModelNames");
+            txtStockInQty.val('');
+            $("#txtCheckStock").text('');
+            $("#txtCheckStock").val('');
+            if (ddlRepairLine.val() != "") {
+                LoadDropDown('/Common/GetDescriptions', 'POST', ddlModelNames, null);
+            }
+            //if (ddlProductionFloor.val() != "" && ddlAssblyLine.val() != "" && ddlQCLine.val() != "" && ddlRepairLine.val() != "") {
+            //    LoadDropDown('/Common/GetDescriptions', 'POST', ddlModelNames, null);
+            //}
         })
 
         ddlModelNames.change(function () {
             $("#txtCheckStock").text('');
+            $("#txtCheckStock").val('');
             if (ddlProductionFloor.val() != "", ddlAssblyLine.val() != "", ddlQCLine.val() != "", ddlRepairLine.val() != "", ddlModelNames.val() != "") {
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common/GetHalfDoneProductStock', JSON.stringify({ floor: TryParseInt(ddlProductionFloor.val(), 0), assbly: TryParseInt(ddlAssblyLine.val(), 0), qcline: TryParseInt(ddlQCLine.val(), 0), repair: TryParseInt(ddlRepairLine.val(), 0), model: TryParseInt(ddlModelNames.val(),0) }), getToken())).then(function (res, status) {
-                    console.log(res);
-                    console.log(status);
                     if (status == "success") {
                         $("#txtCheckStock").text(res);
+                        $("#txtCheckStock").val(res);
                     }
                 }).fail(function (error) {
                     consoleLog(error);
@@ -124,47 +208,151 @@
             }
         });
 
+        function clearCtrl() {
+            ddlModelNames.val('');
+            ddlModelNames.trigger('change');
+            ddlProductionFloor.val('');
+            ddlProductionFloor.trigger('change');
+            ddlAssblyLine.val('');
+            ddlAssblyLine.trigger('change');
+            ddlQCLine.val('');
+            ddlQCLine.trigger('change');
+            ddlRepairLine.val('');
+            ddlRepairLine.trigger('change');
+            txtStockInQty.val('');
+            $("#txtCheckStock").text('');
+            $("#txtCheckStock").val('');
+            $("#tblHalfDoneToWarehouse tbody").empty();
+        }
+
+        $("#btnReset").click(function (e) {
+            e.preventDefault();
+            clearCtrl();
+        })
+
+        function validateInput() {
+            $('.error').addClass('hide');
+            var isValid = true;
+            var count = $("#tblHalfDoneToWarehouse tbody tr").length;
+            console.log(count);
+            if (count > 0) {
+                $.each($("#tblHalfDoneToWarehouse tbody tr"), function (index, item) {
+                    var floorId = $(this).children('td').eq(1).attr('data-val');
+                    var asmId = $(this).children('td').eq(2).attr('data-val');
+                    var qcId = $(this).children('td').eq(3).attr('data-val');
+                    var rpId = $(this).children('td').eq(4).attr('data-val');
+                    var modelId = $(this).children('td').eq(5).attr('data-val');
+                    if (floorId == ddlProductionFloor.val() && asmId == ddlAssblyLine.val() && qcId == ddlQCLine.val() && rpId == ddlRepairLine.val() && modelId == ddlModelNames.val()) {
+                        isValid = false;
+                        toastrErrorAlert("This Item Already Exists!")
+                    }
+                })
+            }
+            if (TryParseInt(ddlProductionFloor.val(), 0) <= 0) {
+                isValid = false;
+                $(".required-floor").removeClass("hide");
+            }
+            if (ddlAssblyLine.val() == "") {
+                isValid = false;
+                $(".required-assembly").removeClass("hide");
+            }
+            if (TryParseInt(ddlModelNames.val(), 0) <= 0) {
+                isValid = false;
+                $(".required-model").removeClass("hide");
+            }
+            if (ddlRepairLine.val() == "") {
+                isValid = false;
+                $(".required-repair").removeClass("hide");
+            }
+            if (ddlQCLine.val() == "") {
+                isValid = false;
+                $(".required-qc").removeClass("hide");
+            }
+            if (TryParseInt(txtStockInQty.val(), 0) <= 0) {
+                isValid = false;
+                $(".required-qty").removeClass("hide");
+            }
+
+            return isValid;
+        }
+
+        $("#btnAddToList").click(function (e) {
+            e.preventDefault();
+            if (validateInput()) {
+                if (TryParseInt($("#txtCheckStock").val(), 0) >= TryParseInt(txtStockInQty.val(), 0)) {
+                    var sl = $("#tblHalfDoneToWarehouse tbody tr").length;
+                    var td1 = "<td class='text-center text-bold'>" + (sl + 1) + "</td>"
+                    var td2 = "<td class='text-center' data-val='" + ddlProductionFloor.val() + "'>" + dropDownSelectedText("ddlProductionFloor") + "</td>";
+                    var td3 = "<td class='text-center' data-val='" + ddlAssblyLine.val() + "'>" + dropDownSelectedText("ddlAssblyLine") + "</td>";
+                    var td4 = "<td class='text-center' data-val='" + ddlQCLine.val() + "'>" + dropDownSelectedText("ddlQCLine") + "</td>";
+                    var td5 = "<td class='text-center' data-val='" + ddlRepairLine.val() + "'>" + dropDownSelectedText("ddlRepairLine") + "</td>";
+                    var td6 = "<td class='text-center' data-val='" + ddlModelNames.val() + "'>" + dropDownSelectedText("ddlModelNames") + "</td>";
+                    var td7 = "<td class='text-center'>" + txtStockInQty.val() + "</td>";
+                    var td8 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger btn-flat data-onfly-del' title='Remove this item'><i class='fa fa-trash'></i></a></td>";
+                    var td9 = "<td class='text-center hide'>" + null + "</td>";
+                    var td10 = "<td class='text-center hide'>" + null + "</td>";
+                    var td11 = "<td class='text-center hide'>" + null + "</td>";
+
+                    var tr = "<tr>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8 + td9 + td10 + td11 + "</tr>";
+                    $("#tblHalfDoneToWarehouse tbody").append(tr);
+                    txtStockInQty.val('');
+                }
+                else {
+                    bootbox.alert("Stock Not Available");
+                }
+            }
+        });
+
+        $(document).on("click", "a.data-onfly-del", function (e) {
+            e.preventDefault();
+            var index = $(this).parent().parents('tbody tr').index();
+            removeTableRow("#tblHalfDoneToWarehouse tbody", index);
+            fnFixTheTbodyRowSerial("#tblHalfDoneToWarehouse", index);
+        })
+
         $("#btnSubmit").click(function (e) {
             e.preventDefault();
             $(".error").addClass("hide");
-                bootbox.confirm("Are you sure you want to save?", function (result) {
-                    if (result) {
-                        disable("#btnSubmit");
-                        var info = {
-                            FloorId: TryParseInt(ddlProductionFloor.val(), 0),
-                            AssemblyLineId: TryParseInt(ddlAssblyLine.val(), 0),
-                            QCLine: TryParseInt(ddlQCLine.val(), 0),
-                            RepairLineId: TryParseInt(ddlRepairLine.val(), 0),
-                            DescriptionId: TryParseInt(ddlModelNames.val(),0)
-                        };
-                        var details = {
-                            Quantity: TryParseInt(txtStockInQty.val(), 0)
-                        }
-                        info.MiniStockTransferToWarehouseDetails = details;
-                        var data = JSON.stringify({ info: info });
-                        console.log("Transfer Stock Data");
-                        return console.log(data);
+            bootbox.confirm("Are you sure you want to save?", function (result) {
+                if (result) {
+                    disable("#btnSubmit");
+                    var reqDetails = []; reqDetails.length = 0;
+                    var totalQty = 0;
+                    $.each($("#tblHalfDoneToWarehouse tbody tr"), function (index, item) {
+                        var tds = $(this).children('td');
 
-                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Production/SaveMiniStockTransferToWarehouse', data, getToken())).then(function (res, status) {
-                            console.log(res);
-                            console.log(status);
-                            enable("#btnSubmit");
-                            if (res == true) {
-                                $('.toastrDefaultSuccess').trigger('click');
+                        reqDetails.push({
+                            ProductionFloorId: tds.eq('1').attr('data-val'),
+                            AssemblyLineId: tds.eq('2').attr('data-val'),
+                            QCId: tds.eq('3').attr('data-val'),
+                            RepairLineId: tds.eq('4').attr('data-val'),
+                            DescriptionId: tds.eq('5').attr('data-val'),
+                            Quantity: tds.eq('6').html(),
+                        });
+                        var qty = TryParseInt(tds.eq('6').html(), 0);
+                        totalQty += qty;
+                    })
 
-                                setTimeout(function () {
-                                    redirectPage('@Url.Action("GetProductionAssembleItemStockInfo")');
-                                }, 1000);
-                            }
-                            else {
-                                $('.toastrDefaultError').trigger('click');
-                            }
-                        }).fail(function (error) {
-                            consoleLog(error)
-                        })
+                    var data = JSON.stringify({ model: reqDetails, totalQty: totalQty });
+
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Production/SaveHalfDoneTransferToWarehouse', data, getToken())).then(function (res, status) {
                         enable("#btnSubmit");
-                    }
-                });
+                        if (res == true && status == "success") {
+                            $('.toastrDefaultSuccess').trigger('click');
+                            enable("#btnSubmit");
+                            clearCtrl();
+                        }
+                        else {
+                            $('.toastrDefaultError').trigger('click');
+                            enable("#btnSubmit");
+                        }
+                    }).fail(function (error) {
+                        consoleLog(error);
+                        $('.toastrDefaultError').trigger('click');
+                        enable("#btnSubmit");
+                    })
+                }
+            });
         });
 
         function redirectPage(page) {

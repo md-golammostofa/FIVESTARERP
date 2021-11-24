@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ERPBLL.Production.Interface
+namespace ERPBLL.Inventory.Interface
 {
-    public interface IMiniStockTransferToWarehouseDetailsBusiness
+    public interface IHalfDoneWarehouseStockDetailBusiness
     {
     }
 }

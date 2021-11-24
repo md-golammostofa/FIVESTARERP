@@ -531,13 +531,13 @@ namespace ERPDAL.ProductionDAL
     {
         public RepairOutRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
     }
-    public class MiniStockTransferToWarehouseInfoRepository : ProductionBaseRepository<MiniStockTransferToWarehouseInfo>
+    public class HalfDoneStockTransferToWarehouseInfoRepository : ProductionBaseRepository<HalfDoneStockTransferToWarehouseInfo>
     {
-        public MiniStockTransferToWarehouseInfoRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+        public HalfDoneStockTransferToWarehouseInfoRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
     }
-    public class MiniStockTransferToWarehouseDetailsRepository : ProductionBaseRepository<MiniStockTransferToWarehouseDetails>
+    public class HalfDoneStockTransferToWarehouseDetailsRepository : ProductionBaseRepository<HalfDoneStockTransferToWarehouseDetail>
     {
-        public MiniStockTransferToWarehouseDetailsRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
+        public HalfDoneStockTransferToWarehouseDetailsRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
     }
     public class MiniStockTransferToSemiFinishGoodsWarehouseRepository : ProductionBaseRepository<MiniStockTransferToSemiFinishGoodsWarehouse>
     {

@@ -237,11 +237,15 @@
     <Compile Include="Inventory\BrandCategoriesBusiness.cs" />
     <Compile Include="Inventory\CategoryBusiness.cs" />
     <Compile Include="Inventory\ColorBusiness.cs" />
+    <Compile Include="Inventory\HalfDoneWarehouseStockDetailBusiness.cs" />
+    <Compile Include="Inventory\HalfDoneWarehouseStockInfoBusiness.cs" />
     <Compile Include="Inventory\HandSetStockBusiness.cs" />
     <Compile Include="Inventory\Interface\IBrandBusiness.cs" />
     <Compile Include="Inventory\Interface\IBrandCategoriesBusiness.cs" />
     <Compile Include="Inventory\Interface\ICategoryBusiness.cs" />
     <Compile Include="Inventory\Interface\IColorBusiness.cs" />
+    <Compile Include="Inventory\Interface\IHalfDoneWarehouseStockDetailBusiness.cs" />
+    <Compile Include="Inventory\Interface\IHalfDoneWarehouseStockInfoBusiness.cs" />
     <Compile Include="Inventory\Interface\IHandSetStockBusiness.cs" />
     <Compile Include="Inventory\Interface\IInventoryReportBusiness.cs" />
     <Compile Include="Inventory\Interface\IIQCBusiness.cs" />
@@ -296,8 +300,8 @@
     <Compile Include="Production\Interface\IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness.cs" />
     <Compile Include="Production\Interface\IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness.cs" />
     <Compile Include="Production\Interface\IMiniStockTransferToSemiFinishGoodsWarehouseBusiness.cs" />
-    <Compile Include="Production\Interface\IMiniStockTransferToWarehouseDetailsBusiness.cs" />
-    <Compile Include="Production\Interface\IMiniStockTransferToWarehouseInfoBusiness.cs" />
+    <Compile Include="Production\Interface\IHalfDoneStockTransferToWarehouseDetailBusiness.cs" />
+    <Compile Include="Production\Interface\IHalfDoneStockTransferToWarehouseInfoBusiness.cs" />
     <Compile Include="Production\Interface\IPackagingFaultyStockDetailBusiness.cs" />
     <Compile Include="Production\Interface\IMiniStockTransferDetailBusiness.cs" />
     <Compile Include="Production\Interface\IMiniStockTransferInfoBusiness.cs" />
@@ -346,8 +350,8 @@
     <Compile Include="Production\MiniStockTransferDetailBusiness.cs" />
     <Compile Include="Production\MiniStockTransferInfoBusiness.cs" />
     <Compile Include="Production\MiniStockTransferToSemiFinishGoodsWarehouseBusiness.cs" />
-    <Compile Include="Production\MiniStockTransferToWarehouseDetailsBusiness.cs" />
-    <Compile Include="Production\MiniStockTransferToWarehouseInfoBusiness.cs" />
+    <Compile Include="Production\HalfDoneStockTransferToWarehouseDetailBusiness.cs" />
+    <Compile Include="Production\HalfDoneStockTransferToWarehouseInfoBusiness.cs" />
     <Compile Include="Production\PackagingFaultyStockDetailBusiness.cs" />
     <Compile Include="Production\PackagingFaultyStockInfoBusiness.cs" />
     <Compile Include="Production\PackagingRepairItemStockDetailBusiness.cs" />
