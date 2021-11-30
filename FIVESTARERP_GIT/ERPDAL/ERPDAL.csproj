@@ -913,10 +913,6 @@
     <Compile Include="ProductionContextMigrations\202111080801474_Production_add_tblRepairIn_tblRepairOut.Designer.cs">
       <DependentUpon>202111080801474_Production_add_tblRepairIn_tblRepairOut.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProductionContextMigrations\202111140940066_Production_MiniStockQCLineAdd.cs" />
-    <Compile Include="ProductionContextMigrations\202111140940066_Production_MiniStockQCLineAdd.Designer.cs">
-      <DependentUpon>202111140940066_Production_MiniStockQCLineAdd.cs</DependentUpon>
-    </Compile>
     <Compile Include="ProductionContextMigrations\202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.cs" />
     <Compile Include="ProductionContextMigrations\202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.Designer.cs">
       <DependentUpon>202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.cs</DependentUpon>
@@ -928,6 +924,14 @@
     <Compile Include="ProductionContextMigrations\202111231108178_Production_add_tblHalfDoneTransferToWarehouseInfo_detail.cs" />
     <Compile Include="ProductionContextMigrations\202111231108178_Production_add_tblHalfDoneTransferToWarehouseInfo_detail.Designer.cs">
       <DependentUpon>202111231108178_Production_add_tblHalfDoneTransferToWarehouseInfo_detail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202111251030402_Production_add_tblWeightCheck.cs" />
+    <Compile Include="ProductionContextMigrations\202111251030402_Production_add_tblWeightCheck.Designer.cs">
+      <DependentUpon>202111251030402_Production_add_tblWeightCheck.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202111300950177_Production_add_prp_tblStockItemReturnDetail.cs" />
+    <Compile Include="ProductionContextMigrations\202111300950177_Production_add_prp_tblStockItemReturnDetail.Designer.cs">
+      <DependentUpon>202111300950177_Production_add_prp_tblStockItemReturnDetail.cs</DependentUpon>
     </Compile>
     <Compile Include="ProductionContextMigrations\Configuration.cs" />
     <Compile Include="ProductionDAL\ProductionRepository.cs" />
@@ -1657,9 +1661,6 @@
     <EmbeddedResource Include="ProductionContextMigrations\202111080801474_Production_add_tblRepairIn_tblRepairOut.resx">
       <DependentUpon>202111080801474_Production_add_tblRepairIn_tblRepairOut.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProductionContextMigrations\202111140940066_Production_MiniStockQCLineAdd.resx">
-      <DependentUpon>202111140940066_Production_MiniStockQCLineAdd.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.resx">
       <DependentUpon>202111181042282_Production_add_tblMiniStockTransferToSemiFinshGoodsWarehouse.cs</DependentUpon>
     </EmbeddedResource>
@@ -1668,6 +1669,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202111231108178_Production_add_tblHalfDoneTransferToWarehouseInfo_detail.resx">
       <DependentUpon>202111231108178_Production_add_tblHalfDoneTransferToWarehouseInfo_detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202111251030402_Production_add_tblWeightCheck.resx">
+      <DependentUpon>202111251030402_Production_add_tblWeightCheck.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202111300950177_Production_add_prp_tblStockItemReturnDetail.resx">
+      <DependentUpon>202111300950177_Production_add_prp_tblStockItemReturnDetail.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.resx">
       <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>

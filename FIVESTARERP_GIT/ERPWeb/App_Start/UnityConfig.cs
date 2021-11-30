@@ -39,6 +39,7 @@ namespace ERPWeb
             // e.g. container.RegisterType<ITestService, TestService>();
             // Inventory Database
             #region Inventory
+            container.RegisterType<IWeightCheckedIMEILogBusiness, WeightCheckedIMEILogBusiness>();
             container.RegisterType<IHalfDoneWarehouseStockInfoBusiness, HalfDoneWarehouseStockInfoBusiness>();
             container.RegisterType<IHalfDoneWarehouseStockDetailBusiness, HalfDoneWarehouseStockDetailBusiness>();
             container.RegisterType<ISemiFinishGoodsWarehouseStockDetailBusiness, SemiFinishGoodsWarehouseStockDetailBusiness>();

@@ -9,13 +9,16 @@
             <thead class="btn-dark">
                 <tr class="text-center">
                     <th style="vertical-align:middle">
-                        <input type="checkbox" id="chkAll" class="chkAll" name="allItem"/>
+                        <input type="checkbox" id="chkAll" class="chkAll" name="allItem" />
                     </th>
-                    <th>#SL</th>
-                    <th>Item Name</th>
-                    <th>Current Stock</th>
-                    <th>Return Qty</th>
-                    <th>Type Of Unit</th>
+                    <th style="vertical-align:middle">#SL</th>
+                    <th style="vertical-align:middle">Item Name</th>
+                    <th style="vertical-align:middle">Current Stock</th>
+                    <th style="vertical-align:middle">Man Made Faulty Qty</th>
+                    <th style="vertical-align:middle">China Made Faulty Qty</th>
+                    <th style="vertical-align:middle">Good Stock Qty</th>
+                    @*<th>Return Qty</th>*@
+                    @*<th class="hide">Type Of Unit</th>*@
                     <th class="warehouse hide"></th>
                     <th class="itemType hide"></th>
                     <th class="item hide"></th>
@@ -28,22 +31,31 @@
                     sl++;
                     string itemName = item.ItemName + " [" + item.ItemTypeName + "-" + item.WarehouseName + "]";
                     int currentStock = (item.StockInQty - item.StockOutQty).Value;
-                    <tr data-item-row="notSelected">
-                        <td class="btn-dark text-center" style="vertical-align:middle;width:5%">
-                            <input type="checkbox" class="chkItem" name="item"/>
-                        </td>
-                        <td class="text-center text-bold" style="vertical-align:middle;width:5%">@sl</td>
-                        <td style="vertical-align:middle;width:60%">@itemName</td>
-                        <td style="width:10%" class="text-center text-bold">@currentStock</td>
-                        <td style="width:10%">
-                            <input type="number" class="form-control form-control-sm" value="0" />
-                        </td>
-                        <td class="text-center text-bold" style="width:10%">@item.UnitName</td>
-                        <td class="warehouse hide">@item.WarehouseId</td>
-                        <td class="itemType hide">@item.ItemTypeId</td>
-                        <td class="item hide">@item.ItemId</td>
-                        <td class="unit hide">@item.UnitId</td>
-                    </tr>
+                <tr data-item-row="notSelected">
+                    <td class="btn-dark text-center" style="vertical-align:middle;width:5%">
+                        <input type="checkbox" class="chkItem" name="item" />
+                    </td>
+                    <td class="text-center text-bold" style="vertical-align:middle;width:5%">@sl</td>
+                    <td style="vertical-align:middle;width:40%">@itemName</td>
+                    <td style="vertical-align:middle;width:10%" class="text-center text-bold">@currentStock</td>
+                    <td style="width:10%" class="text-center text-bold">
+                        <input type="text" class="form-control form-control-sm" name="manMadeFaulty" value="0" />
+                    </td>
+                    <td style="width:10%" class="text-center text-bold">
+                        <input type="text" class="form-control form-control-sm" name="chinaMadeFaulty" value="0" />
+                    </td>
+                    <td style="width:10%" class="text-center text-bold">
+                        <input type="text" class="form-control form-control-sm" name="goodStock" value="@currentStock" />
+                    </td>
+                    @*<td style="width:10%">
+            <input type="text" class="form-control form-control-sm" value="0" />
+        </td>*@
+                    @*<td class="text-center text-bold hide" style="width:10%">@item.UnitName</td>*@
+                    <td class="warehouse hide">@item.WarehouseId</td>
+                    <td class="itemType hide">@item.ItemTypeId</td>
+                    <td class="item hide">@item.ItemId</td>
+                    <td class="unit hide">@item.UnitId</td>
+                </tr>
                 }
             </tbody>
         </table>

@@ -34,5 +34,7 @@ namespace ERPBLL.Production.Interface
         IEnumerable<TempQRCodeTraceDTO> GetAssemblyLineWiseDataForDashBoard(long assemblyId, long orgId);
         DashboardAssemblyLineWiseDataDTO GetAssemblyDashBoard(long assemblyId, long orgId);
         IEnumerable<TempQRCodeTraceDTO> GetDailyProductionSummeryReport(long assemblyId, long modelId, string fromDate, string toDate, long orgId);
+        bool SaveIMEIStatusForWeightCheck(string imei, long orgId, long userId);
+        T_StockDTO GetIMEIFromTStock(string imei);
     }
 }

@@ -7,13 +7,13 @@ namespace ERPDAL.ProductionContextMigrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Production_MiniStockQCLineAdd : IMigrationMetadata
+    public sealed partial class Production_add_tblWeightCheck : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Production_MiniStockQCLineAdd));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Production_add_tblWeightCheck));
         
         string IMigrationMetadata.Id
         {
-            get { return "202111140940066_Production_MiniStockQCLineAdd"; }
+            get { return "202111251030402_Production_add_tblWeightCheck"; }
         }
         
         string IMigrationMetadata.Source

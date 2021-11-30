@@ -551,4 +551,11 @@ namespace ERPDAL.ProductionDAL
     {
         public MiniStockRequisitionToSemiFinishGoodsWarehouseInfoRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork) { }
     }
+    public class WeightCheckedIMEILogRepository : ProductionBaseRepository<WeightCheckedIMEILog>
+    {
+        public WeightCheckedIMEILogRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork)
+        {
+
+        }
+    }
 }

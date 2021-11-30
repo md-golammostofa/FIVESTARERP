@@ -212,6 +212,9 @@ namespace ERPBLL.Common
         public static readonly string Finish = "Finish";
         public static readonly string Carton = "Carton";
         public static readonly string LotIn = "Lot-In";
+        public static readonly string Weight = "Weight-Checked";
+        public static readonly string Bettery = "Battery-Write";
+        public static readonly string IMEIPass = "IMEI-Pass";
     }
     public class CustomerType
     {

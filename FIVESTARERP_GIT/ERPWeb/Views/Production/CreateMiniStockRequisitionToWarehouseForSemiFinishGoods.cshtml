@@ -36,10 +36,10 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="ddlModelNames" class="control-label font-weight-bold">Model</label>
-                                <select id="ddlModelNames" class="form-control form-control-sm select2 select2-danger">
+                                @*<select id="ddlModelNames" class="form-control form-control-sm select2 select2-danger">
                                     <option value="">--Select Model--</option>
-                                </select>
-                                @*@Html.DropDownList("ddlModelNames", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger ctrl-changed" })*@
+                                </select>*@
+                                @Html.DropDownList("ddlModelNames", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger ctrl-changed" })
                                 <span class="error hide required-model font-weight-bold">Model is required !</span>
                             </div>
                         </div>
@@ -122,10 +122,13 @@
 
         ddlProductionFloor.change(function (e) {
             e.preventDefault();
-            clearDropdown("ddlModelNames");
+            //clearDropdown("ddlModelNames");
             clearDropdown("ddlItems");
-            if (ddlProductionFloor.val() != "") {
-                LoadDropDown('/Common/GetMiniStockModelsByFloor', 'POST', ddlModelNames, JSON.stringify({ floorId: ddlProductionFloor.val() }));
+            //if (ddlProductionFloor.val() != "") {
+            //    LoadDropDown('/Common/GetMiniStockModelsByFloor', 'POST', ddlModelNames, JSON.stringify({ floorId: ddlProductionFloor.val() }));
+            //}
+            if (ddlProductionFloor.val() != "" && ddlModelNames.val() != "") {
+                LoadDropDown('/Common/GetMiniStockItemsByFloorWithModels', 'POST', ddlItems, JSON.stringify({ floorId: ddlProductionFloor.val(), modelId: ddlModelNames.val() }));
             }
         })
         ddlModelNames.change(function (e) {

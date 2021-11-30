@@ -440,7 +440,7 @@
                             if (res != null) {
                                 console.log("...........IMEI Carton...........");
                                 console.log(res);
-                                if (res.StateStatus === "Finish") {
+                                if (res.StateStatus === "Weight-Checked") {
                                     if (findDuplication(res.CodeNo)) {
                                         bindIMEIData(res);
                                     }

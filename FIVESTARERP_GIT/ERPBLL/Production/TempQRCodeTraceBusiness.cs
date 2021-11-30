@@ -17,11 +17,13 @@ namespace ERPBLL.Production
         private readonly IProductionUnitOfWork _productionDb;
         private readonly TempQRCodeTraceRepository _tempQRCodeTraceRepository;
         private readonly LotInLogRepository _lotInLogRepository;
+        private readonly WeightCheckedIMEILogRepository _weightCheckedIMEILogRepository;
         public TempQRCodeTraceBusiness(IProductionUnitOfWork productionDb)
         {
             this._productionDb = productionDb;
             this._tempQRCodeTraceRepository = new TempQRCodeTraceRepository(this._productionDb);
             this._lotInLogRepository = new LotInLogRepository(this._productionDb);
+            this._weightCheckedIMEILogRepository = new WeightCheckedIMEILogRepository(this._productionDb);
         }
 
         public async Task<TempQRCodeTrace> GetIMEIinQRCode(string imei, string status, long floorId, long packagingId, long orgId)
@@ -88,10 +90,11 @@ namespace ERPBLL.Production
 
         public async Task<bool> SaveBatteryCodeAsync(BatteryWriteDTO dto, long userId, long orgId)
         {
-            var imeiInDb = await GetIMEIinQRCode(dto.imei,string.Format(@"'PackagingLine'"),dto.floorId,dto.packagingLineId, orgId);
+            var imeiInDb = await GetIMEIinQRCode(dto.imei,string.Format(@"'IMEI-Pass'"),dto.floorId,dto.packagingLineId, orgId);
 
             if(imeiInDb != null && string.IsNullOrEmpty(imeiInDb.BatteryCode))
             {
+                imeiInDb.StateStatus = QRCodeStatus.Bettery;
                 imeiInDb.BatteryCode = dto.batteryCode;
                 imeiInDb.UpdateDate = DateTime.Now;
                 imeiInDb.UpUserId = userId;
@@ -107,8 +110,9 @@ namespace ERPBLL.Production
             {
                 var previousBarCode = qrCodeInDb.IMEI;
                 qrCodeInDb.IMEI = dto.barCode;
-                var preIEMIinDb = string.IsNullOrEmpty(qrCodeInDb.PreviousIMEI) ? "" : qrCodeInDb.PreviousIMEI +",";
-                qrCodeInDb.PreviousIMEI = preIEMIinDb+previousBarCode;
+                //var preIEMIinDb = string.IsNullOrEmpty(qrCodeInDb.PreviousIMEI) ? "" : qrCodeInDb.PreviousIMEI +",";
+                //qrCodeInDb.PreviousIMEI = preIEMIinDb+previousBarCode;
+                qrCodeInDb.PreviousIMEI = previousBarCode;
                 qrCodeInDb.StateStatus = "PackagingLine";
                 qrCodeInDb.UpdateDate = DateTime.Now;
                 qrCodeInDb.PackagingLineId = dto.packagingLineId;
@@ -249,6 +253,43 @@ where CAST(tqrt.UpdateDate as date) = CAST(GETDATE() as date) and tqrt.AssemblyI
         public IEnumerable<TempQRCodeTraceDTO> GetDailyProductionSummeryReport(long assemblyId, long modelId, string fromDate, string toDate, long orgId)
         {
             return _productionDb.Db.Database.SqlQuery<TempQRCodeTraceDTO>(string.Format(@"Exec [spDailyProductionSummery] '{0}','{1}',{2},{3},{4}", fromDate, toDate, assemblyId, modelId, orgId)).ToList();
+        }
+        public bool SaveIMEIStatusForWeightCheck(string imei, long orgId, long userId)
+        {
+            var imeiInfo = this.GetTempQRCodeTraceByIMEI(imei, orgId);
+            if (imeiInfo != null && imeiInfo.StateStatus == QRCodeStatus.Bettery)
+            {
+                imeiInfo.StateStatus = QRCodeStatus.Weight;
+                imeiInfo.UpdateDate = DateTime.Now;
+                imeiInfo.UpUserId = userId;
+                _tempQRCodeTraceRepository.Update(imeiInfo);
+
+                WeightCheckedIMEILog weightCheck = new WeightCheckedIMEILog();
+                weightCheck.AssemblyId = imeiInfo.AssemblyId;
+                weightCheck.CodeId = imeiInfo.CodeId;
+                weightCheck.CodeNo = imeiInfo.CodeNo;
+                weightCheck.DescriptionId = imeiInfo.DescriptionId;
+                weightCheck.EntryDate = DateTime.Now;
+                weightCheck.EUserId = userId;
+                weightCheck.IMEI = imeiInfo.IMEI;
+                weightCheck.ItemId = imeiInfo.ItemId;
+                weightCheck.ItemTypeId = imeiInfo.ItemTypeId;
+                weightCheck.OrganizationId = imeiInfo.OrganizationId;
+                weightCheck.ProductionFloorId = imeiInfo.ProductionFloorId;
+                weightCheck.ReferenceId = imeiInfo.ReferenceId;
+                weightCheck.ReferenceNumber = imeiInfo.ReferenceNumber;
+                weightCheck.Remarks = imeiInfo.Remarks;
+                weightCheck.StateStatus = imeiInfo.StateStatus;
+                weightCheck.WarehouseId = imeiInfo.WarehouseId;
+
+                _weightCheckedIMEILogRepository.Insert(weightCheck);
+                return _weightCheckedIMEILogRepository.Save();
+            }
+            return false;
+        }
+        public T_StockDTO GetIMEIFromTStock(string imei)
+        {
+            return _productionDb.Db.Database.SqlQuery<T_StockDTO>(string.Format(@"EXEC spIMEIFromTStock '{0}'", imei)).FirstOrDefault();
         }
     }
 }

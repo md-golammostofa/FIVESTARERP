@@ -208,6 +208,53 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region Control Panel
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateEmployeeId(string employeeId, long id)
+        {
+            bool isExist = _appUserBusiness.IsDuplicateEmployeeId(employeeId, id, User.OrgId);
+            return Json(isExist);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsUserExist(string userName, long id)
+        {
+            bool isUserExist = _appUserBusiness.GetAllAppUsers().Where(u => u.UserName.ToLower() == userName.ToLower() && u.UserId != id).FirstOrDefault() != null;
+
+            return Json(isUserExist);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsEmailExist(string email, long id)
+        {
+            bool isEmailExist = _appUserBusiness.GetAllAppUsers().Where(u => u.Email.ToLower() == email.ToLower() && u.UserId != id).FirstOrDefault() != null;
+
+            return Json(isEmailExist);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateRoleName(long roleId, string roleName, long orgId)
+        {
+            bool IsDuplicate = false;
+            IsDuplicate = _roleBusiness.IsDuplicateRoleName(roleName, roleId, orgId);
+            return Json(IsDuplicate);
+        }
+
+        [HttpPost]
+        public ActionResult IsCurrentUserPasswordCorrect(string password)
+        {
+            bool IsCorrect = false;
+            UserLogInViewModel loginModel = new UserLogInViewModel
+            {
+                UserName = User.UserName
+            };
+            loginModel.Password = Utility.Encrypt(password);
+            var user = _appUserBusiness.GetAppUserOneById(User.UserId, User.OrgId);
+            if (user != null)
+            {
+                IsCorrect = user.Password == Utility.Encrypt(password);
+            }
+            return Json(IsCorrect);
+        }
         [HttpPost]
         public ActionResult GetModules()
         {
@@ -316,367 +363,6 @@ namespace ERPWeb.Controllers
             return Json(isExist);
         }
         #endregion
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateCategory(string categoryName, long id)
-        {
-            bool isExist = _categoryBusiness.IsDuplicateCategory(id,categoryName, User.OrgId);
-            return Json(isExist);
-        }
-        
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateBrand(string brandName, long id)
-        {
-            bool isExist = _brandBusiness.IsDuplicateBrand(id, brandName, User.OrgId);
-            return Json(isExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateColor(string colorName, long id)
-        {
-            bool isExist = _colorBusiness.IsDuplicateColor(id, colorName, User.OrgId);
-            return Json(isExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateModel(string modelName, long id)
-        {
-            bool isExist = _descriptionBusiness.IsDuplicateModel(id, modelName, User.OrgId);
-            return Json(isExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateItemTypeName(string itemTypeName, long id, long warehouseId)
-        {
-            bool isExist = _itemTypeBusiness.IsDuplicateItemTypeName(itemTypeName, id, User.OrgId, warehouseId);
-            return Json(isExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateItemTypeShortName(string shortName, long id)
-        {
-            bool isExist = _itemTypeBusiness.IsDuplicateShortName(shortName, id, User.OrgId);
-            return Json(isExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateUnitName(string unitName, long id)
-        {
-            bool isExist = _unitBusiness.IsDuplicateUnitName(unitName, id, User.OrgId);
-            return Json(isExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateItemName(string itemName, long id)
-        {
-            bool isExist = _itemBusiness.IsDuplicateItemName(itemName, id, User.OrgId);
-            return Json(isExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateLineNumber(string lineNumber, long id)
-        {
-            bool isExist = _productionLineBusiness.IsDuplicateLineNumber(lineNumber, id, User.OrgId);
-            return Json(isExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateEmployeeId(string employeeId, long id)
-        {
-            bool isExist = _appUserBusiness.IsDuplicateEmployeeId(employeeId, id, User.OrgId);
-            return Json(isExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsUserExist(string userName, long id)
-        {
-            bool isUserExist = _appUserBusiness.GetAllAppUsers().Where(u => u.UserName.ToLower() == userName.ToLower() && u.UserId != id).FirstOrDefault() != null;
-
-            return Json(isUserExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsEmailExist(string email, long id)
-        {
-            bool isEmailExist = _appUserBusiness.GetAllAppUsers().Where(u => u.Email.ToLower() == email.ToLower() && u.UserId != id).FirstOrDefault() != null;
-
-            return Json(isEmailExist);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetUnitByItemId(long itemId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            UnitDomainDTO unitDTO = new UnitDomainDTO();
-            unitDTO.UnitId = unit.UnitId;
-            unitDTO.UnitName = unit.UnitName;
-            unitDTO.UnitSymbol = unit.UnitSymbol;
-            return Json(unitDTO);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetItemUnitAndPDNStockQtyByLineId(long itemId, long lineId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var productionStock = _productionStockInfoBusiness.GetAllProductionStockInfoByItemLineId(User.OrgId, itemId, lineId);
-            var itemStock = 0;
-            if (productionStock != null)
-            {
-                itemStock = (productionStock.StockInQty - productionStock.StockOutQty).Value;
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetItemUnitAndPDNStockQtyByLineAndModelId(long itemId, long lineId, long modelId, string stockFor)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var productionStock = _productionStockInfoBusiness.GetAllProductionStockInfoByLineAndModelAndItemId(User.OrgId, itemId, lineId, modelId, stockFor);
-            var itemStock = 0;
-            if (productionStock != null)
-            {
-                itemStock = (productionStock.StockInQty - productionStock.StockOutQty).Value;
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetAssemblyLineStockInfoByAssemblyAndItemAndModelId(long itemId, long assemblyId, long modelId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var assemblyStock = _assemblyLineStockInfoBusiness.GetAssemblyLineStockInfoByAssemblyAndItemAndModelId(assemblyId, itemId, modelId, User.OrgId);
-            var itemStock = 0;
-            if (assemblyStock != null)
-            {
-                itemStock = (assemblyStock.StockInQty - assemblyStock.StockOutQty).Value;
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetQCLineStockInfoByQCAndItemAndModelId(long itemId, long qcId, long modelId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var qcStock = _qCLineStockInfoBusiness.GetQCLineStockInfoByQCAndItemAndModelId(qcId, itemId, modelId, User.OrgId);
-            var itemStock = 0;
-            if (qcStock != null)
-            {
-                itemStock = (qcStock.StockInQty - qcStock.StockOutQty).Value;
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetPackagingLineStockInfoByPLAndItemAndModelId(long itemId, long packagingId, long modelId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var packagingStock = _packagingLineStockInfoBusiness.GetPackagingLineStockInfoByPackagingAndItemAndModelId(packagingId, itemId, modelId, User.OrgId);
-            var itemStock = 0;
-            if (packagingStock != null)
-            {
-                itemStock = (packagingStock.StockInQty - packagingStock.StockOutQty).Value;
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetRepairLineStockInfoByRepairQCAndItemAndModelId(long itemId, long repairId, long qcId, long modelId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var packagingStock = _repairLineStockInfoBusiness.GetRepairLineStockInfoByRepairQCAndItemAndModelId(repairId, itemId, qcId, modelId, User.OrgId);
-            var itemStock = 0;
-            if (packagingStock != null)
-            {
-                itemStock = (packagingStock.StockInQty - packagingStock.StockOutQty).Value;
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetRepairLineStockInfoByRepairAndItemAndModelId(long itemId, long repairId, long modelId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var repairStock = _repairLineStockInfoBusiness.GetRepairLineStockInfoByRepairAndItemAndModelId(repairId, itemId, modelId, User.OrgId);
-            var itemStock = 0;
-            if (repairStock != null)
-            {
-                itemStock = (repairStock.StockInQty - repairStock.StockOutQty).Value;
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetProductionAssembleStockInfoByLineAndItemAndModelId(long lineId, long itemId, long modelId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var packagingStock = _productionAssembleStockInfoBusiness.productionAssembleStockInfoByFloorAndModelAndItem(lineId, modelId, itemId, User.OrgId);
-            var itemStock = 0;
-            if (packagingStock != null)
-            {
-                itemStock = (packagingStock.StockInQty - packagingStock.StockOutQty);
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetRepairLineQCRemainQty(long assemblyLineId, long repairLineId, long qcLineId, long modelId, long itemId)
-        {
-            var transferQty = _repairItemStockInfoBusiness.GetRepairItem(assemblyLineId, qcLineId, repairLineId, modelId, itemId, User.OrgId);
-            var remainQty = transferQty.Quantity - transferQty.QCQty;
-            return Json(remainQty);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetFaultyItemStockInfoByRepairAndModelAndItem(long itemId, long repairId, long modelId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var repairStock = _faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItem(repairId, modelId, itemId, User.OrgId);
-            var itemStock = 0;
-            if (repairStock != null)
-            {
-                itemStock = (repairStock.StockInQty - repairStock.StockOutQty);
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(long itemId, long repairId, long modelId, bool isChinaFaulty)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var repairStock = _faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(repairId, modelId, itemId, isChinaFaulty, User.OrgId);
-            var itemStock = 0;
-            if (repairStock != null)
-            {
-                itemStock = (repairStock.StockInQty - repairStock.StockOutQty);
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetItemUnitAndFGStockQty(long lineId, long warehouseId, long itemId, long modelId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var finishGoodsStock = _finishGoodsStockInfoBusiness.GetFinishGoodsStockInfoByAll(User.OrgId, lineId, warehouseId, itemId, modelId);
-            var itemStock = 0;
-            if (finishGoodsStock != null)
-            {
-                itemStock = (finishGoodsStock.StockInQty - finishGoodsStock.StockOutQty).Value;
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsStockAvailableForRequisition(long? reqInfoId)
-        {
-            //bool isValidExec = true;
-            //string isValidTxt = string.Empty;
-            //var reqDetail = _requsitionDetailBusiness.GetRequsitionDetailByReqId(reqInfoId.Value, User.OrgId).ToList();
-            //var warehouseStock = _warehouseStockInfoBusiness.GetAllWarehouseStockInfoByOrgId(User.OrgId);
-            //var items = _itemBusiness.GetAllItemByOrgId(User.OrgId).ToList();
-
-            //foreach (var item in reqDetail)
-            //{
-            //    var w = warehouseStock.FirstOrDefault(wr => wr.ItemId == item.ItemId);
-            //    if (w != null)
-            //    {
-            //        if ((w.StockInQty - w.StockOutQty) < item.Quantity)
-            //        {
-            //            isValidExec = false;
-            //            isValidTxt += items.FirstOrDefault(it => it.ItemId == item.ItemId).ItemName + " does not have enough stock </br>";
-            //        }
-            //    }
-            //    else
-            //    {
-            //        isValidExec = false;
-            //        isValidTxt += items.FirstOrDefault(it => it.ItemId == item.ItemId).ItemName + " does not have enough stock </br>";
-            //    }
-            //}
-
-            ExecutionStateWithText stateWithText = GetExecutionStockAvailableForRequisition(reqInfoId);
-            return Json(stateWithText);
-        }
-
-        [NonAction]
-        private ExecutionStateWithText GetExecutionStockAvailableForRequisition(long? reqInfoId)
-        {
-            ExecutionStateWithText stateWithText = new ExecutionStateWithText();
-            var descriptionId = _requsitionInfoBusiness.GetRequisitionById(reqInfoId.Value, User.OrgId).DescriptionId;
-            var reqDetail = _requsitionDetailBusiness.GetRequsitionDetailByReqId(reqInfoId.Value, User.OrgId).ToList();
-            var warehouseStock = _warehouseStockInfoBusiness.GetAllWarehouseStockInfoByOrgId(User.OrgId);
-            var items = _itemBusiness.GetAllItemByOrgId(User.OrgId).ToList();
-            stateWithText.isSuccess = true;
-            foreach (var item in reqDetail)
-            {
-                var w = warehouseStock.Where(wr => wr.ItemId == item.ItemId && wr.DescriptionId == descriptionId).FirstOrDefault();
-                if (w != null)
-                {
-                    if ((w.StockInQty - w.StockOutQty) < item.Quantity)
-                    {
-                        stateWithText.isSuccess = false;
-                        stateWithText.text += items.Where(it => it.ItemId == item.ItemId).FirstOrDefault().ItemName + " does not have enough stock </br>";
-                    }
-                }
-                else
-                {
-                    stateWithText.isSuccess = false;
-                    stateWithText.text += items.Where(it => it.ItemId == item.ItemId).FirstOrDefault().ItemName + " does not have enough stock </br>";
-                }
-            }
-
-            return stateWithText;
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicationItemPreparation(long itemId, long modelId,string type)
-        {
-            bool IsDuplicate = false;
-            IsDuplicate = _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndType(type,modelId, itemId, User.OrgId) != null;
-            return Json(IsDuplicate);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateRoleName(long roleId, string roleName, long orgId)
-        {
-            bool IsDuplicate = false;
-            IsDuplicate = _roleBusiness.IsDuplicateRoleName(roleName, roleId, orgId);
-            return Json(IsDuplicate);
-        }
-
-        [HttpPost]
-        public ActionResult IsCurrentUserPasswordCorrect(string password)
-        {
-            bool IsCorrect = false;
-            UserLogInViewModel loginModel = new UserLogInViewModel
-            {
-                UserName = User.UserName
-            };
-            loginModel.Password = Utility.Encrypt(password);
-            var user = _appUserBusiness.GetAppUserOneById(User.UserId, User.OrgId);
-            if (user != null)
-            {
-                IsCorrect = user.Password == Utility.Encrypt(password);
-            }
-            return Json(IsCorrect);
-        }
-
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult IsDuplicateAssemblyInLine(long lineId, long id, string assemblyName)
-        {
-            var assembly = _assemblyLineBusiness.GetAssemblyLines(User.OrgId).FirstOrDefault(a => a.ProductionLineId == lineId && a.AssemblyLineName == assemblyName && a.AssemblyLineId != id) != null;
-            return Json(assembly);
-        }
 
         #region Dropdown List
         //[HttpPost]
@@ -945,11 +631,23 @@ namespace ERPWeb.Controllers
             var IsExist = _iMEITransferToRepairInfoBusiness.IsIMEIExistInTransferWithStatus(imei, string.Format(@"'Received'"), User.OrgId);
             return Json(IsExist);
         }
+        [HttpPost]
+        public ActionResult IsExistsIMEIPass(string imei)
+        {
+            var IsExists = _tempQRCodeTraceBusiness.IsExistIMEIWithStatus(imei, QRCodeStatus.IMEIPass, User.OrgId);
+            return Json(IsExists);
+        }
+        [HttpPost]
+        public ActionResult IsExistsBetteryWrite(string imei)
+        {
+            var IsExists = _tempQRCodeTraceBusiness.IsExistIMEIWithStatus(imei, QRCodeStatus.Bettery, User.OrgId);
+            return Json(IsExists);
+        }
 
         [HttpPost]
         public async Task<ActionResult> IMEIinFinishGoods(string imei,long floorId, long packagingId)
         {
-            var imeiInfo = await _tempQRCodeTraceBusiness.GetIMEIinQRCode(imei,string.Format(@"'{0}'",QRCodeStatus.Finish),floorId,packagingId, User.OrgId);
+            var imeiInfo = await _tempQRCodeTraceBusiness.GetIMEIinQRCode(imei,string.Format(@"'{0}'",QRCodeStatus.Weight),floorId,packagingId, User.OrgId);
             return Json(imeiInfo);
         }
 
@@ -960,7 +658,6 @@ namespace ERPWeb.Controllers
             return Json(isNotExist);
         }
         #endregion
-
 
         #region Production Module
 
@@ -1086,6 +783,193 @@ namespace ERPWeb.Controllers
         #endregion
 
         [HttpPost]
+        public ActionResult IsExistsIMEIInTStock(string imei)
+        {
+            var data = _tempQRCodeTraceBusiness.GetIMEIFromTStock(imei);
+            string IMEI = string.Empty;
+            if (data != null)
+            {
+                if (!string.IsNullOrEmpty(data.imei1) && string.IsNullOrEmpty(data.imei2) && string.IsNullOrEmpty(data.imei3) && string.IsNullOrEmpty(data.imei4))
+                {
+                    IMEI = data.imei1.Trim() ;
+                }
+                else if (!string.IsNullOrEmpty(data.imei1.Trim()) && !string.IsNullOrEmpty(data.imei2) && string.IsNullOrEmpty(data.imei3) && string.IsNullOrEmpty(data.imei4))
+                {
+                    IMEI = data.imei1.Trim() + "," + data.imei2.Trim();
+                }
+                else if (!string.IsNullOrEmpty(data.imei1) && !string.IsNullOrEmpty(data.imei2) && !string.IsNullOrEmpty(data.imei3) && string.IsNullOrEmpty(data.imei4))
+                {
+                    IMEI = data.imei1.Trim() + "," + data.imei2.Trim() + "," + data.imei3.Trim();
+                }
+                else
+                {
+                    IMEI = data.imei1.Trim() + "," + data.imei2.Trim() + "," + data.imei3.Trim() + "," + data.imei4.Trim();
+                }
+
+                return Json(new { IsSuccess = true, IMEI = IMEI });
+            }
+            return Json(new { IsSuccess = false });
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetItemUnitAndPDNStockQtyByLineId(long itemId, long lineId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var productionStock = _productionStockInfoBusiness.GetAllProductionStockInfoByItemLineId(User.OrgId, itemId, lineId);
+            var itemStock = 0;
+            if (productionStock != null)
+            {
+                itemStock = (productionStock.StockInQty - productionStock.StockOutQty).Value;
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetItemUnitAndPDNStockQtyByLineAndModelId(long itemId, long lineId, long modelId, string stockFor)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var productionStock = _productionStockInfoBusiness.GetAllProductionStockInfoByLineAndModelAndItemId(User.OrgId, itemId, lineId, modelId, stockFor);
+            var itemStock = 0;
+            if (productionStock != null)
+            {
+                itemStock = (productionStock.StockInQty - productionStock.StockOutQty).Value;
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetAssemblyLineStockInfoByAssemblyAndItemAndModelId(long itemId, long assemblyId, long modelId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var assemblyStock = _assemblyLineStockInfoBusiness.GetAssemblyLineStockInfoByAssemblyAndItemAndModelId(assemblyId, itemId, modelId, User.OrgId);
+            var itemStock = 0;
+            if (assemblyStock != null)
+            {
+                itemStock = (assemblyStock.StockInQty - assemblyStock.StockOutQty).Value;
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetQCLineStockInfoByQCAndItemAndModelId(long itemId, long qcId, long modelId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var qcStock = _qCLineStockInfoBusiness.GetQCLineStockInfoByQCAndItemAndModelId(qcId, itemId, modelId, User.OrgId);
+            var itemStock = 0;
+            if (qcStock != null)
+            {
+                itemStock = (qcStock.StockInQty - qcStock.StockOutQty).Value;
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetPackagingLineStockInfoByPLAndItemAndModelId(long itemId, long packagingId, long modelId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var packagingStock = _packagingLineStockInfoBusiness.GetPackagingLineStockInfoByPackagingAndItemAndModelId(packagingId, itemId, modelId, User.OrgId);
+            var itemStock = 0;
+            if (packagingStock != null)
+            {
+                itemStock = (packagingStock.StockInQty - packagingStock.StockOutQty).Value;
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetRepairLineStockInfoByRepairQCAndItemAndModelId(long itemId, long repairId, long qcId, long modelId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var packagingStock = _repairLineStockInfoBusiness.GetRepairLineStockInfoByRepairQCAndItemAndModelId(repairId, itemId, qcId, modelId, User.OrgId);
+            var itemStock = 0;
+            if (packagingStock != null)
+            {
+                itemStock = (packagingStock.StockInQty - packagingStock.StockOutQty).Value;
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetRepairLineStockInfoByRepairAndItemAndModelId(long itemId, long repairId, long modelId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var repairStock = _repairLineStockInfoBusiness.GetRepairLineStockInfoByRepairAndItemAndModelId(repairId, itemId, modelId, User.OrgId);
+            var itemStock = 0;
+            if (repairStock != null)
+            {
+                itemStock = (repairStock.StockInQty - repairStock.StockOutQty).Value;
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetProductionAssembleStockInfoByLineAndItemAndModelId(long lineId, long itemId, long modelId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var packagingStock = _productionAssembleStockInfoBusiness.productionAssembleStockInfoByFloorAndModelAndItem(lineId, modelId, itemId, User.OrgId);
+            var itemStock = 0;
+            if (packagingStock != null)
+            {
+                itemStock = (packagingStock.StockInQty - packagingStock.StockOutQty);
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetRepairLineQCRemainQty(long assemblyLineId, long repairLineId, long qcLineId, long modelId, long itemId)
+        {
+            var transferQty = _repairItemStockInfoBusiness.GetRepairItem(assemblyLineId, qcLineId, repairLineId, modelId, itemId, User.OrgId);
+            var remainQty = transferQty.Quantity - transferQty.QCQty;
+            return Json(remainQty);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetFaultyItemStockInfoByRepairAndModelAndItem(long itemId, long repairId, long modelId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var repairStock = _faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItem(repairId, modelId, itemId, User.OrgId);
+            var itemStock = 0;
+            if (repairStock != null)
+            {
+                itemStock = (repairStock.StockInQty - repairStock.StockOutQty);
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(long itemId, long repairId, long modelId, bool isChinaFaulty)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var repairStock = _faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(repairId, modelId, itemId, isChinaFaulty, User.OrgId);
+            var itemStock = 0;
+            if (repairStock != null)
+            {
+                itemStock = (repairStock.StockInQty - repairStock.StockOutQty);
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateLineNumber(string lineNumber, long id)
+        {
+            bool isExist = _productionLineBusiness.IsDuplicateLineNumber(lineNumber, id, User.OrgId);
+            return Json(isExist);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateAssemblyInLine(long lineId, long id, string assemblyName)
+        {
+            var assembly = _assemblyLineBusiness.GetAssemblyLines(User.OrgId).FirstOrDefault(a => a.ProductionLineId == lineId && a.AssemblyLineName == assemblyName && a.AssemblyLineId != id) != null;
+            return Json(assembly);
+        }
+        [HttpPost]
         public ActionResult IsExistLotInAssembly(string qrCode)
         {
             //DateTime date = DateTime.Today;
@@ -1176,6 +1060,154 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region Inventory Module
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetUnitByItemId(long itemId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            UnitDomainDTO unitDTO = new UnitDomainDTO();
+            unitDTO.UnitId = unit.UnitId;
+            unitDTO.UnitName = unit.UnitName;
+            unitDTO.UnitSymbol = unit.UnitSymbol;
+            return Json(unitDTO);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetItemUnitAndFGStockQty(long lineId, long warehouseId, long itemId, long modelId)
+        {
+            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+            var finishGoodsStock = _finishGoodsStockInfoBusiness.GetFinishGoodsStockInfoByAll(User.OrgId, lineId, warehouseId, itemId, modelId);
+            var itemStock = 0;
+            if (finishGoodsStock != null)
+            {
+                itemStock = (finishGoodsStock.StockInQty - finishGoodsStock.StockOutQty).Value;
+            }
+            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsStockAvailableForRequisition(long? reqInfoId)
+        {
+            //bool isValidExec = true;
+            //string isValidTxt = string.Empty;
+            //var reqDetail = _requsitionDetailBusiness.GetRequsitionDetailByReqId(reqInfoId.Value, User.OrgId).ToList();
+            //var warehouseStock = _warehouseStockInfoBusiness.GetAllWarehouseStockInfoByOrgId(User.OrgId);
+            //var items = _itemBusiness.GetAllItemByOrgId(User.OrgId).ToList();
+
+            //foreach (var item in reqDetail)
+            //{
+            //    var w = warehouseStock.FirstOrDefault(wr => wr.ItemId == item.ItemId);
+            //    if (w != null)
+            //    {
+            //        if ((w.StockInQty - w.StockOutQty) < item.Quantity)
+            //        {
+            //            isValidExec = false;
+            //            isValidTxt += items.FirstOrDefault(it => it.ItemId == item.ItemId).ItemName + " does not have enough stock </br>";
+            //        }
+            //    }
+            //    else
+            //    {
+            //        isValidExec = false;
+            //        isValidTxt += items.FirstOrDefault(it => it.ItemId == item.ItemId).ItemName + " does not have enough stock </br>";
+            //    }
+            //}
+
+            ExecutionStateWithText stateWithText = GetExecutionStockAvailableForRequisition(reqInfoId);
+            return Json(stateWithText);
+        }
+
+        [NonAction]
+        private ExecutionStateWithText GetExecutionStockAvailableForRequisition(long? reqInfoId)
+        {
+            ExecutionStateWithText stateWithText = new ExecutionStateWithText();
+            var descriptionId = _requsitionInfoBusiness.GetRequisitionById(reqInfoId.Value, User.OrgId).DescriptionId;
+            var reqDetail = _requsitionDetailBusiness.GetRequsitionDetailByReqId(reqInfoId.Value, User.OrgId).ToList();
+            var warehouseStock = _warehouseStockInfoBusiness.GetAllWarehouseStockInfoByOrgId(User.OrgId);
+            var items = _itemBusiness.GetAllItemByOrgId(User.OrgId).ToList();
+            stateWithText.isSuccess = true;
+            foreach (var item in reqDetail)
+            {
+                var w = warehouseStock.Where(wr => wr.ItemId == item.ItemId && wr.DescriptionId == descriptionId).FirstOrDefault();
+                if (w != null)
+                {
+                    if ((w.StockInQty - w.StockOutQty) < item.Quantity)
+                    {
+                        stateWithText.isSuccess = false;
+                        stateWithText.text += items.Where(it => it.ItemId == item.ItemId).FirstOrDefault().ItemName + " does not have enough stock </br>";
+                    }
+                }
+                else
+                {
+                    stateWithText.isSuccess = false;
+                    stateWithText.text += items.Where(it => it.ItemId == item.ItemId).FirstOrDefault().ItemName + " does not have enough stock </br>";
+                }
+            }
+
+            return stateWithText;
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicationItemPreparation(long itemId, long modelId, string type)
+        {
+            bool IsDuplicate = false;
+            IsDuplicate = _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndType(type, modelId, itemId, User.OrgId) != null;
+            return Json(IsDuplicate);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateCategory(string categoryName, long id)
+        {
+            bool isExist = _categoryBusiness.IsDuplicateCategory(id, categoryName, User.OrgId);
+            return Json(isExist);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateBrand(string brandName, long id)
+        {
+            bool isExist = _brandBusiness.IsDuplicateBrand(id, brandName, User.OrgId);
+            return Json(isExist);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateColor(string colorName, long id)
+        {
+            bool isExist = _colorBusiness.IsDuplicateColor(id, colorName, User.OrgId);
+            return Json(isExist);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateModel(string modelName, long id)
+        {
+            bool isExist = _descriptionBusiness.IsDuplicateModel(id, modelName, User.OrgId);
+            return Json(isExist);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateItemTypeName(string itemTypeName, long id, long warehouseId)
+        {
+            bool isExist = _itemTypeBusiness.IsDuplicateItemTypeName(itemTypeName, id, User.OrgId, warehouseId);
+            return Json(isExist);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateItemTypeShortName(string shortName, long id)
+        {
+            bool isExist = _itemTypeBusiness.IsDuplicateShortName(shortName, id, User.OrgId);
+            return Json(isExist);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateUnitName(string unitName, long id)
+        {
+            bool isExist = _unitBusiness.IsDuplicateUnitName(unitName, id, User.OrgId);
+            return Json(isExist);
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateItemName(string itemName, long id)
+        {
+            bool isExist = _itemBusiness.IsDuplicateItemName(itemName, id, User.OrgId);
+            return Json(isExist);
+        }
         [HttpPost]
         public ActionResult IsSupplierPhoneNumDuplicate(long supId, string phoneNum)
         {
@@ -1293,7 +1325,6 @@ namespace ERPWeb.Controllers
             return Json(qrCodeData);
         }
         #endregion
-
 
         #region Repair Section
         [HttpPost, ValidateJsonAntiForgeryToken]

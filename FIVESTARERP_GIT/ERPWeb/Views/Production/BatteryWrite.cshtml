@@ -124,11 +124,26 @@
         $(document).ready(function () {
             txtIMEI.focus();
         })
-
+        function validateIMEI(imei) {
+            return ajaxBooleanChecker(JSON.stringify({ imei: $.trim(imei) }), '/Common/IsExistsIMEIPass', getToken()) == true;
+        }
         txtIMEI.change(function () {
-            if (txtIMEI.val().trim() != "" && ddlPackagingLine.val() != "") {
-                var floorId = ddlPackagingLine.val() != "" ? ddlPackagingLine.val().split("#") : ["0", "0"];
-                fnGetIMEIDetail(txtIMEI.val(), floorId[1], floorId[0]);
+            if ($.trim(txtIMEI.val()).length == 15) {
+                if (validateIMEI($.trim(txtIMEI.val()))) {
+                    if (txtIMEI.val().trim() != "" && ddlPackagingLine.val() != "") {
+                        var floorId = ddlPackagingLine.val() != "" ? ddlPackagingLine.val().split("#") : ["0", "0"];
+                        fnGetIMEIDetail($.trim(txtIMEI.val()), floorId[1], floorId[0]);
+                    }
+                    else {
+                        toastrErrorAlert("IMEI Not Valid")
+                    }
+                }
+                else {
+                    toastrErrorAlert("IMEI Not Found")
+                }
+            }
+            else {
+                toastrErrorAlert("IMEI Not Valid")
             }
         })
 
@@ -194,11 +209,11 @@
         $("#btnSubmit").click(function (e) {
             e.preventDefault();
             if (validateInput()) {
-                disable("btnSubmit");
+                disable("#btnSubmit");
                 var floorId = ddlPackagingLine.val() != "" ? ddlPackagingLine.val().split("#") : ["0", "0"];
                 var packagingLineName = dropDownSelectedText("ddlPackagingLine");
                 packagingLineName = packagingLineName.substring(0, packagingLineName.lastIndexOf("["));
-                var data = JSON.stringify({ codeId: hdfCodeId.val(), imei: txtIMEI.val(), batteryCode: txtBatteryCode.val(), floorId: floorId[1], packagingLineId: floorId[0], packagingLineName: packagingLineName.trim() });
+                var data = JSON.stringify({ codeId: hdfCodeId.val(), imei: $.trim(txtIMEI.val()), batteryCode: $.trim(txtBatteryCode.val()), floorId: floorId[1], packagingLineId: floorId[0], packagingLineName: packagingLineName.trim() });
                 console.log(data);
 
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveBatteryCodeAsync', data, getToken())).then(function (res, status) {
@@ -209,11 +224,11 @@
                     else {
                         toastrErrorAlert(execuStatus.fail);
                     }
-                    enable("btnSubmit");
+                    enable("#btnSubmit");
                 }).fail(function (error) {
                     toastrErrorAlert(execuStatus.fail);
                     console.log(error);
-                    enable("btnSubmit");
+                    enable("#btnSubmit");
                 })
             }
         })

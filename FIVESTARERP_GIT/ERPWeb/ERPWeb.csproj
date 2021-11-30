@@ -971,6 +971,8 @@
     <Content Include="Views\Inventory\_GetHalfDoneStockTranferToWarehouse.cshtml" />
     <Content Include="Views\Inventory\_HalfDoneTransferToWarehouseDetails.cshtml" />
     <Content Include="Views\Inventory\_GetHalfDoneWarehouseStock.cshtml" />
+    <Content Include="Views\Production\GetWeightCheck.cshtml" />
+    <Content Include="Views\Production\GetWeightCheckListByUserId.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

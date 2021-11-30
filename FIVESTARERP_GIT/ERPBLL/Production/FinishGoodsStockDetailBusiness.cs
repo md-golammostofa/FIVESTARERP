@@ -411,7 +411,7 @@ Where 1=1 {0}", Utility.ParamChecker(param));
                 }};
 
                 // Temp QRCode
-                imeiInDb.StateStatus = QRCodeStatus.Finish;
+                imeiInDb.StateStatus = QRCodeStatus.IMEIPass;
                 imeiInDb.UpdateDate = DateTime.Now;
                 imeiInDb.UpUserId = userId;
                 _tempQRCodeTraceRepository.Update(imeiInDb);

@@ -180,7 +180,7 @@ namespace ERPBLL.Production
         {
             var qrCodesFromUI = dto.FinishGoodsSendToWarehouseDetails.Select(s => s.QRCode).Distinct().ToList();
             var qrCodeInDb = await _tempQRCodeTraceBusiness.GetTempQRCodeTracesByQRCodesAsync(qrCodesFromUI, orgId);
-            qrCodeInDb = qrCodeInDb.Where(s => s.StateStatus == QRCodeStatus.Finish).ToList();
+            qrCodeInDb = qrCodeInDb.Where(s => s.StateStatus == QRCodeStatus.Weight).ToList();
             if (qrCodeInDb.Count() > 0)
             {
                 // Finish Goods Send Info //

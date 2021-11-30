@@ -8,10 +8,13 @@
             <div class="card-header p-0 pt-1 border-bottom-0">
                 <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active " id="custom-tabs-two-IEMIWrite-tab" data-toggle="pill" href="#custom-tabs-two-IEMIWrite" role="tab" aria-controls="custom-tabs-two-IEMIWrite" aria-selected="true">IEMI Write</a>
+                        <a class="nav-link active " id="custom-tabs-two-IEMIWrite-tab" data-toggle="pill" href="#custom-tabs-two-IEMIWrite" role="tab" aria-controls="custom-tabs-two-IEMIWrite" aria-selected="true">IMEI Write</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-two-IEMIUpdate-tab" data-toggle="pill" href="#custom-tabs-two-IEMIUpdate" role="tab" aria-controls="custom-tabs-two-IEMIUpdate" aria-selected="true">IMEI Update</a>
                     </li>
                     <li class="nav-item hide">
-                        <a class="nav-link" id="custom-tabs-two-IEMIGererate-tab" data-toggle="pill" href="#custom-tabs-two-IEMIGererate" role="tab" aria-controls="custom-tabs-two-IEMIGererate" aria-selected="true">IEMI Generate</a>
+                        <a class="nav-link" id="custom-tabs-two-IEMIGererate-tab" data-toggle="pill" href="#custom-tabs-two-IEMIGererate" role="tab" aria-controls="custom-tabs-two-IEMIGererate" aria-selected="true">IMEI Generate</a>
                     </li>
                     <li class="nav-item hide">
                         <a class="nav-link" id="custom-tabs-two-generatedIMEIList-tab" data-toggle="pill" href="#custom-tabs-two-generatedIMEIList" role="tab" aria-controls="custom-tabs-two-generatedIMEIList" aria-selected="true">Generated IMEI List</a>
@@ -31,7 +34,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <h5 class="text-center text-bold">
-                                                    IEMI Write
+                                                    IMEI Write
                                                 </h5>
                                             </div>
                                             <div class="col-md-3">
@@ -48,7 +51,7 @@
                                         <div class="row">
                                             <input type="hidden" id="hdfCodeId" value="0" />
                                             <div class="col-md-4">
-                                                @Html.DropDownList("ddlPackagingLine", (IEnumerable<SelectListItem>)ViewBag.ddlPackagingLineWithProduction, "--Select Packaging--", new { @class = "form-control form-control-sm" })
+                                                @Html.DropDownList("ddlPackagingLine", (IEnumerable<SelectListItem>)ViewBag.ddlPackagingLine, "--Select Packaging--", new { @class = "form-control form-control-sm" })
                                             </div>
                                         </div>
                                     </div>
@@ -57,13 +60,19 @@
                                             <div class="col-md-6" style="border-right:2px solid #eba573">
                                                 <div class="row">
                                                     <div class="col-md-12">
+                                                        <h5 style="border-bottom:2px solid #70cf44">
+                                                            QR CODE SCANING
+                                                        </h5>
                                                         <input type="text" id="txtQRCode" class="form-control form-control-sm" placeholder="Enter QR Code Here" />
                                                     </div>
                                                     <div class="col-md-12 mt-2">
-                                                        <textarea id="txtBarCode" class="form-control form-control-sm" placeholder="Enter Barcode Here" rows="3"></textarea>
+                                                        <h5 style="border-bottom:2px solid #70cf44">
+                                                            IMEI SCANING
+                                                        </h5>
+                                                        <input id="txtBarCode" class="form-control form-control-sm" placeholder="Enter IMEI Here" />
                                                     </div>
-                                                    <div class="col-md-12">
-                                                        <ul id="errroContainer"></ul>
+                                                    <div class="col-md-12 mt-2 hide" id="ALLIMEI">
+                                                        <textarea id="txtAllIMEI" class="form-control form-control-sm" rows="3" disabled></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -89,7 +98,7 @@
                                                             <td style="width:85%; background-color:#e1dada" colspan="3" class="imei">N/A</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="alert-secondary" style="width:15%">Battery Code</td>
+                                                            <td class="alert-secondary" style="width:15%">Battery SL</td>
                                                             <td style="width:85%; background-color:#e1dada" colspan="3" class="batteryCode">N/A</td>
                                                         </tr>
                                                     </tbody>
@@ -98,7 +107,96 @@
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="button" class="btn btn-success btn-flat" id="btnSubmit">Save</button>
+                                        <button type="button" class="btn btn-success btn-flat hide" id="btnSubmit">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-IEMIUpdate" role="tabpanel" aria-labelledby="custom-tabs-two-IEMIUpdate-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    IMEI Update
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <input type="hidden" id="hdfCodeIdForIMEIUpdate" value="0" />
+                                            <div class="col-md-4">
+                                                @Html.DropDownList("ddlPackagingLineForIMEIUpdate", (IEnumerable<SelectListItem>)ViewBag.ddlPackagingLine, "--Select Packaging--", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-6" style="border-right:2px solid #eba573">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h5 style="border-bottom:2px solid #70cf44">
+                                                            QR CODE SCANING
+                                                        </h5>
+                                                        <input type="text" id="txtQRCodeForIMEIUpdate" class="form-control form-control-sm" placeholder="Enter QR Code Here" />
+                                                    </div>
+                                                    <div class="col-md-12 mt-2">
+                                                        <h5 style="border-bottom:2px solid #70cf44">
+                                                            IMEI SCANING
+                                                        </h5>
+                                                        <input id="txtBarCodeForIMEIUpdate" class="form-control form-control-sm" placeholder="Enter IMEI Here" />
+                                                    </div>
+                                                    <div class="col-md-12 mt-2">
+                                                        <textarea style="background-color:red;color:white;font-weight:bold; " id="txtAllIMEIForIMEIUpdate" class="form-control form-control-sm" rows="3" disabled></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <table class="table table-sm text-sm table-responsive-lg text-bold">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="alert-secondary" style="width:15%">Belt</td>
+                                                            <td style="width:85%; background-color:#e1dada" colspan="3" class="beltNameForIMEIUpdate">N/A</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="alert-secondary" style="width:15%">Item-Color</td>
+                                                            <td style="width:85%; background-color:#e1dada" colspan="3" class="itemNameForIMEIUpdate">N/A</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="alert-secondary" style="width:15%">Status</td>
+                                                            <td style="width:25%; background-color:#e1dada" class="statestatusForIMEIUpdate">N/A</td>
+                                                            <td class="alert-secondary" style="width:25%">Packaging Line</td>
+                                                            <td style="width:35%; background-color:#e1dada" class="packagingLineForIMEIUpdate">N/A</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="alert-secondary" style="width:15%">IMEI</td>
+                                                            <td style="width:85%; background-color:#e1dada" colspan="3" class="imeiForIMEIUpdate">N/A</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="alert-secondary" style="width:15%">Battery SL</td>
+                                                            <td style="width:85%; background-color:#e1dada" colspan="3" class="batteryCodeForIMEIUpdate">N/A</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-success btn-flat" id="btnSubmitForIMEIUpdate">Update</button>
                                     </div>
                                 </div>
                             </div>
@@ -195,13 +293,29 @@
     </div>
 </div>
 
+<div class="callout callout-warning hide" id="loader-process" style="position:absolute;top:30%;left:50%">
+    <div id="loader-div">
+        <h3 class="text-center">
+            <img src="~/Content/Images/loader.gif" width="100" height="100" />
+        </h3>
+        <h5>Please wait...!</h5>
+    </div>
+</div>
 
 @section scripts{
     <script type="text/javascript">
 
+        // IMEI Update //
+        var txtQRCodeForIMEIUpdate = $("#txtQRCodeForIMEIUpdate");
+        var txtBarCodeForIMEIUpdate = $("#txtBarCodeForIMEIUpdate");
+        var txtAllIMEIForIMEIUpdate = $("#txtAllIMEIForIMEIUpdate");
+        var ddlPackagingLineForIMEIUpdate = $("#ddlPackagingLineForIMEIUpdate");
+        var hdfCodeIdForIMEIUpdate = $("#hdfCodeIdForIMEIUpdate");
+
         // IMEI Write //
         var txtQRCode = $("#txtQRCode");
         var txtBarCode = $("#txtBarCode");
+        var txtAllIMEI = $("#txtAllIMEI");
         var ddlPackagingLine = $("#ddlPackagingLine");
         var hdfCodeId = $("#hdfCodeId");
         var imeiInTxtBx = '';
@@ -213,16 +327,196 @@
 
         $(document).ready(function () {
             txtQRCode.focus();
+            $("#btnSubmitForIMEIUpdate").hide();
         })
 
-        //========================= IMEI Write ========================//
+        //#region IMEI Update ========================//
+
+        txtQRCodeForIMEIUpdate.change(function () {
+            hdfCodeId.val('0');
+            if ($.trim(txtQRCodeForIMEIUpdate.val()) != "") {
+                if (ddlPackagingLineForIMEIUpdate.val() != "") {
+                    var floorId = ddlPackagingLineForIMEIUpdate.val() != "" ? ddlPackagingLineForIMEIUpdate.val().split("#") : ["0", "0"];
+                    fnGetQRCodeDetailForIMEIUpdate($.trim(txtQRCodeForIMEIUpdate.val()), floorId[1]);
+                }
+                else {
+                    toastrErrorAlert("Packeging Line Required");
+                }
+            }
+            else {
+                toastrErrorAlert("Enter QR Code");
+            }
+        })
+
+        function fnGetQRCodeDetailForIMEIUpdate(qrCode, floorId) {
+            var data = JSON.stringify({ code: qrCode, floorId: floorId });
+            hdfCodeIdForIMEIUpdate.val("0");
+            $.when(postReqWithData(dataType.applicationJson, dataType.json, type.post, '/Production/GetTempQRCodeTraceByCodeWithFloorAsync', data)).then(function (res, status) {
+                console.log(res);
+                fnBindQRCodeDataForIMEIUpdate(res);
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+        var itemNameForIMEIUpdate = '';
+        function fnBindQRCodeDataForIMEIUpdate(obj) {
+            if (!$.isEmptyObject(obj) && obj.CodeId > 0 && obj.StateStatus == "PackagingLine") {
+                hdfCodeIdForIMEIUpdate.val(obj.CodeId);
+                $(".beltNameForIMEIUpdate").empty();
+                $(".beltNameForIMEIUpdate").text('(' + obj.ProductionFloorName + ')-(' + obj.AssemblyLineName + ')-(' + obj.QCLineName + ')');
+                $('.itemNameForIMEIUpdate').empty();
+                itemNameForIMEIUpdate = (obj.ItemName + ' [' + obj.ItemTypeName + '-' + obj.WarehouseName + ']');
+                $('.itemNameForIMEIUpdate').text(obj.ItemName + ' [' + obj.ItemTypeName + '-' + obj.WarehouseName + ']');
+                $('.statestatusForIMEIUpdate').empty();
+                $('.statestatusForIMEIUpdate').append('<span class="badge badge-warning">' + obj.StateStatus + '</span>');
+                $('.packagingLineForIMEIUpdate').empty();
+                $('.packagingLineForIMEIUpdate').text(obj.PackagingLineName);
+                $('.imeiForIMEIUpdate').empty();
+                $('.imeiForIMEIUpdate').text(obj.IMEI);
+                $('.batteryCodeForIMEIUpdate').empty();
+                $('.batteryCodeForIMEIUpdate').text(obj.BatteryCode);
+                if (obj.StateStatus == "PackagingLine" && obj.IMEI != "") {
+                    $("#btnSubmitForIMEIUpdate").show();
+                    $("#btnSubmitForIMEIUpdate").text('Update');
+                }
+                if (TryParseInt(hdfCodeIdForIMEIUpdate.val(), 0) > 0) {
+                    txtBarCodeForIMEIUpdate.focus();
+                    disable("#txtQRCodeForIMEIUpdate");
+                }
+                else {
+                    toastrErrorAlert("QR Code Not Found");
+                }
+            }
+            else {
+                txtQRCodeForIMEIUpdate.val('');
+                txtQRCodeForIMEIUpdate.focus();
+                toastr.error("QRCode is invalid / In Repair /Completed Cycle", null, { timeOut: 2000 });
+            }
+        }
+
+        txtBarCodeForIMEIUpdate.change(function () {
+            txtBarCodeForIMEIUpdate.blur();
+            txtAllIMEIForIMEIUpdate.val('');
+            var floorId = ddlPackagingLineForIMEIUpdate.val() != "" ? ddlPackagingLineForIMEIUpdate.val().split("#") : ["0", "0"];
+            if ($.trim(txtQRCodeForIMEIUpdate.val()) != "" && TryParseInt(floorId[1], 0) > 0 && TryParseInt(hdfCodeIdForIMEIUpdate.val(), 0) > 0 && itemNameForIMEIUpdate != '') {
+                if ($.trim(txtBarCodeForIMEIUpdate.val()) != "" && $.trim(txtBarCodeForIMEIUpdate.val()).length == 15) {
+                    $("#loader-process").removeClass("hide");
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Common/IsExistsIMEIInTStock', JSON.stringify({ imei: $.trim(txtBarCodeForIMEIUpdate.val()) }), getToken())).then(function (res, status) {
+                        if (res.IsSuccess == true && status == "success") {
+                            txtAllIMEIForIMEIUpdate.val(res.IMEI);
+                            //txtBarCodeForIMEIUpdate.blur();
+                        }
+                        else {
+                            toastr.error("IMEI Not Found", null, { timeOut: 1500 });
+                            txtBarCodeForIMEIUpdate.val('');
+                            txtBarCodeForIMEIUpdate.focus();
+                        }
+                        $("#loader-process").addClass("hide");
+                    }).fail(function (error) {
+                        toastrErrorAlert(execuStatus.fail);
+                        console.log(error);
+                        $("#loader-process").addClass("hide");
+                    })
+                }
+                else {
+                    toastr.error("IMEI Not Valid", null, { timeOut: 1500 });
+                    txtBarCodeForIMEIUpdate.val('');
+                    txtBarCodeForIMEIUpdate.focus();
+                }
+            }
+            else {
+                toastrWarningAlert("Enter QRCode First");
+                txtBarCodeForIMEIUpdate.val('');
+                txtQRCodeForIMEIUpdate.val('');
+                txtQRCodeForIMEIUpdate.focus();
+            }
+        })
+
+        function validateInputForIMEIUpdate() {
+            var isValid = true;
+            if (ddlPackagingLineForIMEIUpdate.val() == "") {
+                isValid = false;
+            }
+            if (txtQRCodeForIMEIUpdate.val().trim() == "") {
+                isValid = false;
+            }
+            if (txtBarCodeForIMEIUpdate.val().trim() == "") {
+                isValid = false;
+            }
+            if ($.trim(txtAllIMEIForIMEIUpdate.val()) == "") {
+                isValid = false;
+            }
+            if (TryParseInt(hdfCodeIdForIMEIUpdate.val(), 0) <= 0) {
+                isValid = false;
+            }
+            return isValid;
+        }
+        $("#btnSubmitForIMEIUpdate").click(function (e) {
+            e.preventDefault();
+            if (validateInputForIMEIUpdate()) {
+                disable("#btnSubmitForIMEIUpdate");
+                var floorId = ddlPackagingLineForIMEIUpdate.val() != "" ? ddlPackagingLineForIMEIUpdate.val().split("#") : ["0", "0"];
+                var packagingLineName = dropDownSelectedText("ddlPackagingLineForIMEIUpdate");
+                packagingLineName = packagingLineName.substring(0, packagingLineName.lastIndexOf("["));
+                var data = JSON.stringify({ codeId: hdfCodeIdForIMEIUpdate.val(), qrCode: $.trim(txtQRCodeForIMEIUpdate.val()), barCode: $.trim(txtAllIMEIForIMEIUpdate.val()), floorId: floorId[1], packagingLineId: floorId[0], packagingLineName: packagingLineName.trim() });
+
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQRCodeIEMIAsync', data, getToken())).then(function (res, status) {
+                    if (res === true && status == "success") {
+                        resetUIForIMEIUpdate();
+                        toastrSuccessAlert(execuStatus.successSave);
+                        txtQRCodeForIMEIUpdate.focus();
+                    }
+                    else {
+                        toastrErrorAlert(execuStatus.fail);
+                    }
+                    enable("#btnSubmitForIMEIUpdate");
+                }).fail(function (error) {
+                    toastrErrorAlert(execuStatus.fail);
+                    console.log(error);
+                    enable("#btnSubmitForIMEIUpdate");
+                })
+            }
+        })
+        function resetUIForIMEIUpdate() {
+            $(".beltNameForIMEIUpdate").empty();
+            $('.itemNameForIMEIUpdate').empty();
+            $('.statestatusForIMEIUpdate').empty();
+            $('.packagingLineForIMEIUpdate').empty();
+            $('.imeiForIMEIUpdate').empty();
+            $('.batteryCodeForIMEIUpdate').empty();
+            txtBarCodeForIMEIUpdate.val('');
+            txtQRCodeForIMEIUpdate.val('');
+            txtAllIMEIForIMEIUpdate.val('');
+            //ddlPackagingLine.val('')
+            txtQRCodeForIMEIUpdate.focus();
+            $("#btnSubmitForIMEIUpdate").hide();
+            enable("#txtQRCodeForIMEIUpdate");
+        }
+
+        //#endregion IMEI Update ========================//
+
+        //#region IMEI Write ========================//
 
         txtQRCode.change(function () {
             hdfCodeId.val('0');
-            if (txtQRCode.val().trim() != "" && ddlPackagingLine.val() != "") {
-                var floorId = ddlPackagingLine.val() != "" ? ddlPackagingLine.val().split("#") : ["0", "0"];
-                fnGetQRCodeDetail(txtQRCode.val(), floorId[1]);
+            if ($.trim(txtQRCode.val()) != "") {
+                if (ddlPackagingLine.val() != "") {
+                    var floorId = ddlPackagingLine.val() != "" ? ddlPackagingLine.val().split("#") : ["0", "0"];
+                    fnGetQRCodeDetail($.trim(txtQRCode.val()), floorId[1]);
+                    //txtBarCode.focus();
+                }
+                else {
+                    toastrErrorAlert("Packeging Line Required");
+                }
             }
+            else {
+                toastrErrorAlert("Enter QR Code");
+            }
+            //if (txtQRCode.val().trim() != "" && ddlPackagingLine.val() != "") {
+            //    var floorId = ddlPackagingLine.val() != "" ? ddlPackagingLine.val().split("#") : ["0", "0"];
+            //    fnGetQRCodeDetail(txtQRCode.val(), floorId[1]);
+            //    txtBarCode.focus();
+            //}
         })
 
         function fnGetQRCodeDetail(qrCode, floorId) {
@@ -236,16 +530,17 @@
             })
         }
 
-        function validateIMEI(imei,codeId) {
+        function validateIMEI(imei, codeId) {
             return ajaxBooleanChecker(JSON.stringify({ imei: $.trim(imei), codeId: codeId }), '/Common/IMEIWithoutThisQRCode', getToken());
         }
-
+        var itemName = '';
         function fnBindQRCodeData(obj) {
-            if (!$.isEmptyObject(obj) && obj.CodeId > 0) {
+            if (!$.isEmptyObject(obj) && obj.CodeId > 0 && obj.StateStatus == "MiniStock") {
                 hdfCodeId.val(obj.CodeId);
                 $(".beltName").empty();
                 $(".beltName").text('(' + obj.ProductionFloorName + ')-(' + obj.AssemblyLineName + ')-(' + obj.QCLineName + ')');
                 $('.itemName').empty();
+                itemName = (obj.ItemName + ' [' + obj.ItemTypeName + '-' + obj.WarehouseName + ']');
                 $('.itemName').text(obj.ItemName + ' [' + obj.ItemTypeName + '-' + obj.WarehouseName + ']');
                 $('.statestatus').empty();
                 $('.statestatus').append('<span class="badge badge-warning">' + obj.StateStatus + '</span>');
@@ -255,31 +550,81 @@
                 $('.imei').text(obj.IMEI);
                 $('.batteryCode').empty();
                 $('.batteryCode').text(obj.BatteryCode);
-                if (obj.StateStatus == "MiniStock") {
-                    $("#btnSubmit").text('Save');
+                //if (obj.StateStatus == "PackagingLine" && obj.IMEI != "") {
+                //    $("#btnSubmit").show();
+                //    $("#btnSubmit").text('Update');
+                //}
+                //if (obj.StateStatus == "MiniStock") {
+                //    $("#btnSubmit").text('Save');
+                //}
+                //else {
+                //    $("#btnSubmit").show();
+                //    $("#btnSubmit").text('Update');
+                //}
+                if (TryParseInt(hdfCodeId.val(), 0) > 0) {
+                    txtBarCode.focus();
+                    disable("#txtQRCode");
                 }
                 else {
-                    $("#btnSubmit").text('Update');
+                    toastrErrorAlert("QR Code Not Found");
                 }
-
-                txtBarCode.focus();
             }
             else {
                 txtQRCode.val('');
                 txtQRCode.focus();
-                toastr.error("QRCode is invalid / In Repair /Completed Cycle", null, {timeOut:2000});
+                toastr.error("QRCode is invalid / In Repair /Completed Cycle", null, { timeOut: 2000 });
             }
         }
 
         txtBarCode.change(function () {
-            if (txtQRCode.val().trim() != "" && TryParseInt(hdfCodeId.val(),0) > 0) {
-                if (validateIMEI($.trim(txtBarCode.val()), hdfCodeId.val())) {
+            txtBarCode.blur();
+            var floorId = ddlPackagingLine.val() != "" ? ddlPackagingLine.val().split("#") : ["0", "0"];
+            if ($.trim(txtQRCode.val()) != "" && TryParseInt(floorId[1], 0) > 0 && TryParseInt(hdfCodeId.val(), 0) > 0 && itemName != '') {
+                if ($.trim(txtBarCode.val()) != "" && $.trim(txtBarCode.val()).length == 15) {
+                    $("#loader-process").removeClass("hide");
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Common/IsExistsIMEIInTStock', JSON.stringify({ imei: $.trim(txtBarCode.val()) }), getToken())).then(function (res, status) {
+                        if (res.IsSuccess == true && status == "success") {
+                            //$("#ALLIMEI").show();
+                            txtAllIMEI.val(res.IMEI);
+                            if ($.trim(txtAllIMEI.val()) != "") {
+                                var packagingLineName = dropDownSelectedText("ddlPackagingLine");
+                                packagingLineName = packagingLineName.substring(0, packagingLineName.lastIndexOf("["));
+                                var data = JSON.stringify({ codeId: hdfCodeId.val(), qrCode: $.trim(txtQRCode.val()), barCode: $.trim(txtAllIMEI.val()), floorId: floorId[1], packagingLineId: floorId[0], packagingLineName: packagingLineName.trim() });
 
+                                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQRCodeIEMIAsync', data, getToken())).then(function (res, status) {
+                                    if (res === true && status == "success") {
+                                        resetUI();
+                                        toastrSuccessAlert(execuStatus.successSave);
+                                        txtQRCode.focus();
+                                    }
+                                    else {
+                                        toastrErrorAlert(execuStatus.fail);
+                                    }
+                                    $("#loader-process").addClass("hide");
+                                }).fail(function (error) {
+                                    toastrErrorAlert(execuStatus.fail);
+                                    console.log(error);
+                                    $("#loader-process").addClass("hide");
+                                })
+                            }
+                        }
+                        else {
+                            toastr.error("IMEI Not Found", null, { timeOut: 1500 });
+                            txtBarCode.val('');
+                            txtBarCode.focus();
+                            $("#loader-process").addClass("hide");
+                        }
+                    }).fail(function (error) {
+                        toastrErrorAlert(execuStatus.fail);
+                        console.log(error);
+                        $("#loader-process").addClass("hide");
+                    })
                 }
                 else {
-                    toastr.error("This IMEI already in another QRCode", null, { timeOut: 1500 });
+                    toastr.error("IMEI Not Valid", null, { timeOut: 1500 });
                     txtBarCode.val('');
                     txtBarCode.focus();
+                    $("#loader-process").addClass("hide");
                 }
             }
             else {
@@ -311,32 +656,32 @@
             return isValid;
         }
 
-        $("#btnSubmit").click(function (e) {
-            e.preventDefault();
-            if (validateInput()) {
-                disable("#btnSubmit");
-                var floorId = ddlPackagingLine.val() != "" ? ddlPackagingLine.val().split("#") : ["0", "0"];
-                var packagingLineName = dropDownSelectedText("ddlPackagingLine");
-                packagingLineName = packagingLineName.substring(0, packagingLineName.lastIndexOf("["));
-                var data = JSON.stringify({ codeId: hdfCodeId.val(), qrCode: txtQRCode.val(), barCode: txtBarCode.val(), floorId: floorId[1], packagingLineId: floorId[0], packagingLineName: packagingLineName.trim() });
-                console.log(data);
+        //$("#btnSubmit").click(function (e) {
+        //    e.preventDefault();
+        //    if (validateInput()) {
+        //        disable("#btnSubmit");
+        //        var floorId = ddlPackagingLine.val() != "" ? ddlPackagingLine.val().split("#") : ["0", "0"];
+        //        var packagingLineName = dropDownSelectedText("ddlPackagingLine");
+        //        packagingLineName = packagingLineName.substring(0, packagingLineName.lastIndexOf("["));
+        //        var data = JSON.stringify({ codeId: hdfCodeId.val(), qrCode: txtQRCode.val(), barCode: txtBarCode.val(), floorId: floorId[1], packagingLineId: floorId[0], packagingLineName: packagingLineName.trim() });
+        //        console.log(data);
 
-                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQRCodeIEMIAsync', data, getToken())).then(function (res, status) {
-                    if (res === true && status == "success") {
-                        resetUI();
-                        toastrSuccessAlert(execuStatus.successSave);
-                    }
-                    else {
-                        toastrErrorAlert(execuStatus.fail);
-                    }
-                    enable("#btnSubmit");
-                }).fail(function (error) {
-                    toastrErrorAlert(execuStatus.fail);
-                    console.log(error);
-                    enable("#btnSubmit");
-                })
-            }
-        })
+        //        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQRCodeIEMIAsync', data, getToken())).then(function (res, status) {
+        //            if (res === true && status == "success") {
+        //                resetUI();
+        //                toastrSuccessAlert(execuStatus.successSave);
+        //            }
+        //            else {
+        //                toastrErrorAlert(execuStatus.fail);
+        //            }
+        //            enable("#btnSubmit");
+        //        }).fail(function (error) {
+        //            toastrErrorAlert(execuStatus.fail);
+        //            console.log(error);
+        //            enable("#btnSubmit");
+        //        })
+        //    }
+        //})
 
         function resetUI() {
             $(".beltName").empty();
@@ -349,8 +694,13 @@
             txtQRCode.val('');
             //ddlPackagingLine.val('')
             txtQRCode.focus();
-
+            $("#ALLIMEI").hide();
+            enable("#txtQRCode");
         }
+
+        //#endregion IMEI Write ========================//
+
+        
 
         //========================= End of IMEI Write ========================//        
         

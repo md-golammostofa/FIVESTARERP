@@ -112,6 +112,7 @@ rsinfo.StockOutQty,war.WarehouseName,rsinfo.ProductionFloorId,rsinfo.AssemblyLin
                     stock.UpUserId = userId;
 
                     _repairSectionSemiFinishStockInfoRepository.Update(stock);
+                    _repairSectionSemiFinishStockInfoRepository.Save();
                 }
                 else
                 {
@@ -129,6 +130,7 @@ rsinfo.StockOutQty,war.WarehouseName,rsinfo.ProductionFloorId,rsinfo.AssemblyLin
                     info.OrganizationId = orgId;
 
                     _repairSectionSemiFinishStockInfoRepository.Insert(info);
+                    _repairSectionSemiFinishStockInfoRepository.Save();
                 }
             }
             _repairSectionSemiFinishStockDetailsRepository.InsertAll(stockDetails);

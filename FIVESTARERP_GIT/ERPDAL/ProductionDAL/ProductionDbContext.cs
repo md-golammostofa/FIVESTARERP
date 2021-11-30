@@ -110,5 +110,6 @@ namespace ERPDAL.ProductionDAL
         public DbSet<MiniStockTransferToSemiFinishGoodsWarehouse> tblMiniStockTransferToSemiFinishGoodsWarehouse { get; set; }
         public DbSet<MiniStockRequisitionToSemiFinishGoodsWarehouseDetail> tblMiniStockRequisitionToSemiFinishGoodsWarehouseDetail { get; set; }
         public DbSet<MiniStockRequisitionToSemiFinishGoodsWarehouseInfo> tblMiniStockRequisitionToSemiFinishGoodsWarehouseInfo { get; set; }
+        public DbSet<WeightCheckedIMEILog> tblWeightCheckedIMEILog { get; set; }
     }
 }

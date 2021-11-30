@@ -1,0 +1,317 @@
+﻿@{
+    ViewBag.Title = "Weight Check";
+}
+<div class="row">
+    <div class="col-md-12 text-sm">
+        <div class="card card-primary card-outline card-tabs" style="margin-top:-20px">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs" role="tablist" id="custom-tabs-two-tab">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-two-IMEIScanningForWeightCheck-tab" data-toggle="pill" href="#custom-tabs-two-IMEIScanningForWeightCheck" role="tab" aria-controls="custom-tabs-two-IMEIScanningForWeightCheck" aria-selected="true">IMEI Scannig</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " id="custom-tabs-two-IMEIScanningForBoxStickerList-tab" data-toggle="pill" href="#custom-tabs-two-IMEIScanningForWeightCheckList" role="tab" aria-controls="custom-tabs-two-IMEIScanningForWeightCheckList" aria-selected="true">IMEI Scanning List</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                @Html.AntiForgeryToken()
+                <div class="tab-content" id="custom-tabs-two-tabContent">
+                    <div class="tab-pane fade show active" id="custom-tabs-two-IMEIScanningForWeightCheck" role="tabpanel" aria-labelledby="custom-tabs-two-IMEIScanningForWeightCheck-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    IMEI Scanning For Weight Check
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" style="margin-top:-15px">
+                                            @*<div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="ddlAssemblyLine" class="control-label font-weight-bold">Assembly Line</label>
+                                                            @Html.DropDownList("ddlAssemblyLine", (IEnumerable<SelectListItem>)ViewBag.ddlAssemblyLine, "--SelectAssembly--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                                            <span class="error hide req-assembly">Assembly is Required!</span>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="ddlItemName" class="control-label font-weight-bold">Model Name</label>
+                                                            @Html.DropDownList("ddlItemName", (IEnumerable<SelectListItem>)ViewBag.ddlItemName, "--SelectModel--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                                            <span class="error hide req-model">Model is Required!</span>
+                                                        </div>
+                                                    </div>
+                                                </div>*@
+                                            <div class="col-md-6">
+                                                <h5 style="border-bottom:2px solid #70cf44">
+                                                    SCANING
+                                                </h5>
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-2">
+                                                        <input class="form-control" type="text" id="IMEIScanningForWeightCheck" placeholder="SCAN IMEI" autocomplete="off" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-IMEIScanningForWeightCheckList" role="tabpanel" aria-labelledby="custom-tabs-two-IMEIScanningForWeightCheckList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    Weight Check IMEI List
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <h6 class="card-title">Search By</h6>
+                                    </div>
+                                    <div class="card-body text-sm">
+                                        <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-6">
+                                                <h5 style="border-bottom:2px solid #70cf44">SCANING</h5>
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-2">
+                                                        <input type="text" id="IMEIScanningForWeightCheckForSearch" placeholder="SCAN IMEI" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 style="border-bottom:2px solid #70cf44">Date Wise Search</h5>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-2">
+                                                        <label class="control-label font-weight-bold">From Date</label>
+                                                        <div class="input-group input-group-sm ">
+                                                            <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptFromDate" />
+                                                            <div class="input-group-prepend cursor-pointer remove-date dptFromDate" style="cursor:pointer">
+                                                                <span class="input-group-text">&#10008;</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
+                                                        <label class="control-label font-weight-bold">To Date</label>
+                                                        <div class="input-group input-group-sm ">
+                                                            <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptToDate" />
+                                                            <div class="input-group-prepend remove-date dptToDate" style="cursor:pointer">
+                                                                <span class="input-group-text">&#10008;</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="col-md-12" id="dataContainer2">
+                                            @{Html.RenderAction("GetWeightCheckListByUserId");}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var IMEIScanningForWeightCheck = $("#IMEIScanningForWeightCheck");
+        var ddlItemName = $("#ddlItemName");
+        var ddlAssemblyLine = $("#ddlAssemblyLine");
+        var dptFromDate = $("#dptFromDate");
+        var dptToDate = $("#dptToDate");
+
+        $(document).ready(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+            IMEIScanningForWeightCheck.focus();
+            dptFromDate.prop('readonly', true);
+            dptToDate.prop('readonly', true);
+            dptFromDate.css("background-color", "#fff");
+            dptToDate.css("background-color", "#fff");
+            $('#dptFromDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+            $('#dptToDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true
+            }).on('change', function () {
+                $('.datepicker').hide();
+            });
+        })
+
+        function validateWeightCheckInput() {
+            $(".error").addClass("hide");
+            var isValid = true;
+            //if (TryParseInt(ddlItemName.val(), 0) <= 0) {
+            //    $(".req-model").removeClass('hide');
+            //    isValid = false;
+            //}
+            //if (TryParseInt(ddlAssemblyLine.val(), 0) <= 0) {
+            //    $(".req-assembly").removeClass('hide');
+            //    isValid = false;
+            //}
+            if ($.trim(IMEIScanningForWeightCheck.val()).length != 15) {
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        function validateIMEI() {
+            return ajaxBooleanChecker(JSON.stringify({ imei: $.trim(IMEIScanningForWeightCheck.val()) }), '/Common/IsExistsBetteryWrite', getToken()) == true;
+        }
+        function validateModelForWeightCheck() {
+            return ajaxBooleanChecker(JSON.stringify({ itemId: TryParseInt(ddlItemName.val(), 0), assemblyId: TryParseInt(ddlAssemblyLine.val(), 0) }), '/Common/IsExistsItemAndAssemblyWithQCpass', getToken()) == true;
+        }
+        function validateModelForIMEI() {
+            return ajaxBooleanChecker(JSON.stringify({ itemId: TryParseInt(ddlItemName.val(), 0), imei: $.trim(IMEIScanningForWeightCheck.val())}), '/Common/IsExistsIMEIInModel', getToken()) == true;
+        }
+        IMEIScanningForWeightCheck.change(function () {
+            if ($.trim(IMEIScanningForWeightCheck.val()).length == 15) {
+                //if (validateModelForWeightCheck()) {
+                    if (validateIMEI()) {
+                        var data = JSON.stringify({ imei: $.trim(IMEIScanningForWeightCheck.val())/*, itemId: TryParseInt(ddlItemName.val(), 0), assemblyId: TryParseInt(ddlAssemblyLine.val(), 0)*/ });
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveIMEIStatusForWeightCheck', data, getToken())).then(function (res, status) {
+                            if (status === "success" && res === true) {
+                                toastrSuccessAlert(execuStatus.successSave);
+                                IMEIScanningForWeightCheck.val('');
+                                IMEIScanningForWeightCheck.focus();
+                                LoadDataTableForWeightCheckList();
+                            }
+                            else {
+                                toastrErrorAlert(execuStatus.fail);
+                                IMEIScanningForWeightCheck.val('');
+                                IMEIScanningForWeightCheck.focus();
+                            }
+
+                        }).fail(function (err) {
+                            console.log(err);
+                        })
+                    }
+                    else {
+                        toastrErrorAlert("IMEI Not Found");
+                        IMEIScanningForWeightCheck.val('');
+                        IMEIScanningForWeightCheck.focus();
+                    }
+                //}
+                //else {
+                //    toastrErrorAlert("Assembly With Model is not Valid");
+                //    IMEIScanningForWeightCheck.val('');
+                //    IMEIScanningForWeightCheck.focus();
+                //}
+            }
+            else {
+                toastrErrorAlert("IMEI is not Valid");
+                IMEIScanningForWeightCheck.val('');
+                IMEIScanningForWeightCheck.focus();
+            }
+        })
+
+        ///------WeightCheck IMEI List-----------////
+
+        var IMEIScanningForWeightCheckForSearch = $("#IMEIScanningForWeightCheckForSearch");
+
+        IMEIScanningForWeightCheckForSearch.change(function () {
+            LoadDataTableForWeightCheckList();
+            IMEIScanningForWeightCheckForSearch.val('');
+            IMEIScanningForWeightCheckForSearch.focus();
+        })
+
+        $(document).on('click', 'div.remove-date', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDate.val() !== '') {
+                    dptToDate.val('');
+                    LoadDataTableForWeightCheckList();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDate.val() !== '') {
+                    dptFromDate.val('');
+                    LoadDataTableForWeightCheckList();
+                }
+            }
+        })
+
+        $(document).on('change', '.ctrl-changed', function () {
+            LoadDataTableForWeightCheckList();
+        })
+
+        var page = 1;
+        function LoadDataTableForWeightCheckList() {
+            var data = { imei: IMEIScanningForWeightCheckForSearch.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), page: page };
+            $.when(getReqWithData('html', 'GET', '/Production/GetWeightCheckListByUserId', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer2").fadeOut('500', function () {
+                        $("#dataContainer2").empty();
+                        $("#dataContainer2").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+            page = 1;
+        }
+        $(document).on('click', 'a.page-link', function (e) {
+            e.preventDefault();
+            if (!$(this).hasClass('current-page')) {
+                if ($(this).parent().parents('div').hasClass('WeightCheckPrintPage')) {
+                    page = $(this).attr('data-page-no');
+                    LoadDataTableForWeightCheckList();
+                }
+            }
+        })
+    </script>
+}
+

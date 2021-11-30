@@ -151,9 +151,11 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
 
             foreach (var stockWarehouse in itemWarehouses)
             {
-                string returnCode = ("SIR-" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
+                string timeCode = ( DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
 
                 var data = items.Where(s => s.WarehouseId == stockWarehouse);
+                string returnCode = (data.FirstOrDefault().Flag == StockRetunFlag.AssemblyLine) ? "ASM-RET-" + timeCode : ((data.FirstOrDefault().Flag == StockRetunFlag.AssemblyRepair) ? "ASM-REP-RET-" + timeCode : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingLine) ? "PAC-RET-" + timeCode : "PAC-REP-RET-" + timeCode));
+
                 StockItemReturnInfo stockItemReturnInfo = new StockItemReturnInfo()
                 {
                     DescriptionId = data.FirstOrDefault().DescriptionId,
@@ -167,13 +169,18 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                     EUserId = userId,
                     EntryDate = DateTime.Now,
                     StateStatus = "Send",
-                    ReturnCode = returnCode
+                    ReturnCode = returnCode,
                 };
+
+                stockItemReturnInfo.Remarks = (data.FirstOrDefault().Flag == StockRetunFlag.AssemblyLine) ? "Stock Item Return By Assembly Line" : ((data.FirstOrDefault().Flag == StockRetunFlag.AssemblyRepair) ? "Stock Item Return By Assembly Repair Line" : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingLine) ? "Stock Item Return By Packaging Line" : "Stock Item Return By Packaging Repair Line"));
+
                 List<StockItemReturnDetail> stockItemReturnDetails = new List<StockItemReturnDetail>();
                 foreach (var item in data)
                 {
                     flag = item.Flag;
-                    stockItemReturnInfo.Remarks = (item.AssemblyLineId != null && item.AssemblyLineId > 0) ? "Stock Item Return By Assembly Line" : ((item.RepairLineId != null && item.RepairLineId > 0) ? "Stock Item Return By Repair Line" : "Stock Item Return By Packaging Line");
+
+                    //stockItemReturnInfo.Remarks = (item.AssemblyLineId != null && item.AssemblyLineId > 0) ? "Stock Item Return By Assembly Line" : ((item.RepairLineId != null && item.RepairLineId > 0) ? "Stock Item Return By Repair Line" : "Stock Item Return By Packaging Line");
+
                     StockItemReturnDetail stockItemReturnDetail = new StockItemReturnDetail()
                     {
                         DescriptionId = item.DescriptionId,
@@ -186,7 +193,10 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                         ItemTypeId = item.ItemTypeId,
                         ItemId = item.ItemId,
                         UnitId = item.UnitId,
-                        Quantity = item.Quantity,
+                        Quantity = item.GoodStockQty + item.ManMadeFaultyQty + item.ChinaFaultyQty,
+                        GoodStockQty = item.GoodStockQty,
+                        ManMadeFaultyQty = item.ManMadeFaultyQty,
+                        ChinaFaultyQty = item.ChinaFaultyQty,
                         OrganizationId = orgId,
                         EUserId = userId,
                         EntryDate = DateTime.Now,
@@ -205,7 +215,7 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                             ItemTypeId = item.ItemTypeId,
                             ItemId = item.ItemId,
                             UnitId = item.UnitId,
-                            Quantity = item.Quantity,
+                            Quantity = item.GoodStockQty + item.ManMadeFaultyQty + item.ChinaFaultyQty,
                             OrganizationId = orgId,
                             EUserId = userId,
                             EntryDate = DateTime.Now,
@@ -226,7 +236,7 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                             ItemTypeId = item.ItemTypeId,
                             ItemId = item.ItemId,
                             UnitId = item.UnitId,
-                            Quantity = item.Quantity,
+                            Quantity = item.GoodStockQty + item.ManMadeFaultyQty + item.ChinaFaultyQty,
                             OrganizationId = orgId,
                             EUserId = userId,
                             EntryDate = DateTime.Now,
@@ -247,7 +257,7 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                             ItemTypeId = item.ItemTypeId,
                             ItemId = item.ItemId,
                             UnitId = item.UnitId,
-                            Quantity = item.Quantity,
+                            Quantity = item.GoodStockQty + item.ManMadeFaultyQty + item.ChinaFaultyQty,
                             OrganizationId = orgId,
                             EUserId = userId,
                             EntryDate = DateTime.Now,
@@ -268,7 +278,7 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                             ItemTypeId = item.ItemTypeId,
                             ItemId = item.ItemId,
                             UnitId = item.UnitId,
-                            Quantity = item.Quantity,
+                            Quantity = item.GoodStockQty + item.ManMadeFaultyQty + item.ChinaFaultyQty,
                             OrganizationId = orgId,
                             EUserId = userId,
                             EntryDate = DateTime.Now,
