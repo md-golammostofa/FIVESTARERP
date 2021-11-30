@@ -940,9 +940,9 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-3">
-                            <label for="ddlBrandName" class="control-label font-weight-bold">Brand<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
-                            @Html.DropDownList("ddlBrandName", (IEnumerable<SelectListItem>)ViewBag.ddlBrandName, "--Select Brand--", new { @class = "form-control form-control-sm" })
-                            <span class="error hide require-brandName font-weight-bold">Brand is required !</span>
+                            <label for="ddlBrandName2" class="control-label font-weight-bold">Brand<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlBrandName2", (IEnumerable<SelectListItem>)ViewBag.ddlBrandName2, "--Select Brand--", new { @class = "form-control form-control-sm" })
+                            <span class="error hide require-brandName2 font-weight-bold">Brand is required !</span>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="txtDealerContractPName" class="control-label font-weight-bold">Contract Person Name</label>
@@ -1168,7 +1168,7 @@
         var txtDealerContractPMobile = $("#txtDealerContractPMobile");
         var txtDealerCode = $("#txtDealerCode");
         var txtDealerRemarks = $("#txtDealerRemarks");
-        var ddlBrandName = $("#ddlBrandName");
+        var ddlBrandName2 = $("#ddlBrandName2");
         //Color
         var searchByColor = $("#searchByColor");
         var txtColorName = $("#txtColorName");
@@ -2097,6 +2097,10 @@
                 $(".required-dealerZone").removeClass("hide");
                 isValid = false;
             }
+            if ($.trim(ddlBrandName2.val()) == "") {
+                $(".require-brandName2").removeClass("hide");
+                isValid = false;
+            }
             return isValid;
         }
         $("#btnDealerSubmit").click(function (e) {
@@ -2118,7 +2122,7 @@
                     ContactPersonName: txtDealerContractPName.val(),
                     ContactPersonMobile: txtDealerContractPMobile.val(),
                     Remarks: txtDealerRemarks.val(),
-                    BrandId: TryParseInt(ddlBrandName.val(),0)
+                    BrandId: TryParseInt(ddlBrandName2.val(),0)
                 });
                 console.log(data);
                 console.log("Dealer");

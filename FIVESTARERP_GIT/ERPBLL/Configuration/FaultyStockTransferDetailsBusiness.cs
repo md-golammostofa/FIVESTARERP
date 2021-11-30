@@ -54,7 +54,10 @@ namespace ERPBLL.Configuration
         public bool SaveFaultyStockTransfer(FaultyStockTransferInfoDTO dto, long userId, long orgId, long branchId)
         {
             bool IsSuccess = false;
-            var transferCode = ("FST-" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
+            Random random = new Random();
+            var ran = random.Next().ToString();
+            ran = ran.Substring(0, 4);
+            var transferCode = ("FST-" + ran + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
             List<FaultyStockDetailDTO> faultyStock = new List<FaultyStockDetailDTO>();
             List<FaultyStockTransferDetails> details = new List<FaultyStockTransferDetails>();
 

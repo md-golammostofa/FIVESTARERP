@@ -19,5 +19,7 @@ namespace ERPBLL.Configuration.Interface
         TransferInfoDTO GetStockTransferInfoDataById(long id, long orgId);
         bool UpdateTransferStatusAndStockOut(TransferInfoDTO dto, long orgId, long branchId, long userId);
         bool ReceiveStockAndUpdateStatus(List<TransferDetailDTO> details, long userId, long orgId, long branchId);
+        IEnumerable<TransferInfoDTO> GetStockTransferForReport(long infoId, long orgId, long branchId);
+        IEnumerable<TransferInfoDTO> GetAllReceiveList(long? branch, string status, long orgId, long branchId, string fromDate, string toDate);
     }
 }

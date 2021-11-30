@@ -13,9 +13,6 @@
                     <li class="nav-item">
                         <a class="nav-link active" id="custom-tabs-two-jobOrderList-tab" data-toggle="pill" href="#custom-tabs-two-jobOrderList" role="tab" aria-controls="custom-tabs-two-jobOrderList" aria-selected="true">Job Order List</a>
                     </li>
-                    <li class="nav-item hide">
-                        <a class="nav-link" id="custom-tabs-two-accessoriesSellsList-tab" data-toggle="pill" href="#custom-tabs-two-accessoriesSellsList" role="tab" aria-controls="custom-tabs-two-accessoriesSellsList" aria-selected="false">Accessories Sells</a>
-                    </li>
                 </ul>
             </div>
             <div class="card-body shadow">
@@ -34,11 +31,8 @@
                                                     Job Order List For QC
                                                 </h5>
                                             </div>
-                                            <div class="col-md-3 hide">
-                                                @if (privilege.Add)
-                                                {
-                                                    <a href="/FrontDesk/CreateJobOrder" title="Create a New Job Order" class="btn btn-outline-primary btn-sm float-lg-right" style="background-color:darkblue" id="btnReset"><i class="fas fa-plus"></i> Job Order</a>
-                                                }
+                                            <div class="col-md-3">
+                                                <button type="submit" class="btn btn-sm btn-primary float-right" value="Received" id="btnQCReceived">Received</button>
                                             </div>
                                         </div>
                                     </div>
@@ -128,78 +122,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade show" id="custom-tabs-two-accessoriesSellsList" role="tabpanel" aria-labelledby="custom-tabs-two-accessoriesSellsList-tab">
-                        <div class="row" style="margin-top:-15px">
-                            <div class="col-md-12">
-                                <div class="card shadow card-gray-dark">
-                                    <div class="card-header shadow">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h5 class="text-center text-bold">
-                                                    Invoice List For Accessories Sells
-                                                </h5>
-                                            </div>
-                                            <div class="col-md-3">
-                                                @if (privilege.Add)
-                                                {
-                                                    <a href="/FrontDesk/CreateAccessoriesInvoice" title="Create a New Job Order" class="btn btn-outline-primary btn-sm float-lg-right" style="background-color: darkblue" id="btnReset"><i class="fas fa-plus"></i> Sells Accessories</a>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12" style="margin-top:-10px">
-                                <div class="card shadow card-navy">
-                                    <div class="card-body text-sm">
-                                        <div class="row text-sm">
-                                            <div class="col-md-2">
-                                                <label class="control-label font-weight-bold">Invoice</label>
-                                                <input type="text" id="txtInvoice" class="form-control form-control-sm" placeholder="Search By Invoice" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label class="control-label font-weight-bold">Mobile No</label>
-                                                <input type="text" id="txtMobileNo2" class="form-control form-control-sm" placeholder="Search By MobileNo" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label class="control-label font-weight-bold">From Date</label>
-                                                <div class="input-group input-group-sm ">
-                                                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptFromDate2" />
-                                                    <div class="input-group-prepend cursor-pointer remove-date dptFromDate2" style="cursor:pointer">
-                                                        <span class="input-group-text">&#10008;</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label class="control-label font-weight-bold">To Date</label>
-                                                <div class="input-group input-group-sm ">
-                                                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptToDate2" />
-                                                    <div class="input-group-prepend remove-date dptToDate2" style="cursor:pointer">
-                                                        <span class="input-group-text">&#10008;</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12" style="margin-top:-10px">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-12 text-sm text-sm" id="dataContainer3" style="overflow-y:scroll">
-                                                @{Html.RenderAction("AccessoriesSells", new { @flag = "sell" });}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -223,57 +145,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalInvoice" role="dialog" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert-secondary" style="height:60px">
-                <h4 id="modalHeading" class="modal-title"><span id="spanModalHead">Invoice</span></h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <form id="frmInvoice">
-                    <div class="form-row">
-                        <div class="form-group col-md-2">
-                            <label for="txtLabourCharge" class="control-label font-weight-bold">Labour Charge</label>
-                            <input type="number" name="labourCharge" value="" id="txtLabourCharge" class="form-control form-control-sm" />
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="txtVat" class="control-label font-weight-bold">VAT</label>
-                            <input type="number" name="vat" value="" id="txtVat" class="form-control form-control-sm" />
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="txtTax" class="control-label font-weight-bold">Tax</label>
-                            <input type="number" name="tax" value="" id="txtTax" class="form-control form-control-sm" />
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="txtDiscount" class="control-label font-weight-bold">Discount</label>
-                            <input type="number" name="discount" value="" id="txtDiscount" class="form-control form-control-sm" />
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="txtRemarks" class="control-label font-weight-bold">Remarks</label>
-                            <input type="text" name="remarks" value="" id="txtRemarks" class="form-control form-control-sm" />
-                        </div>
-                        <div class="modal-body" id="dataContainer1">
-
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer btn-light">
-                <div class="col-md-6">
-                    <div id="msg1" class="alert alert-success hide float-left">
-                        Data has been saved Successful!
-                    </div>
-                    <div id="msg2" class="alert alert-danger hide float-left">
-                        Data has been failed to save!
-                    </div>
-                </div>
-                <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
-                <button type="submit" class="btn btn-sm btn-success float-right" id="btnInvoiceSubmit"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="modalQC" role="dialog" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -342,6 +213,7 @@
         var ddlCustomerType = $("#ddlCustomerType");
         var ddlJobType = $("#ddlJobType");
         var txtRepairStatus = $("#txtRepairStatus");
+        var count = 0;
 
         $(document).ready(function () {
             dptFromDate.prop('readonly', true);
@@ -482,12 +354,7 @@
             getJobOrderDetail("TSWork", id);
         })
 
-        // assign a T.S.
-        $(document).on('click', 'a.data-item-assignTS', function (e) {
-            e.preventDefault();
-            var id = $(this).attr("data-item-assignTS");
-            getJobOrderDetail("Assign", id);
-        })
+        
 
         function getJobOrderDetail(flag, id) {
             hdfJobOrderId.val("0");
@@ -664,134 +531,7 @@
 
         })
 
-        function OpenInvoiceModal() {
-            $("#modalInvoice").modal("show");
-            $(".error").addClass("hide");
-        }
-
-        $(document).on('click', '.btnInvoice', function (e) {
-            e.preventDefault();
-            OpenInvoiceModal();
-            var data = {
-                jobOrderId: TryParseInt(hdfJobOrderId.val(),0)
-            };
-            $.when(getReqWithData('html', 'GET', '/FrontDesk/GetPartsUsedStock', data)).then(function (res, status) {
-                if (status == "success") {
-                    $("#dataContainer1").empty();
-                    $("#dataContainer1").append(res);
-                }
-            }).fail(function (error) {
-                console.log(error);
-            })
-            //clearCtr()
-        })
-
-
-        $("#btnInvoiceSubmit").click(function (e) {
-            e.preventDefault();
-            $(".error").addClass("hide");
-                bootbox.confirm("Are you sure you want to save?", function (result) {
-                    if (result) {
-                        //disable("#btnSubmit");
-                        var totalItemsAmount = 0.00;
-                        if ($("#tblPartsUsedQty tbody").length > 0) {
-                            totalItemsAmount = TryParseFloat($("#tblPartsUsedQty tfoot tr").children('td').eq(1).html(), 0.00);
-                        }
-                        var info = {
-                            JobOrderId: TryParseInt(hdfJobOrderId.val(), 0),
-                            LabourCharge: TryParseFloat(txtLabourCharge.val(), 0.00),
-                            VAT: TryParseFloat(txtVat.val(), 0.00),
-                            Tax: TryParseFloat(txtTax.val(), 0.00),
-                            Discount: TryParseFloat(txtDiscount.val(), 0.00),
-                            TotalSPAmount:totalItemsAmount,
-                            Remarks: txtRemarks.val(),
-                        };
-                        //alert("totalItemsAmount="+totalItemsAmount);
-                        //return;
-                        var details = []; details.length = 0;
-                        //empty-row
-                        //if (('.empty-row').length > 0) {
-
-                        //}
-                        if ($("#tblPartsUsedQty tbody").length > 0) {
-
-                            //
-                            if (($("#tblPartsUsedQty tbody tr").length == 1 && !$("#tblPartsUsedQty tbody tr").hasClass('empty-row')) || $("#tblPartsUsedQty tbody tr").length > 1) {
-                                $.each($("#tblPartsUsedQty tbody tr"), function (index, item) {
-                                    var tds = $(this).children('td');
-                                    var partsId = tds.eq('1').html();
-                                    var pName = tds.eq('2').html();
-                                    var qty = tds.eq('3').html();
-                                    var price = tds.eq('4').html();
-                                    var total = tds.eq('5').html();
-
-                                    details.push({
-                                        InvoiceDetailId: 0,
-                                        PartsId: TryParseInt(partsId, 0),
-                                        PartsName: pName,
-                                        Quantity: TryParseInt(qty, 0),
-                                        SellPrice: TryParseFloat(price, 0),
-                                        Total: TryParseFloat(total, 0),
-                                    })
-                                });
-                            }
-
-                        }
-
-                        var data = JSON.stringify({ info: info, details: details});
-                        console.log("Invoice");
-                        console.log(data);
-                      // return console.log(data);
-                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/FrontDesk/SaveInvoiceForJobOrder', data, getToken())).then(function (res, status) {
-                            console.log(res);
-                            console.log(status);
-                           // enable("#btnSubmit");
-                            if (res == true) {
-                                $('.toastrDefaultSuccess').trigger('click');
-                                setTimeout(function () {
-                                    redirectPage('@Url.Action("GetJobOrders")');
-                                }, 1000);
-                            }
-                            else {
-                                $('.toastrDefaultError').trigger('click');
-                            }
-                        }).fail(function (error) {
-                            consoleLog(error)
-                        })
-                    }
-                });
-        });
-
-        // Accessories
-        dptFromDate2.change(function () {
-            LoadDataTableForASells();
-        })
-        dptToDate2.change(function () {
-            LoadDataTableForASells();
-        })
-        txtInvoice.keyup(function () {
-            LoadDataTableForASells();
-        })
-        txtMobileNo2.keyup(function () {
-            LoadDataTableForASells();
-        })
-        function LoadDataTableForASells() {
-            var data = { flag: "sell", invoice: txtInvoice.val().trim(), mobileNo: txtMobileNo2.val().trim(), fromDate: dptFromDate2.val(), toDate: dptToDate2.val(), page: pageNo };
-
-            console.log(data);
-            //return console.log(data);
-            $.when(getReqWithData('html', 'GET', '/FrontDesk/AccessoriesSells', data)).then(function (res, status) {
-                console.log(status);
-                if (status === "success") {
-                    $("#dataContainer3").fadeOut('500', function () {
-                        $("#dataContainer3").empty();
-                        $("#dataContainer3").append(res).fadeIn('500');
-                    });
-                }
-            }).fail(function (error) {
-                console.log(error);
-            })
-        }
+       
 
         ///// QC Status
         var ddlQCStatus = $("#ddlQCStatus");
@@ -801,9 +541,6 @@
             $("#modalQC").modal("show");
             $(".error").addClass("hide");
         }
-
-
-
 
         $(document).on('click', '.btnQcStatus', function (e) {
             e.preventDefault();
@@ -884,7 +621,75 @@
                 }
             }
         })
+        /////////
+        $(document).on('change', 'input[name="allJobOrder"]', function () {
+            var isChecked = $('input[name="allJobOrder"]').is(":checked");
+            $('input[name="jobOrderName"]').prop("checked", isChecked);
+            if (isChecked) {
+                count = $(".tblQCJobOrderList tbody tr").length;
+            }
+            else {
+                count = 0;
+            }
+        })
 
+        $(document).on('change', 'input[name="jobOrderName"]', function () {
+            count = 0;
+            $.each($(".tblQCJobOrderList tbody tr"), function (index, item) {
+                if ($(this).children('td').eq(1).children('input[name="jobOrderName"]').is(":checked")) {
+                    count++;
+                }
+            });
+            var allChecked = $(".tblQCJobOrderList tbody tr").length == count;
+            $('input[name="allJobOrder"]').prop("checked", allChecked);
+        })
+        $("#btnQCReceived").click(function (e) {
+            e.preventDefault();
+            if (ValidateSubmit()) {
+                bootbox.confirm("Are you sure you want Received All JobOrder !", function (result) {
+                    if (result) {
+                        disable("#btnQCReceived");
+                        var jobOrders = []; jobOrders.length = 0;
+                        $.each($(".tblQCJobOrderList tbody tr"), function (index, item) {
+                            var checkBox = $(this).children('td').eq(1).children('input[name="jobOrderName"]');
+                            //alert(checkBox);
+                            if (checkBox.is(":checked")) {
+                                jobOrders.push(TryParseInt(checkBox.attr("data-item-val"), 0));
+                            }
+                        });
+                        //console.log("JobOrders");
+                        //console.log(jobOrders);
+
+                        var data = JSON.stringify({jobOrders: jobOrders });
+                        //return console.log(data);
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/FrontDesk/UpdateQCStatusMultipleJob', data, getToken())).then(function (res, status) {
+                            if (res === true && status === "success") {
+                                $('.toastrDefaultSuccess').trigger('click');
+                                LoadDataTable();
+                                count = 0;
+                            }
+                            else {
+                                $('.toastrDefaultError').trigger('click');
+                            }
+                            enable("#btnQCReceived");
+                        }).fail(function (error) {
+                            console.log(error);
+                            $('.toastrDefaultError').trigger('click');
+                            enable("#btnQCReceived");
+                        });
+                    }
+                })
+            }
+        })
+
+        function ValidateSubmit() {
+            var isValid = true;
+            if (count == 0) {
+                isValid = false;
+                bootbox.alert("Please check at least one row");
+            }
+            return isValid;
+        }
 
         function redirectPage(page) {
             window.location.replace(page);

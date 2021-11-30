@@ -27,5 +27,8 @@ namespace ERPBO.Configuration.DTOModels
         //Custom
         public string PartsName { get; set; }
         public string BranchName { get; set; }
+        public string ModelFrom { get; set; }
+        public string ModelTo { get; set; }
+        public string UserName { get; set; }
     }
 }

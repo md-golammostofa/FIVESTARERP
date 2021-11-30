@@ -15,5 +15,7 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<RequsitionDetailForJobOrderDTO> GetAvailableQtyByRequsition(long reqInfoId, long orgId, long branchId);
         //Nishad//
         IEnumerable<RequsitionDetailForJobOrderDTO> GetModelWiseAvailableQtyByRequsition(long reqInfoId, long orgId, long branchId, long modelId);
+
+        IEnumerable<RequsitionDetailForJobOrderDTO> GetRequsitionDetailAndAvailableQty(long reqInfoId, long orgId, long branchId);
     }
 }

@@ -33,5 +33,6 @@ namespace ERPBO.FrontDesk.DomainModels
         public long RequsitionInfoForJobOrderId { get; set; }
         public RequsitionInfoForJobOrder RequsitionInfoForJobOrder { get; set; }
         public long? UserBranchId { get; set; }
+        public int IssueQty { get; set; }
    }
 }

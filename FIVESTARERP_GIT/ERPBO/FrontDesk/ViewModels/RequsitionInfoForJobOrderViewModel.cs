@@ -44,5 +44,6 @@ namespace ERPBO.FrontDesk.ViewModels
         public string JobCode { get; set; }
         //
         //public long ModelId { get; set; }
+        public string UserName { get; set; }
     }
 }

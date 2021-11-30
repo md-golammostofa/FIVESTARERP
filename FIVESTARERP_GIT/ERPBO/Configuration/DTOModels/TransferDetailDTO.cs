@@ -31,6 +31,7 @@ namespace ERPBO.Configuration.DTOModels
         public double SellPrice { get; set; }
 
         public long? DescriptionId { get; set; }
+        public string ModelName { get; set; }
         //
         public int IssueQty { get; set; }
         public string PartsCode { get; set; }

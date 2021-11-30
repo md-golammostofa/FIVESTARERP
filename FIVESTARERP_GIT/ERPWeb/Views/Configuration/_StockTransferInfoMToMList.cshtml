@@ -18,7 +18,7 @@
             <th class="hide"></th>
             <th>Services Warehouse</th>*@
             <th>State Status</th>
-            <th>Remarks</th>
+            <th>EntryDate</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -27,6 +27,7 @@
         {
             badge = trans.StateStatus == "Approved" ? "badge bg-success" : "badge bg-primary";
             sl = sl + 1;
+            string entryDate = trans.EntryDate != null ? trans.EntryDate.Value.ToString("dd-MMM-yyy") : "";
         <tr>
             <td class="text-center text-bold">@sl</td>
             <td class="hide">@trans.TransferInfoModelToModelId</td>
@@ -42,7 +43,7 @@
             <td class="text-center" data-val="@trans.StateStatus">
                 <span class="@badge">@trans.StateStatus</span>
             </td>
-            <td>@trans.Remarks</td>
+            <td>@entryDate</td>
             <td class="text-center">
                 <a href="#" class="btn btn-sm btn-outline-secondary data-item-MM-details" title="View Details" data-item-MM-details="@trans.TransferInfoModelToModelId"><i class="fas fa-eye"></i></a>
             </td>

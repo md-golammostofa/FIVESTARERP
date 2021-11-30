@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ERPBO.Configuration.ViewModels.StockTransferDetailModelToModelViewModel>
+@{ 
+    int sl = 0;
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered table-sm table-striped" id="tblModelData">
+            <thead class="btn-dark">
+                <tr class="text-center">
+                    <th>#SL</th>
+                    <th class="hide"></th>
+                    <th class="hide"></th>
+                    <th>Model</th>
+                    <th>Ex-Change Model</th>
+                    <th>Parts</th>
+                    <th>Qty.</th>
+                    <th>Entry User</th>
+                    <th>Ex-Chang Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mod in Model)
+                {
+                    sl = sl + 1;
+                    string entryDate = mod.EntryDate != null ? mod.EntryDate.Value.ToString("dd-MMM-yyy") : "";
+                <tr>
+                    <td class="text-center" width="10%">@sl</td>
+                    <td class="hide">@mod.DescriptionId</td>
+
+                    <td class="hide">@mod.PartsId</td>
+                    <td>@mod.ModelFrom</td>
+                    <td>@mod.ModelTo</td>
+                    <td>@mod.PartsName</td>
+                    <td>@mod.Quantity</td>
+                    <td>@mod.UserName</td>
+                    <td>@entryDate</td>
+                </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="text-center empty-row">
+                        <td colspan="7">
+                            No Rows Found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

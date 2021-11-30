@@ -57,5 +57,15 @@ Group By details.TransferDetailId,details.TransferInfoId,details.DescriptionId,m
         {
             return transferDetailRepository.GetOneByOrg(d => d.TransferDetailId == reqDetailsId && d.OrganizationId == orgId && d.BranchId == branchId);
         }
+
+        public IEnumerable<TransferDetailDTO> GetTransferDetailDataForReport(long requsitionId, long orgId, long branchId)
+        {
+            var data= this._configurationDb.Db.Database.SqlQuery<TransferDetailDTO>(string.Format(@"Select m.ModelName,p.MobilePartName'PartsName',Quantity,IssueQty From tblTransferDetails td
+ Left Join tblModelSS m on td.DescriptionId=m.ModelId
+ Left Join tblMobileParts p on td.PartsId=p.MobilePartId
+ Where td.TransferInfoId={0} and td.OrganizationId={1} and BranchTo={2}
+", requsitionId, orgId, branchId)).ToList();
+            return data;
+        }
     }
 }

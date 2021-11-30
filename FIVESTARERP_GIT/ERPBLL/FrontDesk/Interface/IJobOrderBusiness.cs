@@ -20,7 +20,7 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<DashboardRequisitionSummeryDTO> DashboardJobOrderSummery(long orgId,long branchId);
         IEnumerable<JobOrder> GetAllJobOrdersByOrgId(long orgId);
         IEnumerable<JobOrderDTO> GetJobOrdersTS(string roleName,string mobileNo, long? modelId, long? jobOrderId, string jobCode,string status,string recId,long userId, long orgId, long branchId);
-        IEnumerable<JobOrderDTO> GetJobOrdersPush(long? jobOrderId,string recId, long orgId,long branchId);
+        IEnumerable<JobOrderDTO> GetJobOrdersPush(long? jobOrderId,string recId, long orgId,long branchId,string imei,string jobCode);
 
         IEnumerable<JobOrder> GetJobOrdersByBranch(long branchId, long orgId);
         JobOrder GetJobOrdersByIdWithBranch(long jobOrderId,long branchId, long orgId);
@@ -78,7 +78,7 @@ namespace ERPBLL.FrontDesk.Interface
         bool SaveQCApproval(long jobId, string approval, string remarks, long userId, long orgId,long branchId);
         IEnumerable<JobOrderDTO> DashboardQCStatus(long orgId, long branchId, long userId);
 
-        IEnumerable<JobOrderDTO> GetJobOrderForDelivery(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus,string recId);
+        IEnumerable<JobOrderDTO> GetJobOrderForDelivery(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus,string recId,string customerName);
         ExecutionStateWithText SaveJobOrderMDelivey(long[] jobOrders, long userId, long orgId, long branchId);
         IEnumerable<JobOrderDTO> GetMultipleJobDeliveryChalan(string deliveryCode, long branchId, long orgId);
         bool UpdateQCTransferStatus(long jobOrderId, long orgId, long branchId, long userId);
@@ -89,5 +89,11 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<JobOrderDTO> GetRefeNumberCount(string imei, long branchId, long orgId);
         IEnumerable<JobOrderDTO> GetQCPassFailData(string jobCode, long? modelId, string status, long orgId, long branchId, string fromDate, string toDate);
         IEnumerable<JobOrderDTO> GetIMEICount(long branchId, long orgId);
+
+        IEnumerable<JobOrderDTO> CallCentreApproval(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId);
+        bool UpdateJobTypeStatus(long jobId, string jobType, long userId, long branchId, long orgId);
+       IEnumerable<JobOrder> GetIMEIChekCreateJob(string imei, long orgId, long branchId);
+        bool UpdateQCStatusMultipleJob(long[] joblist, long orgId, long branchId, long userId);
+
     }
 }

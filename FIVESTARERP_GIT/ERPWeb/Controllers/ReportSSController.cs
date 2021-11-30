@@ -32,8 +32,10 @@ namespace ERPWeb.Controllers
         private readonly IJobOrderTSBusiness _jobOrderTSBusiness;
         private readonly IHandsetChangeTraceBusiness _handsetChangeTraceBusiness;
         private readonly IMobilePartStockDetailBusiness _mobilePartStockDetailBusiness;
+        private readonly ITransferInfoBusiness _transferInfoBusiness;
+        private readonly ITransferDetailBusiness _transferDetailBusiness;
         // GET: ReportSS
-        public ReportSSController(IJobOrderReportBusiness jobOrderReportBusiness, IJobOrderBusiness jobOrderBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartBusiness mobilePartBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IJobOrderReturnDetailBusiness jobOrderReturnDetailBusiness, IJobOrderTransferDetailBusiness jobOrderTransferDetailBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness)
+        public ReportSSController(IJobOrderReportBusiness jobOrderReportBusiness, IJobOrderBusiness jobOrderBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartBusiness mobilePartBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IJobOrderReturnDetailBusiness jobOrderReturnDetailBusiness, IJobOrderTransferDetailBusiness jobOrderTransferDetailBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, ITransferInfoBusiness transferInfoBusiness, ITransferDetailBusiness transferDetailBusiness)
         {
             this._jobOrderReportBusiness = jobOrderReportBusiness;
             this._jobOrderBusiness = jobOrderBusiness;
@@ -50,6 +52,8 @@ namespace ERPWeb.Controllers
             this._jobOrderTSBusiness = jobOrderTSBusiness;
             this._handsetChangeTraceBusiness = handsetChangeTraceBusiness;
             this._mobilePartStockDetailBusiness = mobilePartStockDetailBusiness;
+            this._transferInfoBusiness = transferInfoBusiness;
+            this._transferDetailBusiness = transferDetailBusiness;
         }
 
         #region JobOrderList
@@ -1079,6 +1083,239 @@ namespace ERPWeb.Controllers
                     out warnings);
                 return File(renderedBytes, mimeType);
             }
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region JobDeliveryReceipt2ndTime
+        public ActionResult GetDeliveryReceiptRePrint(long jobOrderId)
+        {
+            bool IsSuccess = false;
+            JobOrderDTO reportData = _jobOrderBusiness.GetJobOrderReceipt(jobOrderId, User.UserId, User.OrgId, User.BranchId);
+            List<JobOrderDTO> servicesreportData = new List<JobOrderDTO>();
+            servicesreportData.Add(reportData);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptJobOrderReceipt.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("JobOrderReceipt", servicesreportData);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "Receipt";
+                string mimeType;
+                string encoding;
+                string fileNameExtension = ".pdf";
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    "Pdf",
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region MultipleDeliveryCodeRePrint
+        public ActionResult MultipleDeliveryReceiptRePrint(string deliveryCode)
+        {
+            string file = string.Empty;
+            IEnumerable<JobOrderDTO> jobOrderDetails = _jobOrderBusiness.GetMultipleJobDeliveryChalan(deliveryCode, User.BranchId, User.OrgId);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptMultipleJobOrderDelivery.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("JobOrder", jobOrderDetails);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "Receipt";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension = ".pdf";
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    "Pdf",
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region BranchRequsitionChallan
+        public ActionResult BranRequsitionChallanReport(long infoId)
+        {
+            string file = string.Empty;
+            IEnumerable<TransferInfoDTO> dataInfo = _transferInfoBusiness.GetStockTransferForReport(infoId, User.OrgId, User.BranchId);
+            IEnumerable<TransferDetailDTO> dataDetails = _transferDetailBusiness.GetTransferDetailDataForReport(infoId,User.OrgId,User.BranchId);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/Configuration/rptBranchRequsitionChallan.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("BranchReqInfo", dataInfo);
+                ReportDataSource dataSource2 = new ReportDataSource("BranchReqDetails", dataDetails);
+                ReportDataSource dataSource3 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.DataSources.Add(dataSource3);
+                localReport.Refresh();
+                localReport.DisplayName = "Challan";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension = ".pdf";
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    "Pdf",
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region JobTransferDeliveryChalan
+        public ActionResult GetJobTransferDeliveryChalan(string transferCode)
+        {
+            string file = string.Empty;
+            IEnumerable<JobOrderDTO> jobOrderDetails = _jobOrderTransferDetailBusiness.GetTransferDeliveryChalan(transferCode, User.OrgId);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptJobTransferDeliveryChalan.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("JobTransfer", jobOrderDetails);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "Receipt";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension = ".pdf";
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    "Pdf",
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+               return File(renderedBytes, mimeType);
+            }
+
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region JobReturnDeliveryChallan
+        public ActionResult GetJobReturnDeliveryChalan(string transferCode)
+        {
+            string file = string.Empty;
+            IEnumerable<JobOrderDTO> jobOrderDetails = _jobOrderReturnDetailBusiness.GetReturnDeliveryChalan(transferCode, User.OrgId);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptJobReturnDeliveryChalan.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("JobReturn", jobOrderDetails);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "Receipt";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension = ".pdf";
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    "Pdf",
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+
             return new EmptyResult();
         }
         #endregion

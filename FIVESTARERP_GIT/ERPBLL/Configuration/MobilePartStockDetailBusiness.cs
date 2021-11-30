@@ -491,31 +491,111 @@ namespace ERPBLL.Configuration
 
             if (orgId > 0)
             {
-                param += string.Format(@" and sti.OrganizationId={0}", orgId);
+                param += string.Format(@" and st.OrganizationId={0}", orgId);
             }
             if (branchId > 0)
             {
-                param += string.Format(@" and sti.BranchId={0}", branchId);
+                param += string.Format(@" and st.BranchId={0}", branchId);
             }
 
             if (modelId != null && modelId > 0)
             {
-                param += string.Format(@" and sti.DescriptionId ={0}", modelId);
+                param += string.Format(@" and st.DescriptionId ={0}", modelId);
             }
             if (partsId != null && partsId > 0)
             {
-                param += string.Format(@" and sti.MobilePartId ={0}", partsId);
+                param += string.Format(@" and st.MobilePartId ={0}", partsId);
             }
 
-            query = string.Format(@"Select DescriptionId,MobilePartId,ModelName,PartsName,PartsCode,(GoodStock+FaultyStock+ScrapStock+CareTransfer+DustStock)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer From( Select sti.DescriptionId,sti.MobilePartId, m.ModelName,ps.MobilePartName'PartsName',ps.MobilePartCode'PartsCode',sti.StockInQty,ISNULL((sti.StockInQty-sti.StockOutQty),0)'GoodStock',ISNULL((ISNULL(fs.StockInQty,0)-ISNULL(fs.StockOutQty,0)),0)'FaultyStock',ISNULL((ISNULL(sc.ScrapQuantity,0)-ISNULL(sc.ScrapOutQty,0)),0)'ScrapStock',ISNULL(ds.StockInQty,0)'DustStock',Sum(ISNULL(tsb.IssueQty,0))'CareTransfer' From [Configuration].dbo.tblMobilePartStockInfo sti
-Left Join [Configuration].dbo.tblModelSS m on sti.DescriptionId=m.ModelId
-Left Join [Configuration].dbo.tblMobileParts ps on sti.MobilePartId=ps.MobilePartId
-Left Join [Configuration].dbo.tblFaultyStockInfo fs on sti.DescriptionId=fs.DescriptionId and sti.MobilePartId=fs.PartsId and sti.BranchId=fs.BranchId
-Left Join [Configuration].dbo.tblScrapStockInfo sc on sti.DescriptionId=sc.DescriptionId and sti.MobilePartId=sc.PartsId and sti.BranchId=sc.BranchId
-Left Join [Configuration].dbo.tblTransferDetails tsb on sti.DescriptionId=tsb.DescriptionId and sti.MobilePartId=tsb.PartsId and sti.BranchId=tsb.BranchTo
-Left Join [Configuration].dbo.tblDustStockInfo ds on sti.DescriptionId=ds.ModelId and sti.MobilePartId=ds.PartsId and sti.BranchId=ds.BranchId
-Where 1=1{0}
-Group By sti.DescriptionId,sti.MobilePartId,m.ModelName,ps.MobilePartName,ps.MobilePartCode,sti.StockInQty,sti.StockOutQty,fs.StockInQty,fs.StockOutQty,sc.ScrapQuantity,sc.ScrapOutQty,ds.StockInQty) tbl1
+            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,
+
+(Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblMobilePartStockInfo
+Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId=st.BranchId)'GoodStock',
+
+(Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblFaultyStockInfo
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'FaultyStock',
+
+(Select ISNULL(Sum(ScrapQuantity-ScrapOutQty),0) From tblScrapStockInfo
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ScrapStock',
+
+(Select ISNULL(SUM(StockInQty),0) From tblDustStockInfo
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'DustStock',
+
+(Select ISNULL(SUM(IssueQty),0) From tblTransferDetails
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo=st.BranchId)'CareTransfer'
+
+From tblMobilePartStockInfo st
+Left Join tblModelSS m on st.DescriptionId=m.ModelId
+Left Join tblMobileParts p on st.MobilePartId=p.MobilePartId
+Where 1=1{0}) tbl1
+", Utility.ParamChecker(param));
+            return query;
+        }
+
+        public IEnumerable<TotalStockDetailsDTO> AllBranchTotalStock(long? branch, long orgId)
+        {
+            if (branch == null)
+            {
+                branch = 22;
+            }
+            var data= _configurationDb.Db.Database.SqlQuery<TotalStockDetailsDTO>(string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,
+
+(Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblMobilePartStockInfo
+Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId={0})'GoodStock',
+
+(Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblFaultyStockInfo
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'FaultyStock',
+
+(Select ISNULL(Sum(ScrapQuantity-ScrapOutQty),0) From tblScrapStockInfo
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'ScrapStock',
+
+(Select ISNULL(SUM(StockInQty),0) From tblDustStockInfo
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'DustStock',
+
+(Select ISNULL(SUM(IssueQty),0) From tblTransferDetails
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo={0})'CareTransfer'
+
+From tblMobilePartStockInfo st
+Left Join tblModelSS m on st.DescriptionId=m.ModelId
+Left Join tblMobileParts p on st.MobilePartId=p.MobilePartId
+Where st.BranchId={0} and st.OrganizationId={1}) tbl1", branch,orgId)).ToList();
+            return data;
+        }
+        private string QueryForAllBranchTotalStock(long? branch, long orgId)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+
+            if (orgId > 0)
+            {
+                param += string.Format(@" and st.OrganizationId={0}", orgId);
+            }
+
+            //if (branch != null && branch > 0)
+            //{
+            //    param += string.Format(@" and BranchId ={0}", branch);
+            //}
+            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,
+
+(Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblMobilePartStockInfo
+Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId={0})'GoodStock',
+
+(Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblFaultyStockInfo
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'FaultyStock',
+
+(Select ISNULL(Sum(ScrapQuantity-ScrapOutQty),0) From tblScrapStockInfo
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'ScrapStock',
+
+(Select ISNULL(SUM(StockInQty),0) From tblDustStockInfo
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'DustStock',
+
+(Select ISNULL(SUM(IssueQty),0) From tblTransferDetails
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo={0})'CareTransfer'
+
+From tblMobilePartStockInfo st
+Left Join tblModelSS m on st.DescriptionId=m.ModelId
+Left Join tblMobileParts p on st.MobilePartId=p.MobilePartId
+Where 1=1{0}) tbl1
 ", Utility.ParamChecker(param));
             return query;
         }

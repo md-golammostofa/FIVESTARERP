@@ -54,10 +54,7 @@
                                                 <label class="col-form-label">IMEI1</label>
                                                 <input type="text" id="txtIMEINo" class="form-control form-control-sm" placeholder="Search By IMEI1" />
                                             </div>
-                                            <div class="col-md-2">
-                                                <label class="col-form-label">IMEI2</label>
-                                                <input type="text" id="txtIMEI2No" class="form-control form-control-sm" placeholder="Search By IMEI2" />
-                                            </div>
+
                                             <div class="col-md-2">
                                                 <label class="col-form-label">Mobile No</label>
                                                 <input type="text" id="txtMobileNo" class="form-control form-control-sm" placeholder="Search By Mobile" />
@@ -66,15 +63,20 @@
                                                 <label class="col-form-label">Job Status</label>
                                                 @Html.DropDownList("ddlStateStatus", (IEnumerable<SelectListItem>)ViewBag.ddlStateStatus, "--Search By Status--", new { @class = "form-control form-control-sm ctrl-changed " })
                                             </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">Job Type</label>
+                                                @Html.DropDownList("ddlJobType", (IEnumerable<SelectListItem>)ViewBag.ddlJobType, "--Search By Job Type--", new { @class = "form-control form-control-sm ctrl-changed " })
+                                            </div>
                                         </div>
+                                        
                                         <div class="row text-sm">
                                             <div class="col-md-2">
                                                 <label class="control-label font-weight-bold">Customer Type</label>
                                                 @Html.DropDownList("ddlCustomerType", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, "--Search By CustomerType--", new { @class = "form-control form-control-sm ctrl-changed " })
                                             </div>
                                             <div class="col-md-2">
-                                                <label class="control-label font-weight-bold">Job Type</label>
-                                                @Html.DropDownList("ddlJobType", (IEnumerable<SelectListItem>)ViewBag.ddlJobType, "--Search By Job Type--", new { @class = "form-control form-control-sm ctrl-changed " })
+                                                <label class="control-label font-weight-bold">Dealer</label>
+                                                @Html.DropDownList("ddlDealerSearch", (IEnumerable<SelectListItem>)ViewBag.ddlDealerSearch, "--Search By Dealer--", new { @class = "form-control form-control-sm ctrl-changed select select2" })
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="control-label font-weight-bold">Receive Id</label>
@@ -204,6 +206,7 @@
         var txtMobileNo2 = $("#txtMobileNo2");
         var ddlCustomerType = $("#ddlCustomerType");
         var ddlJobType = $("#ddlJobType");
+        var ddlDealerSearch = $("#ddlDealerSearch");
 
         $(document).ready(function () {
             dptFromDate.prop('readonly', true);
@@ -303,13 +306,16 @@
         txtReceiveId.keyup(function () {
             LoadDataTable();
         })
+        ddlDealerSearch.change(function () {
+            LoadDataTable();
+        })
 
         $(document).on('change', '.ctrl-changed', function () {
             LoadDataTable();
         })
 
         function LoadDataTable() {
-            var data = { flag: "search", modelId: TryParseInt(ddlModelName.val(), 0), jobOrderId: 0, mobileNo: $.trim(txtMobileNo.val()), status: ddlStateStatus.val(), jobCode: txtJobCode.val(), iMEI: txtIMEINo.val(), iMEI2: txtIMEI2No.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), customerType: ddlCustomerType.val(), jobType: ddlJobType.val(), recId: txtReceiveId.val(), page: pageNo };
+            var data = { flag: "search", modelId: TryParseInt(ddlModelName.val(), 0), jobOrderId: 0, mobileNo: $.trim(txtMobileNo.val()), status: ddlStateStatus.val(), jobCode: txtJobCode.val(), iMEI: txtIMEINo.val(), iMEI2: txtIMEI2No.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), customerType: ddlCustomerType.val(), jobType: ddlJobType.val(), recId: txtReceiveId.val(), customerName: ddlDealerSearch.val(), page: pageNo };
 
             console.log(data);
             $.when(getReqWithData('html', 'GET', '/FrontDesk/GetJobOrderListForDelivery', data)).then(function (res, status) {

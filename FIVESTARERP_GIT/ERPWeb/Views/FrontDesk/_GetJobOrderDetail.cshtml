@@ -18,7 +18,7 @@
                 <td class="font-weight-bold">@Model.JobOrderCode</td>
                 <td class="text-purple">Invoice</td>
                 <td class="font-weight-bold">@Model.InvoiceCode</td>
-                <td class="text-purple">Create Date</td>
+                <td class="text-purple">Receiving Date</td>
                 <td class="font-weight-bold">@EntryDate</td>
             </tr>
             <tr>
@@ -43,8 +43,8 @@
                 <td>@Model.Type</td>
                 <td class="text-purple">Model</td>
                 <td>@Model.ModelName</td>
-                <td class="text-purple">Color</td>
-                <td>@Model.ModelColor</td>
+                <td class="text-purple">Brand</td>
+                <td>@Model.BrandName</td>
 
             </tr>
             <tr>
@@ -72,7 +72,7 @@
                 <td>@strWarrentStartDate</td>
                 <td class="text-purple">Repair Date</td>
                 <td>@RepairDate</td>
-                <td class="text-purple">Close Date</td>
+                <td class="text-purple">Delivery Date</td>
                 <td>@CloseDate</td>
             </tr>
             <tr>
@@ -80,7 +80,7 @@
                 <td>@Model.TSName</td>
                 <td class="text-purple">Received by</td>
                 <td>@Model.EntryUser</td>
-                <td class="text-purple">Close by</td>
+                <td class="text-purple">Delivery by</td>
                 <td>@Model.CloseUser</td>
             </tr>
             <tr>
@@ -118,8 +118,7 @@
                     <td colspan="3">
                         @Model.JobOrderType
                     </td>
-                    <td class="text-purple">Brand</td>
-                    <td>@Model.BrandName</td>
+                    
                 </tr>
             }
         </table>
@@ -143,7 +142,7 @@
                 </tr>
             </table>
         }
-        @if (Model.StateStatus == "HandSetChange" && Model.TsRepairStatus == "MODULE SWAP")
+        @if ((Model.StateStatus == "HandSetChange" && Model.TsRepairStatus == "MODULE SWAP") || (Model.TsRepairStatus == "MODULE SWAP"))
         {
             <table class="table table-sm table-bordered table-responsive-lg text-sm text-bold">
                 <tr class="text-center">

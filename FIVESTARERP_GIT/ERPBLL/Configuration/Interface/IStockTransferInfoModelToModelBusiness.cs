@@ -10,7 +10,7 @@ namespace ERPBLL.Configuration.Interface
 {
     public interface IStockTransferInfoModelToModelBusiness
     {
-        bool SaveStockTransferModelToModel(StockTransferInfoModelToModelDTO dto, long userId, long branchId, long orgId);
+        bool SaveStockTransferModelToModel(List<StockTransferDetailModelToModelDTO> dto, long userId, long branchId, long orgId);
         IEnumerable<StockTransferInfoModelToModel> GetAllStockTransferInfoModelToModelByOrgIdAndBranch(long orgId, long branchId);
         StockTransferInfoModelToModel GetStockTransferMMInfoById(long id, long orgId);
     }

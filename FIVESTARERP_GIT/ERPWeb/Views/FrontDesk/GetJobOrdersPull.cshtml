@@ -11,8 +11,29 @@
             </div>
         </div>
     </div>
-
 </div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-md-2">
+                        <input type="text" id="txtReceiveId" class="form-control form-control-sm" placeholder="Search By Receive Id" name="recId" />
+                    </div>
+                    <div class="col-md-2 hide">
+                        <input type="text" id="txtIMEISearch" class="form-control form-control-sm" placeholder="Search By IMEI No" name="imei" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" id="txtJobOrderSearch" class="form-control form-control-sm" placeholder="Search By Job Code No" name="jobCode" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12">
         <div class="card shadow">
@@ -30,9 +51,22 @@
 
 @section scripts{
     <script type="text/javascript">
+        var txtReceiveId = $("#txtReceiveId");
+        var txtIMEISearch = $("#txtIMEISearch");
+        var txtJobOrderSearch = $("#txtJobOrderSearch");
+
+        txtReceiveId.keyup(function () {
+            LoadDataTable();
+        })
+        txtIMEISearch.keyup(function () {
+            LoadDataTable();
+        })
+        txtJobOrderSearch.keyup(function () {
+            LoadDataTable();
+        })
 
         function LoadDataTable() {
-            var data = { flag: "view" };
+            var data = { flag: "view", recId: txtReceiveId.val().trim(), imei: txtIMEISearch.val().trim(), jobCode: txtJobOrderSearch.val().trim() };
             console.log(data);
             $.when(getReqWithData('html', 'GET', '/FrontDesk/GetJobOrdersPull', data)).then(function (res, status) {
                 console.log(status);

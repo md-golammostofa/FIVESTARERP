@@ -74,44 +74,46 @@ namespace ERPBLL.FrontDesk
         {
             bool isSuccess = false;
             var JobOrderInDb = _jobOrderBusiness.GetJobOrderById(jobId, orgId);
-            var imei_2 = _handSetStockBusiness.GetIMEI2ByIMEI1(imei1,branchId,orgId).IMEI;
-
-            HandsetChangeTrace handset = new HandsetChangeTrace();
-            handset.JobOrderId = JobOrderInDb.JodOrderId;
-            handset.JobOrderCode = JobOrderInDb.JobOrderCode;
-            handset.JobStatus = JobOrderInDb.StateStatus;
-            handset.ModelId = JobOrderInDb.DescriptionId;
-            handset.Type = JobOrderInDb.Type;
-            handset.IMEI1 = JobOrderInDb.IMEI;
-            handset.IMEI2 = JobOrderInDb.IMEI2;
-            handset.Color = JobOrderInDb.ModelColor;
-            handset.CustomerName = JobOrderInDb.CustomerName;
-            handset.CustomerPhone = JobOrderInDb.MobileNo;
-            handset.EUserId = userId;
-            handset.EntryDate = DateTime.Now;
-            handset.OrganizationId = orgId;
-            handset.BranchId = branchId;
-            _handsetChangeTraceRepository.Insert(handset);
-            _handsetChangeTraceRepository.Save();
-
-            if (JobOrderInDb != null)
+            var imei_2 = _handSetStockBusiness.GetIMEI2ByIMEI1(imei1,branchId,orgId);
+            if (imei_2.StateStatus == "Stock-In")
             {
-                JobOrderInDb.DescriptionId = modelId;
-                JobOrderInDb.IMEI = imei1;
-                if (imei2 == "")
+                HandsetChangeTrace handset = new HandsetChangeTrace();
+                handset.JobOrderId = JobOrderInDb.JodOrderId;
+                handset.JobOrderCode = JobOrderInDb.JobOrderCode;
+                handset.JobStatus = JobOrderInDb.StateStatus;
+                handset.ModelId = JobOrderInDb.DescriptionId;
+                handset.Type = JobOrderInDb.Type;
+                handset.IMEI1 = JobOrderInDb.IMEI;
+                handset.IMEI2 = JobOrderInDb.IMEI2;
+                handset.Color = JobOrderInDb.ModelColor;
+                handset.CustomerName = JobOrderInDb.CustomerName;
+                handset.CustomerPhone = JobOrderInDb.MobileNo;
+                handset.EUserId = userId;
+                handset.EntryDate = DateTime.Now;
+                handset.OrganizationId = orgId;
+                handset.BranchId = branchId;
+                _handsetChangeTraceRepository.Insert(handset);
+                _handsetChangeTraceRepository.Save();
+
+                if (JobOrderInDb != null)
                 {
-                    JobOrderInDb.IMEI2 = imei_2;
+                    JobOrderInDb.DescriptionId = modelId;
+                    JobOrderInDb.IMEI = imei1;
+                    if (imei2 == "")
+                    {
+                        JobOrderInDb.IMEI2 = imei_2.IMEI;
+                    }
+                    else
+                    {
+                        JobOrderInDb.IMEI2 = imei2;
+                    }
+                    JobOrderInDb.ModelColor = color;
+                    _jobOrderRepository.Update(JobOrderInDb);
                 }
-                else
+                if (_jobOrderRepository.Save() == true)
                 {
-                    JobOrderInDb.IMEI2 = imei2;
+                    return StockOutHandset(imei1, orgId, branchId, userId);
                 }
-                JobOrderInDb.ModelColor = color;
-                 _jobOrderRepository.Update(JobOrderInDb);
-            }
-            if (_jobOrderRepository.Save() == true)
-            {
-                return StockOutHandset(imei1, orgId, branchId, userId);
             }
             return isSuccess;
         }

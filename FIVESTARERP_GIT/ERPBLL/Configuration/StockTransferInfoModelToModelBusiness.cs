@@ -17,43 +17,47 @@ namespace ERPBLL.Configuration
         private readonly StockTransferInfoModelToModelRepository _stockTransferInfoModelToModelRepository;
        // private readonly StockTransferDetailModelToModelRepository _stockTransferDetailModelToModelRepository;
         private readonly IMobilePartStockDetailBusiness _mobilePartStockDetailBusiness;
-        public StockTransferInfoModelToModelBusiness(IConfigurationUnitOfWork configDb, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness)
+        private readonly IServicesWarehouseBusiness _servicesWarehouseBusiness;
+        public StockTransferInfoModelToModelBusiness(IConfigurationUnitOfWork configDb, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness)
         {
             this._configDb = configDb;
             this._mobilePartStockDetailBusiness = mobilePartStockDetailBusiness;
             _stockTransferInfoModelToModelRepository = new StockTransferInfoModelToModelRepository(this._configDb);
+            this._servicesWarehouseBusiness = servicesWarehouseBusiness;
             //_stockTransferDetailModelToModelRepository = new StockTransferDetailModelToModelRepository(this._configDb);
         }
-        public bool SaveStockTransferModelToModel(StockTransferInfoModelToModelDTO dto, long userId, long branchId, long orgId)
+        public bool SaveStockTransferModelToModel(List<StockTransferDetailModelToModelDTO> dto, long userId, long branchId, long orgId)
         {
             bool IsSuccess = false;
-
-            List<StockTransferDetailModelToModel> details = new List<StockTransferDetailModelToModel>();
+            List<StockTransferInfoModelToModel> infolist = new List<StockTransferInfoModelToModel>();
+            
             List<MobilePartStockDetailDTO> partsDetailsForStockOut = new List<MobilePartStockDetailDTO>();
             List<MobilePartStockDetailDTO> partsDetailsForStockIn = new List<MobilePartStockDetailDTO>();
+            var trasnferCode = ("STM-" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
+            var warehouse = _servicesWarehouseBusiness.GetAllServiceWarehouseByOrgId(orgId, branchId).FirstOrDefault();
+            
+            foreach (var item in dto)
+            {
+                StockTransferInfoModelToModel info = new StockTransferInfoModelToModel();
+                info.BranchId = branchId;
+                info.DescriptionId = item.DescriptionId;
+                info.ToDescriptionId = item.ToDescriptionId;
+                info.EntryDate = DateTime.Now;
+                info.EUserId = userId;
+                info.OrganizationId = orgId;
+                info.Remarks = item.Remarks;
+                info.StateStatus = RequisitionStatus.Approved;
+                info.TransferCode = trasnferCode;
+                info.WarehouseId = warehouse.SWarehouseId;
 
-            StockTransferInfoModelToModel info = new StockTransferInfoModelToModel()
-            {
-                BranchId = branchId,
-                DescriptionId = dto.DescriptionId,
-                ToDescriptionId = dto.ToDescriptionId,
-                EntryDate = DateTime.Now,
-                EUserId = userId,
-                OrganizationId = orgId,
-                Remarks = dto.Remarks,
-                StateStatus = RequisitionStatus.Approved,
-                TransferCode = ("STM-" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss")),
-                WarehouseId = dto.WarehouseId,
-            };
-            foreach (var item in dto.StockTransferDetailModelToModels)
-            {
+                List<StockTransferDetailModelToModel> details = new List<StockTransferDetailModelToModel>();
                 StockTransferDetailModelToModel detail = new StockTransferDetailModelToModel()
                 {
                     BranchId = branchId,
                     CostPrice = item.CostPrice,
                     SellPrice = item.SellPrice,
-                    DescriptionId = dto.DescriptionId,
-                    ToDescriptionId = dto.ToDescriptionId,
+                    DescriptionId = item.DescriptionId,
+                    ToDescriptionId = item.ToDescriptionId,
                     EntryDate = DateTime.Now,
                     EUserId = userId,
                     OrganizationId = orgId,
@@ -62,9 +66,11 @@ namespace ERPBLL.Configuration
                     Remarks = item.Remarks,
                 };
                 details.Add(detail);
+                info.StockTransferDetailModelToModels = details;
+
                 MobilePartStockDetailDTO stockOutItem = new MobilePartStockDetailDTO
                 {
-                    SWarehouseId = dto.WarehouseId,
+                    SWarehouseId = warehouse.SWarehouseId,
                     MobilePartId = item.PartsId,
                     CostPrice = item.CostPrice,
                     SellPrice = item.SellPrice,
@@ -82,7 +88,7 @@ namespace ERPBLL.Configuration
 
                 MobilePartStockDetailDTO stockInItem = new MobilePartStockDetailDTO
                 {
-                    SWarehouseId = dto.WarehouseId,
+                    SWarehouseId = warehouse.SWarehouseId,
                     MobilePartId = item.PartsId,
                     CostPrice = item.CostPrice,
                     SellPrice = item.SellPrice,
@@ -97,15 +103,13 @@ namespace ERPBLL.Configuration
                     DescriptionId = info.ToDescriptionId
                 };
                 partsDetailsForStockIn.Add(stockInItem);
+                _stockTransferInfoModelToModelRepository.Insert(info);
+                _stockTransferInfoModelToModelRepository.Save();
+                IsSuccess = true;
             }
-
-            info.StockTransferDetailModelToModels = details;
-            _stockTransferInfoModelToModelRepository.Insert(info);
-
-            if (_stockTransferInfoModelToModelRepository.Save())
+            if (IsSuccess == true)
             {
-
-                if(_mobilePartStockDetailBusiness.SaveMobilePartStockOut(partsDetailsForStockOut, userId, orgId, branchId))
+                if(_mobilePartStockDetailBusiness.SaveMobilePartStockOut(partsDetailsForStockOut, orgId, branchId, userId))
                 {
                     IsSuccess = _mobilePartStockDetailBusiness.SaveMobilePartStockIn(partsDetailsForStockIn, userId, orgId, branchId);
                 }

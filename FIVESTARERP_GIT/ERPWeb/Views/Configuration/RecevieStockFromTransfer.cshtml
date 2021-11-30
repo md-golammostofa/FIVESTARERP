@@ -20,9 +20,36 @@
                         <label for="ddlBranchName" class="control-label font-weight-bold">Branch Name<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                         @Html.DropDownList("ddlBranchName", (IEnumerable<SelectListItem>)ViewBag.ddlBranchName, "--Select Branch--", new { @class = "form-control form-control-sm select2 select2-danger" })
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 hide">
                         <label for="ddlModels" class="control-label font-weight-bold">Model<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                         @Html.DropDownList("ddlModels", (IEnumerable<SelectListItem>)ViewBag.ddlModels, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        <label for="ddlStateStatus" class="control-label font-weight-bold">Status</label>
+                        <select class="form-control form-control-sm select2 select2-danger" id="ddlStateStatus">
+                            <option value="">Search By Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Send">Send</option>
+                            <option value="Accepted">Accepted</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label font-weight-bold">From Date</label>
+                        <div class="input-group input-group-sm ">
+                            <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptFromDate" name="fromDate" />
+                            <div class="input-group-prepend cursor-pointer remove-date dptFromDate" style="cursor:pointer">
+                                <span class="input-group-text">&#10008;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label font-weight-bold">To Date</label>
+                        <div class="input-group input-group-sm ">
+                            <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptToDate" name="toDate" />
+                            <div class="input-group-prepend remove-date dptToDate" style="cursor:pointer">
+                                <span class="input-group-text">&#10008;</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,12 +93,46 @@
         var hdfTransferInfoId = $("#hdfTransferInfoId");
         var ddlBranchName = $("#ddlBranchName");
         var ddlModels = $("#ddlModels");
+        var ddlStateStatus = $("#ddlStateStatus");
+        var dptFromDate = $("#dptFromDate");
+        var dptToDate = $("#dptToDate");
 
         $(document).ready(function () {
+            dptFromDate.prop('readonly', true);
+            dptToDate.prop('readonly', true);
+            dptFromDate.css("background-color", "#fff");
+            dptToDate.css("background-color", "#fff");
+            $('#dptFromDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+            $('#dptToDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
             $('.select2').select2();
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             });
+        })
+
+        $(document).on('click', 'div.remove-date', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDate.val() !== '') {
+                    dptToDate.val('');
+                    LoadDataTable();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDate.val() !== '') {
+                    dptFromDate.val('');
+                    LoadDataTable();
+                }
+            }
         })
 
 
@@ -84,8 +145,17 @@
         ddlModels.change(function () {
             LoadDataTable();
         })
+        dptFromDate.change(function () {
+            LoadDataTable();
+        })
+        dptToDate.change(function () {
+            LoadDataTable();
+        })
+        ddlStateStatus.change(function () {
+            LoadDataTable();
+        })
         function LoadDataTable() {
-            var data = { sWerehouseId: 0, branch: TryParseInt(ddlBranchName.val(), 0), model: TryParseInt(ddlModels.val(),0) };
+            var data = { sWerehouseId: 0, branch: TryParseInt(ddlBranchName.val(), 0), model: TryParseInt(ddlModels.val(), 0), status: ddlStateStatus.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val() };
             console.log(data);
             $.when(getReqWithData('html', 'GET', '/Configuration/RecevieStockFromTransferInfoPartialList', data)).then(function (res, status) {
                 console.log(status);

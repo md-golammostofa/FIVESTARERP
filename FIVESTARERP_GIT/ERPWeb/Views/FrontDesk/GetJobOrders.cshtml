@@ -82,9 +82,13 @@
                                                             <label class="col-form-label">Customer Type</label>
                                                             @Html.DropDownList("ddlCustomerType", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, "--Search By CustomerType--", new { @class = "form-control form-control-sm ctrl-changed " })
                                                         </div>
-                                                        <div class="col-md-2" id="divCustomerName">
+                                                        @*<div class="col-md-2" id="divCustomerName">
                                                             <label class="col-form-label">Dealer Name</label>
                                                             <input type="text" id="txtCustomerName" class="form-control form-control-sm" placeholder="Search By Dealer" name="customer" />
+                                                        </div>*@
+                                                        <div class="col-md-2">
+                                                            <label class="col-form-label">Dealer</label>
+                                                            @Html.DropDownList("txtCustomerName", (IEnumerable<SelectListItem>)ViewBag.txtCustomerName, "--Search By Dealer--", new { @class = "form-control form-control-sm ctrl-changed select select2" })
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label class="col-form-label">Job Status</label>
@@ -112,14 +116,14 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-1" id="divReportType">
+                                                        <div class="col-md-1 hide" id="divReportType">
                                                             <label class="col-form-label" for="rptType">Type</label>
                                                             <select name="rptType" id="rptType" class="form-control form-control-sm">
                                                                 <option value="PDF">PDF</option>
                                                                 <option value="EXCEL">EXCEL</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-1" id="divbtnReport">
+                                                        <div class="col-md-1 hide" id="divbtnReport">
                                                             <label class="col-form-label" for="Download" style="visibility:hidden">Download</label>
                                                             <button type="submit" title="Download Dealer Receipt" class="btn btn-sm btn-outline-danger"><i class="fas fa-file-pdf"> </i></button>
                                                         </div>
@@ -134,15 +138,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @*<div class="col-md-12" style="margin-top:-10px">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>*@
                         </div>
                     </div>
 
@@ -465,9 +460,9 @@
             if ('@tab' == "AccessoriesSells") {
                 $("#custom-tabs-two-accessoriesSellsList-tab").trigger('click');
             }
-            $("#divReportType").hide(); 
-            $("#divbtnReport").hide();
-            $("#divCustomerName").hide();
+            //$("#divReportType").hide(); 
+            //$("#divbtnReport").hide();
+            //$("#divCustomerName").hide();
         })
 
         $(document).on('click', 'div.remove-date', function () {
@@ -497,17 +492,17 @@
             }
             
         })
-        ddlCustomerType.change(function () {
-            if (ddlCustomerType.val() === "Dealer") {
-                $("#divReportType").hide();
-                $("#divbtnReport").show();
-                $("#divCustomerName").show();
-            } else {
-                $("#divReportType").hide();
-                $("#divbtnReport").hide();
-                $("#divCustomerName").hide();
-            }
-        });
+        //ddlCustomerType.change(function () {
+        //    if (ddlCustomerType.val() === "Dealer") {
+        //        $("#divReportType").hide();
+        //        $("#divbtnReport").show();
+        //        $("#divCustomerName").show();
+        //    } else {
+        //        $("#divReportType").hide();
+        //        $("#divbtnReport").hide();
+        //        $("#divCustomerName").hide();
+        //    }
+        //});
 
         dptFromDate.change(function () {
             LoadDataTable();
@@ -537,7 +532,7 @@
         txtIMEI2No.keyup(function () {
             LoadDataTable();
         })
-        txtCustomerName.keyup(function () {
+        txtCustomerName.change(function () {
             LoadDataTable();
         })
         txtReceiveId.keyup(function () {

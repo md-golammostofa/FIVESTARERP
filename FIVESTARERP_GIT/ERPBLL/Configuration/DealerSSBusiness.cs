@@ -30,7 +30,7 @@ namespace ERPBLL.Configuration
         public IEnumerable<DealerSSDTO> GetAllDealerForD(long orgId)
         {
             var data = this._configurationDb.Db.Database.SqlQuery<DealerSSDTO>(
-                    string.Format(@"Select DealerId,MobileNo,Cast(DealerName as Nvarchar(50))+'-'+Cast(ZoneName as Nvarchar(50))'Dealer' From tblDealerSS Where OrganizationId={0}", orgId)).ToList();
+                    string.Format(@"Select DealerId,DealerName,MobileNo,Cast(DealerName as Nvarchar(50))+'-'+Cast(ZoneName as Nvarchar(50))'Dealer' From tblDealerSS Where OrganizationId={0}", orgId)).ToList();
             return data;
         }
 

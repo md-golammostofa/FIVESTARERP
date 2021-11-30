@@ -27,5 +27,6 @@ namespace ERPBO.FrontDesk.DomainModels
         public Nullable<DateTime> UpdateDate { get; set; }
         public ICollection<RequsitionDetailForJobOrder> RequsitionDetailForJobOrders { get; set; }
         public long? UserBranchId { get; set; }
+        
     }
 }

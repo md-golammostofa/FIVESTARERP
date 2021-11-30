@@ -53,11 +53,12 @@ namespace ERPWeb.Controllers
         private readonly ERPBLL.Accounts.Interface.ISupplierBusiness _suppliersBusiness;
         private readonly IDealerSSBusiness _dealerSSBusiness;
         private readonly IModelSSBusiness _modelSSBusiness;
+        private readonly IRequsitionInfoForJobOrderBusiness _requsitionInfoForJobOrderBusiness;
         //Nishad
         private readonly ERPBLL.Configuration.Interface.IHandSetStockBusiness _handSetStockBusiness;
         private readonly IFaultyStockInfoBusiness _faultyStockInfoBusiness;
 
-        public Common2Controller(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, ICustomerServiceBusiness customerServiceBusiness,IBranchBusiness2 branchBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IJobOrderBusiness jobOrderBusiness, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IJobOrderProblemBusiness jobOrderProblemBusiness, IJobOrderFaultBusiness jobOrderFaultBusiness, IJobOrderServiceBusiness jobOrderServiceBusiness, IDescriptionBusiness descriptionBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IRepairBusiness repairBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IJournalBusiness journalBusiness, ICustomersBusiness customersBusiness, ERPBLL.Accounts.Interface.ISupplierBusiness suppliersBusiness, IDealerSSBusiness dealerSSBusiness, IModelSSBusiness modelSSBusiness)
+        public Common2Controller(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, ICustomerServiceBusiness customerServiceBusiness,IBranchBusiness2 branchBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IJobOrderBusiness jobOrderBusiness, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IJobOrderProblemBusiness jobOrderProblemBusiness, IJobOrderFaultBusiness jobOrderFaultBusiness, IJobOrderServiceBusiness jobOrderServiceBusiness, IDescriptionBusiness descriptionBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IRepairBusiness repairBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IJournalBusiness journalBusiness, ICustomersBusiness customersBusiness, ERPBLL.Accounts.Interface.ISupplierBusiness suppliersBusiness, IDealerSSBusiness dealerSSBusiness, IModelSSBusiness modelSSBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness)
         {
             this._accessoriesBusiness = accessoriesBusiness;
             this._clientProblemBusiness = clientProblemBusiness;
@@ -86,6 +87,7 @@ namespace ERPWeb.Controllers
             this._suppliersBusiness = suppliersBusiness;
             this._dealerSSBusiness = dealerSSBusiness;
             this._modelSSBusiness = modelSSBusiness;
+            this._requsitionInfoForJobOrderBusiness = requsitionInfoForJobOrderBusiness;
         }
 
         #region Configuration Module
@@ -463,9 +465,9 @@ namespace ERPWeb.Controllers
             return Json(dropDown);
         }
         [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetPartsStockByPrice(long warehouseId, long partsId, double cprice)
+        public ActionResult GetPartsStockByPrice(long warehouseId, long partsId, double cprice,long model)
         {
-            var stock = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoByInfoId(warehouseId, partsId, cprice, User.OrgId, User.BranchId);
+            var stock = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoByInfoId(warehouseId, partsId, cprice, User.OrgId, User.BranchId,model);
             int total = 0;
             if (stock != null)
             {
@@ -507,6 +509,16 @@ namespace ERPWeb.Controllers
 
             }
             return Json(jobOd);
+        }
+
+        public ActionResult RequsitionStatusCheck(long jobId)
+        {
+            bool isExist = false;
+            if (jobId > 0)
+            {
+                isExist = _requsitionInfoForJobOrderBusiness.RequsitionStatusCheck(jobId,User.OrgId,User.BranchId);
+            }
+            return Json(isExist);
         }
 
         #endregion

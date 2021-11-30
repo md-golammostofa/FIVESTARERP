@@ -20,5 +20,6 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<JobOrderReturnDetailDTO> RepairOtherBranchJob(long branchId, long? branchName, long orgId, string fromDate, string toDate);
         IEnumerable<JobOrderReturnDetailDTO> RepairedJobOfOtherBranch(long branchId, long? branchName, long orgId, string fromDate, string toDate);
         IEnumerable<JobOrderReturnDetailDTO> JobReturnList(long orgId, long branchId);
+        JobOrderReturnDetail GetJobByJobId(long jobId, long orgId, long branchId);
     }
 }

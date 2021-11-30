@@ -30,6 +30,53 @@ namespace ERPBLL.Configuration
             this._mobilePartStockInfoBusiness = mobilePartStockInfoBusiness;
         }
 
+        public IEnumerable<TransferInfoDTO> GetAllReceiveList(long? branch, string status, long orgId, long branchId, string fromDate, string toDate)
+        {
+            return _configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(QueryForAllReceiveList(branch,status,orgId,branchId,fromDate,toDate)).ToList();
+        }
+        private string QueryForAllReceiveList(long? branch, string status, long orgId, long branchId, string fromDate, string toDate)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+            if (orgId > 0)
+            {
+                param += string.Format(@"and ti.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@"and ti.BranchTo={0}", branchId);
+            }
+            if (branch != null && branch > 0)
+            {
+                param += string.Format(@"and ti.BranchId ={0}", branch);
+            }
+            if (!string.IsNullOrEmpty(status))
+            {
+                param += string.Format(@"and ti.StateStatus ='{0}'", status);
+            }
+            if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(ti.IssueDate as date) between '{0}' and '{1}'", fDate, tDate);
+            }
+            else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(ti.IssueDate as date)='{0}'", fDate);
+            }
+            else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(ti.IssueDate as date)='{0}'", tDate);
+            }
+
+            query = string.Format(@"Select ti.TransferInfoId,ti.BranchId,ti.BranchTo,ti.TransferCode,ti.StateStatus,b.BranchName,ti.EntryDate,ti.IssueDate,ti.ReceivedDate From tblTransferInfo ti
+Left Join [ControlPanel].dbo.tblBranch b on ti.BranchId=b.BranchId Where 1=1{0} Order By ti.EntryDate desc
+", Utility.ParamChecker(param));
+            return query;
+        }
+
         public IEnumerable<TransferInfo> GetAllStockTransferByOrgId(long orgId)
         {
             return transferInfoRepository.GetAll(ts => ts.OrganizationId == orgId).ToList();
@@ -38,6 +85,17 @@ namespace ERPBLL.Configuration
         public IEnumerable<TransferInfo> GetAllStockTransferByOrgIdAndBranch(long orgId, long branchId)
         {
             return transferInfoRepository.GetAll(ts => ts.OrganizationId == orgId && ts.BranchId == branchId).ToList();
+        }
+
+        public IEnumerable<TransferInfoDTO> GetStockTransferForReport(long infoId, long orgId, long branchId)
+        {
+            var data= this._configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(string.Format(@"Select ti.TransferInfoId,ti.TransferCode,ti.StateStatus,b.BranchName'RequestBranch',bh.BranchName'IssueBranch',
+u.UserName'RequestBy',ti.EntryDate,ti.IssueDate,ti.ReceivedDate From tblTransferInfo ti
+Left Join [ControlPanel].dbo.tblBranch b on ti.BranchId=b.BranchId
+Left join [ControlPanel].dbo.tblBranch bh on ti.BranchTo=bh.BranchId
+Left join [ControlPanel].dbo.tblApplicationUsers u on ti.EUserId=u.UserId
+Where ti.TransferInfoId={0} and ti.OrganizationId={1} and ti.BranchTo={2} ", infoId, orgId, branchId)).ToList();
+            return data;
         }
 
         public TransferInfo GetStockTransferInfoById(long id, long orgId, long branchId)
@@ -66,7 +124,7 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
             if(reqInfo != null)
             {
                 reqInfo.StateStatus = "Accepted";
-                reqInfo.UpdateDate = DateTime.Now;
+                reqInfo.ReceivedDate = DateTime.Now;
                 reqInfo.UpUserId = userId;
             }
             transferInfoRepository.Update(reqInfo);
@@ -220,7 +278,7 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
             if(reqInfo != null)
             {
                 reqInfo.StateStatus = dto.StateStatus;
-                reqInfo.UpdateDate = DateTime.Now;
+                reqInfo.IssueDate = DateTime.Now;
                 reqInfo.UpUserId = userId;
                 transferInfoRepository.Update(reqInfo);
                 

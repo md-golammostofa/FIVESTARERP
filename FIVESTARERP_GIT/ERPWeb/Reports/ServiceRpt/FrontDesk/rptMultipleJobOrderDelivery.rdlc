@@ -266,28 +266,25 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.44251in</Width>
+              <Width>0.47812in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.00193in</Width>
+              <Width>1.03754in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.45981in</Width>
+              <Width>0.72458in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.46692in</Width>
+              <Width>0.66275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.39516in</Width>
+              <Width>1.31447in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.28275in</Width>
+              <Width>1.71378in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.32401in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1.35663in</Width>
+              <Width>1.79849in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -413,14 +410,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox50">
+                    <Textbox Name="Textbox7">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Color</Value>
+                              <Value>Type</Value>
                               <Style>
                                 <FontFamily>Times New Roman</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -432,7 +429,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox50</rd:DefaultName>
+                      <rd:DefaultName>Textbox7</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -472,45 +469,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox64</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>Solid</Style>
-                        </Border>
-                        <RightBorder>
-                          <Style>None</Style>
-                        </RightBorder>
-                        <BackgroundColor>LightGrey</BackgroundColor>
-                        <VerticalAlign>Middle</VerticalAlign>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox62">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>IMEI-2</Value>
-                              <Style>
-                                <FontFamily>Times New Roman</FontFamily>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox62</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -715,14 +673,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="ModelColor">
+                    <Textbox Name="Type">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!ModelColor.Value</Value>
+                              <Value>=Fields!Type.Value</Value>
                               <Style>
                                 <FontFamily>Times New Roman</FontFamily>
                               </Style>
@@ -731,7 +689,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>ModelColor</rd:DefaultName>
+                      <rd:DefaultName>Type</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -766,40 +724,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>IMEI</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>Solid</Style>
-                        </Border>
-                        <RightBorder>
-                          <Style>None</Style>
-                        </RightBorder>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="IMEI2">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!IMEI2.Value</Value>
-                              <Style>
-                                <FontFamily>Times New Roman</FontFamily>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>IMEI2</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -893,7 +817,6 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -907,7 +830,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>JobOrder</DataSetName>
-        <Top>1.54441in</Top>
+        <Top>1.85691in</Top>
         <Left>0.01167in</Left>
         <Height>0.65783in</Height>
         <Width>7.72973in</Width>
@@ -921,7 +844,6 @@
       <Rectangle Name="Rectangle2">
         <ReportItems>
           <Line Name="Line5">
-            <Top>0in</Top>
             <Left>2.80025in</Left>
             <Height>0.29167in</Height>
             <Width>0in</Width>
@@ -932,7 +854,6 @@
             </Style>
           </Line>
           <Line Name="Line6">
-            <Top>0in</Top>
             <Left>1.30246in</Left>
             <Height>0.29167in</Height>
             <Width>0in</Width>
@@ -962,7 +883,9 @@
                 <TextRuns>
                   <TextRun>
                     <Value>Challan No.</Value>
-                    <Style />
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
@@ -992,7 +915,9 @@
                 <TextRuns>
                   <TextRun>
                     <Value>Challan Date</Value>
-                    <Style />
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
@@ -1022,9 +947,10 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Label>Date</Label>
-                    <Value>=Globals!ExecutionTime</Value>
+                    <Label>Delivery Date</Label>
+                    <Value>=First(Fields!CloseDate.Value, "JobOrder")</Value>
                     <Style>
+                      <FontFamily>times New Roman</FontFamily>
                       <Format>dd  MMM yyyy</Format>
                     </Style>
                   </TextRun>
@@ -1096,8 +1022,275 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Rectangle Name="Rectangle1">
+        <ReportItems>
+          <Line Name="Line2">
+            <Left>0.89506in</Left>
+            <Height>0.27879in</Height>
+            <Width>0in</Width>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Line Name="Line3">
+            <Left>2.22925in</Left>
+            <Height>0.27879in</Height>
+            <Width>0in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Line Name="Line4">
+            <Left>2.81493in</Left>
+            <Height>0.2625in</Height>
+            <Width>0in</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Line Name="Line8">
+            <Left>3.83986in</Left>
+            <Height>0.27879in</Height>
+            <Width>0in</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Line Name="Line9">
+            <Left>4.74945in</Left>
+            <Height>0.27879in</Height>
+            <Width>0in</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Textbox Name="Textbox1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Dealer Name</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>0.0125in</Top>
+            <Left>0.00485in</Left>
+            <Height>0.25241in</Height>
+            <Width>0.86773in</Width>
+            <ZIndex>5</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BackgroundColor>LightGrey</BackgroundColor>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Mobile</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>0.01388in</Top>
+            <Left>2.23578in</Left>
+            <Height>0.25241in</Height>
+            <Width>0.57787in</Width>
+            <ZIndex>6</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BackgroundColor>LightGrey</BackgroundColor>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox3">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Label>Dealer Name</Label>
+                    <Value>=First(Fields!CustomerName.Value, "JobOrder")</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>0.01319in</Top>
+            <Left>0.91147in</Left>
+            <Height>0.25241in</Height>
+            <Width>1.27611in</Width>
+            <ZIndex>7</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox4">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Label>Mobile</Label>
+                    <Value>=First(Fields!MobileNo.Value, "JobOrder")</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>0.01319in</Top>
+            <Left>2.82902in</Left>
+            <Height>0.25241in</Height>
+            <Width>0.98028in</Width>
+            <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox5">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Address</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>0.0125in</Top>
+            <Left>3.86764in</Left>
+            <Height>0.25241in</Height>
+            <Width>0.86792in</Width>
+            <ZIndex>9</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BackgroundColor>LightGrey</BackgroundColor>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox6">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Label>Address</Label>
+                    <Value>=First(Fields!Address.Value, "JobOrder")</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>0.01319in</Top>
+            <Left>4.76612in</Left>
+            <Height>0.25241in</Height>
+            <Width>2.93054in</Width>
+            <ZIndex>10</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <KeepTogether>true</KeepTogether>
+        <Top>1.52497in</Top>
+        <Left>0.01167in</Left>
+        <Height>0.27879in</Height>
+        <Width>7.72972in</Width>
+        <ZIndex>10</ZIndex>
+        <Style>
+          <Border>
+            <Style>Solid</Style>
+          </Border>
+        </Style>
+      </Rectangle>
     </ReportItems>
-    <Height>2.26517in</Height>
+    <Height>2.55224in</Height>
     <Style />
   </Body>
   <Width>7.77in</Width>

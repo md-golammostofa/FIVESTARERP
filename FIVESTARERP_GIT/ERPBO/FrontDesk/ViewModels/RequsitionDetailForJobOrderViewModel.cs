@@ -40,5 +40,8 @@ namespace ERPBO.FrontDesk.ViewModels
         public int AvailableQty { get; set; }
         public string MobilePartCode { get; set; }
         public long? UserBranchId { get; set; }
+        public int IssueQty { get; set; }
+        public long DescriptionId { get; set; }
+        public string ModelName { get; set; }
     }
 }

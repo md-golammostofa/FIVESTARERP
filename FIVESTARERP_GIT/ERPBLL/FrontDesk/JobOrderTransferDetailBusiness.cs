@@ -76,9 +76,9 @@ namespace ERPBLL.FrontDesk
                 param += string.Format(@" and Cast(d.EntryDate as date)='{0}'", tDate);
             }
 
-            query = string.Format(@"Select JobOrderTransferDetailId,BranchId,TransferCode,JobOrderId,JobOrderCode,JobStatus,
+            query = string.Format(@"Select JobOrderTransferDetailId,BranchId,TransferCode,JobOrderId,JobOrderCode,JobStatus,IMEI,
 TransferStatus,FromBranchName,EntryDate,ModelColor,ModelName,SUBSTRING(AccessoriesNames,1,LEN(AccessoriesNames)-1) 'AccessoriesNames',UserName'ReceivedBy' From (Select d.JobOrderTransferDetailId,d.BranchId,d.TransferCode,d.JobOrderId,d.JobOrderCode,d.JobStatus,
-d.TransferStatus,b.BranchName'FromBranchName',d.EntryDate,j.ModelColor,de.ModelName,
+d.TransferStatus,b.BranchName'FromBranchName',d.EntryDate,j.ModelColor,de.ModelName,j.IMEI,
 (Cast((Select AccessoriesName+',' From [Configuration].dbo.tblAccessories ass
 Inner Join tblJobOrderAccessories joa on ass.AccessoriesId = joa.AccessoriesId
 Where joa.JobOrderId = j.JodOrderId
@@ -129,25 +129,33 @@ where TransferStatus='Pending' and 1=1 {0}) tbl order by EntryDate desc
         public ExecutionStateWithText SaveJobOrderTransferWithReport(long transferId, long[] jobOrders, long userId, long orgId, long branchId, string cName, string cNumber)
         {
             bool IsSuccess = false;
+            Random random = new Random();
+            var ran = random.Next().ToString();
+            ran = ran.Substring(0, 4);
+            
             ExecutionStateWithText executionState = new ExecutionStateWithText();
             List<JobOrderTransferDetail> jobOrderTransfers = new List<JobOrderTransferDetail>();
-            string transferCode = ("DO-" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
+            string transferCode = ("DO-" + ran + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
             foreach (var job in jobOrders)
             {
-                var jobOrderInDb = _jobOrderBusiness.GetJobOrdersByIdWithBranch(job, branchId, orgId);
-                JobOrderTransferDetail detail = new JobOrderTransferDetail();
-                detail.TransferCode = transferCode;
-                detail.JobOrderId = jobOrderInDb.JodOrderId;
-                detail.JobOrderCode = jobOrderInDb.JobOrderCode;
-                detail.JobStatus = jobOrderInDb.StateStatus;
-                detail.TransferStatus = JobOrderTransferStatus.Pending;
-                detail.BranchId = branchId;
-                detail.FromBranch = branchId;
-                detail.ToBranch = transferId;
-                detail.OrganizationId = orgId;
-                detail.EUserId = userId;
-                detail.EntryDate = DateTime.Now;
-                _jobOrderTransferDetailRepository.Insert(detail);
+                var checkJob = GetJobOrderByJobId(job, orgId, branchId);
+                if(checkJob == null || checkJob.TransferStatus== "Received")
+                {
+                    var jobOrderInDb = _jobOrderBusiness.GetJobOrdersByIdWithBranch(job, branchId, orgId);
+                    JobOrderTransferDetail detail = new JobOrderTransferDetail();
+                    detail.TransferCode = transferCode;
+                    detail.JobOrderId = jobOrderInDb.JodOrderId;
+                    detail.JobOrderCode = jobOrderInDb.JobOrderCode;
+                    detail.JobStatus = jobOrderInDb.StateStatus;
+                    detail.TransferStatus = JobOrderTransferStatus.Pending;
+                    detail.BranchId = branchId;
+                    detail.FromBranch = branchId;
+                    detail.ToBranch = transferId;
+                    detail.OrganizationId = orgId;
+                    detail.EUserId = userId;
+                    detail.EntryDate = DateTime.Now;
+                    _jobOrderTransferDetailRepository.Insert(detail);
+                }
             }
             _jobOrderTransferDetailRepository.InsertAll(jobOrderTransfers);
             if (_jobOrderTransferDetailRepository.Save() == true)
@@ -258,6 +266,11 @@ Select JobOrderId From tblJobOrderTransferDetail Where TransferCode='{0}' and Or
 Left Join [ControlPanel].dbo.tblBranch br on tsd.ToBranch=br.BranchId
 Where tsd.OrganizationId={0} and tsd.BranchId={1}", orgId, branchId)).ToList();
             return data;
+        }
+
+        public JobOrderTransferDetail GetJobOrderByJobId(long jobId, long orgId, long brabchId)
+        {
+            return _jobOrderTransferDetailRepository.GetOneByOrg(j => j.JobOrderId == jobId && j.OrganizationId == orgId && j.BranchId == brabchId);
         }
     }
 }

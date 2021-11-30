@@ -21,5 +21,6 @@ namespace ERPBLL.Configuration.Interface
         //bool StockOutAccessoriesSells(long invoiceId, long orgId, long branchId, long userId);
         bool SaveMobilePartStockInByBranchRequsition(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId);
         IEnumerable<TotalStockDetailsDTO> TotalStockDetailsReport(long orgId, long branchId, long? modelId, long? partsId);
+        IEnumerable<TotalStockDetailsDTO> AllBranchTotalStock(long? branch,long orgId);
     }
 }

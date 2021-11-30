@@ -29,5 +29,7 @@ namespace ERPBO.Configuration.DomainModels
         public long? ABWarehouse { get; set; }
         public long? WarehouseIdTo { get; set; }
         public long? DescriptionId { get; set; }
+        public Nullable<DateTime> IssueDate { get; set; }
+        public Nullable<DateTime> ReceivedDate { get; set; }
     }
 }

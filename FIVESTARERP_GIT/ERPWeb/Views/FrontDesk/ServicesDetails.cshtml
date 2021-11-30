@@ -214,7 +214,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1" id="btnRepairAddButton">
                                 <button type="button" id="btnRepair" class="btn btn-sm btn-primary" title="Add New Repair"><i class="fas fa-plus"> </i> </button>
                             </div>
                         </div>
@@ -380,7 +380,7 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <b>CC:</b> @jobOrder.CustomerApproval
+                                                <b>CC:</b><span id="qcStatusForHide">@jobOrder.CustomerApproval</span> 
                                             </td>
                                             <td>
                                                @jobOrder.CallCenterRemarks
@@ -396,7 +396,7 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <b>QC:</b> @jobOrder.QCStatus
+                                                <b>QC:</b> <span >@jobOrder.QCStatus</span>
                                             </td>
                                             <td>
                                                 @jobOrder.QCRemarks
@@ -900,6 +900,7 @@
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             });
+            //$("#btnRepairAddButton").show();
         });
         function OpenFaultModal() {
             clearCtrlFault();
@@ -1659,7 +1660,7 @@ $('.toastrDefaultError').trigger('click');
                                         var td4 = "<td class='hide'>"+item.PartsId+"</td>";
                                         var td5 = "<td>" + item.PartsName+"</td>";
                     var td6 = "<td class='text-center'>" + item.Quantity + "</td>";
-                                        var td7 = "<td class='text-center' style='width:15%'><input type='number' value=0 class='form-control form-control-sm' name='usedQty' /></td>";
+                    var td7 = "<td class='text-center' style='width:15%'><input type='number' value='" + item.Quantity + "' class='form-control form-control-sm' name='usedQty' /></td>";
                     var td8 = "<td class='hide'></td>";
                     
                                         var tr = "<tr>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8 + "</tr>";
@@ -1721,21 +1722,26 @@ $('.toastrDefaultError').trigger('click');
         }
 
         $("#btnReturnStock").click(function (e) {
-                                e.preventDefault();
-                                var tbllength = $("#tblStockByRequsition tbody").length;
-                                if (tbllength > 0) {
-                $.each(jobOrderSignOutObj.tsStock, function (index, item) {
-                    $.each($("#tblStockByRequsition tbody tr"), function (ix, it) {
-                                            var tds = $(this).children('td');
-                                            var pId = tds.eq(3).html();
-                                            var iuputQty = tds.eq(6).children('input').val();
-                                            if (item.PartsId == pId) {
-                                            item.UsedQty = TryParseInt(iuputQty,0);
-                          }
-                    })
-                })
-            }
-            fnSubmitJobSignOut(jobOrderSignOutObj);
+            
+            e.preventDefault();
+            bootbox.confirm("Are you sure you want to save?", function (result) {
+                if (result === true) {
+                    var tbllength = $("#tblStockByRequsition tbody").length;
+                    if (tbllength > 0) {
+                        $.each(jobOrderSignOutObj.tsStock, function (index, item) {
+                            $.each($("#tblStockByRequsition tbody tr"), function (ix, it) {
+                                var tds = $(this).children('td');
+                                var pId = tds.eq(3).html();
+                                var iuputQty = tds.eq(6).children('input').val();
+                                if (item.PartsId == pId) {
+                                    item.UsedQty = TryParseInt(iuputQty, 0);
+                                }
+                            })
+                        })
+                    }
+                    fnSubmitJobSignOut(jobOrderSignOutObj);
+                }
+            })                  
         });
 
         function fnDisableRowsInputElementByRepairStatus()
@@ -1749,12 +1755,43 @@ $('.toastrDefaultError').trigger('click');
                 }
             }
         }
-
-        //////
+        ///////
+        function ValidationSignOutButton() {
+            $(".error").addClass("hide");
+            var isValid = true;
+            if (ajaxBooleanChecker(JSON.stringify({ jobId: TryParseInt(hdfJobOrderId.val(), 0) }), '/Common2/RequsitionStatusCheck',
+                getToken()) == true) {
+                //alert("False")
+                isValid = false;
+            }
+            return isValid;
+        }
+        /////btnRepairAddButton
+        if (($("#repairName").text() == "CALL CENTER")) {
+            if ($("#qcStatusForHide").text() == "") {
+                $("#btnRepairAddButton").hide();
+            }
+        } else {
+            $("#btnRepairAddButton").show();
+        }
+        
         $(document).ready(function () {
-            if ($("#repairName").text() == "QC" || $("#repairName").text() == "RETURN FOR ENGINEER HEAD") {
+            if ($("#repairName").text() == "QC") {
+                $("#changeIMEI1").hide();
+                $("#changeIMEI2").hide();
+                $("#changeModel").hide();
+                $("#changeColor").hide();
+                $("#changeButton").hide();
+                if (ValidationSignOutButton() == true) {
+                    $("#btnjobsign").show();
+                    // $("#btnHandsetchange").hide();
+                } else {
+                    $("#btnjobsign").hide();
+                }
+            }
+            else if ($("#repairName").text() == "RETURN FOR ENGINEER HEAD") {
                 $("#btnjobsign").show();
-               // $("#btnHandsetchange").hide();
+                // $("#btnHandsetchange").hide();
                 $("#changeIMEI1").hide();
                 $("#changeIMEI2").hide();
                 $("#changeModel").hide();
@@ -1802,7 +1839,8 @@ $('.toastrDefaultError').trigger('click');
                             }, 1000);
                           }
                        else {
-                         $('.toastrDefaultError').trigger('click');
+                           //$('.toastrDefaultError').trigger('click');
+                           bootbox.alert("This IMEI Already Stock-Out/IMEI Not Stock-In");
                             }
                        }).fail(function (error) {
                         console.log(error);

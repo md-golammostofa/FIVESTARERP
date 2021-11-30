@@ -1304,7 +1304,7 @@
                 <TextRuns>
                   <TextRun>
                     <Label>Color</Label>
-                    <Value>=First(Fields!ModelColor.Value, "JobCreateReceipt")</Value>
+                    <Value />
                     <Style>
                       <FontFamily>Times New Roman</FontFamily>
                       <FontSize>9pt</FontSize>

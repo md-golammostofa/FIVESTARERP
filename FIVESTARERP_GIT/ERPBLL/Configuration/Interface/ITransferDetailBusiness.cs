@@ -16,5 +16,6 @@ namespace ERPBLL.Configuration.Interface
         IEnumerable<TransferDetailDTO> GetAllTransferDetailDataByInfoId(long requsitionId, long orgId,long branchId);
         TransferDetail GetOneByDetailId(long reqDetailsId, long orgId, long branchId);
         TransferDetail GetOneByOneDetailId(long reqDetailsId, long orgId, long branchId);
+        IEnumerable<TransferDetailDTO> GetTransferDetailDataForReport(long requsitionId, long orgId, long branchId);
     }
 }

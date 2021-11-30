@@ -36,9 +36,9 @@ namespace ERPBLL.Configuration
             return mobilePartStockInfoRepository.GetAll(info => info.OrganizationId == orgId && info.BranchId == branchId).ToList();
         }
 
-        public MobilePartStockInfo GetAllMobilePartStockInfoByInfoId(long warehouseId, long partsId, double cprice, long orgId, long branchId)
+        public MobilePartStockInfo GetAllMobilePartStockInfoByInfoId(long warehouseId, long partsId, double cprice, long orgId, long branchId,long model)
         {
-            return mobilePartStockInfoRepository.GetOneByOrg(info =>info.SWarehouseId==warehouseId && info.MobilePartId==partsId && info.CostPrice == cprice && info.OrganizationId == orgId && info.BranchId == branchId);
+            return mobilePartStockInfoRepository.GetOneByOrg(info =>info.SWarehouseId==warehouseId && info.MobilePartId==partsId && info.CostPrice == cprice && info.OrganizationId == orgId && info.BranchId == branchId && info.DescriptionId==model);
         }
 
         public MobilePartStockInfo GetMobilePartStockInfoByModelAndMobilePartsAndCostPrice(long modelId, long mobilePartsId,double costprice, long orgId, long branchId)
@@ -85,7 +85,7 @@ namespace ERPBLL.Configuration
 sum(StockInQty-StockOutQty) 'Quantity' from tblMobilePartStockInfo stock
 left join tblMobileParts parts on stock.MobilePartId=parts.MobilePartId
 left join [Configuration].dbo.tblModelSS d on stock.DescriptionId=d.ModelId
-where 1=1{0}
+where 1=1{0} and (StockInQty-StockOutQty) > 0
 group by MobilePartStockInfoId,stock.MobilePartId,parts.MobilePartName,parts.MobilePartCode,d.ModelName
 order by d.ModelName
 ", Utility.ParamChecker(param));
@@ -128,7 +128,7 @@ From tblMobilePartStockInfo stock
 Left Join tblServiceWarehouses w on stock.SWarehouseId = w.SWarehouseId and stock.OrganizationId =w.OrganizationId
 Left Join tblMobileParts parts on stock.MobilePartId = parts.MobilePartId and stock.OrganizationId =parts.OrganizationId
 Left Join tblModelSS de  on stock.DescriptionId = de.ModelId and stock.OrganizationId =de.OrganizationId
-Where 1=1{0} order by ModelName", Utility.ParamChecker(param));
+Where 1=1{0} and (stock.StockInQty-stock.StockOutQty) > 0 order by ModelName", Utility.ParamChecker(param));
 
             return _configurationDb.Db.Database.SqlQuery<MobilePartStockInfoDTO>(query).ToList();
         }

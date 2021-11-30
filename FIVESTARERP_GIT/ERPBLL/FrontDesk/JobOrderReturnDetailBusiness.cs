@@ -216,25 +216,33 @@ Select JobOrderId From tblJobOrderReturnDetails Where TransferCode='{0}' and Org
         public ExecutionStateWithText SaveJobOrderReturnWithReport(long transferId, long[] jobOrders, long userId, long orgId, long branchId, string cName, string cNumber)
         {
             bool IsSuccess = false;
+            Random random = new Random();
+            var ran = random.Next().ToString();
+            ran = ran.Substring(0, 4);
             ExecutionStateWithText executionState = new ExecutionStateWithText();
             List<JobOrderReturnDetail> jobOrderReturn = new List<JobOrderReturnDetail>();
-            string transferCode = ("DO-" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
+            string transferCode = ("DO-" + ran + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
             foreach (var job in jobOrders)
             {
-                var jobOrderInDb = _jobOrderBusiness.GetJobOrdersByIdWithBranch(job, transferId, orgId);
-                JobOrderReturnDetail detail = new JobOrderReturnDetail();
-                detail.TransferCode = transferCode;
-                detail.JobOrderId = jobOrderInDb.JodOrderId;
-                detail.JobOrderCode = jobOrderInDb.JobOrderCode;
-                detail.JobStatus = jobOrderInDb.StateStatus;
-                detail.TransferStatus = JobOrderTransferStatus.Pending;
-                detail.BranchId = branchId;
-                detail.FromBranch = branchId;
-                detail.ToBranch = transferId;
-                detail.OrganizationId = orgId;
-                detail.EUserId = userId;
-                detail.EntryDate = DateTime.Now;
-                _jobOrderReturnDetailRepository.Insert(detail);
+                var jobCheck = GetJobByJobId(job, orgId, branchId);
+                if(jobCheck == null || jobCheck.TransferStatus == "Received")
+                {
+                    var jobOrderInDb = _jobOrderBusiness.GetJobOrdersByIdWithBranch(job, transferId, orgId);
+                    JobOrderReturnDetail detail = new JobOrderReturnDetail();
+                    detail.TransferCode = transferCode;
+                    detail.JobOrderId = jobOrderInDb.JodOrderId;
+                    detail.JobOrderCode = jobOrderInDb.JobOrderCode;
+                    detail.JobStatus = jobOrderInDb.StateStatus;
+                    detail.TransferStatus = JobOrderTransferStatus.Pending;
+                    detail.BranchId = branchId;
+                    detail.FromBranch = branchId;
+                    detail.ToBranch = transferId;
+                    detail.OrganizationId = orgId;
+                    detail.EUserId = userId;
+                    detail.EntryDate = DateTime.Now;
+                    _jobOrderReturnDetailRepository.Insert(detail);
+                }
+                
             }
             _jobOrderReturnDetailRepository.InsertAll(jobOrderReturn);
             if (_jobOrderReturnDetailRepository.Save() == true)
@@ -340,6 +348,11 @@ where JobStatus='Repair-Done' and 1=1 {0}", Utility.ParamChecker(param));
 Left Join [ControlPanel].dbo.tblBranch b on jod.ToBranch=b.BranchId
 Where jod.OrganizationId={0} and jod.BranchId={1}", orgId, branchId)).ToList();
             return data;
+        }
+
+        public JobOrderReturnDetail GetJobByJobId(long jobId, long orgId, long branchId)
+        {
+            return _jobOrderReturnDetailRepository.GetOneByOrg(r => r.JobOrderId == jobId && r.OrganizationId == orgId && r.BranchId == branchId);
         }
     }
 }

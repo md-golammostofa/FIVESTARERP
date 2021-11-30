@@ -296,6 +296,10 @@
     <Compile Include="ConfigurationContextMigrations\202111151210507_Configuration_BrandAdd_Dealer.Designer.cs">
       <DependentUpon>202111151210507_Configuration_BrandAdd_Dealer.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigurationContextMigrations\202111230849069_Configuration_IssueAndRecDateTrandferToBranchReq.cs" />
+    <Compile Include="ConfigurationContextMigrations\202111230849069_Configuration_IssueAndRecDateTrandferToBranchReq.Designer.cs">
+      <DependentUpon>202111230849069_Configuration_IssueAndRecDateTrandferToBranchReq.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigurationContextMigrations\Configuration.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationBaseRepository.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationDbContext.cs" />
@@ -547,6 +551,10 @@
     <Compile Include="FrontDeskContextMigrations\202109050525176_FrontDesk_ProbalyDate.cs" />
     <Compile Include="FrontDeskContextMigrations\202109050525176_FrontDesk_ProbalyDate.Designer.cs">
       <DependentUpon>202109050525176_FrontDesk_ProbalyDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202111300743527_FrontDesk_Requsition_IssueQty.cs" />
+    <Compile Include="FrontDeskContextMigrations\202111300743527_FrontDesk_Requsition_IssueQty.Designer.cs">
+      <DependentUpon>202111300743527_FrontDesk_Requsition_IssueQty.cs</DependentUpon>
     </Compile>
     <Compile Include="FrontDeskContextMigrations\Configuration.cs" />
     <Compile Include="FrontDeskDAL\FrontDeskDbContext.cs" />
@@ -1194,6 +1202,9 @@
     <EmbeddedResource Include="ConfigurationContextMigrations\202111151210507_Configuration_BrandAdd_Dealer.resx">
       <DependentUpon>202111151210507_Configuration_BrandAdd_Dealer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202111230849069_Configuration_IssueAndRecDateTrandferToBranchReq.resx">
+      <DependentUpon>202111230849069_Configuration_IssueAndRecDateTrandferToBranchReq.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ControlPanelContextMigrations\202006151000333_ControlPanel_AllEntities_16-May-2020.resx">
       <DependentUpon>202006151000333_ControlPanel_AllEntities_16-May-2020.cs</DependentUpon>
     </EmbeddedResource>
@@ -1373,6 +1384,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrontDeskContextMigrations\202109050525176_FrontDesk_ProbalyDate.resx">
       <DependentUpon>202109050525176_FrontDesk_ProbalyDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202111300743527_FrontDesk_Requsition_IssueQty.resx">
+      <DependentUpon>202111300743527_FrontDesk_Requsition_IssueQty.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InventoryContextMigrations\202008121414323_Inventory_AllEntities_12-Aug-2020.resx">
       <DependentUpon>202008121414323_Inventory_AllEntities_12-Aug-2020.cs</DependentUpon>

@@ -35,29 +35,40 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="info-box">
                                 <span class="info-box-icon bg-success">
                                     <i class="fas fa-flag"></i>
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text"><b><i>Job Order</i></b></span>
-                                    <span class="info-box-number"><a href="/FrontDesk/GetJobOrders" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.JobOrderApproved).TotalCount)</a></span>
+                                    <span class="info-box-number"><a href="/FrontDesk/GetJobOrders?job=Job-Initiated" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.JobOrderApproved).TotalCount)</a></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="info-box">
                                 <span class="info-box-icon bg-indigo">
                                     <i class="fas fa-user-cog"></i>
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text"><b><i>@(((DashboardRequisitionSummeryViewModel)ViewBag.JobOrdeAssignToTS).StateStatus)</i></b></span>
-                                    <span class="info-box-number"><a href="/FrontDesk/GetJobOrders" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.JobOrdeAssignToTS).TotalCount)</a></span>
+                                    <span class="info-box-number"><a href="/FrontDesk/GetJobOrders?job=Ts-Assigned" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.JobOrdeAssignToTS).TotalCount)</a></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-fuchsia">
+                                    <i class="fas fa-hammer"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text"><b><i>@(((DashboardRequisitionSummeryViewModel)ViewBag.JobOrdeAssignToQC).StateStatus)</i></b></span>
+                                    <span class="info-box-number"><a href="/FrontDesk/GetJobOrders?job=QC-Assigned" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.JobOrdeAssignToQC).TotalCount)</a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
                             <div class="info-box">
                                 <span class="info-box-icon bg-warning">
                                     <i class="fas fa-shopping-cart"></i>
@@ -65,19 +76,30 @@
                                 <div class="info-box-content">
                                     <span class="info-box-text"><b><i>Repaired</i></b></span>
                                     <span class="info-box-number">
-                                        <a href="/FrontDesk/GetJobOrders" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.RepairDone).TotalCount)</a>
+                                        <a href="/FrontDesk/GetJobOrders?job=Repair-Done" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.RepairDone).TotalCount)</a>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="info-box">
                                 <span class="info-box-icon bg-danger">
                                     <i class="fas fa-truck"></i>
                                 </span>
                                 <div class="info-box-content">
                                     <span class="info-box-text"><b><i>Delivered</i></b></span>
-                                    <span class="info-box-number"><a href="/FrontDesk/GetJobOrders" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.DeliveryDone).TotalCount)</a></span>
+                                    <span class="info-box-number"><a href="/FrontDesk/GetJobOrders?job=Delivery-Done" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.DeliveryDone).TotalCount)</a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-gradient-purple">
+                                    <i class="fas fa-sync"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text"><b><i>PhoneChange</i></b></span>
+                                    <span class="info-box-number"><a href="/FrontDesk/GetJobOrders?job=HandSetChange" class="link-black">@(((DashboardRequisitionSummeryViewModel)ViewBag.JobOrdeHandsetChange).TotalCount)</a></span>
                                 </div>
                             </div>
                         </div>
@@ -1928,7 +1950,7 @@
         //chart
 
         $(document).ready(function () {
-            if ('@User.RoleName' == "FrontDesk" || '@User.RoleName' == "User") {
+            if ('@User.RoleName' == "Front Desk" || '@User.RoleName' == "Administrator") {
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/User/GetDailySellsChart', null, getToken())).then(function (res, status) {
                     if (status === 'success') {
                         console.log("Daily Sell Data");

@@ -311,6 +311,42 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalJobTypeEdit" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary" style="height:60px">
+                <h4 id="modalHeading" class="modal-title"><span id="spanModalHead">Update JobType Status</span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCustomer">
+                    <input type="hidden" name="Id" id="hdfJobOrderId" />
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ddlJobTypeForEdit" class="control-label font-weight-bold">Job Type<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                            @Html.DropDownList("ddlJobTypeForEdit", (IEnumerable<SelectListItem>)ViewBag.ddlJobTypeForEdit, new { @class = "form-control form-control-sm ctrl-changed " })
+                            <span class="error hide required-qcStatus font-weight-bold">Input Status !</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer btn-light">
+                <div class="col-md-6">
+                    <div id="msg1" class="alert alert-success hide float-left">
+                        Data has been saved Successful!
+                    </div>
+                    <div id="msg2" class="alert alert-danger hide float-left">
+                        Data has been failed to save!
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
+                <button type="submit" class="btn btn-sm btn-success float-right" id="btnSubmitJobType"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
     <script type="text/javascript">
         //JobOrder
@@ -340,6 +376,7 @@
         var ddlJobType = $("#ddlJobType");
         var txtRepairStatus = $("#txtRepairStatus");
         var txtCourierNumber = $("#txtCourierNumber");
+        var ddlJobTypeForEdit = $("#ddlJobTypeForEdit");
 
         $(document).ready(function () {
             dptFromDate.prop('readonly', true);
@@ -848,6 +885,45 @@
                 }
             }
         })
+
+        //JobType Status
+        function OpenJobTypeModal() {
+            $("#modalJobTypeEdit").modal("show");
+            $(".error").addClass("hide");
+        }
+        $(document).on('click', '.data-item-edit', function (e) {
+            e.preventDefault();
+            var jobId = $(this).attr("data-item-edit");
+            hdfJobOrderId.val(jobId);
+            OpenJobTypeModal();
+        })
+        $("#btnSubmitJobType").click(function (e) {
+            e.preventDefault();
+            $(".error").addClass("hide");
+            bootbox.confirm("Are you sure you want to save?", function (result) {
+                var data = JSON.stringify({
+                    jobId: TryParseInt(hdfJobOrderId.val(), 0), jobType: ddlJobTypeForEdit.val()
+                });
+                    console.log(data);
+                    //return console.log(data)
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/FrontDesk/UpdateJobTypeStatus', data, getToken())).then(function (res, status) {
+                        console.log(res);
+                        console.log(status);
+                        // enable("#btnSubmit");
+                        if (res == true) {
+                            $('.toastrDefaultSuccess').trigger('click');
+                            setTimeout(function () {
+                                redirectPage('@Url.Action("GetJobOrderListForCallCenter")');
+                            }, 1000);
+                        }
+                        else {
+                            $('.toastrDefaultError').trigger('click');
+                        }
+                    }).fail(function (error) {
+                        consoleLog(error)
+                    })
+            })
+        });
 
 
         function redirectPage(page) {

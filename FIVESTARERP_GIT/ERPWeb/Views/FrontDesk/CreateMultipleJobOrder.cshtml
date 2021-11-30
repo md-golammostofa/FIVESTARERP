@@ -178,7 +178,7 @@
                                         <th style="vertical-align:middle">IMEI1</th>
                                         <th style="vertical-align:middle">IMEI2</th>
                                         <th style="vertical-align:middle" class="hide"></th>
-                                        <th style="vertical-align:middle">Color</th>
+                                        <th class="hide" style="vertical-align:middle">Color</th>
                                         <th style="vertical-align:middle">Job Type</th>
                                         <th style="vertical-align:middle" class="hide"></th>
                                         <th style="vertical-align:middle">Symptom</th>
@@ -480,7 +480,7 @@
                 var td5 = "<td class='text-center'>" + txtIMEI.val() + "</td>";
                 var td6 = "<td class='text-center'>" + txtIMEI2.val() + "</td>";
                 var td7 = "<td class='hide'>" + ddlModelColor.val() + "</td>";
-                var td8 = "<td>" + $("#ddlModelColor option:selected").text() + "</td>";
+                var td8 = "<td class='hide'>" + $("#ddlModelColor option:selected").text() + "</td>";
                 var td9 = "<td class='text-center'>" + ddlJobOrderType.val() + "</td>";
                 var td10 = "<td class='hide'>" + aryProblems + "</td>";
                 var td11 = "<td>" + $("#ddlProblems option:selected").text() + "</td>";
@@ -508,8 +508,8 @@
             txtIMEI2.val('');
             ddlModelColor.val('');
             ddlModelColor.trigger("change");
-            ddlJobOrderType.val('');
-            ddlJobOrderType.trigger("change");
+            //ddlJobOrderType.val('');
+            //ddlJobOrderType.trigger("change");
             ddlAccessories.val([]);
             ddlAccessories.trigger("change");
             ddlProblems.val([]);

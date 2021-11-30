@@ -116,6 +116,8 @@ namespace ERPWeb.Controllers
             if (string.IsNullOrEmpty(flag))
             {
                 ViewBag.ddlBrandName = _brandSSBusiness.GetAllBrandByOrgId(User.OrgId).Select(services => new SelectListItem { Text = services.BrandName, Value = services.BrandId.ToString() }).ToList();
+
+                ViewBag.ddlBrandName2 = _brandSSBusiness.GetAllBrandByOrgId(User.OrgId).Select(services => new SelectListItem { Text = services.BrandName, Value = services.BrandId.ToString() }).ToList();
                 //ViewBag.UserPrivilege = UserPrivilege("Configuration", "AccessoriesList");
                 //return View();
             }
@@ -1310,13 +1312,13 @@ namespace ERPWeb.Controllers
             return View();
         }
 
-        public ActionResult SaveStockTransferModelToModel(StockTransferInfoModelToModelViewModel model)
+        public ActionResult SaveStockTransferModelToModel(List<StockTransferDetailModelToModelViewModel> models)
         {
             bool IsSuccess = false;
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && models.Count() > 0)
             {
-                StockTransferInfoModelToModelDTO dto = new StockTransferInfoModelToModelDTO();
-                AutoMapper.Mapper.Map(model, dto);
+                List<StockTransferDetailModelToModelDTO> dto = new List<StockTransferDetailModelToModelDTO>();
+                AutoMapper.Mapper.Map(models, dto);
                 IsSuccess = _stockTransferInfoModelToModelBusiness.SaveStockTransferModelToModel(dto, User.UserId, User.BranchId, User.OrgId);
             }
             return Json(IsSuccess);
@@ -1342,6 +1344,23 @@ namespace ERPWeb.Controllers
             List<StockTransferDetailModelToModelViewModel> viewModel = new List<StockTransferDetailModelToModelViewModel>();
             AutoMapper.Mapper.Map(infoDTO, viewModel);
             return PartialView("_StockTransferMMDetails", viewModel);
+        }
+        public ActionResult GetModelToModelTransferDetailsList(string flag,long? model,long? parts,string fromDate,string toDate)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                ViewBag.ddlMobileParts = _mobilePartBusiness.GetAllMobilePartAndCode(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.MobilePartName, Value = mobile.MobilePartId.ToString() }).ToList();
+
+                ViewBag.ddlModels = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
+                return View();
+            }
+            else
+            {
+                var dto = _stockTransferDetailModelToModelBusiness.GetAllTransferDetail(model, parts, User.OrgId, User.BranchId, fromDate, toDate);
+                List<StockTransferDetailModelToModelViewModel> viewModels = new List<StockTransferDetailModelToModelViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetModelToModelTransferDetailsList", viewModels);
+            }
         }
         #endregion
 
@@ -1394,7 +1413,8 @@ namespace ERPWeb.Controllers
                     ToDescriptionId = trans.ToDescriptionId,
                     FromModelName = _modelSSBusiness.GetModelById(trans.DescriptionId.Value, User.OrgId).ModelName,
                     ToModelName = _modelSSBusiness.GetModelById(trans.ToDescriptionId.Value, User.OrgId).ModelName,
-                }).AsEnumerable();
+                    EntryDate = trans.EntryDate
+                }).AsEnumerable().OrderByDescending(d => d.EntryDate);
 
                 stockTransferInfoDTO = stockTransferInfoDTO.Where(s => (sWerehouseId == null || sWerehouseId == 0 || s.WarehouseId == sWerehouseId)).ToList();
 
@@ -1503,33 +1523,54 @@ namespace ERPWeb.Controllers
             ViewBag.ddlModels = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
             return View();
         }
-        public ActionResult RecevieStockFromTransferInfoPartialList(long? sWerehouseId,long? branch,long? model)
+        public ActionResult RecevieStockFromTransferInfoPartialList(long? sWerehouseId,long? branch,long? model,string status,string fromDate,string toDate)
         {
-            var data = _transferInfoBusiness.GetAllStockTransferByOrgId(User.OrgId).Where(s => s.BranchTo == User.BranchId).ToList();
 
-            IEnumerable<TransferInfoDTO> transferInfoDTO = data
-            .Select(trans => new TransferInfoDTO
-            {
-                TransferInfoId = trans.TransferInfoId,
-                TransferCode = trans.TransferCode,
-                BranchTo = trans.BranchTo.Value,
-                BranchToName = (_branchBusinesss.GetBranchOneByOrgId(trans.BranchTo.Value, User.OrgId).BranchName),
-                BranchId = trans.BranchId,
-                BranchName = (_branchBusinesss.GetBranchOneByOrgId(trans.BranchId.Value, User.OrgId).BranchName),
-                StateStatus = trans.StateStatus,
-                DescriptionId=trans.DescriptionId,
-                ModelName=_modelSSBusiness.GetModelById(trans.DescriptionId.Value,User.OrgId).ModelName,
-                //SWarehouseId = trans.WarehouseId,
-                //SWarehouseName = trans.StateStatus == RequisitionStatus.Accepted ? (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(trans.WarehouseIdTo.Value, User.OrgId, trans.BranchTo.Value).ServicesWarehouseName) : "",
-                Remarks = trans.Remarks,
-                OrganizationId = trans.OrganizationId,
-                ItemCount = _transferDetailBusiness.GetAllTransferDetailByInfoId(trans.TransferInfoId, User.OrgId, User.BranchId).Count()
-            }).AsEnumerable();
+            //var data = _transferInfoBusiness.GetAllStockTransferByOrgId(User.OrgId).Where(s => s.BranchTo == User.BranchId).ToList();
 
-            transferInfoDTO = transferInfoDTO.Where(s => (sWerehouseId == null || sWerehouseId == 0 || s.SWarehouseId == sWerehouseId) && (branch == null || branch == 0 || s.BranchId == branch) && (model == null || model == 0 || s.DescriptionId == model)).ToList();
+            //IEnumerable<TransferInfoDTO> transferInfoDTO = data
+            //.Select(trans => new TransferInfoDTO
+            //{
+            //    TransferInfoId = trans.TransferInfoId,
+            //    TransferCode = trans.TransferCode,
+            //    BranchTo = trans.BranchTo.Value,
+            //    BranchToName = (_branchBusinesss.GetBranchOneByOrgId(trans.BranchTo.Value, User.OrgId).BranchName),
+            //    BranchId = trans.BranchId,
+            //    BranchName = (_branchBusinesss.GetBranchOneByOrgId(trans.BranchId.Value, User.OrgId).BranchName),
+            //    StateStatus = trans.StateStatus,
+            //    DescriptionId = trans.DescriptionId,
+            //    ModelName = _modelSSBusiness.GetModelById(trans.DescriptionId.Value, User.OrgId).ModelName,
+            //    //SWarehouseId = trans.WarehouseId,
+            //    //SWarehouseName = trans.StateStatus == RequisitionStatus.Accepted ? (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(trans.WarehouseIdTo.Value, User.OrgId, trans.BranchTo.Value).ServicesWarehouseName) : "",
+            //    Remarks = trans.Remarks,
+            //    OrganizationId = trans.OrganizationId,
+            //    ItemCount = _transferDetailBusiness.GetAllTransferDetailByInfoId(trans.TransferInfoId, User.OrgId, User.BranchId).Count(),
+            //    EntryDate = trans.EntryDate,
+            //    UpdateDate=trans.UpdateDate,
+            //    IssueDate=trans.IssueDate,
+            //    ReceivedDate=trans.ReceivedDate,
 
+            //}).AsEnumerable().OrderByDescending(d => d.EntryDate);
+
+            //transferInfoDTO = transferInfoDTO.Where(s => (sWerehouseId == null || sWerehouseId == 0 || s.SWarehouseId == sWerehouseId) && (branch == null || branch == 0 || s.BranchId == branch) && (model == null || model == 0 || s.DescriptionId == model) && (status == null || status.Trim() == "" || s.StateStatus == status.Trim()) &&
+            //(
+            //                 (fromDate == null && toDate == null)
+            //                 ||
+            //                  (fromDate == "" && toDate == "")
+            //                 ||
+            //                 (fromDate.Trim() != "" && toDate.Trim() != "" &&
+
+            //                     s.EntryDate.Value.Date >= Convert.ToDateTime(fromDate).Date &&
+            //                     s.EntryDate.Value.Date <= Convert.ToDateTime(toDate).Date)
+            //                 ||
+            //                 (fromDate.Trim() != "" && s.EntryDate.Value.Date == Convert.ToDateTime(fromDate).Date)
+            //                 ||
+            //                 (toDate.Trim() != "" && s.EntryDate.Value.Date == Convert.ToDateTime(toDate).Date)
+            //             )
+            //).ToList();
+            var dto = _transferInfoBusiness.GetAllReceiveList(branch, status, User.OrgId, User.BranchId, fromDate, toDate);
             List<TransferInfoViewModel> transferInfoViewModels = new List<TransferInfoViewModel>();
-            AutoMapper.Mapper.Map(transferInfoDTO, transferInfoViewModels);
+            AutoMapper.Mapper.Map(dto, transferInfoViewModels);
 
             return PartialView(transferInfoViewModels);
         }
@@ -1899,6 +1940,23 @@ namespace ERPWeb.Controllers
             else
             {
                 var dto = _mobilePartStockDetailBusiness.TotalStockDetailsReport(User.OrgId, User.BranchId, modelId, partsId);
+                List<TotalStockDetailsViewModel> viewModels = new List<TotalStockDetailsViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_TotalStockDetailsReport", viewModels);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult AllBranchTotalStockList(string flag, long? branch)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                ViewBag.ddlBranchName = _branchBusinesss.GetBranchByOrgId(User.OrgId).Where(b => b.BranchId != User.BranchId).Select(b => new SelectListItem { Text = b.BranchName, Value = b.BranchId.ToString() }).ToList();
+                return View();
+            }
+            else
+            {
+                var dto = _mobilePartStockDetailBusiness.AllBranchTotalStock(branch,User.OrgId);
                 List<TotalStockDetailsViewModel> viewModels = new List<TotalStockDetailsViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_TotalStockDetailsReport", viewModels);

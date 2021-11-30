@@ -43,6 +43,10 @@
             <td>@info.EntryDate.Value.ToString("dd-MMM-yyyy hh:mm tt")</td>
             <td class="text-center action">
                 <a href="#" class="btn btn-sm btn-outline-secondary data-item-details " title="View Details" data-item-details="@info.RequsitionInfoForJobOrderId"><i class="fas fa-eye"></i></a>
+                @if (info.StateStatus == "Current")
+                {
+                    <a href="@Url.Action("IssueTsRequsition", "FrontDesk", new { @reqId = info.RequsitionInfoForJobOrderId })" target="_blank" class="btn text-bold btn-sm btn-outline-info" title="Issue Eng. Requsition"><i class="fas fa-pencil-alt"></i></a>
+                }
             </td>
         </tr>
         }

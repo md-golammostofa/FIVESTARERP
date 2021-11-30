@@ -132,12 +132,17 @@ order by EntryDate desc
         public bool SaveRequisitionInfoForJobOrder(RequsitionInfoForJobOrderDTO requsitionInfoDTO, List<RequsitionDetailForJobOrderDTO> details, long userId, long orgId, long branchId)
         {
             bool IsSuccess = false;
+            Random random = new Random();
+            var ran = random.Next().ToString();
+            ran = ran.Substring(0, 4);
             var jobOrder = _jobOrderBusiness.GetJobOrderById(requsitionInfoDTO.JobOrderId.Value, orgId);
             var warehouse = _servicesWarehouseBusiness.GetWarehouseOneByOrgId(orgId,branchId);
-            RequsitionInfoForJobOrder requsitionInfo = new RequsitionInfoForJobOrder();
+            
+
             if (requsitionInfoDTO.RequsitionInfoForJobOrderId == 0)
             {
-                requsitionInfo.RequsitionCode = ("SR-" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
+                RequsitionInfoForJobOrder requsitionInfo = new RequsitionInfoForJobOrder();
+                requsitionInfo.RequsitionCode = ("SR-" + ran + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
                 requsitionInfo.SWarehouseId = warehouse.SWarehouseId;
                 requsitionInfo.JobOrderId = requsitionInfoDTO.JobOrderId;
                 requsitionInfo.StateStatus = RequisitionStatus.Current;
@@ -191,13 +196,32 @@ order by EntryDate desc
         public bool UpdatePendingCurrentRequisitionStatus(long jobOrderId, string tsRepairStatus, long userId, long orgId, long branchId)
         {
             bool IsSuccess = false;
+            string status = string.Empty;
             var reqInfos = requsitionInfoForJobOrderRepository.GetAll(req => req.JobOrderId == jobOrderId && req.OrganizationId == orgId && req.BranchId == branchId);
-            var Status = ((tsRepairStatus == "RETURN FOR ENGINEER HEAD") || (tsRepairStatus == "MODULE SWAP")) ? RequisitionStatus.Void : RequisitionStatus.Approved;
+            //var Status = ((tsRepairStatus == "RETURN FOR ENGINEER HEAD") || (tsRepairStatus == "MODULE SWAP")) ? RequisitionStatus.Void : RequisitionStatus.Approved;
             if(reqInfos.Count() > 0)
             {
                 foreach (var item in reqInfos)
                 {
-                    item.StateStatus = Status;
+                    if(tsRepairStatus == "RETURN FOR ENGINEER HEAD")
+                    {
+                        status = RequisitionStatus.Void;
+                    }
+                    else if(tsRepairStatus == "MODULE SWAP")
+                    {
+                        status = RequisitionStatus.Void;
+                    }else if (tsRepairStatus == "QC")
+                    {
+                       if(item.StateStatus=="Current" || item.StateStatus == "Pending")
+                        {
+                            status = RequisitionStatus.Void;
+                        }
+                        else
+                        {
+                            status = item.StateStatus;
+                        }
+                    }
+                    item.StateStatus = status;
                     item.UpUserId = userId;
                     item.UpdateDate = DateTime.Now;
                     requsitionInfoForJobOrderRepository.Update(item);
@@ -279,6 +303,37 @@ JobOrderId,q.JobOrderCode,q.Remarks,q.BranchId,q.OrganizationId,q.EUserId,j.IsTr
 q.EntryDate,UserBranchId From tblRequsitionInfoForJobOrders q
 left join tblJobOrders j on q.JobOrderId=j.JodOrderId
 where q.JobOrderId={0}", jobOrderId)).ToList();
+        }
+
+        public bool RequsitionStatusCheck(long jobId,long orgId,long branchId)
+        {
+            bool IsSuccess = false;
+            if (jobId > 0)
+            {
+                var requsitionStatus = GetAllRequsitionInfoForJobOrder(jobId,orgId, branchId);
+                if (requsitionStatus.Count() > 0)
+                {
+                    foreach(var item in requsitionStatus)
+                    {
+                        if(item.StateStatus=="Pending" || item.StateStatus == "Current")
+                        {
+                            IsSuccess = true;
+                        }
+                    }
+                }
+            }
+            return IsSuccess;
+        }
+
+        public RequsitionInfoForJobOrderDTO GetAllRequsitionInfoData(long reqInfoId, long orgId,long branchId)
+        {
+            return this._frontDeskUnitOfWork.Db.Database.SqlQuery<RequsitionInfoForJobOrderDTO>(
+                string.Format(@"Select ri.RequsitionInfoForJobOrderId,ri.RequsitionCode,ri.StateStatus,jo.JobOrderCode,u.UserName,m.ModelName,ri.EntryDate From tblRequsitionInfoForJobOrders ri
+Left Join [FrontDesk].dbo.tblJobOrders jo on ri.JobOrderId=jo.JodOrderId
+Left Join [ControlPanel].dbo.tblApplicationUsers u on ri.EUserId=UserId
+Left Join [Configuration].dbo.tblModelSS m on jo.DescriptionId=m.ModelId and ri.JobOrderId=jo.JodOrderId
+Where ri.RequsitionInfoForJobOrderId={0} and ri.OrganizationId={1} and ri.BranchId={2}
+Order By ri.EntryDate desc", reqInfoId,orgId,branchId)).FirstOrDefault();
         }
     }
 }

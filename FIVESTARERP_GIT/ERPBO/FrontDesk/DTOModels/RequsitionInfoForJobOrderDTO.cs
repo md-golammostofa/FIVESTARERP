@@ -34,5 +34,6 @@ namespace ERPBO.FrontDesk.DTOModels
         public long? UserBranchId { get; set; }
         public string BranchName { get; set; }
         public string JobCode { get; set; }
+        public string UserName { get; set; }
     }
 }

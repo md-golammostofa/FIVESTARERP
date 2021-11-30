@@ -75,6 +75,7 @@
                                     <div class="card-header">
                                         <div class="row">
                                             <div class="col-md-3">
+                                                <a href="/Configuration/GetModelToModelTransferDetailsList" style="background-color:darkblue" class="btn btn-outline-primary btn-sm float-lg-left"><i class="fa fa-eye"></i> Go To Details</a>
                                             </div>
                                             <div class="col-md-6">
                                                 <h5 class="text-center text-bold">
@@ -199,7 +200,7 @@
                     var detId = tds.eq('2').html();
                     var model = tds.eq('3').html();
                     var partsId = tds.eq('4').html();
-                    var issuQty = tds.eq('8').html();
+                    var issuQty = tds.eq('9').html();
 
                     details.push({
                         TransferInfoId: TryParseInt(infoId, 0),

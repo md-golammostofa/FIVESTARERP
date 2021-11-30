@@ -31,6 +31,10 @@ namespace ERPBO.Configuration.ViewModels
         [StringLength(100)]
         public string BranchName { get; set; }
         //
+        public string RequestBranch { get; set; }
+        public string IssueBranch { get; set; }
+        public string RequestBy { get; set; }
+        //
         public long? ABWarehouse { get; set; }
         public string BranchToName { get; set; }
         public int? ItemCount { get; set; }
@@ -38,5 +42,7 @@ namespace ERPBO.Configuration.ViewModels
         public long? DescriptionId { get; set; }
         public string ModelName { get; set; }
         public ICollection<TransferDetail> TransferDetails { get; set; }
+        public Nullable<DateTime> IssueDate { get; set; }
+        public Nullable<DateTime> ReceivedDate { get; set; }
     }
 }

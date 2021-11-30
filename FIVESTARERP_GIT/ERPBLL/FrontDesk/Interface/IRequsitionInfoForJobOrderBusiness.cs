@@ -22,6 +22,8 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<RequsitionInfoForJobOrderDTO> GetRequsitionInfoData(string reqCode, long? warehouseId, long? tsId, string status, string fromDate, string toDate, long orgId, long branchId,string jobCode);
         IEnumerable<RequsitionInfoForJobOrderDTO> GetRequsitionInfoOtherBranchData(string reqCode, long? warehouseId, long? tsId, string status, string fromDate, string toDate, long orgId, long branchId);
         IEnumerable<RequsitionInfoForJobOrderDTO> GetRequsitionInfoTSData(long jobOrderId);
+        bool RequsitionStatusCheck(long jobId, long orgId, long branchId);
+        RequsitionInfoForJobOrderDTO GetAllRequsitionInfoData(long reqInfoId, long orgId,long branchId);
 
     }
 }

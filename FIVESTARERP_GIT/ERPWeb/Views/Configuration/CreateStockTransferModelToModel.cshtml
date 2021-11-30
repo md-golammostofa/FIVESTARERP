@@ -65,7 +65,7 @@
                     <div class="col-md-2">
                         <div class="form-group col-md-12">
                             <label for="txtSellPrice" class="control-label font-weight-bold">Sell Price<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
-                            <input type="text" name="txtSellPrice" value="" id="txtSellPrice" class="form-control form-control-sm" />
+                            <input type="text" name="txtSellPrice" value="" id="txtSellPrice" class="form-control form-control-sm" disabled/>
                             <span class="error hide require-sellPrice font-weight-bold">SellPrice is required !</span>
                         </div>
                     </div>
@@ -111,6 +111,10 @@
                                 </tr>
                                 <tr class="btn-dark text-center">
                                     <th>#SL</th>
+                                    <th class="hide"></th>
+                                    <th>Model</th>
+                                    <th class="hide"></th>
+                                    <th>Ex-Change M</th>
                                     <th class="hide"></th>
                                     <th>MobilePart Name</th>
                                     <th>CostPrice</th>
@@ -199,8 +203,8 @@
         //Stock text
         ddlCostPrice.change(function () {
             $("#stockQty").text('');
-            if (ddlServicesWarehouse.val() != "", ddlMobileParts.val() != "", ddlCostPrice.val() != "") {
-                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common2/GetPartsStockByPrice', JSON.stringify({ warehouseId: ddlServicesWarehouse.val(), partsId: ddlMobileParts.val(), cprice: TryParseFloat(ddlCostPrice.val(), 0) }), getToken())).then(function (res, status) {
+            if (ddlServicesWarehouse.val() != "", ddlMobileParts.val() != "", ddlCostPrice.val() != "", ddlModels.val() != "") {
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common2/GetPartsStockByPrice', JSON.stringify({ warehouseId: ddlServicesWarehouse.val(), partsId: ddlMobileParts.val(), cprice: TryParseFloat(ddlCostPrice.val(), 0), model: TryParseInt(ddlModels.val()) }), getToken())).then(function (res, status) {
                     console.log(res);
                     console.log(status);
                     if (status == "success") {
@@ -216,16 +220,16 @@
         function validateInput() {
             $('.error').addClass('hide');
             var isValid = true;
-            var count = $("#tblStockTransferM-M tbody tr").length;
-            if (count > 0) {
-                $.each($("#tblStockTransferM-M tbody tr"), function (index, item) {
-                    var partsId = $(this).children('td').eq(1).html();
-                    if (partsId == ddlMobileParts.val()) {
-                        isValid = false;
-                        $(".duplicate-parts").removeClass('hide');
-                    }
-                })
-            }
+            //var count = $("#tblStockTransferM-M tbody tr").length;
+            //if (count > 0) {
+            //    $.each($("#tblStockTransferM-M tbody tr"), function (index, item) {
+            //        var partsId = $(this).children('td').eq(1).html();
+            //        if (partsId == ddlMobileParts.val()) {
+            //            isValid = false;
+            //            $(".duplicate-parts").removeClass('hide');
+            //        }
+            //    })
+            //}
             if (TryParseInt(ddlServicesWarehouse.val(), 0) <= 0) {
                 isValid = false;
                 $(".require-warehouse").removeClass("hide");
@@ -266,20 +270,24 @@
             e.preventDefault();
             if (validateInput() == true) {
                 disable("#ddlServicesWarehouse");
-                disable("#ddlModelsTo");
-                disable("#ddlModels");
+                //disable("#ddlModelsTo");
+                //disable("#ddlModels");
                 var sl = $("#tblStockTransferM-M tbody tr").length;
                 var td1 = "<td class='text-center text-bold'>" + (sl + 1) + "</td>"
-                var td2 = "<td class='hide'>" + ddlMobileParts.val() + "</td>";
-                var td3 = "<td>" + $("#ddlMobileParts option:selected").text() + "</td>";
-                var td4 = "<td class='text-center'>" + ddlCostPrice.val() + "</td>";
+                var td2 = "<td class='hide'>" + ddlModels.val() + "</td>";
+                var td3 = "<td>" + $("#ddlModels option:selected").text() + "</td>";
+                var td4 = "<td class='hide'>" + ddlModelsTo.val() + "</td>";
+                var td5 = "<td>" + $("#ddlModelsTo option:selected").text() + "</td>";
+                var td6 = "<td class='hide'>" + ddlMobileParts.val() + "</td>";
+                var td7 = "<td>" + $("#ddlMobileParts option:selected").text() + "</td>";
+                var td8 = "<td class='text-center'>" + ddlCostPrice.val() + "</td>";
                 //var td5 = "<td class='text-center'>" + $("#ddlCostPrice option:selected").text() + "</td>";
-                var td6 = "<td class='text-center'>" + txtSellPrice.val() + "</td>";
-                var td7 = "<td class='text-center'>" + txtStockInQty.val() + "</td>";
-                var td8 = "<td>" + txtRemarks.val() + "</td>";
-                var td9 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i> Delete</a></td>";
+                var td9 = "<td class='text-center'>" + txtSellPrice.val() + "</td>";
+                var td10 = "<td class='text-center'>" + txtStockInQty.val() + "</td>";
+                var td11 = "<td>" + txtRemarks.val() + "</td>";
+                var td12 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i> Delete</a></td>";
 
-                var tr = "<tr>" + td1 + td2 + td3 + td4 + td6 + td7 + td8 + td9 + "</tr>";
+                var tr = "<tr>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8 + td9 + td10 + td11 + td12 + "</tr>";
                 if ($("#tblStockTransferM-M tbody tr").length == 0) {
                     $("#tblStockTransferM-M tbody").append(tr);
                 }
@@ -291,7 +299,9 @@
         })
         function clearCtrl() {
             ddlMobileParts.val('');
+            ddlMobileParts.trigger('change')
             ddlCostPrice.val('');
+            ddlCostPrice.trigger('change')
             txtSellPrice.val('');
             txtStockInQty.val('');
             txtRemarks.val('');
@@ -316,22 +326,21 @@
                 bootbox.confirm("Are you sure you want to save?", function (result) {
                     if (result) {
                         disable("#btnSubmit");
-                        var info = {
-                            WarehouseId: TryParseInt(ddlServicesWarehouse.val(),0),
-                            ToDescriptionId: TryParseInt(ddlModelsTo.val(), 0),
-                            DescriptionId: TryParseInt(ddlModels.val(), 0)
-                        };
 
                         var details = []; details.length = 0;
                         $.each($("#tblStockTransferM-M tbody tr"), function (index, item) {
                             var tds = $(this).children('td');
-                            var partsId = tds.eq('1').html();
-                            var cprice = tds.eq('3').html();
-                            var sprice = tds.eq('4').html();
-                            var qty = tds.eq('5').html();
-                            var rmk = tds.eq('6').html();
+                            var fromM = tds.eq('1').html();
+                            var toM = tds.eq('3').html();
+                            var partsId = tds.eq('5').html();
+                            var cprice = tds.eq('7').html();
+                            var sprice = tds.eq('8').html();
+                            var qty = tds.eq('9').html();
+                            var rmk = tds.eq('10').html();
 
                             details.push({
+                                DescriptionId: TryParseInt(fromM, 0),
+                                ToDescriptionId: TryParseInt(toM,0),
                                 PartsId: TryParseInt(partsId, 0),
                                 CostPrice: TryParseFloat(cprice, 0),
                                 SellPrice: TryParseFloat(sprice, 0),
@@ -340,9 +349,8 @@
                             })
                         });
 
-                        info.StockTransferDetailModelToModels = details;
-                        var data = JSON.stringify({ model: info });
-
+                        var data = JSON.stringify({ models: details });
+                        //return console.log(data);
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Configuration/SaveStockTransferModelToModel', data, getToken())).then(function (res, status) {
                             enable("#btnSubmit");
                             if (res == true) {

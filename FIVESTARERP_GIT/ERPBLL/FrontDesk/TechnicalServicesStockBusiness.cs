@@ -275,7 +275,7 @@ where ts.UsedQty>0 and 1=1{0}  order by rq.EntryDate desc
                     stockServices.Remarks = "NotUsed";
                     stockServices.ModelId = modelId;
                     stockServices.EntryDate = DateTime.Now;
-                    technicalServicesStockRepository.Insert(stockServices);
+                    servicesStocks.Add(stockServices);
                 }
             }
             technicalServicesStockRepository.InsertAll(servicesStocks);

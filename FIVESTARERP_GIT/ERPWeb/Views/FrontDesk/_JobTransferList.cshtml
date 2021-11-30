@@ -23,7 +23,9 @@
                 //string entryDate = part.EntryDate != null ? part.EntryDate.Value.ToString("dd-MMM-yyy hh:mm tt") : "";
                 <tr>
                     <td class="text-center">@sl</td>
-                    <td>@item.TransferCode</td>
+                    <td>
+                    <a href="@Url.Action("GetJobTransferDeliveryChalan", "ReportSS", new { @transferCode = item.TransferCode })" target="_blank" class="btn text-bold" style="color:blue" title="Download Receipt">@item.TransferCode</a>
+                    </td>
                     <td>@item.JobOrderCode</td>
                     <td class="text-center" data-val="@item.TransferStatus">
                         <span class="@badge">@item.TransferStatus</span>
