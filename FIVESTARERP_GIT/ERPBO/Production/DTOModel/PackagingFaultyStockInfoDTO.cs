@@ -17,9 +17,10 @@ namespace ERPBO.Production.DTOModel
         public long? ItemTypeId { get; set; }
         public long? ItemId { get; set; }
         public long? UnitId { get; set; }
-        public int StockInQty { get; set; }
-        public int StockOutQty { get; set; }
-        public bool IsChinaFaulty { get; set; }
+        public int ChinaMadeFaultyStockInQty { get; set; }
+        public int ChinaMadeFaultyStockOutQty { get; set; }
+        public int ManMadeFaultyStockInQty { get; set; }
+        public int ManMadeFaultyStockOutQty { get; set; }
         [StringLength(150)]
         public string Remarks { get; set; }
         public long OrganizationId { get; set; }

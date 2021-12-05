@@ -1524,19 +1524,19 @@
             if (TryParseInt(id, 0) > 0) {
                 bootbox.confirm("Are you sure You Want to Accept this Item?", function (result) {
                     if (result) {
-                        disable($(this));
+                        disable('.btnRequisitionAccept');
                         var data = JSON.stringify({ reqInfoId: id });
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/UpdateMiniWarehouseRequisitionStatus', data, getToken())).then(function (res, status) {
                             if (res == true && status === "success") {
                                 toastrSuccessAlert(execuStatus.successSave);
                                 loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
                                 LoadDataTable();
-                                $("#modalMiniStockRequisitionToSemiFinishWarehouseDetails").modal("toggle");
-                                enable($(this));
+                                $("#modalMiniStockRequisitionToSemiFinishWarehouseDetails").modal("toggle");  
                             }
+                            enable('.btnRequisitionAccept');
                         }).fail(function (error) {
                             console.log(error);
-                            enable($(this));
+                            enable('.btnRequisitionAccept');
                         });
                     }
                 })
@@ -1631,19 +1631,19 @@
             if (TryParseInt(id, 0) > 0) {
                 bootbox.confirm("Are you sure You Want to Receive this Item?", function (result) {
                     if (result) {
-                        disable($(this));
+                        disable('.btnHalfDoneTransferReceive');
                         var data = JSON.stringify({ transferInfoId: id });
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/UpdateHalfDoneTransferStatus', data, getToken())).then(function (res, status) {
                             if (res == true && status === "success") {
                                 toastrSuccessAlert(execuStatus.successSave);
                                 loadHalfDoneStockTranferListDataTable();
                                 LoadDataTableRepairSectionSemiFinishGoodStockInfo();
-                                $("#modalHalfDoneTransferToWarehouseDetails").modal("toggle");
-                                enable($(this));
+                                $("#modalHalfDoneTransferToWarehouseDetails").modal("toggle"); 
                             }
+                            enable('.btnHalfDoneTransferReceive');
                         }).fail(function (error) {
                             console.log(error);
-                            enable($(this));
+                            enable('.btnHalfDoneTransferReceive');
                         });
                     }
                 })

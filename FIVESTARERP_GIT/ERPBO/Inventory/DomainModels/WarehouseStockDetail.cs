@@ -19,6 +19,9 @@ namespace ERPBO.Inventory.DomainModels
         public long? ItemId { get; set; }
         public long? UnitId { get; set; }
         public int Quantity { get; set; }
+        public int GoodStockQty { get; set; }
+        public int ManMadeFaultyQty { get; set; }
+        public int ChinaFaultyQty { get; set; }
         public int OrderQty { get; set; }
         public long? SupplierId { get; set; }
         public Nullable<DateTime> ExpireDate { get; set; }
@@ -35,5 +38,6 @@ namespace ERPBO.Inventory.DomainModels
 
         [StringLength(150)]
         public string RefferenceNumber { get; set; }
+        public long StockInfoId { get; set; }
     }
 }

@@ -10,9 +10,11 @@
             <thead class="btn-dark">
                 <tr class="text-center">
                     <th class="vertialHeader">#SL</th>
-                    <th class="vertialHeader">Parts</th>
-                    <th class="vertialHeader">Quantity</th>
-                    <th class="vertialHeader">Type Of Unit</th>
+                    <th class="vertialHeader">Item</th>
+                    <th class="vertialHeader">Good Stock</th>
+                    <th class="vertialHeader">Man Made Faulty</th>
+                    <th class="vertialHeader">China Made Faulty</th>
+                    <th class="vertialHeader">Total Stock</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,19 +25,22 @@
                     <tr>
                         <td class="text-center text-bold">@sl</td>
                         <td>@itemName</td>
+                        <td class="text-center">@item.GoodStockQty</td>
+                        <td class="text-center">@item.ManMadeFaultyQty</td>
+                        <td class="text-center">@item.ChinaFaultyQty</td>
                         <td class="text-center">@item.Quantity</td>
-                        <td>@item.UnitName</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
+
 @if (ViewBag.StateStatus == "Send")
 {
     <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-success btn-flat btnReceiveReturnStock">
-            <i class="fas fa-paper-plane"></i> Save...
+            <i class="fas fa-paper-plane"></i> Receive...
         </button>
     </div>
 }

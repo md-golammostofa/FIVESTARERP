@@ -950,24 +950,27 @@
             e.preventDefault();
             var id = TryParseInt(hdfInfoId.val(), 0);
             if (id > 0) {
-                disable(".btnReceiveReturnStock");
-                var data = JSON.stringify({ returnId: id, status: "Received" });
-                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/SaveStockReturnStatus', data, getToken())).then(function (res, status) {
-                    if (res == true) {
-                        $("#returnDetail").modal("toggle").toggle("fast");
-                        fnRemoveARowFromTbody(".tblStockReturnList", hdfRowIndex.val());
-                        toastrSuccessAlert("Return Stock has been received");
-                        setTimeout(function () {
-                            LoadDataTableStockReturn();
-                            LoadDataTable();
-                        }, 1000);
-
+                bootbox.confirm("Are You Sure You Want To Receive?", function (result) {
+                    if (result) {
+                        disable(".btnReceiveReturnStock");
+                        var data = JSON.stringify({ returnId: id, status: "Received" });
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/SaveStockReturnStatus', data, getToken())).then(function (res, status) {
+                            if (res == true) {
+                                $("#returnDetail").modal("toggle").toggle("fast");
+                                fnRemoveARowFromTbody(".tblStockReturnList", hdfRowIndex.val());
+                                toastrSuccessAlert("Return Stock has been received");
+                                setTimeout(function () {
+                                    LoadDataTableStockReturn();
+                                    LoadDataTable();
+                                }, 1000);
+                            }
+                            enable(".btnReceiveReturnStock");
+                        }).fail(function (error) {
+                            console.log(error);
+                            toastrErrorAlert(execuStatus.fail);
+                            enable(".btnReceiveReturnStock");
+                        })
                     }
-                    enable(".btnReceiveReturnStock");
-                }).fail(function (error) {
-                    console.log(error);
-                    toastrErrorAlert(execuStatus.fail);
-                    enable(".btnReceiveReturnStock");
                 })
             }
         })

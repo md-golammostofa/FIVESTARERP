@@ -59,7 +59,7 @@ namespace ERPBLL.Inventory
         public bool SaveWarehouseStockIn(List<WarehouseStockDetailDTO> warehouseStockDetailDTO, long userId, long orgId)
         {
             List<WarehouseStockDetail> warehouseStockDetails = new List<WarehouseStockDetail>();
-            List<WarehouseStockInfo> warehouseStockInfos = new List<WarehouseStockInfo>();
+            //List<WarehouseStockInfo> warehouseStockInfos = new List<WarehouseStockInfo>();
             foreach (var item in warehouseStockDetailDTO)
             {
                 WarehouseStockDetail stockDetail = new WarehouseStockDetail();
@@ -67,6 +67,9 @@ namespace ERPBLL.Inventory
                 stockDetail.ItemTypeId = item.ItemTypeId;
                 stockDetail.ItemId = item.ItemId;
                 stockDetail.Quantity = item.Quantity;
+                stockDetail.ChinaFaultyQty = 0;
+                stockDetail.ManMadeFaultyQty = 0;
+                stockDetail.GoodStockQty = 0;
                 stockDetail.OrganizationId = orgId;
                 stockDetail.EUserId = userId;
                 stockDetail.Remarks = item.Remarks;
@@ -92,70 +95,106 @@ namespace ERPBLL.Inventory
                     warehouseInfo.UpUserId = userId;
                     warehouseInfo.UpdateDate = DateTime.Now;
                     warehouseStockInfoRepository.Update(warehouseInfo);
+                    if (warehouseStockInfoRepository.Save())
+                    {
+                        stockDetail.StockInfoId = warehouseInfo.StockInfoId;
+                    }
                 }
                 else
                 {
-                    WarehouseStockInfo warehouseStockInfo = new WarehouseStockInfo();
-                    if (warehouseStockInfos.Count > 0)
+                    WarehouseStockInfo warehouseStockInfo = new WarehouseStockInfo()
                     {
-                        var warehouseStockInfoInQueue= warehouseStockInfos.FirstOrDefault(s => s.DescriptionId == item.DescriptionId && s.ItemId == item.ItemId);
-                        if(warehouseStockInfoInQueue != null)
-                        {
-                            warehouseStockInfoInQueue.StockInQty += item.Quantity;
-                        }
-                        else
-                        {
-                            warehouseStockInfo.WarehouseId = item.WarehouseId;
-                            warehouseStockInfo.DescriptionId = item.DescriptionId;
-                            warehouseStockInfo.ItemTypeId = item.ItemTypeId;
-                            warehouseStockInfo.ItemId = item.ItemId;
-                            warehouseStockInfo.UnitId = stockDetail.UnitId;
-                            warehouseStockInfo.StockInQty = item.Quantity;
-                            warehouseStockInfo.StockOutQty = 0;
-                            warehouseStockInfo.OrganizationId = orgId;
-                            warehouseStockInfo.EUserId = userId;
-                            warehouseStockInfo.Remarks = item.Remarks;
-                            if (item.EntryDate != null)
-                            {
-                                warehouseStockInfo.EntryDate = item.EntryDate;
-                            }
-                            else
-                            {
-                                warehouseStockInfo.EntryDate = DateTime.Now;
-                            }
-                            warehouseStockInfos.Add(warehouseStockInfo);
-                        }
-                    }
-                    else
+                        WarehouseId = item.WarehouseId,
+                        DescriptionId = item.DescriptionId,
+                        ItemTypeId = item.ItemTypeId,
+                        ItemId = item.ItemId,
+                        UnitId = stockDetail.UnitId,
+                        StockInQty = item.Quantity,
+                        StockOutQty = 0,
+                        ManMadeFaultyStockInQty = 0,
+                        ManMadeFaultyStockOutQty = 0,
+                        ChinaMadeFaultyStockInQty = 0,
+                        ChinaMadeFaultyStockOutQty = 0,
+                        OrganizationId = orgId,
+                        EUserId = userId,
+                        Remarks = item.Remarks,
+                        EntryDate = DateTime.Now,
+                    };
+                    warehouseStockInfoRepository.Insert(warehouseStockInfo);
+                    if (warehouseStockInfoRepository.Save())
                     {
-                        warehouseStockInfo.WarehouseId = item.WarehouseId;
-                        warehouseStockInfo.DescriptionId = item.DescriptionId;
-                        warehouseStockInfo.ItemTypeId = item.ItemTypeId;
-                        warehouseStockInfo.ItemId = item.ItemId;
-                        warehouseStockInfo.UnitId = stockDetail.UnitId;
-                        warehouseStockInfo.StockInQty = item.Quantity;
-                        warehouseStockInfo.StockOutQty = 0;
-                        warehouseStockInfo.OrganizationId = orgId;
-                        warehouseStockInfo.EUserId = userId;
-                        warehouseStockInfo.Remarks = string.Empty;
-                        if (item.EntryDate != null)
-                        {
-                            warehouseStockInfo.EntryDate = item.EntryDate;
-                        }
-                        else
-                        {
-                            warehouseStockInfo.EntryDate = DateTime.Now;
-                        }
-                        warehouseStockInfos.Add(warehouseStockInfo);
+                        stockDetail.StockInfoId = warehouseStockInfo.StockInfoId;
                     }
+                    warehouseStockDetails.Add(stockDetail);
+
+                    //if (warehouseStockInfos.Count > 0)
+                    //{
+                    //    var warehouseStockInfoInQueue = warehouseStockInfos.FirstOrDefault(s => s.DescriptionId == item.DescriptionId && s.ItemId == item.ItemId);
+                    //    if (warehouseStockInfoInQueue != null)
+                    //    {
+                    //        warehouseStockInfoInQueue.StockInQty += item.Quantity;
+                    //    }
+                    //    else
+                    //    {
+                    //        warehouseStockInfo.WarehouseId = item.WarehouseId;
+                    //        warehouseStockInfo.DescriptionId = item.DescriptionId;
+                    //        warehouseStockInfo.ItemTypeId = item.ItemTypeId;
+                    //        warehouseStockInfo.ItemId = item.ItemId;
+                    //        warehouseStockInfo.UnitId = stockDetail.UnitId;
+                    //        warehouseStockInfo.StockInQty = item.Quantity;
+                    //        warehouseStockInfo.StockOutQty = 0;
+                    //        warehouseStockInfo.ManMadeFaultyStockInQty = 0;
+                    //        warehouseStockInfo.ManMadeFaultyStockOutQty = 0;
+                    //        warehouseStockInfo.ChinaMadeFaultyStockInQty = 0;
+                    //        warehouseStockInfo.ChinaMadeFaultyStockOutQty = 0;
+                    //        warehouseStockInfo.OrganizationId = orgId;
+                    //        warehouseStockInfo.EUserId = userId;
+                    //        warehouseStockInfo.Remarks = item.Remarks;
+                    //        if (item.EntryDate != null)
+                    //        {
+                    //            warehouseStockInfo.EntryDate = item.EntryDate;
+                    //        }
+                    //        else
+                    //        {
+                    //            warehouseStockInfo.EntryDate = DateTime.Now;
+                    //        }
+                    //        warehouseStockInfos.Add(warehouseStockInfo);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    warehouseStockInfo.WarehouseId = item.WarehouseId;
+                    //    warehouseStockInfo.DescriptionId = item.DescriptionId;
+                    //    warehouseStockInfo.ItemTypeId = item.ItemTypeId;
+                    //    warehouseStockInfo.ItemId = item.ItemId;
+                    //    warehouseStockInfo.UnitId = stockDetail.UnitId;
+                    //    warehouseStockInfo.StockInQty = item.Quantity;
+                    //    warehouseStockInfo.StockOutQty = 0;
+                    //    warehouseStockInfo.ManMadeFaultyStockInQty = 0;
+                    //    warehouseStockInfo.ManMadeFaultyStockOutQty = 0;
+                    //    warehouseStockInfo.ChinaMadeFaultyStockInQty = 0;
+                    //    warehouseStockInfo.ChinaMadeFaultyStockOutQty = 0;
+                    //    warehouseStockInfo.OrganizationId = orgId;
+                    //    warehouseStockInfo.EUserId = userId;
+                    //    warehouseStockInfo.Remarks = string.Empty;
+                    //    if (item.EntryDate != null)
+                    //    {
+                    //        warehouseStockInfo.EntryDate = item.EntryDate;
+                    //    }
+                    //    else
+                    //    {
+                    //        warehouseStockInfo.EntryDate = DateTime.Now;
+                    //    }
+                    //    warehouseStockInfos.Add(warehouseStockInfo);
+                    //}
                     //warehouseStockInfoRepository.Insert(warehouseStockInfo);
                 }
-                warehouseStockDetails.Add(stockDetail);
+                //warehouseStockDetails.Add(stockDetail);
             }
-            if(warehouseStockInfos.Count > 0)
-            {
-                warehouseStockInfoRepository.InsertAll(warehouseStockInfos);
-            }
+            //if (warehouseStockInfos.Count > 0)
+            //{
+            //    warehouseStockInfoRepository.InsertAll(warehouseStockInfos);
+            //}
             warehouseStockDetailRepository.InsertAll(warehouseStockDetails);
             return warehouseStockDetailRepository.Save();
         }
@@ -173,29 +212,36 @@ namespace ERPBLL.Inventory
             {
                 foreach (var item in warehouseStockDetailDTOs)
                 {
+                    WarehouseStockDetail warehouseStockDetail = new WarehouseStockDetail()
+                    {
+                        WarehouseId = item.WarehouseId,
+                        DescriptionId = item.DescriptionId,
+                        ItemTypeId = item.ItemTypeId,
+                        ItemId = item.ItemId,
+                        Quantity = item.Quantity,
+                        EUserId = userId,
+                        EntryDate = DateTime.Now,
+                        OrganizationId = orgId,
+                        Remarks = item.Remarks,
+                        StockStatus = StockStatus.StockOut,
+                        RefferenceNumber = item.RefferenceNumber,
+                        UnitId = item.UnitId,
+                        GoodStockQty = 0,
+                        ChinaFaultyQty = 0,
+                        ManMadeFaultyQty = 0
+                    };
+
                     var warehouseInfo = _warehouseStockInfoBusiness.GetAllWarehouseStockInfoByOrgId(orgId).Where(s => s.ItemId == item.ItemId && (s.StockInQty - s.StockOutQty) >= item.Quantity && s.DescriptionId == item.DescriptionId).FirstOrDefault();
                     if (warehouseInfo != null)
                     {
                         warehouseInfo.StockOutQty += item.Quantity;
                         warehouseInfo.UpUserId = userId;
                         warehouseInfo.UpdateDate = DateTime.Now;
-
-                        WarehouseStockDetail warehouseStockDetail = new WarehouseStockDetail()
-                        {
-                            WarehouseId = item.WarehouseId,
-                            DescriptionId = item.DescriptionId,
-                            ItemTypeId = item.ItemTypeId,
-                            ItemId = item.ItemId,
-                            Quantity = item.Quantity,
-                            EUserId = userId,
-                            EntryDate = DateTime.Now,
-                            OrganizationId = orgId,
-                            Remarks = item.Remarks,
-                            StockStatus = StockStatus.StockOut,
-                            RefferenceNumber = item.RefferenceNumber,
-                            UnitId = item.UnitId
-                        };
                         warehouseStockInfoRepository.Update(warehouseInfo);
+                        if (warehouseStockInfoRepository.Save())
+                        {
+                            warehouseStockDetail.StockInfoId = warehouseInfo.StockInfoId;
+                        } 
                         warehouseStockDetails.Add(warehouseStockDetail);
                     }
                     else
@@ -234,7 +280,10 @@ namespace ERPBLL.Inventory
                         EntryDate = DateTime.Now,
                         Remarks = "Stock Out By Production Requistion " + "(" + reqInfo.ReqInfoCode + ")",
                         RefferenceNumber = reqInfo.ReqInfoCode,
-                        StockStatus = StockStatus.StockOut
+                        StockStatus = StockStatus.StockOut,
+                        GoodStockQty = 0,
+                        ChinaFaultyQty = 0,
+                        ManMadeFaultyQty = 0
                     };
                     stockDetailDTOs.Add(stockDetailDTO);
                 }
@@ -272,7 +321,10 @@ namespace ERPBLL.Inventory
                                 UnitId = _itemBusiness.GetItemById(item.ItemId, orgId).UnitId,
                                 EntryDate = DateTime.Now,
                                 StockStatus = StockStatus.StockIn,
-                                RefferenceNumber = irInfo.IRCode
+                                RefferenceNumber = irInfo.IRCode,
+                                GoodStockQty = 0,
+                                ChinaFaultyQty = 0,
+                                ManMadeFaultyQty = 0
                             };
                             warehouseStockDetailDTOs.Add(stockDetailDTO);
                         }
@@ -385,7 +437,7 @@ Left Join [ControlPanel].dbo.tblApplicationUsers au on wsd.EUserId = au.UserId
 Where 1=1 {0}", Utility.ParamChecker(param));
             return query;
         }
-        public IEnumerable<StockShortageOrExcessQty> StockShortageOrExcessQty(long orgId,string fromDate, string toDate,long modelId)
+        public IEnumerable<StockShortageOrExcessQty> StockShortageOrExcessQty(long orgId, string fromDate, string toDate, long modelId)
         {
             return this._inventoryDb.Db.Database.SqlQuery<StockShortageOrExcessQty>("Exec spWarehouseShortageReport {0},{1},{2},{3}", orgId, fromDate, toDate, modelId).ToList();
         }
@@ -393,6 +445,53 @@ Where 1=1 {0}", Utility.ParamChecker(param));
         public IEnumerable<StockExcelUploaderData> GetStockExcelUploaderData(long orgId)
         {
             return this._inventoryDb.Db.Database.SqlQuery<StockExcelUploaderData>("Exec spExcelUploaderItemList {0}", orgId).ToList();
+        }
+        public bool SavePartsStockInFromProduction(List<WarehouseStockDetailDTO> dTOs, long userId, long orgId)
+        {
+            List<WarehouseStockDetail> warehouseStockDetails = new List<WarehouseStockDetail>();
+            foreach (var item in dTOs)
+            {
+                WarehouseStockDetail stockDetail = new WarehouseStockDetail
+                {
+                    ChinaFaultyQty = item.ChinaFaultyQty,
+                    DescriptionId = item.DescriptionId,
+                    EntryDate = DateTime.Now,
+                    EUserId = userId,
+                    GoodStockQty = item.GoodStockQty,
+                    ItemId = item.ItemId,
+                    ItemTypeId = item.ItemTypeId,
+                    ManMadeFaultyQty = item.ManMadeFaultyQty,
+                    OrderQty = 0,
+                    OrganizationId = orgId,
+                    RefferenceNumber = item.RefferenceNumber,
+                    Remarks = item.Remarks,
+                    Quantity = item.Quantity,
+                    StockStatus = StockStatus.StockIn,
+                    UnitId = item.UnitId,
+                    WarehouseId = item.WarehouseId
+                };
+
+                var info = _warehouseStockInfoBusiness.GetAllWarehouseStockInfoByOrgId(orgId).Where(o => o.ItemTypeId == item.ItemTypeId && o.ItemId == item.ItemId && o.DescriptionId == item.DescriptionId).FirstOrDefault();
+
+                if (info != null)
+                {
+                    info.StockInQty += item.GoodStockQty;
+                    info.ManMadeFaultyStockInQty += item.ManMadeFaultyQty;
+                    info.ChinaMadeFaultyStockInQty += item.ChinaFaultyQty;
+                    info.UpdateDate = DateTime.Now;
+                    info.UpUserId = userId;
+
+                    warehouseStockInfoRepository.Update(info);
+                    if (warehouseStockInfoRepository.Save())
+                    {
+                        stockDetail.StockInfoId = info.StockInfoId;
+                    }
+                }
+                warehouseStockDetails.Add(stockDetail);
+            }
+
+            warehouseStockDetailRepository.InsertAll(warehouseStockDetails);
+            return warehouseStockDetailRepository.Save();
         }
     }
 }

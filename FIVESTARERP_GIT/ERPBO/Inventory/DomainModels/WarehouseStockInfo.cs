@@ -20,6 +20,10 @@ namespace ERPBO.Inventory.DomainModels
         public long? UnitId { get; set; }
         public int? StockInQty { get; set; }
         public int? StockOutQty { get; set; }
+        public int? ManMadeFaultyStockInQty { get; set; }
+        public int? ManMadeFaultyStockOutQty { get; set; }
+        public int? ChinaMadeFaultyStockInQty { get; set; }
+        public int? ChinaMadeFaultyStockOutQty { get; set; }
         [StringLength(150)]
         public string Remarks { get; set; }
         public long OrganizationId { get; set; }
@@ -27,6 +31,5 @@ namespace ERPBO.Inventory.DomainModels
         public Nullable<DateTime> EntryDate { get; set; }
         public long? UpUserId { get; set; }
         public Nullable<DateTime> UpdateDate { get; set; }
-        public ICollection<WarehouseStockDetail> WarehouseStockDetails { get; set; }
     }
 }

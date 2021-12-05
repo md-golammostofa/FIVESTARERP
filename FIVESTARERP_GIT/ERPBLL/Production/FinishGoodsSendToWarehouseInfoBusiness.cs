@@ -384,7 +384,7 @@ Inner Join tblProductionLines pl  on fsi.LineId =pl.LineId
 Inner Join tblPackagingLine pac on fsi.PackagingLineId =pac.PackagingLineId
 Inner Join [Inventory].dbo.tblWarehouses w on fsi.WarehouseId =w.Id
 Inner Join [Inventory].dbo.tblDescriptions de on fsi.DescriptionId =de.DescriptionId
-Where 1=1 and fsi.OrganizationId={0} {1}", orgId,Utility.ParamChecker(param));
+Where 1=1 and fsi.OrganizationId={0} {1} ORDER BY fsi.SendId DESC", orgId,Utility.ParamChecker(param));
             return _productionDb.Db.Database.SqlQuery<FinishGoodsSendToWarehouseInfoDTO>(query).ToList();
         }
     }

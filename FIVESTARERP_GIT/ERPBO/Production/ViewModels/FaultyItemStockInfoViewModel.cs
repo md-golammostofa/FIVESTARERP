@@ -20,10 +20,10 @@ namespace ERPBO.Production.ViewModels
         public long? ItemTypeId { get; set; }
         public long? ItemId { get; set; }
         public long? UnitId { get; set; }
-        public int StockInQty { get; set; }
-        public int StockOutQty { get; set; }
-        public bool IsChinaFaulty { get; set; }
-        [StringLength(150)]
+        public int ChinaMadeFaultyStockInQty { get; set; }
+        public int ChinaMadeFaultyStockOutQty { get; set; }
+        public int ManMadeFaultyStockInQty { get; set; }
+        public int ManMadeFaultyStockOutQty { get; set; }
         public string Remarks { get; set; }
         public long OrganizationId { get; set; }
         public long? EUserId { get; set; }

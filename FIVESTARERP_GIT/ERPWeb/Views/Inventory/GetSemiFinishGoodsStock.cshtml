@@ -283,6 +283,7 @@
         }
 
         //#region Semi Finish Goods Stock
+
         var ddlFloorForSemiFinishGoodsStockSearch = $("#ddlFloorForSemiFinishGoodsStockSearch");
         var ddlModelNameForSemiFinishGoodsStockSearch = $("#ddlModelNameForSemiFinishGoodsStockSearch");
         var ddlItemsStockForSemiFinishGoodsStockSearch = $("#ddlItemsStockForSemiFinishGoodsStockSearch");
@@ -330,6 +331,7 @@
         //#endregion
 
         //#region Semi Finish Goods Stock Receive From Mini Warehouse
+
         var ddlFloorForMiniStockTransferToWarehouseSearch = $("#ddlFloorForMiniStockTransferToWarehouseSearch");
         var ddlModelNameForMiniStockTransferToWarehouseSearch = $("#ddlModelNameForMiniStockTransferToWarehouseSearch");
         var ddlItemsStockForMiniStockTransferToWarehouseSearch = $("#ddlItemsStockForMiniStockTransferToWarehouseSearch");
@@ -383,7 +385,7 @@
             if (id > 0) {
                 bootbox.confirm("Are you sure You Want to Accept this Item?", function (result) {
                     if (result) {
-                        consoleLog(id);
+                        disable("a.btnSemiFinishReceive");
                         var data = JSON.stringify({ semiFinsihTransferId: id });
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/SaveSemiFinishGoodsStock', data, getToken())).then(function (res, status) {
                             if (res === true && status == "success") {
@@ -391,9 +393,11 @@
                                 loadMiniStockTransferToWarehouseListDataTable();
                                 loadSemiFinishGoodsStockListDataTable();
                             }
+                            enable("a.btnSemiFinishReceive");
                         }).fail(function (error) {
                             console.log(error);
                             $('.toastrDefaultError').trigger('click');
+                            enable("a.btnSemiFinishReceive");
                         })
                     }
                 })
@@ -494,7 +498,7 @@
             if (id > 0) {
                 bootbox.confirm("Are you sure You Want to Approve this Item?", function (result) {
                     if (result) {
-                        disable($(this));
+                        disable(".btnRequisitionApprove");
                         var data = JSON.stringify({ reqInfoId: id });
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Common/GetSemiFinishGoodsStock', data, getToken())).then(function (res, status) {
                             if (res.IsSuccess == true && status === "success") {
@@ -504,20 +508,20 @@
                                         loadMiniStockRequisitionToSemiFinishWarehouseListDataTable();
                                         loadSemiFinishGoodsStockListDataTable();
                                         $("#modalMiniStockRequisitionToSemiFinishWarehouseDetails").modal("toggle");
-                                        enable($(this));
+                                        enable(".btnRequisitionApprove");
                                     }
                                 }).fail(function (error) {
                                     console.log(error);
-                                    enable($(this));
+                                    enable(".btnRequisitionApprove");
                                 });
                             }
                             else {
-                                enable($(this));
+                                enable(".btnRequisitionApprove");
                                 bootbox.alert(res.Message);
                             }
                         }).fail(function (error) {
                             console.log(error);
-                            enable($(this));
+                            enable(".btnRequisitionApprove");
                         });
                     }
                 })

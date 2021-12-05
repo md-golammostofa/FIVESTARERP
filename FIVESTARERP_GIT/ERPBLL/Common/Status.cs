@@ -226,7 +226,9 @@ namespace ERPBLL.Common
     {
         public static readonly string AssemblyLine = "AssemblyLine";
         public static readonly string AssemblyRepair = "Assembly-Repair";
+        public static readonly string AssemblyRepairFaulty = "Assembly-Repair-Faulty";
         public static readonly string PackagingLine = "PackagingLine";
         public static readonly string PackagingRepair = "Packaging-Repair";
+        public static readonly string PackagingRepairFaulty = "Packaging-Repair-Faulty";
     }
 }

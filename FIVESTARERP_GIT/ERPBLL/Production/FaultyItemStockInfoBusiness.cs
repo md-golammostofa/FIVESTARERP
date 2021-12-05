@@ -41,7 +41,7 @@ namespace ERPBLL.Production
 
         public FaultyItemStockInfo GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(long repairLine, long modelId, long itemId, bool isChinaFaulty, long orgId)
         {
-            return this._faultyItemStockInfoRepository.GetOneByOrg(f => f.RepairLineId == repairLine && f.DescriptionId == modelId && f.ItemId == itemId && f.IsChinaFaulty == isChinaFaulty && f.OrganizationId == orgId);
+            return this._faultyItemStockInfoRepository.GetOneByOrg(f => f.RepairLineId == repairLine && f.DescriptionId == modelId && f.ItemId == itemId /*&& f.IsChinaFaulty == isChinaFaulty*/ && f.OrganizationId == orgId);
         }
 
         public IEnumerable<FaultyItemStockInfo> GetFaultyItemStockInfos(long orgId)
@@ -83,18 +83,11 @@ namespace ERPBLL.Production
             if (itemId != null && itemId > 0)
             {
                 param += string.Format(@" and fs.ItemId={0}", itemId);
-            }
-            if(!string.IsNullOrEmpty(lessOrEq) && lessOrEq.Trim() != "")
-            {
-                int i = 0;
-                if (int.TryParse(lessOrEq, out i) && i > 0) {
-                    param += string.Format(@" and (fs.StockInQty-fs.StockOutQty) >{0}", i);
-                };
-            }
+            }    
 
             query = string.Format(@"Select fs.FaultyItemStockInfoId,ISNULL(pl.LineNumber,'') 'ProductionFloorName',fs.RepairLineId,rl.RepairLineName 'RepairName', ISNULL(de.DescriptionName,'') 'ModelName', 
 ISNULL(w.WarehouseName,'') 'WarehouseName', ISNULL(it.ItemName,'') 'ItemTypeName', ISNULL(i.ItemName,'') 'ItemName',
-ISNULL(u.UnitSymbol,'') 'UnitName',fs.StockInQty,fs.StockOutQty, fs.IsChinaFaulty,(Case When fs.IsChinaFaulty = 1 then 'China Made' else 'Man Made' End)'FaultyReason'
+ISNULL(u.UnitSymbol,'') 'UnitName',fs.ChinaMadeFaultyStockInQty,fs.ChinaMadeFaultyStockOutQty,fs.ManMadeFaultyStockInQty,fs.ManMadeFaultyStockOutQty
 From tblFaultyItemStockInfo fs
 Left Join tblProductionLines pl on fs.ProductionFloorId= pl.LineId
 Left Join tblRepairLine rl on fs.RepairLineId= rl.RepairLineId
@@ -105,6 +98,16 @@ Left Join [Inventory].dbo.[tblItems] i on fs.ItemId = i.ItemId
 Left Join [Inventory].dbo.[tblUnits] u on fs.UnitId = u.UnitId
 Where 1=1 {0}", Utility.ParamChecker(param));
             return query;
+        }
+        public IEnumerable<FaultyItemStockInfoDTO> GetRepairLineStocksForReturnStock(long repairLineId, long floorId, long modelId, long orgId)
+        {
+            return this._productionDb.Db.Database.SqlQuery<FaultyItemStockInfoDTO>(string.Format(@"Select rsi.FaultyItemStockInfoId,rsi.WarehouseId,w.WarehouseName,rsi.ItemTypeId,it.ItemName'ItemTypeName',rsi.ItemId,i.ItemName,rsi.UnitId ,u.UnitSymbol 'UnitName',rsi.ChinaMadeFaultyStockInQty,rsi.ChinaMadeFaultyStockOutQty,rsi.ManMadeFaultyStockInQty,rsi.ManMadeFaultyStockOutQty
+From tblFaultyItemStockInfo rsi
+Inner Join [Inventory].dbo.tblWarehouses w on rsi.WarehouseId = w.Id
+Inner Join [Inventory].dbo.tblItemTypes it on rsi.ItemTypeId = it.ItemId
+Inner Join [Inventory].dbo.tblItems i on rsi.ItemId = i.ItemId
+Inner Join [Inventory].dbo.tblUnits u on rsi.UnitId = u.UnitId
+Where 1=1 and rsi.OrganizationId={0} and rsi.ProductionFloorId={1} and rsi.RepairLineId={2} and rsi.DescriptionId= {3}  and ((rsi.ChinaMadeFaultyStockInQty-rsi.ChinaMadeFaultyStockOutQty) > 0 OR (rsi.ManMadeFaultyStockInQty-rsi.ManMadeFaultyStockOutQty) > 0)", orgId, floorId, repairLineId, modelId)).ToList();
         }
     }
 }

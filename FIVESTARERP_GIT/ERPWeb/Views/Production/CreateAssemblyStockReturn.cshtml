@@ -204,7 +204,6 @@
                             tds.eq(6).children('input[type="text"]').addClass("error-border");
                             isValid = false;
                             invalidValue++;
-                            consoleLog("Any negative");
                         }
                         else if ((TryParseInt(manMade, 0) + TryParseInt(chinaMade, 0) + TryParseInt(good, 0)) <= 0)
                         {
@@ -213,7 +212,6 @@
                             tds.eq(6).children('input[type="text"]').addClass("error-border");
                             isValid = false;
                             invalidValue++;
-                            consoleLog("Sum of Zero or Neagtive");
                         }
                         else if ((TryParseInt(manMade, 0) + TryParseInt(chinaMade, 0) + TryParseInt(good, 0)) > TryParseInt(availableStockQty, 0))
                         {
@@ -222,7 +220,6 @@
                             tds.eq(6).children('input[type="text"]').addClass("error-border");
                             isValid = false;
                             invalidValue++;
-                            consoleLog("Sum is Greater than Current Stock");
                         }
                         else
                         {

@@ -4,15 +4,17 @@
     int sl = 0;
 }
 
-<div class="row">
+<div class="row text-sm">
     <div class="col-md-12">
         <table class="table table-sm table-bordered table-striped table-responsive-lg">
             <thead class="btn-dark">
                 <tr class="text-center">
                     <th class="vertialHeader">#SL</th>
                     <th class="vertialHeader">Item</th>
-                    <th class="vertialHeader">Quantity</th>
-                    <th class="vertialHeader">Type Of Unit</th>
+                    <th class="vertialHeader">Good Stock</th>
+                    <th class="vertialHeader">Man Made Faulty</th>
+                    <th class="vertialHeader">China Made Faulty</th>
+                    <th class="vertialHeader">Total Stock</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,8 +25,10 @@
                     <tr>
                         <td class="text-center text-bold">@sl</td>
                         <td>@itemName</td>
+                        <td class="text-center">@item.GoodStockQty</td>
+                        <td class="text-center">@item.ManMadeFaultyQty</td>
+                        <td class="text-center">@item.ChinaFaultyQty</td>
                         <td class="text-center">@item.Quantity</td>
-                        <td>@item.UnitName</td>
                     </tr>
                 }
             </tbody>

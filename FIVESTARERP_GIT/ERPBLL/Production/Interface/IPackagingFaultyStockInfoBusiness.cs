@@ -15,5 +15,6 @@ namespace ERPBLL.Production.Interface
         PackagingFaultyStockInfo GetPackagingFaultyStockInfoByPackagingLineAndModelAndItem(long packagingLineId, long modelId, long itemId, long orgId);
         IEnumerable<PackagingFaultyStockInfoDTO> GetPackagingFaultyStockInfosByQuery(long? floorId, long? packagingLineId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq, long orgId);
         PackagingFaultyStockInfo GetPackagingFaultyStockInfoByRepairAndModelAndItemAndFultyType(long packagingLineId, long modelId, long itemId, bool isChinaFaulty, long orgId);
+        IEnumerable<PackagingFaultyStockInfoDTO> GetPackegingLineFaultyStocksForReturnStock(long packegingId, long floorId, long modelId, long orgId);
     }
 }

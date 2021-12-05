@@ -376,7 +376,7 @@
             if (TryParseInt(id, 0) > 0) {
                 bootbox.confirm("Are you sure You Want to Approve this Item?", function (result) {
                     if (result) {
-                        disable($(this));
+                        disable('.btnHalfDoneTransferApproved');
                         var data = JSON.stringify({ transferInfoId: id });
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/UpdateHalfDoneTransferStatusForApproved', data, getToken())).then(function (res, status) {
                             if (res == true && status === "success") {
@@ -384,11 +384,11 @@
                                 loadHalfDoneStockTranferListDataTable();
                                 LoadDataTableForHalfDoneStock();
                                 $("#modalHalfDoneTransferToWarehouseDetails").modal("toggle");
-                                enable($(this));
+                                enable('.btnHalfDoneTransferApproved');
                             }
                         }).fail(function (error) {
                             console.log(error);
-                            enable($(this));
+                            enable('.btnHalfDoneTransferApproved');
                         });
                     }
                 })
@@ -401,7 +401,7 @@
             if (TryParseInt(id, 0) > 0) {
                 bootbox.confirm("Are you sure You Want to Return this Item?", function (result) {
                     if (result) {
-                        disable($(this).addClass('.btnHalfDoneTransferReturn'));
+                        disable('.btnHalfDoneTransferReturn');
                         var data = JSON.stringify({ transferInfoId: id });
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Inventory/UpdateHalfDoneTransferStatusForReturn', data, getToken())).then(function (res, status) {
                             if (res == true && status === "success") {
@@ -409,11 +409,11 @@
                                 loadHalfDoneStockTranferListDataTable();
                                 LoadDataTableForHalfDoneStock();
                                 $("#modalHalfDoneTransferToWarehouseDetails").modal("toggle");
-                                enable($(this));
+                                enable('.btnHalfDoneTransferReturn');
                             }
                         }).fail(function (error) {
                             console.log(error);
-                            enable($(this));
+                            enable('.btnHalfDoneTransferReturn');
                         });
                     }
                 })

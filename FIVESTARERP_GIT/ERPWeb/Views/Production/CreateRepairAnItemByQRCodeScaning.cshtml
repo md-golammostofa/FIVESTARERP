@@ -391,29 +391,37 @@
             return isValid;
         }
 
-        
+        function IsRepairLineStockAvailable() {
+            getItemValues();
+            return ajaxBooleanChecker(JSON.stringify({ itemId: item, repairId: hdfRepairLineId.val(), modelId: hdfModelId.val(), qty: 1 }), '/Common/IsAssemblyRepairLineStockAvailable', getToken()) == true;
+        }
 
         $("#btnAddToList").click(function (e) {
             e.preventDefault();
             if (validationFaultyInput()) {
-                $("#btnFaulty").show();
-                $("#btnRepairDone").hide();
-                var rows = $("#tblFaultItems tbody tr").length;
-                getItemValues();
-                var itemText = dropDownSelectedText("ddlItems");
-                itemText = itemText.substring(0, itemText.lastIndexOf("("));
-                var td1 = "<td class='text-center text-bold'>" + (rows + 1) + "</td>";
-                var td2 = "<td>" + itemText + "</td>";
-                var td3 = "<td class='text-center text-bold'>" + txtQuantity.val() + "</td>";
-                var td4 = "<td class='text-center'><input type='checkbox' class='chkChinaFaulty' name='chinaFaulty' checked='checked' /></td>";
-                var td5 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i></a></td>";
-                var td6 = "<td class='hide warehouse'>" + warehouse + "</td>";
-                var td7 = "<td class='hide itemType'>" + itemType + "</td>";
-                var td8 = "<td class='hide item'>" + item + "</td>";
+                if (IsRepairLineStockAvailable()) {
+                    $("#btnFaulty").show();
+                    $("#btnRepairDone").hide();
+                    var rows = $("#tblFaultItems tbody tr").length;
+                    getItemValues();
+                    var itemText = dropDownSelectedText("ddlItems");
+                    itemText = itemText.substring(0, itemText.lastIndexOf("("));
+                    var td1 = "<td class='text-center text-bold'>" + (rows + 1) + "</td>";
+                    var td2 = "<td>" + itemText + "</td>";
+                    var td3 = "<td class='text-center text-bold'>" + txtQuantity.val() + "</td>";
+                    var td4 = "<td class='text-center'><input type='checkbox' class='chkChinaFaulty' name='chinaFaulty' checked='checked' /></td>";
+                    var td5 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i></a></td>";
+                    var td6 = "<td class='hide warehouse'>" + warehouse + "</td>";
+                    var td7 = "<td class='hide itemType'>" + itemType + "</td>";
+                    var td8 = "<td class='hide item'>" + item + "</td>";
 
-                var tr = "<tr class='new-item'>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8 + "</tr>";
-                $("#tblFaultItems tbody").append(tr);
-                txtQuantity.val('0');
+                    var tr = "<tr class='new-item'>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + td8 + "</tr>";
+                    $("#tblFaultItems tbody").append(tr);
+                    txtQuantity.val('0');
+                }
+                else {
+                    toastrErrorAlert("Stock Not Available In Repair Line");
+                }
             }
         })
 
@@ -422,10 +430,14 @@
             var index = $(this).parent().parents('tbody tr').index();
             removeTableRow("#tblFaultItems tbody", index);
             fnFixTheTbodyRowSerial("#tblFaultItems", index);
-            if (index == 0) {
-                $("#btnFaulty").hide();
-                $("#btnRepairDone").show();
-            }
+
+            setTimeout(function () {
+                if ($('#tblFaultItems tbody tr').length == 0) {
+                    $("#btnFaulty").hide();
+                    $("#btnRepairDone").show();
+                }
+            }, 1000);
+           
             if (($("#tblFaultItems tbody").find("tr.old-item")).length > 0 && ($("#tblFaultItems tbody").find("tr.new-item")).length == 1) {
                 $("#btnFaulty").hide();
                 $("#btnRepairDone").show();

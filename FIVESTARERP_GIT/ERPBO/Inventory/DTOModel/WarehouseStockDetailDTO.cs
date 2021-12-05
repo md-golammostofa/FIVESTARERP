@@ -23,6 +23,9 @@ namespace ERPBO.Inventory.DTOModel
         public long? UnitId { get; set; }
         [Range(1, long.MaxValue)]
         public int Quantity { get; set; }
+        public int GoodStockQty { get; set; }
+        public int ManMadeFaultyQty { get; set; }
+        public int ChinaFaultyQty { get; set; }
         public int OrderQty { get; set; }
         public long? SupplierId { get; set; }
         public Nullable<DateTime> ExpireDate { get; set; }
@@ -35,6 +38,7 @@ namespace ERPBO.Inventory.DTOModel
         [Range(1, long.MaxValue)]
         public long? UpUserId { get; set; }
         public Nullable<DateTime> UpdateDate { get; set; }
+        public long StockInfoId { get; set; }
 
         //Custom Pop
         [StringLength(100)]

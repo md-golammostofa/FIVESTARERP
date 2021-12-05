@@ -69,8 +69,10 @@ var execuStatus = {
 var stockReturnFlag = {
     assemblyLine: "AssemblyLine",
     assemblyRepair: "Assembly-Repair",
+    assemblyRepairFaulty: "Assembly-Repair-Faulty",
     packagingLine: "PackagingLine",
-    packagingRepair: "Packaging-Repair"
+    packagingRepair: "Packaging-Repair",
+    packagingRepairFaulty: "Packaging-Repair-Faulty",
 };
 
 

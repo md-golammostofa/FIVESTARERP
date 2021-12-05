@@ -24,11 +24,13 @@ namespace ERPBLL.Production
         private readonly IPackagingRepairRawStockDetailBusiness _repairRawStockDetailBusiness;
         private readonly IStockItemReturnDetailBusiness _stockItemReturnDetailBusiness;
         private readonly IWarehouseStockDetailBusiness _warehouseStockDetailBusiness;
+        private readonly IFaultyItemStockDetailBusiness _faultyItemStockDetailBusiness;
+        private readonly IPackagingFaultyStockDetailBusiness _packagingFaultyStockDetailBusiness;
         // Repository //
         private readonly StockItemReturnInfoRepository _stockItemReturnInfoRepository;
 
 
-        public StockItemReturnInfoBusiness(IProductionUnitOfWork productionDb, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IRepairLineStockDetailBusiness repairLineStockDetailBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, IPackagingRepairRawStockDetailBusiness repairRawStockDetailBusiness, IStockItemReturnDetailBusiness stockItemReturnDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness)
+        public StockItemReturnInfoBusiness(IProductionUnitOfWork productionDb, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IRepairLineStockDetailBusiness repairLineStockDetailBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, IPackagingRepairRawStockDetailBusiness repairRawStockDetailBusiness, IStockItemReturnDetailBusiness stockItemReturnDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness)
         {
             // Database
             this._productionDb = productionDb;
@@ -39,6 +41,8 @@ namespace ERPBLL.Production
             this._repairRawStockDetailBusiness = repairRawStockDetailBusiness;
             this._stockItemReturnDetailBusiness = stockItemReturnDetailBusiness;
             this._warehouseStockDetailBusiness = warehouseStockDetailBusiness;
+            this._faultyItemStockDetailBusiness = faultyItemStockDetailBusiness;
+            this._packagingFaultyStockDetailBusiness = packagingFaultyStockDetailBusiness;
             // Repository 
 
             this._stockItemReturnInfoRepository = new StockItemReturnInfoRepository(this._productionDb);
@@ -134,7 +138,7 @@ Left Join [Production].dbo.tblAssemblyLines al on sr.AssemblyLineId = al.Assembl
 Left Join [Production].dbo.tblRepairLine rl on sr.RepairLineId = rl.RepairLineId
 Left Join [Production].dbo.tblPackagingLine pac on sr.PackagingLineId=pac.PackagingLineId
 Inner Join [ControlPanel].dbo.tblApplicationUsers app on sr.EUserId = app.UserId
-Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
+Where 1=1 and sr.OrganizationId={0} {1} ORDER BY sr.SIRInfoId DESC", orgId, Utility.ParamChecker(param));
 
             return query;
         }
@@ -143,18 +147,21 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
         {
             var itemWarehouses = items.Select(s => s.WarehouseId).Distinct().ToList();
             string flag = string.Empty;
+
             List<StockItemReturnInfo> stockItemReturnInfos = new List<StockItemReturnInfo>();
             List<AssemblyLineStockDetailDTO> assemblyLineStocks = new List<AssemblyLineStockDetailDTO>();
             List<RepairLineStockDetailDTO> repairLineStocks = new List<RepairLineStockDetailDTO>();
+            List<FaultyItemStockDetailDTO> faultyItemStocks = new List<FaultyItemStockDetailDTO>();
             List<PackagingLineStockDetailDTO> packagingLineStocks = new List<PackagingLineStockDetailDTO>();
             List<PackagingRepairRawStockDetailDTO> packagingRepairRawStocks = new List<PackagingRepairRawStockDetailDTO>();
+            List<PackagingFaultyStockDetailDTO> packagingFaultyStocks = new List<PackagingFaultyStockDetailDTO>();
 
             foreach (var stockWarehouse in itemWarehouses)
             {
                 string timeCode = ( DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
 
                 var data = items.Where(s => s.WarehouseId == stockWarehouse);
-                string returnCode = (data.FirstOrDefault().Flag == StockRetunFlag.AssemblyLine) ? "ASM-RET-" + timeCode : ((data.FirstOrDefault().Flag == StockRetunFlag.AssemblyRepair) ? "ASM-REP-RET-" + timeCode : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingLine) ? "PAC-RET-" + timeCode : "PAC-REP-RET-" + timeCode));
+                string returnCode = (data.FirstOrDefault().Flag == StockRetunFlag.AssemblyLine) ? "ASM-RET-" + timeCode : ((data.FirstOrDefault().Flag == StockRetunFlag.AssemblyRepair) ? "ASM-REP-RET-" + timeCode : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingLine) ? "PAC-RET-" + timeCode : ((data.FirstOrDefault().Flag == StockRetunFlag.AssemblyRepairFaulty) ? "ASM-REP-F-RET-" + timeCode : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingRepair) ? "PAC-REP-RET-" + timeCode : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingRepairFaulty) ? "PAC-REP-F-RET-" + timeCode : "Nothing")))));
 
                 StockItemReturnInfo stockItemReturnInfo = new StockItemReturnInfo()
                 {
@@ -172,7 +179,7 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                     ReturnCode = returnCode,
                 };
 
-                stockItemReturnInfo.Remarks = (data.FirstOrDefault().Flag == StockRetunFlag.AssemblyLine) ? "Stock Item Return By Assembly Line" : ((data.FirstOrDefault().Flag == StockRetunFlag.AssemblyRepair) ? "Stock Item Return By Assembly Repair Line" : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingLine) ? "Stock Item Return By Packaging Line" : "Stock Item Return By Packaging Repair Line"));
+                stockItemReturnInfo.Remarks = (data.FirstOrDefault().Flag == StockRetunFlag.AssemblyLine) ? "Stock Item Return By Assembly Line" : ((data.FirstOrDefault().Flag == StockRetunFlag.AssemblyRepair) ? "Stock Item Return By Assembly Repair Line" : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingLine) ? "Stock Item Return By Packaging Line" : ((data.FirstOrDefault().Flag == StockRetunFlag.AssemblyRepairFaulty) ? "Faulty Stock Item Return By Assembly Repair Line" : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingRepair) ? "Stock Item Return By Packaging Repair Line" : ((data.FirstOrDefault().Flag == StockRetunFlag.PackagingRepairFaulty) ? "Faulty Stock Item Return By Packaging Repair Line" : "Nothing")))));
 
                 List<StockItemReturnDetail> stockItemReturnDetails = new List<StockItemReturnDetail>();
                 foreach (var item in data)
@@ -246,6 +253,30 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                         };
                         repairLineStocks.Add(repairLineStockDetail);
                     }
+                    else if (item.Flag == StockRetunFlag.AssemblyRepairFaulty)
+                    {
+                        FaultyItemStockDetailDTO faultyItemStock = new FaultyItemStockDetailDTO()
+                        {
+                            RepairLineId = item.RepairLineId,
+                            ProductionFloorId = item.ProductionFloorId,
+                            DescriptionId = item.DescriptionId,
+                            WarehouseId = item.WarehouseId,
+                            ItemTypeId = item.ItemTypeId,
+                            ItemId = item.ItemId,
+                            UnitId = item.UnitId,
+                            Quantity = item.GoodStockQty + item.ManMadeFaultyQty + item.ChinaFaultyQty,
+                            OrganizationId = orgId,
+                            EUserId = userId,
+                            EntryDate = DateTime.Now,
+                            Remarks = stockItemReturnInfo.Remarks,
+                            ReferenceNumber = returnCode,
+                            StockStatus = StockStatus.StockReturn,
+                            AsseemblyLineId = item.AssemblyLineId,
+                            ManReturnQty = item.ManMadeFaultyQty,
+                            ChinaReturnQty = item.ChinaFaultyQty,
+                        };
+                        faultyItemStocks.Add(faultyItemStock);
+                    }
                     else if (item.Flag == StockRetunFlag.PackagingLine)
                     {
                         PackagingLineStockDetailDTO packagingLineStockDetail = new PackagingLineStockDetailDTO()
@@ -288,6 +319,29 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                         };
                         packagingRepairRawStocks.Add(packagingRepairStockDetail);
                     }
+                    else if (item.Flag == StockRetunFlag.PackagingRepairFaulty)
+                    {
+                        PackagingFaultyStockDetailDTO packagingFaultyStock = new PackagingFaultyStockDetailDTO()
+                        {
+                            PackagingLineId = item.PackagingLineId,
+                            ProductionFloorId = item.ProductionFloorId,
+                            DescriptionId = item.DescriptionId,
+                            WarehouseId = item.WarehouseId,
+                            ItemTypeId = item.ItemTypeId,
+                            ItemId = item.ItemId,
+                            UnitId = item.UnitId,
+                            Quantity = item.GoodStockQty + item.ManMadeFaultyQty + item.ChinaFaultyQty,
+                            OrganizationId = orgId,
+                            EUserId = userId,
+                            EntryDate = DateTime.Now,
+                            Remarks = stockItemReturnInfo.Remarks,
+                            ReferenceNumber = returnCode,
+                            StockStatus = StockStatus.StockReturn,
+                            ManReturnQty = item.ManMadeFaultyQty,
+                            ChinaReturnQty = item.ChinaFaultyQty,
+                        };
+                        packagingFaultyStocks.Add(packagingFaultyStock);
+                    }
                 }
                 stockItemReturnInfo.StockItemReturnDetails = stockItemReturnDetails;
                 stockItemReturnInfos.Add(stockItemReturnInfo);
@@ -304,6 +358,10 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                     {
                         return _repairLineStockDetailBusiness.SaveRepairLineStockReturn(repairLineStocks, userId, orgId, string.Empty);
                     }
+                    else if (flag == StockRetunFlag.AssemblyRepairFaulty)
+                    {
+                        return _faultyItemStockDetailBusiness.SaveFaultyStockReturn(faultyItemStocks, userId, orgId);
+                    }
                     else if (flag == StockRetunFlag.PackagingLine)
                     {
                         return _packagingLineStockDetailBusiness.SavePackagingLineStockReturn(packagingLineStocks, userId, orgId, string.Empty);
@@ -311,6 +369,10 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                     else if (flag == StockRetunFlag.PackagingRepair)
                     {
                         return _repairRawStockDetailBusiness.SavePackagingRepairRawStockReturn(packagingRepairRawStocks, userId, orgId);
+                    }
+                    else if (flag == StockRetunFlag.PackagingRepairFaulty)
+                    {
+                        return _packagingFaultyStockDetailBusiness.SaveFaultyStockReturn(packagingFaultyStocks, userId, orgId);
                     }
                 }
             }
@@ -347,6 +409,9 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                         ItemId = item.ItemId,
                         UnitId = item.UnitId,
                         Quantity = item.Quantity,
+                        GoodStockQty = item.GoodStockQty,
+                        ManMadeFaultyQty = item.ManMadeFaultyQty,
+                        ChinaFaultyQty = item.ChinaFaultyQty,
                         OrganizationId = orgId,
                         RefferenceNumber = returnInfo.ReturnCode,
                         EUserId = userId,
@@ -359,7 +424,7 @@ Where 1=1 and sr.OrganizationId={0} {1}",orgId, Utility.ParamChecker(param));
                 }
                 if (this.UpdateStockItemReturnStatus(returnId, status, userId, orgId))
                 {
-                    return _warehouseStockDetailBusiness.SaveWarehouseStockIn(warehouseStocks, userId, orgId);
+                    return _warehouseStockDetailBusiness.SavePartsStockInFromProduction(warehouseStocks, userId, orgId);
                 }
             }
 

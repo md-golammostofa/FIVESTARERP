@@ -168,7 +168,6 @@ namespace ERPWeb.Controllers
         }
         #endregion
 
-        // GET: Account
         #region Description
         public ActionResult GetDescriptionList(int? page)
         {
@@ -904,14 +903,14 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "StockReturnList")
             {
-                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, floorId, null, null, packagingLineId, warehouseId, returnId, returnCode, string.Empty, status, fromDate, toDate, User.OrgId);
+                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, floorId, null, null, packagingLineId, warehouseId, returnId, returnCode, string.Empty, status, fromDate, toDate, User.OrgId).Where(s=> s.StateStatus == "Send");
                 List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetStockReturnList", viewModels);
             }
             else if(!string.IsNullOrEmpty(flag) && flag.Trim() !="" && flag == "receivefinishGoods")
             {
-                var dto =_finishGoodsSendToWarehouseInfoBusiness.GetFinishGoodSendInfomations(lineId, warehouseId, modelId, status, fromDate, toDate, refNo, User.OrgId);
+                var dto =_finishGoodsSendToWarehouseInfoBusiness.GetFinishGoodSendInfomations(lineId, warehouseId, modelId, status, fromDate, toDate, refNo, User.OrgId).Where(s=> s.StateStatus == FinishGoodsSendStatus.Send);
                 ViewBag.PagerData = GetPagerData(dto.Count(), pageSize, page);
                 dto = dto.Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 List<FinishGoodsSendToWarehouseInfoViewModel> listOfFinishGoodsSendToWarehouseInfoViewModels = new List<FinishGoodsSendToWarehouseInfoViewModel>();
@@ -2780,6 +2779,8 @@ namespace ERPWeb.Controllers
         }
         #endregion
 
+        #region Stock Return From Production
+
         public ActionResult GetStockReturnItemsDetail(long returnId)
         {
             ViewBag.StateStatus = _stockItemReturnInfoBusiness.GetStockItemReturnInfoById(returnId, User.OrgId).StateStatus;
@@ -2803,6 +2804,8 @@ namespace ERPWeb.Controllers
             }
             return Json(IsSuccess);
         }
+
+        #endregion
 
         protected override void Dispose(bool disposing)
         {

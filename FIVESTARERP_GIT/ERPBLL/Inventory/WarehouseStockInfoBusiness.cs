@@ -73,7 +73,7 @@ namespace ERPBLL.Inventory
                 param += string.Format(@" and (wsi.StockInQty - wsi.StockOutQty)<='{0}'", lessOrEq);
             }
 
-            query = string.Format(@"Select wsi.StockInfoId,wh.WarehouseName 'Warehouse',de.DescriptionName 'ModelName',it.ItemName 'ItemType',i.ItemName 'Item',u.UnitSymbol 'Unit',wsi.StockInQty,wsi.StockOutQty,wsi.Remarks
+            query = string.Format(@"Select wsi.StockInfoId,wh.WarehouseName 'Warehouse',de.DescriptionName 'ModelName',it.ItemName 'ItemType',i.ItemName 'Item',u.UnitSymbol 'Unit',wsi.StockInQty,wsi.StockOutQty,wsi.Remarks,wsi.ManMadeFaultyStockInQty,wsi.ManMadeFaultyStockOutQty,wsi.ChinaMadeFaultyStockInQty,wsi.ChinaMadeFaultyStockOutQty
 From tblWarehouseStockInfo wsi
 Left Join tblWarehouses wh on wsi.WarehouseId = wh.Id
 Left Join tblDescriptions de on wsi.DescriptionId =de.DescriptionId

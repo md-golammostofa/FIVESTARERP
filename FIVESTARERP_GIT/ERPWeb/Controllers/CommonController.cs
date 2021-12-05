@@ -907,7 +907,21 @@ namespace ERPWeb.Controllers
             }
             return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
         }
-
+        [HttpPost]
+        public ActionResult IsAssemblyRepairLineStockAvailable(long itemId, long repairId, long modelId, int qty)
+        {
+            var repairStock = _repairLineStockInfoBusiness.GetRepairLineStockInfoByRepairAndItemAndModelId(repairId, itemId, modelId, User.OrgId);
+            var itemStock = 0;
+            if (repairStock != null)
+            {
+                itemStock = (repairStock.StockInQty - repairStock.StockOutQty).Value;
+                if (itemStock >= qty)
+                {
+                    return Json(true);
+                }
+            }
+            return Json(false);
+        }
         [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult GetProductionAssembleStockInfoByLineAndItemAndModelId(long lineId, long itemId, long modelId)
         {
@@ -930,33 +944,33 @@ namespace ERPWeb.Controllers
             return Json(remainQty);
         }
 
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetFaultyItemStockInfoByRepairAndModelAndItem(long itemId, long repairId, long modelId)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var repairStock = _faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItem(repairId, modelId, itemId, User.OrgId);
-            var itemStock = 0;
-            if (repairStock != null)
-            {
-                itemStock = (repairStock.StockInQty - repairStock.StockOutQty);
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
+        //[HttpPost, ValidateJsonAntiForgeryToken]
+        //public ActionResult GetFaultyItemStockInfoByRepairAndModelAndItem(long itemId, long repairId, long modelId)
+        //{
+        //    var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+        //    var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+        //    var repairStock = _faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItem(repairId, modelId, itemId, User.OrgId);
+        //    var itemStock = 0;
+        //    if (repairStock != null)
+        //    {
+        //        itemStock = (repairStock.StockInQty - repairStock.StockOutQty);
+        //    }
+        //    return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        //}
 
-        [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(long itemId, long repairId, long modelId, bool isChinaFaulty)
-        {
-            var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
-            var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
-            var repairStock = _faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(repairId, modelId, itemId, isChinaFaulty, User.OrgId);
-            var itemStock = 0;
-            if (repairStock != null)
-            {
-                itemStock = (repairStock.StockInQty - repairStock.StockOutQty);
-            }
-            return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
-        }
+        //[HttpPost, ValidateJsonAntiForgeryToken]
+        //public ActionResult GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(long itemId, long repairId, long modelId, bool isChinaFaulty)
+        //{
+        //    var unitId = _itemBusiness.GetItemOneByOrgId(itemId, User.OrgId).UnitId;
+        //    var unit = _unitBusiness.GetUnitOneByOrgId(unitId, User.OrgId);
+        //    var repairStock = _faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(repairId, modelId, itemId, isChinaFaulty, User.OrgId);
+        //    var itemStock = 0;
+        //    if (repairStock != null)
+        //    {
+        //        itemStock = (repairStock.StockInQty - repairStock.StockOutQty);
+        //    }
+        //    return Json(new { unitid = unit.UnitId, unitName = unit.UnitName, unitSymbol = unit.UnitSymbol, stockQty = itemStock });
+        //}
         [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult IsDuplicateLineNumber(string lineNumber, long id)
         {

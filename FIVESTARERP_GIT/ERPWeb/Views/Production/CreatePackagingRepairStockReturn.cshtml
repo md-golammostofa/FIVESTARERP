@@ -150,6 +150,32 @@
             $('input[name="allItem"]').prop("checked", allChecked);
         })
 
+        $(document).on('keyup', 'input[name="manMadeFaulty"]', function () {
+            $.each($(this).parents('tr'), function (index, item) {
+                var tds = $(this).children('td');
+                var goodStock = tds.eq(3).html();/*$(this).children('td').eq(4).children('input[name="goodStock"]').val();*/
+                var manMade = tds.eq(4).children('input[name="manMadeFaulty"]').val();
+                var chinaMade = tds.eq(5).children('input[name="chinaMadeFaulty"]').val();
+
+                var totalGood = TryParseInt(goodStock, 0) - (TryParseInt(manMade, 0) + TryParseInt(chinaMade, 0));
+
+                tds.eq(6).children('input[name="goodStock"]').val(totalGood).trigger('change');
+            })
+        })
+
+        $(document).on('keyup', 'input[name="chinaMadeFaulty"]', function () {
+            $.each($(this).parents('tr'), function (index, item) {
+                var tds = $(this).children('td');
+                var goodStock = tds.eq(3).html();/*$(this).children('td').eq(4).children('input[name="goodStock"]').val();*/
+                var manMade = tds.eq(4).children('input[name="manMadeFaulty"]').val();
+                var chinaMade = tds.eq(5).children('input[name="chinaMadeFaulty"]').val();
+
+                var totalGood = TryParseInt(goodStock, 0) - (TryParseInt(manMade, 0) + TryParseInt(chinaMade, 0));
+
+                tds.eq(6).children('input[name="goodStock"]').val(totalGood).trigger('change');
+            })
+        })
+
         function validateSubmit() {
             var isValid = true;
             if (!validateSearch()) {
@@ -159,24 +185,39 @@
             var invalidValue = 0;
             if ($(".tblPackagingRepairReturnItems tbody").length > 0) {
                 $.each($(".tblPackagingRepairReturnItems tbody tr"), function (index, item) {
-                    if ($(this).children('td').eq(0).children('input[name="item"]').is(":checked")) {
+                    var tds = $(this).children('td');
+                    if (tds.eq(0).children('input[name="item"]').is(":checked")) {
                         totalCheckedItems++;
-                        var returnQty = $(this).children('td').eq(4).children('input[type="number"]').val();
-                        var availableStockQty = $(this).children('td').eq(3).html();
-                        if (TryParseInt(returnQty, 0) <= 0) {
-                            $(this).children('td').eq(4).children('input[type="number"]').addClass("error-border");
+                        var manMade = tds.eq(4).children('input[name="manMadeFaulty"]').val();
+                        var chinaMade = tds.eq(5).children('input[name="chinaMadeFaulty"]').val();
+                        var good = tds.eq(6).children('input[name="goodStock"]').val();
+                        var availableStockQty = tds.eq(3).html();
+
+                        if (TryParseInt(manMade, 0) < 0 || TryParseInt(chinaMade, 0) < 0 || TryParseInt(good, 0) < 0) {
+                            tds.eq(4).children('input[type="text"]').addClass("error-border");
+                            tds.eq(5).children('input[type="text"]').addClass("error-border");
+                            tds.eq(6).children('input[type="text"]').addClass("error-border");
+                            isValid = false;
+                            invalidValue++;
+                        }
+                        else if ((TryParseInt(manMade, 0) + TryParseInt(chinaMade, 0) + TryParseInt(good, 0)) <= 0) {
+                            tds.eq(4).children('input[type="text"]').addClass("error-border");
+                            tds.eq(5).children('input[type="text"]').addClass("error-border");
+                            tds.eq(6).children('input[type="text"]').addClass("error-border");
+                            isValid = false;
+                            invalidValue++;
+                        }
+                        else if ((TryParseInt(manMade, 0) + TryParseInt(chinaMade, 0) + TryParseInt(good, 0)) > TryParseInt(availableStockQty, 0)) {
+                            tds.eq(4).children('input[type="text"]').addClass("error-border");
+                            tds.eq(5).children('input[type="text"]').addClass("error-border");
+                            tds.eq(6).children('input[type="text"]').addClass("error-border");
                             isValid = false;
                             invalidValue++;
                         }
                         else {
-                            if (TryParseInt(returnQty, 0) > TryParseInt(availableStockQty, 0)) {
-                                $(this).children('td').eq(4).children('input[type="number"]').addClass("error-border");
-                                isValid = false;
-                                invalidValue++;
-                            }
-                            else {
-                                $(this).children('td').eq(4).children('input[type="number"]').removeClass("error-border");
-                            }
+                            tds.eq(4).children('input[type="text"]').removeClass("error-border");
+                            tds.eq(5).children('input[type="text"]').removeClass("error-border");
+                            tds.eq(6).children('input[type="text"]').removeClass("error-border");
                         }
                     }
                 });
@@ -211,11 +252,13 @@
                                 DescriptionId: TryParseInt(ddlModelName.val()),
                                 PackagingLineId: packaging[0],
                                 ProductionFloorId: packaging[1],
-                                WarehouseId: tds.eq('6').html(),
-                                ItemTypeId: tds.eq('7').html(),
-                                ItemId: tds.eq('8').html(),
-                                UnitId: tds.eq('9').html(),
-                                Quantity: tds.eq('4').children('input[type="number"]').val(),
+                                ManMadeFaultyQty: TryParseInt(tds.eq('4').children('input[type="text"]').val(), 0),
+                                ChinaFaultyQty: TryParseInt(tds.eq('5').children('input[type="text"]').val(), 0),
+                                GoodStockQty: TryParseInt(tds.eq('6').children('input[type="text"]').val(), 0),
+                                WarehouseId: tds.eq('7').html(),
+                                ItemTypeId: tds.eq('8').html(),
+                                ItemId: tds.eq('9').html(),
+                                UnitId: tds.eq('10').html(),
                                 Flag: stockReturnFlag.packagingRepair,
                                 Remarks: "Stock Item Return By Packaging Line"
                             })
@@ -223,8 +266,6 @@
 
                         var data = JSON.stringify({ model: items });
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveStockReturnItems', data, getToken())).then(function (res, status) {
-                            console.log(res);
-                            console.log(status);
                             if (res == true && status === "success") {
                                 toastrSuccessAlert(execuStatus.successSave);
                                 setTimeout(function () {

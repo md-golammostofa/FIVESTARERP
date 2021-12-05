@@ -35,7 +35,7 @@ namespace ERPBLL.Production
 
         public PackagingFaultyStockInfo GetPackagingFaultyStockInfoByRepairAndModelAndItemAndFultyType(long packagingLineId, long modelId, long itemId, bool isChinaFaulty, long orgId)
         {
-            return this._packagingFaultyStockInfoRepository.GetOneByOrg(s => s.PackagingLineId == packagingLineId && s.DescriptionId == modelId && s.ItemId == itemId && s.IsChinaFaulty == isChinaFaulty && s.OrganizationId == orgId);
+            return this._packagingFaultyStockInfoRepository.GetOneByOrg(s => s.PackagingLineId == packagingLineId && s.DescriptionId == modelId && s.ItemId == itemId /*&& s.IsChinaFaulty == isChinaFaulty*/ && s.OrganizationId == orgId);
         }
 
         public IEnumerable<PackagingFaultyStockInfo> GetPackagingFaultyStockInfos(long orgId)
@@ -82,13 +82,13 @@ namespace ERPBLL.Production
                 int i = 0;
                 if (int.TryParse(lessOrEq, out i) && i > 0)
                 {
-                    param += string.Format(@" and (pfi.StockInQty-pfi.StockOutQty) >{0}", i);
+                    param += string.Format(@" and (pfi.ChinaMadeFaultyStockInQty-pfi.ChinaMadeFaultyStockOutQty) >{0}", i);
                 };
             }
 
             query = string.Format(@"Select  pfi.PackagingFaultyStockInfoId,ISNULL(pl.LineNumber,'') 'ProductionFloorName',pfi.PackagingLineId,pac.PackagingLineName , ISNULL(de.DescriptionName,'') 'ModelName', 
 ISNULL(w.WarehouseName,'') 'WarehouseName', ISNULL(it.ItemName,'') 'ItemTypeName', ISNULL(i.ItemName,'') 'ItemName',
-ISNULL(u.UnitSymbol,'') 'UnitName',pfi.StockInQty,pfi.StockOutQty, pfi.IsChinaFaulty,(Case When pfi.IsChinaFaulty = 1 then 'China Made' else 'Man Made' End)'FaultyReason' 
+ISNULL(u.UnitSymbol,'') 'UnitName',pfi.ChinaMadeFaultyStockInQty,pfi.ChinaMadeFaultyStockOutQty,pfi.ManMadeFaultyStockInQty,pfi.ManMadeFaultyStockOutQty 
 From [Production].dbo.tblPackagingFaultyStockInfo pfi
 Inner Join [Production].dbo.tblProductionLines pl on pfi.ProductionFloorId = pl.LineId
 Inner Join [Production].dbo.tblPackagingLine pac on pfi.PackagingLineId = pac.PackagingLineId
@@ -100,6 +100,16 @@ Left Join [Inventory].dbo.[tblUnits] u on pfi.UnitId = u.UnitId
 Where 1=1 and pfi.OrganizationId={0} {1}", orgId, Utility.ParamChecker(param));
 
             return query;
+        }
+        public IEnumerable<PackagingFaultyStockInfoDTO> GetPackegingLineFaultyStocksForReturnStock(long packegingId, long floorId, long modelId, long orgId)
+        {
+            return this._productionDb.Db.Database.SqlQuery<PackagingFaultyStockInfoDTO>(string.Format(@"Select rsi.PackagingFaultyStockInfoId,rsi.WarehouseId,w.WarehouseName,rsi.ItemTypeId,it.ItemName'ItemTypeName',rsi.ItemId,i.ItemName,rsi.UnitId ,u.UnitSymbol 'UnitName',rsi.ChinaMadeFaultyStockInQty,rsi.ChinaMadeFaultyStockOutQty,rsi.ManMadeFaultyStockInQty,rsi.ManMadeFaultyStockOutQty
+From tblPackagingFaultyStockInfo rsi
+Inner Join [Inventory].dbo.tblWarehouses w on rsi.WarehouseId = w.Id
+Inner Join [Inventory].dbo.tblItemTypes it on rsi.ItemTypeId = it.ItemId
+Inner Join [Inventory].dbo.tblItems i on rsi.ItemId = i.ItemId
+Inner Join [Inventory].dbo.tblUnits u on rsi.UnitId = u.UnitId
+Where 1=1 and rsi.OrganizationId={0} and rsi.ProductionFloorId={1} and rsi.PackagingLineId={2} and rsi.DescriptionId= {3}  and ((rsi.ChinaMadeFaultyStockInQty-rsi.ChinaMadeFaultyStockOutQty) > 0 OR (rsi.ManMadeFaultyStockInQty-rsi.ManMadeFaultyStockOutQty) > 0)", orgId, floorId, packegingId, modelId)).ToList();
         }
     }
 }

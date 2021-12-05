@@ -32,7 +32,9 @@ namespace ERPBO.Production.DTOModel
         public long? TransferId { get; set; }
         [StringLength(150)]
         public string TransferCode { get; set; }
-
+        public long PackagingFaultyStockInfoId { get; set; }
+        public int ChinaReturnQty { get; set; }
+        public int ManReturnQty { get; set; }
         // Custom Property
         [StringLength(100)]
         public string ProductionFloorName { get; set; }

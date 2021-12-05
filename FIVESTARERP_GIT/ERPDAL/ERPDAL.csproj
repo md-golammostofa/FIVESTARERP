@@ -618,6 +618,14 @@
     <Compile Include="InventoryContextMigrations\202111240826453_Inventory_add_tblHalfDoneWarehouseStockInfo_detail.Designer.cs">
       <DependentUpon>202111240826453_Inventory_add_tblHalfDoneWarehouseStockInfo_detail.cs</DependentUpon>
     </Compile>
+    <Compile Include="InventoryContextMigrations\202112010747299_Inventory_add_prp_tblWarehouseStockInfo_Detail.cs" />
+    <Compile Include="InventoryContextMigrations\202112010747299_Inventory_add_prp_tblWarehouseStockInfo_Detail.Designer.cs">
+      <DependentUpon>202112010747299_Inventory_add_prp_tblWarehouseStockInfo_Detail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryContextMigrations\202112020515282_Inventory_add_prp_StockInfo_in_tblWarehouseStockDetail.cs" />
+    <Compile Include="InventoryContextMigrations\202112020515282_Inventory_add_prp_StockInfo_in_tblWarehouseStockDetail.Designer.cs">
+      <DependentUpon>202112020515282_Inventory_add_prp_StockInfo_in_tblWarehouseStockDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="InventoryContextMigrations\Configuration.cs" />
     <Compile Include="InventoryDAL\InventoryUnitOfWork.cs" />
     <Compile Include="InventoryDAL\WarehouseRepository.cs" />
@@ -932,6 +940,14 @@
     <Compile Include="ProductionContextMigrations\202111300950177_Production_add_prp_tblStockItemReturnDetail.cs" />
     <Compile Include="ProductionContextMigrations\202111300950177_Production_add_prp_tblStockItemReturnDetail.Designer.cs">
       <DependentUpon>202111300950177_Production_add_prp_tblStockItemReturnDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202112020912053_Production_add_prp_tblFaultyItemStockInfo_Detail.cs" />
+    <Compile Include="ProductionContextMigrations\202112020912053_Production_add_prp_tblFaultyItemStockInfo_Detail.Designer.cs">
+      <DependentUpon>202112020912053_Production_add_prp_tblFaultyItemStockInfo_Detail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202112050555346_Production_add_prp_in_tblPackegingFaultyStockInfo_Detail.cs" />
+    <Compile Include="ProductionContextMigrations\202112050555346_Production_add_prp_in_tblPackegingFaultyStockInfo_Detail.Designer.cs">
+      <DependentUpon>202112050555346_Production_add_prp_in_tblPackegingFaultyStockInfo_Detail.cs</DependentUpon>
     </Compile>
     <Compile Include="ProductionContextMigrations\Configuration.cs" />
     <Compile Include="ProductionDAL\ProductionRepository.cs" />
@@ -1442,6 +1458,12 @@
     <EmbeddedResource Include="InventoryContextMigrations\202111240826453_Inventory_add_tblHalfDoneWarehouseStockInfo_detail.resx">
       <DependentUpon>202111240826453_Inventory_add_tblHalfDoneWarehouseStockInfo_detail.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202112010747299_Inventory_add_prp_tblWarehouseStockInfo_Detail.resx">
+      <DependentUpon>202112010747299_Inventory_add_prp_tblWarehouseStockInfo_Detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InventoryContextMigrations\202112020515282_Inventory_add_prp_StockInfo_in_tblWarehouseStockDetail.resx">
+      <DependentUpon>202112020515282_Inventory_add_prp_StockInfo_in_tblWarehouseStockDetail.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202006271621248_Production_AllEntities_27-Jun-2020.resx">
       <DependentUpon>202006271621248_Production_AllEntities_27-Jun-2020.cs</DependentUpon>
     </EmbeddedResource>
@@ -1675,6 +1697,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202111300950177_Production_add_prp_tblStockItemReturnDetail.resx">
       <DependentUpon>202111300950177_Production_add_prp_tblStockItemReturnDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202112020912053_Production_add_prp_tblFaultyItemStockInfo_Detail.resx">
+      <DependentUpon>202112020912053_Production_add_prp_tblFaultyItemStockInfo_Detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202112050555346_Production_add_prp_in_tblPackegingFaultyStockInfo_Detail.resx">
+      <DependentUpon>202112050555346_Production_add_prp_in_tblPackegingFaultyStockInfo_Detail.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.resx">
       <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>

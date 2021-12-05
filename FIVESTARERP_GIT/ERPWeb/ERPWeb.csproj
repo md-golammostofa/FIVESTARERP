@@ -973,6 +973,11 @@
     <Content Include="Views\Inventory\_GetHalfDoneWarehouseStock.cshtml" />
     <Content Include="Views\Production\GetWeightCheck.cshtml" />
     <Content Include="Views\Production\GetWeightCheckListByUserId.cshtml" />
+    <Content Include="Views\Production\GetRepairFaultyStockItemsForReturn.cshtml" />
+    <Content Include="Views\Production\_GetAssemblyRepairFaultyStockReturnList.cshtml" />
+    <Content Include="Views\Production\CreatePackegingFaultyStockReturn.cshtml" />
+    <Content Include="Views\Production\GetPackegingFaultyStockItemsForReturn.cshtml" />
+    <Content Include="Views\Production\_GetPackegingRepairFaultyStockReturnList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

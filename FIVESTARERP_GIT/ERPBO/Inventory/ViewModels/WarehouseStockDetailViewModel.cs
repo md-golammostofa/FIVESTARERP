@@ -23,6 +23,9 @@ namespace ERPBO.Inventory.ViewModels
         public long? UnitId { get; set; }
         [Range(1, int.MaxValue)]
         public int Quantity { get; set; }
+        public int GoodStockQty { get; set; }
+        public int ManMadeFaultyQty { get; set; }
+        public int ChinaFaultyQty { get; set; }
         public int OrderQty { get; set; }
         public long? SupplierId { get; set; }
         public Nullable<DateTime> ExpireDate { get; set; }
@@ -39,6 +42,7 @@ namespace ERPBO.Inventory.ViewModels
         public string RefferenceNumber { get; set; }
         [StringLength(150)]
         public string StockStatus { get; set; }
+        public long StockInfoId { get; set; }
 
         //Custom Prop
         [StringLength(100)]

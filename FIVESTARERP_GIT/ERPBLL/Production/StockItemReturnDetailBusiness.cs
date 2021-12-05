@@ -21,7 +21,7 @@ namespace ERPBLL.Production
         }
         public IEnumerable<StockItemReturnDetailDTO> GetStockItemReturnDetails(long infoId, long orgId)
         {
-            return this._productionDb.Db.Database.SqlQuery<StockItemReturnDetailDTO>(string.Format(@"Select srd.SIRDetailId,srd.WarehouseId,w.WarehouseName,srd.ItemTypeId,it.ItemName 'ItemTypeName',srd.ItemId, i.ItemName,srd.Quantity,srd.UnitId, u.UnitSymbol 'UnitName' 
+            return this._productionDb.Db.Database.SqlQuery<StockItemReturnDetailDTO>(string.Format(@"Select srd.SIRDetailId,srd.SIRInfoId,srd.WarehouseId,w.WarehouseName,srd.ItemTypeId,it.ItemName 'ItemTypeName',srd.ItemId,i.ItemName,srd.Quantity,srd.GoodStockQty,srd.ManMadeFaultyQty,srd.ChinaFaultyQty,srd.UnitId, u.UnitSymbol 'UnitName'
 From tblStockItemReturnDetail srd
 Inner Join [Inventory].dbo.tblWarehouses w on srd.WarehouseId = w.Id
 Inner Join [Inventory].dbo.tblItemTypes it on srd.ItemTypeId = it.ItemId

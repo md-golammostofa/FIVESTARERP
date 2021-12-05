@@ -3843,12 +3843,21 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag == "StockReturnList")
             {
-                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId, repairId, null, null, warehouseId, returnId, returnCode,StockRetunFlag.AssemblyRepair, status, fromDate, toDate, User.OrgId);
-
+                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId, null, repairId, null, warehouseId, returnId, returnCode,StockRetunFlag.AssemblyRepair, status, fromDate, toDate, User.OrgId);
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
-
                 return PartialView("_GetStockReturnList", viewModels);
+            }
+            else if (!string.IsNullOrEmpty(flag) && flag == "FaultyStockReturnList")
+            {
+                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId,null, repairId, null, warehouseId, returnId, returnCode, StockRetunFlag.AssemblyRepairFaulty, status, fromDate, toDate, User.OrgId);
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
+                List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetAssemblyRepairFaultyStockReturnList", viewModels);
             }
             return View();
         }
@@ -4048,8 +4057,8 @@ namespace ERPWeb.Controllers
                 IEnumerable<FaultyItemStockInfoDTO> dto = _faultyItemStockInfoBusiness.GetFaultyItemStockInfosByQuery(lineId, repairId, modelId, warehouseId, itemTypeId, itemId, lessOrEq,reqFor, User.OrgId);
 
                 // Pagination //
-                //ViewBag.PagerData = GetPagerData(dto.Count(), pageSize, page);
-                //dto = dto.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 //-----------------//
                 List<FaultyItemStockInfoViewModel> viewModels = new List<FaultyItemStockInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
@@ -4209,6 +4218,15 @@ namespace ERPWeb.Controllers
                 return PartialView("_GetRepairSectionFaultyItemTransferDetail", viewModels);
             }
             return View();
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetRepairFaultyStockItemsForReturn(long repairLinesId, long floorId, long modelId)
+        {
+            var data = _faultyItemStockInfoBusiness.GetRepairLineStocksForReturnStock(repairLinesId, floorId, modelId, User.OrgId);
+            IEnumerable<FaultyItemStockInfoViewModel> viewModels = new List<FaultyItemStockInfoViewModel>();
+            AutoMapper.Mapper.Map(data, viewModels);
+            return PartialView(viewModels);
         }
 
         #endregion
@@ -4530,7 +4548,6 @@ namespace ERPWeb.Controllers
             return View();
         }
 
-        // FiveStar - 
         #region Production - Requisition - New [21-July-2020] // FiveStar
         public ActionResult GetRequisitionByItemInfoAndDetail(string flag, long? floorId, long? assemblyId, long? packagingId, long? repairLineId, long? warehouseId, long? modelId, string reqCode, string reqType, string reqFor, string fromDate, string toDate, string status, long? reqInfoId, string reqFlag)
         {
@@ -4660,7 +4677,8 @@ namespace ERPWeb.Controllers
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() !="" && flag == "StockReturnList")
             {
                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId, assemblyId, null, null, warehouseId, returnId, returnCode, StockRetunFlag.AssemblyLine, status, fromDate, toDate, User.OrgId);
-
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
 
@@ -5094,6 +5112,7 @@ namespace ERPWeb.Controllers
         {
             if (string.IsNullOrEmpty(flag))
             {
+                ViewBag.ddlLineNumber = _productionLineBusiness.GetAllProductionLineByOrgId(User.OrgId).Select(line => new SelectListItem { Text = line.LineNumber, Value = line.LineId.ToString() }).ToList();
                 ViewBag.ddlPackagingLine = _packagingLineBusiness.GetPackagingLinesWithProduction(User.OrgId).Select(s => new SelectListItem
                 {
                     Text = s.text,
@@ -5194,6 +5213,8 @@ namespace ERPWeb.Controllers
             else if(!string.IsNullOrEmpty(flag) && flag.Trim() == "FaultyStock")
             {
                 var dto = _packagingFaultyStockInfoBusiness.GetPackagingFaultyStockInfosByQuery(floorId, packagingLineId, modelId, warehouseId, itemTypeId, itemId, lessOrEq, User.OrgId);
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<PackagingFaultyStockInfoViewModel> viewModels = new List<PackagingFaultyStockInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetPackagingFaultyStockInfo", viewModels);
@@ -5247,9 +5268,20 @@ namespace ERPWeb.Controllers
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "StockReturnList")
             {
                 var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, floorId, null, null, packagingLineId, warehouseId, returnId, returnCode, StockRetunFlag.PackagingRepair, status, fromDate, toDate, User.OrgId);
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetStockReturnList", viewModels);
+            }
+            else if (!string.IsNullOrEmpty(flag) && flag == "FaultyStockReturnList")
+            {
+                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, floorId, null, null, packagingLineId, warehouseId, returnId, returnCode, StockRetunFlag.PackagingRepairFaulty, status, fromDate, toDate, User.OrgId);
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
+                List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetPackegingRepairFaultyStockReturnList", viewModels);
             }
             return View();
         }
@@ -5274,6 +5306,34 @@ namespace ERPWeb.Controllers
         {
             var data = _packagingRepairRawStockInfoBusiness.GetPackagingRepairStocksForReturnStock(packagingLine, floorId, modelId, User.OrgId);
             IEnumerable<PackagingRepairRawStockInfoViewModel> viewModels = new List<PackagingRepairRawStockInfoViewModel>();
+            AutoMapper.Mapper.Map(data, viewModels);
+            return PartialView(viewModels);
+        }
+
+        #endregion
+
+        #region Packeging Faulty Stock Return
+
+        public ActionResult CreatePackegingFaultyStockReturn()
+        {
+            ViewBag.ddlPackagingLine = _packagingLineBusiness.GetPackagingLinesWithProduction(User.OrgId).Select(s => new SelectListItem
+            {
+                Text = s.text,
+                Value = s.value
+            }).ToList();
+
+            ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(s => new SelectListItem
+            {
+                Text = s.DescriptionName,
+                Value = s.DescriptionId.ToString()
+            }).ToList();
+            return View();
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetPackegingFaultyStockItemsForReturn(long packegingLineId, long floorId, long modelId)
+        {
+            var data = _packagingFaultyStockInfoBusiness.GetPackegingLineFaultyStocksForReturnStock(packegingLineId, floorId, modelId, User.OrgId);
+            IEnumerable<PackagingFaultyStockInfoViewModel> viewModels = new List<PackagingFaultyStockInfoViewModel>();
             AutoMapper.Mapper.Map(data, viewModels);
             return PartialView(viewModels);
         }

@@ -33,7 +33,15 @@ namespace ERPBLL.Production
                var info = _faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItem(data.RepairLineId.Value, data.DescriptionId.Value, data.ItemId.Value, orgId);
                 if(info != null)
                 {
-                    info.StockInQty = info.StockInQty - 1;
+                    if (data.IsChinaFaulty)
+                    {
+                        info.ChinaMadeFaultyStockInQty = info.ChinaMadeFaultyStockInQty - 1;
+                    }
+                    else
+                    {
+                        info.ManMadeFaultyStockInQty = info.ManMadeFaultyStockInQty - 1;
+                    }
+                    
                     _faultyItemStockInfoRepository.Update(info);
                 }
                 _faultyItemStockDetailRepository.Delete(data.FaultyItemStockDetailId);
@@ -110,38 +118,93 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
                     TransferId = item.TransferId,
                     IsChinaFaulty = item.IsChinaFaulty
                 };
-                var stockInfoInDb = this._faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(item.RepairLineId.Value, item.DescriptionId.Value, item.ItemId.Value, item.IsChinaFaulty, orgId);
 
-                if (stockInfoInDb != null)
+                if (item.IsChinaFaulty)
                 {
-                    stockInfoInDb.StockInQty += item.Quantity;
-                    stockInfoInDb.UpdateDate = DateTime.Now;
-                    stockInfoInDb.UpUserId = userId;
-                    _faultyItemStockInfoRepository.Update(stockInfoInDb);
+                    var stockInfoInDb = this._faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(item.RepairLineId.Value, item.DescriptionId.Value, item.ItemId.Value, item.IsChinaFaulty, orgId);
+                    if (stockInfoInDb != null)
+                    {
+                        stockInfoInDb.ChinaMadeFaultyStockInQty += item.Quantity;
+                        stockInfoInDb.UpdateDate = DateTime.Now;
+                        stockInfoInDb.UpUserId = userId;
+                        _faultyItemStockInfoRepository.Update(stockInfoInDb);
+                        if (_faultyItemStockInfoRepository.Save())
+                        {
+                            faultyItem.FaultyItemStockInfoId = stockInfoInDb.FaultyItemStockInfoId;
+                        }
+                    }
+                    else
+                    {
+                        FaultyItemStockInfo stockInfo = new FaultyItemStockInfo()
+                        {
+                            ProductionFloorId = item.ProductionFloorId,
+                            DescriptionId = item.DescriptionId,
+                            QCId = item.QCId,
+                            RepairLineId = item.RepairLineId,
+                            WarehouseId = item.WarehouseId,
+                            ItemTypeId = item.ItemTypeId,
+                            ItemId = item.ItemId,
+                            UnitId = item.UnitId,
+                            OrganizationId = orgId,
+                            EUserId = userId,
+                            ChinaMadeFaultyStockInQty = item.Quantity,
+                            ChinaMadeFaultyStockOutQty = 0,
+                            ManMadeFaultyStockInQty = 0,
+                            ManMadeFaultyStockOutQty = 0,
+                            Remarks = item.Remarks,
+                            EntryDate = DateTime.Now,
+                            AsseemblyLineId = item.AsseemblyLineId,
+                        };
+                        _faultyItemStockInfoRepository.Insert(stockInfo);
+                        if (_faultyItemStockInfoRepository.Save())
+                        {
+                            faultyItem.FaultyItemStockInfoId = stockInfo.FaultyItemStockInfoId;
+                        }
+                    }
                 }
                 else
                 {
-                    FaultyItemStockInfo stockInfo = new FaultyItemStockInfo()
+                    var stockInfoInDb = this._faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(item.RepairLineId.Value, item.DescriptionId.Value, item.ItemId.Value, item.IsChinaFaulty, orgId);
+                    if (stockInfoInDb != null)
                     {
-                        ProductionFloorId = item.ProductionFloorId,
-                        DescriptionId = item.DescriptionId,
-                        QCId = item.QCId,
-                        RepairLineId = item.RepairLineId,
-                        WarehouseId = item.WarehouseId,
-                        ItemTypeId = item.ItemTypeId,
-                        ItemId = item.ItemId,
-                        UnitId = item.UnitId,
-                        OrganizationId = orgId,
-                        EUserId = userId,
-                        StockInQty = item.Quantity,
-                        StockOutQty = 0,
-                        Remarks = item.Remarks,
-                        EntryDate = DateTime.Now,
-                        IsChinaFaulty = item.IsChinaFaulty
-                    };
-                    _faultyItemStockInfoRepository.Insert(stockInfo);
+                        stockInfoInDb.ManMadeFaultyStockInQty += item.Quantity;
+                        stockInfoInDb.UpdateDate = DateTime.Now;
+                        stockInfoInDb.UpUserId = userId;
+                        _faultyItemStockInfoRepository.Update(stockInfoInDb);
+                        if (_faultyItemStockInfoRepository.Save())
+                        {
+                            faultyItem.FaultyItemStockInfoId = stockInfoInDb.FaultyItemStockInfoId;
+                        }
+                    }
+                    else
+                    {
+                        FaultyItemStockInfo stockInfo = new FaultyItemStockInfo()
+                        {
+                            ProductionFloorId = item.ProductionFloorId,
+                            DescriptionId = item.DescriptionId,
+                            QCId = item.QCId,
+                            RepairLineId = item.RepairLineId,
+                            WarehouseId = item.WarehouseId,
+                            ItemTypeId = item.ItemTypeId,
+                            ItemId = item.ItemId,
+                            UnitId = item.UnitId,
+                            OrganizationId = orgId,
+                            EUserId = userId,
+                            ManMadeFaultyStockInQty = item.Quantity,
+                            ManMadeFaultyStockOutQty = 0,
+                            ChinaMadeFaultyStockOutQty = 0,
+                            ChinaMadeFaultyStockInQty = 0,
+                            Remarks = item.Remarks,
+                            EntryDate = DateTime.Now,
+                            AsseemblyLineId = item.AsseemblyLineId,
+                        };
+                        _faultyItemStockInfoRepository.Insert(stockInfo);
+                        if (_faultyItemStockInfoRepository.Save())
+                        {
+                            faultyItem.FaultyItemStockInfoId = stockInfo.FaultyItemStockInfoId;
+                        }
+                    }
                 }
-
                 faultyItemStocks.Add(faultyItem);
             }
             if (faultyItemStocks.Count > 0)
@@ -173,13 +236,33 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
                     Remarks = item.Remarks,
                     StockStatus = StockStatus.StockOut,
                     EntryDate = DateTime.Now,
-                    IsChinaFaulty = item.IsChinaFaulty
+                    IsChinaFaulty = item.IsChinaFaulty,
+                    AsseemblyLineId = item.AsseemblyLineId,
                 };
-                var stockInfoInDb = this._faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(item.RepairLineId.Value, item.DescriptionId.Value, item.ItemId.Value, item.IsChinaFaulty, orgId);
-                stockInfoInDb.StockOutQty += item.Quantity;
-                stockInfoInDb.UpdateDate = DateTime.Now;
-                stockInfoInDb.UpUserId = userId;
-                _faultyItemStockInfoRepository.Update(stockInfoInDb);
+                if (item.IsChinaFaulty)
+                {
+                    var stockInfoInDb = this._faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(item.RepairLineId.Value, item.DescriptionId.Value, item.ItemId.Value, item.IsChinaFaulty, orgId);
+                    stockInfoInDb.ChinaMadeFaultyStockOutQty += item.Quantity;
+                    stockInfoInDb.UpdateDate = DateTime.Now;
+                    stockInfoInDb.UpUserId = userId;
+                    _faultyItemStockInfoRepository.Update(stockInfoInDb);
+                    if (_faultyItemStockInfoRepository.Save())
+                    {
+                        faultyItem.FaultyItemStockInfoId = stockInfoInDb.FaultyItemStockInfoId;
+                    }
+                }
+                else
+                {
+                    var stockInfoInDb = this._faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(item.RepairLineId.Value, item.DescriptionId.Value, item.ItemId.Value, item.IsChinaFaulty, orgId);
+                    stockInfoInDb.ManMadeFaultyStockOutQty += item.Quantity;
+                    stockInfoInDb.UpdateDate = DateTime.Now;
+                    stockInfoInDb.UpUserId = userId;
+                    _faultyItemStockInfoRepository.Update(stockInfoInDb);
+                    if (_faultyItemStockInfoRepository.Save())
+                    {
+                        faultyItem.FaultyItemStockInfoId = stockInfoInDb.FaultyItemStockInfoId;
+                    }
+                }
                 faultyItemStocks.Add(faultyItem);
             }
             if (faultyItemStocks.Count > 0)
@@ -189,7 +272,55 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
             }
             return IsSuccess;
         }
+        public bool SaveFaultyStockReturn(List<FaultyItemStockDetailDTO> stockDetails, long userId, long orgId)
+        {
+            bool IsSuccess = false;
+            List<FaultyItemStockDetail> faultyItemStocks = new List<FaultyItemStockDetail>();
+            foreach (var item in stockDetails)
+            {
+                FaultyItemStockDetail faultyItem = new FaultyItemStockDetail()
+                {
+                    ProductionFloorId = item.ProductionFloorId,
+                    DescriptionId = item.DescriptionId,
+                    QCId = item.QCId,
+                    RepairLineId = item.RepairLineId,
+                    WarehouseId = item.WarehouseId,
+                    ItemTypeId = item.ItemTypeId,
+                    ItemId = item.ItemId,
+                    OrganizationId = orgId,
+                    EUserId = userId,
+                    Quantity = item.Quantity,
+                    ReferenceNumber = item.ReferenceNumber,
+                    Remarks = item.Remarks,
+                    StockStatus = StockStatus.StockReturn,
+                    EntryDate = DateTime.Now,
+                    IsChinaFaulty = item.IsChinaFaulty,
+                    AsseemblyLineId = item.AsseemblyLineId,
+                };
 
+                var stockInfoInDb = this._faultyItemStockInfoBusiness.GetFaultyItemStockInfoByRepairAndModelAndItemAndFultyType(item.RepairLineId.Value, item.DescriptionId.Value, item.ItemId.Value, item.IsChinaFaulty, orgId);
+                if (stockInfoInDb != null)
+                {
+                    stockInfoInDb.ChinaMadeFaultyStockOutQty += item.ChinaReturnQty;
+                    stockInfoInDb.ManMadeFaultyStockOutQty += item.ManReturnQty;
+                    stockInfoInDb.UpdateDate = DateTime.Now;
+                    stockInfoInDb.UpUserId = userId;
+
+                    _faultyItemStockInfoRepository.Update(stockInfoInDb);
+                    if (_faultyItemStockInfoRepository.Save())
+                    {
+                        faultyItem.FaultyItemStockInfoId = stockInfoInDb.FaultyItemStockInfoId;
+                    }
+                }
+                faultyItemStocks.Add(faultyItem);
+            }
+            if (faultyItemStocks.Count > 0)
+            {
+                this._faultyItemStockDetailRepository.InsertAll(faultyItemStocks);
+                IsSuccess = _faultyItemStockDetailRepository.Save();
+            }
+            return IsSuccess;
+        }
         
     }
 }

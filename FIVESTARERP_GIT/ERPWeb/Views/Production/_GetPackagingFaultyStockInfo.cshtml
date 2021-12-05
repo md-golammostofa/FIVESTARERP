@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<ERPBO.Production.ViewModels.PackagingFaultyStockInfoViewModel>
 @{
-    int sl = 0;
+    var pagerData = (ERPWeb.Infrastructure.PagerData)ViewBag.PagerData;
+    int sl = pagerData.Serial;
     int stock = 0;
+    int man = 0;
 }
 
 <div class="row">
@@ -16,32 +18,36 @@
                     <th style="vertical-align:middle">Warehouse</th>
                     <th style="vertical-align:middle">ItemType Name</th>
                     <th style="vertical-align:middle">Item-Color</th>
-                    <th style="vertical-align:middle">Stock-In Qty</th>
-                    <th style="vertical-align:middle">Stock-Out Qty</th>
-                    <th style="vertical-align:middle">Stock Qty</th>
+                    <th style="vertical-align:middle">China Faulty Stock</th>
+                    <th style="vertical-align:middle">Man Made Faulty Stock</th>
+                    @*<th style="vertical-align:middle">Stock-In Qty</th>
+        <th style="vertical-align:middle">Stock-Out Qty</th>
+        <th style="vertical-align:middle">Stock Qty</th>*@
                     <th style="vertical-align:middle">Type Of Unit</th>
-                    <th style="vertical-align:middle">Faulty Case</th>
+                    @*<th style="vertical-align:middle">Faulty Case</th>*@
+                    <th style="vertical-align:middle">Remarks</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var info in Model)
                 {
                     sl = sl + 1;
-                    stock = (info.StockInQty - info.StockOutQty);
-                    <tr>
-                        <td class="text-center"><b>@sl</b></td>
-                        <td>@info.ProductionFloorName</td>
-                        <td>@info.PackagingLineName</td>
-                        <td class="text-center">@info.ModelName</td>
-                        <td>@info.WarehouseName</td>
-                        <td>@info.ItemTypeName</td>
-                        <td>@info.ItemName</td>
-                        <td class="text-center">@info.StockInQty</td>
-                        <td class="text-center">@info.StockOutQty</td>
-                        <td class="text-center">@stock</td>
-                        <td class="text-center">@info.UnitName</td>
-                        <td class="text-center">@info.FaultyReason</td>
-                    </tr>
+                    stock = (info.ChinaMadeFaultyStockInQty - info.ChinaMadeFaultyStockOutQty);
+                    man = (info.ManMadeFaultyStockInQty - info.ManMadeFaultyStockOutQty);
+                <tr>
+                    <td class="text-center"><b>@sl</b></td>
+                    <td>@info.ProductionFloorName</td>
+                    <td>@info.PackagingLineName</td>
+                    <td class="text-center">@info.ModelName</td>
+                    <td>@info.WarehouseName</td>
+                    <td>@info.ItemTypeName</td>
+                    <td>@info.ItemName</td>
+                    <td class="text-center">@stock</td>
+                    <td class="text-center">@man</td>
+                    <td class="text-center">@info.UnitName</td>
+                    @*<td>@info.FaultyReason</td>*@
+                    <td>@info.Remarks</td>
+                </tr>
                 }
                 @if (Model.Count() == 0)
                 {
@@ -54,6 +60,8 @@
             </tbody>
         </table>
     </div>
-    <div class="col-md-12"></div>
+</div>
+<div class="divPackegingFaultyStock">
+    @Html.Partial("_Pagination", pagerData)
 </div>
 

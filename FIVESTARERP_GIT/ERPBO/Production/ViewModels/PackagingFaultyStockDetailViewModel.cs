@@ -49,5 +49,8 @@ namespace ERPBO.Production.ViewModels
         [StringLength(100)]
         public string UnitName { get; set; }
         public string FaultyReason { get; set; }
+        public long PackagingFaultyStockInfoId { get; set; }
+        public int ChinaReturnQty { get; set; }
+        public int ManReturnQty { get; set; }
     }
 }

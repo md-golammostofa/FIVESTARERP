@@ -22,6 +22,10 @@ namespace ERPBO.Inventory.ViewModels
         public long? UnitId { get; set; }
         public int? StockInQty { get; set; }
         public int? StockOutQty { get; set; }
+        public int? ManMadeFaultyStockInQty { get; set; }
+        public int? ManMadeFaultyStockOutQty { get; set; }
+        public int? ChinaMadeFaultyStockInQty { get; set; }
+        public int? ChinaMadeFaultyStockOutQty { get; set; }
         [StringLength(150)]
         public string Remarks { get; set; }
         public long OrganizationId { get; set; }

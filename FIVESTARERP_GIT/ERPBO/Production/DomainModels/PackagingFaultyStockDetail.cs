@@ -35,5 +35,6 @@ namespace ERPBO.Production.DomainModels
         public long? TransferId { get; set; }
         [StringLength(150)]
         public string TransferCode { get; set; }
+        public long PackagingFaultyStockInfoId { get; set; }
     }
 }
