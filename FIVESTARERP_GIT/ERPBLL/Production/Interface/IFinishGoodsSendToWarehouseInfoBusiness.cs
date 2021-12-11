@@ -17,5 +17,6 @@ namespace ERPBLL.Production.Interface
         bool SaveFinishGoodsStatus(long sendId, long userId, long orgId);
         Task<bool> SaveFinishGoodsCartonAsync(FinishGoodsSendToWarehouseInfoDTO dto, long userId, long orgId);
         IEnumerable<FinishGoodsSendToWarehouseInfoDTO> GetFinishGoodsSendToWarehouseInfosByQuery(long? floorId, long? packagingLineId, long? warehouseId, long? modelId, string status, string transferCode, string fromDate, string toDate, long? transferId, long orgId);
+        Task<IEnumerable<HandsetCountWithHourDTO>> GetAllHandsetByPackagingLineWithTime(long packagingId, DateTime time, long orgId);
     }
 }

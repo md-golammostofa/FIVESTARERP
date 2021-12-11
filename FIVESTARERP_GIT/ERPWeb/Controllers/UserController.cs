@@ -13,6 +13,7 @@ using ERPWeb.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -45,8 +46,13 @@ namespace ERPWeb.Controllers
         private readonly IQC1DetailBusiness _qC1DetailBusiness;
         private readonly IQC2DetailBusiness _qC2DetailBusiness;
         private readonly IQC3DetailBusiness _qC3DetailBusiness;
+        private readonly IFinishGoodsSendToWarehouseDetailBusiness _finishGoodsSendToWarehouseDetailBusiness;
+        private readonly IIMEIWriteByQRCodeLogBusiness _iMEIWriteByQRCodeLogBusiness;
+        private readonly IIMEIQCFailLogBusiness _iMEIQCFailLogBusiness;
+        private readonly IIMEITransferToRepairInfoBusiness _iMEITransferToRepairInfoBusiness;
+        private readonly IIMEITransferToRepairDetailBusiness _iMEITransferToRepairDetailBusiness;
 
-        public UserController (IRequsitionInfoBusiness requsitionInfoBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IProductionLineBusiness productionLineBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness,IItemReturnInfoBusiness itemReturnInfoBusiness, IJobOrderBusiness jobOrderBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, IMobilePartBusiness mobilePartBusiness, IDescriptionBusiness descriptionBusiness, IPackagingLineBusiness packagingLineBusiness, IModelSSBusiness modelSSBusiness, IAssemblyLineBusiness assemblyLineBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, ILotInLogBusiness lotInLogBusiness, IQCPassTransferDetailBusiness qCPassTransferDetailBusiness, IRepairOutBusiness repairOutBusiness, IRepairInBusiness repairInBusiness, IQC1DetailBusiness qC1DetailBusiness, IQC2DetailBusiness qC2DetailBusiness, IQC3DetailBusiness qC3DetailBusiness)
+        public UserController (IRequsitionInfoBusiness requsitionInfoBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IProductionLineBusiness productionLineBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness,IItemReturnInfoBusiness itemReturnInfoBusiness, IJobOrderBusiness jobOrderBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, IMobilePartBusiness mobilePartBusiness, IDescriptionBusiness descriptionBusiness, IPackagingLineBusiness packagingLineBusiness, IModelSSBusiness modelSSBusiness, IAssemblyLineBusiness assemblyLineBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, ILotInLogBusiness lotInLogBusiness, IQCPassTransferDetailBusiness qCPassTransferDetailBusiness, IRepairOutBusiness repairOutBusiness, IRepairInBusiness repairInBusiness, IQC1DetailBusiness qC1DetailBusiness, IQC2DetailBusiness qC2DetailBusiness, IQC3DetailBusiness qC3DetailBusiness,IFinishGoodsSendToWarehouseDetailBusiness finishGoodsSendToWarehouseDetailBusiness, IIMEIWriteByQRCodeLogBusiness iMEIWriteByQRCodeLogBusiness, IIMEIQCFailLogBusiness iMEIQCFailLogBusiness, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, IIMEITransferToRepairDetailBusiness iMEITransferToRepairDetailBusiness)
         {
             this._requsitionInfoBusiness = requsitionInfoBusiness;
             this._finishGoodsStockInfoBusiness = finishGoodsStockInfoBusiness;
@@ -71,6 +77,11 @@ namespace ERPWeb.Controllers
             this._qC1DetailBusiness = qC1DetailBusiness;
             this._qC2DetailBusiness = qC2DetailBusiness;
             this._qC3DetailBusiness = qC3DetailBusiness;
+            this._finishGoodsSendToWarehouseDetailBusiness = finishGoodsSendToWarehouseDetailBusiness;
+            this._iMEIWriteByQRCodeLogBusiness = iMEIWriteByQRCodeLogBusiness;
+            this._iMEIQCFailLogBusiness = iMEIQCFailLogBusiness;
+            this._iMEITransferToRepairInfoBusiness = iMEITransferToRepairInfoBusiness;
+            this._iMEITransferToRepairDetailBusiness = iMEITransferToRepairDetailBusiness;
         }
         public ActionResult Index(string flag)
         {
@@ -79,6 +90,7 @@ namespace ERPWeb.Controllers
                 if (string.IsNullOrEmpty(flag))
                 {
                     ViewBag.ddlAssemblyLine = _assemblyLineBusiness.GetAssemblyLines(User.OrgId).Select(s => new SelectListItem { Text = s.AssemblyLineName, Value = s.AssemblyLineId.ToString() }).ToList();
+                    ViewBag.ddlPackegingLine = _packagingLineBusiness.GetPackagingLinesByOrgId(User.OrgId).Select(s => new SelectListItem { Text = s.PackagingLineName, Value = s.PackagingLineId.ToString() }).ToList();
                 }
                 // Requisition Summery
                 IEnumerable<DashboardRequisitionSummeryDTO> dto = _requsitionInfoBusiness.DashboardRequisitionSummery(User.OrgId);
@@ -279,6 +291,13 @@ namespace ERPWeb.Controllers
             return Json(new { BrandName = tempData != null ? tempData.BrandName : "", ItemName = tempData != null ? tempData.ItemName : "", ModelName = tempData != null ? tempData.ModelName : "", ColorName = tempData != null ? tempData.ColorName : "", Time = DateTime.Now.ToString("hh:mm tt"), Date = DateTime.Now.Date.ToString("dd-MMM-yyyy"), LotIn = result.TotalLotIn, QCPass = result.TotalQCPass, Pending = (result.TotalLotIn) - result.TotalQCPass/*(result.TotalQCPass + result.TotalQCFail - result.TotalRepairDone)*/, QCFail = result.TotalQCFail, TotalQC1 = result.TotalQC1, TotalQC2 = result.TotalQC2, TotalQC3 = result.TotalQC3, RepairDone = result.TotalRepairDone, RepairPending = (result.TotalQC1 + result.TotalQC2 + result.TotalQC3) - result.TotalRepairDone, TotalItem = result.TotalHandset, TotalMiniWarehouseReceived = result.MiniStockReceivedQty });
         }
 
+        public ActionResult GetPackegingLineWiseDashboardData(long packegingId)
+        {
+            var tempData = _tempQRCodeTraceBusiness.GetPackegingLineWiseDataForDashBoard(packegingId, User.OrgId).FirstOrDefault();
+            var result = _tempQRCodeTraceBusiness.GetPackegingDashBoard(packegingId, User.OrgId);
+            return Json(new { BrandName = tempData != null ? tempData.BrandName : "", ItemName = tempData != null ? tempData.ItemName : "", ModelName = tempData != null ? tempData.ModelName : "", ColorName = tempData != null ? tempData.ColorName : "", Time = DateTime.Now.ToString("hh:mm tt"), Date = DateTime.Now.Date.ToString("dd-MMM-yyyy"), IMEIWrite = result.TotalIMEIWrite, Handset = result.TotalHandset, Pending = (result.TotalIMEIWrite) - result.TotalHandset, QCPass = result.TotalQCPass, BatteryWrite = result.TotalBatteryWrite, QCFail = result.TotalQCFail, RepairDone = result.TotalRepairDone, RepairPending = result.TotalQCFail - result.TotalRepairDone, Carton = result.TotalCarton });
+        }
+
         public ActionResult GetINPUT_OUTPUTBarchart(long assemblyId)
         {
             var qcPass = _qCPassTransferDetailBusiness.GetAllQCPassLogDataByAssemblyIdWithTimeWise(assemblyId, DateTime.Today, User.OrgId);
@@ -400,7 +419,6 @@ namespace ERPWeb.Controllers
 
             return Json(new { Hour = ViewBag.Hour, QCPassCount = ViewBag.QCPassCount, LotInCount = ViewBag.LotInCount });
         }
-
         public ActionResult GetREPAIRIN_OUTBarchart(long assemblyId)
         {
             var repairIn = _repairInBusiness.GetAllRepairInDataByAssemblyIdWithTimeWise(assemblyId, DateTime.Today, User.OrgId);
@@ -590,6 +608,278 @@ namespace ERPWeb.Controllers
                 {
                     Value = qrCodeProblem.Count(s => s.ProblemName == item),
                     Text = qrCodeProblem.Where(s => s.ProblemName == item).FirstOrDefault().ProblemName,
+                };
+                countWithProblem.Add(pro);
+            }
+            countWithProblem = countWithProblem.OrderByDescending(x => x.Value).ThenBy(s => s.Text).ToList();
+            var takeTopTen = countWithProblem.ToList().Take(10);
+            foreach (var item in takeTopTen)
+            {
+                repetedProblemName.Add(item.Text);
+                repetedProblem.Add(item.Value);
+            }
+            ViewBag.ProblemNames = repetedProblemName.ToList();
+            ViewBag.RepetedProblems = repetedProblem.ToList();
+            return Json(new { ProblemNames = ViewBag.ProblemNames, RepetedProblems = ViewBag.RepetedProblems });
+        }
+        public async Task<ActionResult> GetIMEIINPUT_OUTPUTBarchart(long packegingId)
+        {
+            List<string> hour = new List<string>();
+            List<int> imeiInCount = new List<int>();
+            List<int> imeiOutCount = new List<int>();
+
+            List<BarChatTimeWiseData> barChatTimeWiseDatas = new List<BarChatTimeWiseData>();
+
+            List<HandsetCountWithHourDTO> sameTimesWithIMEIIn = new List<HandsetCountWithHourDTO>();
+            List<HandsetCountWithHourDTO> sameTimesWithIMEIOut = new List<HandsetCountWithHourDTO>();
+
+            var handset = await _finishGoodsSendToWarehouseDetailBusiness.GetAllHandsetByPackagingLineWithTime(packegingId, DateTime.Today, User.OrgId);
+
+            var queryForHandset = handset.AsEnumerable()
+                .GroupBy(grp => grp.EntryDate.Value.ToString("HH:00"))
+                .Select(s => new
+                {
+                    Hour = s.Key,
+                    Qty = s.Count()
+                }).ToList().OrderBy(s => s.Hour).ToList();
+
+            var imeiWrite = await _iMEIWriteByQRCodeLogBusiness.GetAllIMEIWriteByPackagingLineWithTime(packegingId, DateTime.Today, User.OrgId);
+
+            var queryForIMEIWrite = imeiWrite.AsEnumerable()
+                .GroupBy(grp => grp.EntryDate.Value.ToString("HH:00"))
+                .Select(s => new
+                {
+                    Hour = s.Key,
+                    Qty = s.Count()
+                }).ToList().OrderBy(s => s.Hour).ToList();
+
+            if (queryForHandset.Count() > 0)
+            {
+                foreach (var item in queryForHandset)
+                {
+                    foreach (var item2 in queryForIMEIWrite)
+                    {
+                        if (item.Hour == item2.Hour)
+                        {
+                            BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                            {
+                                Hour = item.Hour,
+                                IMEIOutCount = item.Qty,
+                                IMEIInCount = item2.Qty
+                            };
+                            barChatTimeWiseDatas.Add(barChatTimeWiseData);
+
+                            HandsetCountWithHourDTO sameTimeForIMEIIn = new HandsetCountWithHourDTO()
+                            {
+                                Hour = item2.Hour,
+                                Qty = item2.Qty,
+                            };
+                            sameTimesWithIMEIIn.Add(sameTimeForIMEIIn);
+
+                            HandsetCountWithHourDTO sameTimeForIMEIOut = new HandsetCountWithHourDTO()
+                            {
+                                Hour = item.Hour,
+                                Qty = item.Qty,
+                            };
+                            sameTimesWithIMEIOut.Add(sameTimeForIMEIOut);
+                        }
+                    }
+                }
+
+                foreach (var item in sameTimesWithIMEIIn)
+                {
+                    queryForIMEIWrite.RemoveAll(s => s.Hour == item.Hour);
+                }
+                foreach (var item in queryForIMEIWrite)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        IMEIInCount = item.Qty
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                }
+
+                foreach (var item in sameTimesWithIMEIOut)
+                {
+                    queryForHandset.RemoveAll(s => s.Hour == item.Hour);
+                }
+
+                foreach (var item in queryForHandset)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        IMEIOutCount = item.Qty,
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                }
+            }
+            else
+            {
+                foreach (var item in queryForIMEIWrite)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        IMEIInCount = item.Qty
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                }
+            }
+
+            var chartList = barChatTimeWiseDatas.ToList().OrderBy(s => s.Hour);
+
+            foreach (var item in chartList)
+            {
+                hour.Add(Convert.ToDateTime(item.Hour).ToString("hh:00"));
+                imeiInCount.Add(item.IMEIInCount);
+                imeiOutCount.Add(item.IMEIOutCount);
+            }
+
+            ViewBag.Hour = hour.ToList();
+            ViewBag.IMEIInCount = imeiInCount.ToList();
+            ViewBag.IMEIOutCount = imeiOutCount.ToList();
+
+            return Json(new { Hour = ViewBag.Hour, IMEIOutCount = ViewBag.IMEIOutCount, IMEIInCount = ViewBag.IMEIInCount });
+        }
+        public async Task<ActionResult> GetIMEIREPAIRIN_OUTBarchart(long packegingId)
+        {
+            List<string> hour = new List<string>();
+            List<int> repairInCount = new List<int>();
+            List<int> repairOutCount = new List<int>();
+
+            List<BarChatTimeWiseData> barChatTimeWiseDatas = new List<BarChatTimeWiseData>();
+
+            List<HandsetCountWithHourDTO> sameTimesWithRepairIn = new List<HandsetCountWithHourDTO>();
+            List<HandsetCountWithHourDTO> sameTimesWithRepairOut = new List<HandsetCountWithHourDTO>();
+
+            var repairIn = await _iMEIQCFailLogBusiness.GetAllRepairInByPackagingLineWithTime(packegingId, DateTime.Today, User.OrgId);
+
+            var queryForRepairIn = repairIn.AsEnumerable()
+                .GroupBy(grp => grp.EntryDate.Value.ToString("HH:00"))
+                .Select(s => new
+                {
+                    Hour = s.Key,
+                    Qty = s.Count()
+                }).ToList().OrderBy(s => s.Hour).ToList();
+
+            var repairOut = await _iMEITransferToRepairInfoBusiness.GetAllRepairOutByPackagingLineWithTime(packegingId, DateTime.Today, User.OrgId);
+
+            var queryForRepairOut = repairOut.AsEnumerable()
+                .GroupBy(grp => grp.UpdateDate.Value.ToString("HH:00"))
+                .Select(s => new
+                {
+                    Hour = s.Key,
+                    Qty = s.Count()
+                }).ToList().OrderBy(s => s.Hour).ToList();
+
+            if (queryForRepairIn.Count() > 0)
+            {
+                foreach (var item in queryForRepairIn)
+                {
+                    foreach (var item2 in queryForRepairOut)
+                    {
+                        if (item.Hour == item2.Hour)
+                        {
+                            BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                            {
+                                Hour = item.Hour,
+                                RepairInCount = item.Qty,
+                                RepairOutCount = item2.Qty
+                            };
+                            barChatTimeWiseDatas.Add(barChatTimeWiseData);
+
+                            HandsetCountWithHourDTO sameTimeForRepairOut = new HandsetCountWithHourDTO()
+                            {
+                                Hour = item2.Hour,
+                                Qty = item2.Qty,
+                            };
+                            sameTimesWithRepairOut.Add(sameTimeForRepairOut);
+
+                            HandsetCountWithHourDTO sameTimeForRepairIn = new HandsetCountWithHourDTO()
+                            {
+                                Hour = item.Hour,
+                                Qty = item.Qty,
+                            };
+                            sameTimesWithRepairIn.Add(sameTimeForRepairIn);
+                        }
+                    }
+                }
+
+                foreach (var item in sameTimesWithRepairOut)
+                {
+                    queryForRepairOut.RemoveAll(s => s.Hour == item.Hour);
+                }
+                foreach (var item in queryForRepairOut)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        RepairOutCount = item.Qty
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                }
+
+                foreach (var item in sameTimesWithRepairIn)
+                {
+                    queryForRepairIn.RemoveAll(s => s.Hour == item.Hour);
+                }
+
+                foreach (var item in queryForRepairIn)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        RepairInCount = item.Qty,
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                }
+            }
+            else
+            {
+                foreach (var item in queryForRepairOut)
+                {
+                    BarChatTimeWiseData barChatTimeWiseData = new BarChatTimeWiseData()
+                    {
+                        Hour = item.Hour,
+                        RepairOutCount = item.Qty
+                    };
+                    barChatTimeWiseDatas.Add(barChatTimeWiseData);
+                }
+            }
+
+            var chartList = barChatTimeWiseDatas.ToList().OrderBy(s => s.Hour);
+
+            foreach (var item in chartList)
+            {
+                hour.Add(Convert.ToDateTime(item.Hour).ToString("hh:00"));
+                repairInCount.Add(item.RepairInCount);
+                repairOutCount.Add(item.RepairOutCount);
+            }
+
+            ViewBag.Hour = hour.ToList();
+            ViewBag.RepairInCount = repairInCount.ToList();
+            ViewBag.RepairOutCount = repairOutCount.ToList();
+
+            return Json(new { Hour = ViewBag.Hour, RepairOutCount = ViewBag.RepairOutCount, RepairInCount = ViewBag.RepairInCount });
+        }
+        public async Task<ActionResult> GetIMEIQCProblem_HorizontalBarChart(long packegingId)
+        {
+            List<string> repetedProblemName = new List<string>();
+            List<int> repetedProblem = new List<int>();
+            List<QRCodeProblemCountWithProblem> countWithProblem = new List<QRCodeProblemCountWithProblem>();
+
+            var imeiProblem = await _iMEITransferToRepairDetailBusiness.GetAllProblemByPackagingLineWithTime(packegingId, DateTime.Today, User.OrgId);
+
+            var problems = imeiProblem.Select(s => s.ProblemName).Distinct();
+
+            foreach (var item in problems)
+            {
+                QRCodeProblemCountWithProblem pro = new QRCodeProblemCountWithProblem()
+                {
+                    Value = imeiProblem.Count(s => s.ProblemName == item),
+                    Text = imeiProblem.Where(s => s.ProblemName == item).FirstOrDefault().ProblemName,
                 };
                 countWithProblem.Add(pro);
             }

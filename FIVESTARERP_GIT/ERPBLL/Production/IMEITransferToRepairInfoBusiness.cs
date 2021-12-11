@@ -8,6 +8,7 @@ using ERPBO.Production.DTOModel;
 using ERPDAL.ProductionDAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,9 @@ namespace ERPBLL.Production
         // Repository //
         private readonly IMEITransferToRepairInfoRepository _iMEITransferToRepairInfoRepository;
         private readonly TransferToPackagingRepairInfoRepository _transferToPackagingRepairInfoRepository;
+        private readonly TempQRCodeTraceRepository _tempQRCodeTraceRepository;
+        private readonly IMEIQCFailLogRepository _iMEIQCFailLogRepository;
+
         public IMEITransferToRepairInfoBusiness(IProductionUnitOfWork productionDb, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, ITransferToPackagingRepairInfoBusiness transferToPackagingRepairInfoBusiness, IItemBusiness itemBusiness, IPackagingRepairRawStockInfoBusiness packagingRepairRawStockInfoBusiness, IPackagingFaultyStockInfoBusiness packagingFaultyStockInfoBusiness, IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness)
         {
             // Database //
@@ -53,6 +57,8 @@ namespace ERPBLL.Production
             // Repository //
             this._iMEITransferToRepairInfoRepository = new IMEITransferToRepairInfoRepository(this._productionDb);
             this._transferToPackagingRepairInfoRepository = new TransferToPackagingRepairInfoRepository(this._productionDb);
+            this._tempQRCodeTraceRepository = new TempQRCodeTraceRepository(this._productionDb);
+            this._iMEIQCFailLogRepository = new IMEIQCFailLogRepository(this._productionDb);
         }
 
         public IEnumerable<IMEITransferToRepairInfoDTO> GetIMEITransferToRepairInfosByQuery(long? transferId, string qrCode, string imei, long? floorId, long? packagingLineId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string status, string transferCode, long orgId)
@@ -285,7 +291,45 @@ Where 1= 1 and imei.OrganizationId={0} {1}", orgId,Utility.ParamChecker(param));
                 {
                     if (await _packagingLineStockDetailBusiness.SavePackagingLineStockOutAsync(packagingLineStocks, userId, orgId, string.Empty))
                     {
-                        if (await _tempQRCodeTraceBusiness.UpdateQRCodeStatusAsync(imeiItem.CodeNo, QRCodeStatus.PackagingRepair, orgId))
+                        // Temp QRCode
+                        imeiItem.StateStatus = QRCodeStatus.PackagingRepair;
+                        imeiItem.UpdateDate = DateTime.Now;
+                        imeiItem.UpUserId = userId;
+                        _tempQRCodeTraceRepository.Update(imeiItem);
+
+                        IMEIQCFailLog failLog = new IMEIQCFailLog()
+                        {
+                            AssemblyId = imeiItem.AssemblyId,
+                            AssemblyLineName = imeiItem.AssemblyLineName,
+                            CodeId = imeiItem.CodeId,
+                            CodeNo = imeiItem.CodeNo,
+                            ColorId = imeiItem.ColorId,
+                            ColorName = imeiItem.ColorName,
+                            DescriptionId = imeiItem.DescriptionId,
+                            EntryDate = DateTime.Now,
+                            EUserId = userId,
+                            IMEI = imeiItem.IMEI,
+                            ItemId = imeiItem.ItemId,
+                            ItemName = imeiItem.ItemName,
+                            ItemTypeId = imeiItem.ItemTypeId,
+                            ModelName = imeiItem.ModelName,
+                            OrganizationId = orgId,
+                            PackagingLineId = imeiItem.PackagingLineId,
+                            PackagingLineName = imeiItem.PackagingLineName,
+                            ProductionFloorId = imeiItem.ProductionFloorId,
+                            ProductionFloorName = imeiItem.ProductionFloorName,
+                            QCLineId = imeiItem.QCLineId,
+                            QCLineName = imeiItem.QCLineName,
+                            ReferenceId = imeiItem.ReferenceId,
+                            ReferenceNumber = imeiItem.ReferenceNumber,
+                            Remarks = imeiItem.Remarks,
+                            StateStatus = imeiItem.StateStatus,
+                            WarehouseId = imeiItem.WarehouseId,
+                        };
+                        _iMEIQCFailLogRepository.Insert(failLog);
+
+                        if (await _iMEIQCFailLogRepository.SaveAsync())
+                        //if (await _tempQRCodeTraceBusiness.UpdateQRCodeStatusAsync(imeiItem.CodeNo, QRCodeStatus.PackagingRepair, orgId))
                         {
                             transferId = transferInfo.TPRInfoId;
                             iMEITransferToRepairInfo.TransferId = transferId;
@@ -478,6 +522,10 @@ Where 1=1 and imei.OrganizationId='{0}' {1}  Order By imei.IMEITRInfoId desc", o
                 }
             }
             return false;
+        }
+        public async Task<IEnumerable<IMEITransferToRepairInfo>> GetAllRepairOutByPackagingLineWithTime(long packagingId, DateTime time, long orgId)
+        {
+            return await _iMEITransferToRepairInfoRepository.GetAllAsync(s => s.StateStatus == "Repair-Done" && s.PackagingLineId == packagingId && DbFunctions.TruncateTime(s.UpdateDate) == DbFunctions.TruncateTime(time) && s.OrganizationId == orgId);
         }
     }
 }

@@ -443,6 +443,8 @@
                                 if (res.StateStatus === "Weight-Checked") {
                                     if (findDuplication(res.CodeNo)) {
                                         bindIMEIData(res);
+                                        txtIMEIScaning.val('');
+                                        txtIMEIScaning.focus();
                                     }
                                     else {
                                         toastrErrorAlert("This IMEI has been already added");

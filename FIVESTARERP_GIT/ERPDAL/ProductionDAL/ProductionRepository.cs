@@ -558,4 +558,32 @@ namespace ERPDAL.ProductionDAL
 
         }
     }
+    public class IMEIWriteByQRCodeLogRepository : ProductionBaseRepository<IMEIWriteByQRCodeLog>
+    {
+        public IMEIWriteByQRCodeLogRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork)
+        {
+
+        }
+    }
+    public class BatteryWriteByIMEILogRepository : ProductionBaseRepository<BatteryWriteByIMEILog>
+    {
+        public BatteryWriteByIMEILogRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork)
+        {
+
+        }
+    }
+    public class IMEIQCPassLogRepository : ProductionBaseRepository<IMEIQCPassLog>
+    {
+        public IMEIQCPassLogRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork)
+        {
+
+        }
+    }
+    public class IMEIQCFailLogRepository : ProductionBaseRepository<IMEIQCFailLog>
+    {
+        public IMEIQCFailLogRepository(IProductionUnitOfWork productionUnitOfWork) : base(productionUnitOfWork)
+        {
+
+        }
+    }
 }

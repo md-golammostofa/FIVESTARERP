@@ -12,6 +12,7 @@ namespace ERPBO.Production.ViewModels
     {
         public long SendDetailId { get; set; }
         public long DescriptionId { get; set; }
+        public long PackagingLineId { get; set; }
         public long WarehouseId { get; set; }
         //[Range(1,long.MaxValue)]
         public long ItemTypeId { get; set; }

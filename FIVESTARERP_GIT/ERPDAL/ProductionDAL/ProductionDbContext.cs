@@ -111,5 +111,9 @@ namespace ERPDAL.ProductionDAL
         public DbSet<MiniStockRequisitionToSemiFinishGoodsWarehouseDetail> tblMiniStockRequisitionToSemiFinishGoodsWarehouseDetail { get; set; }
         public DbSet<MiniStockRequisitionToSemiFinishGoodsWarehouseInfo> tblMiniStockRequisitionToSemiFinishGoodsWarehouseInfo { get; set; }
         public DbSet<WeightCheckedIMEILog> tblWeightCheckedIMEILog { get; set; }
+        public DbSet<IMEIWriteByQRCodeLog> tblIMEIWriteByQRCodeLog { get; set; }
+        public DbSet<BatteryWriteByIMEILog> tblBatteryWriteByIMEILog { get; set; }
+        public DbSet<IMEIQCPassLog> tblIMEIQCPassLog { get; set; }
+        public DbSet<IMEIQCFailLog> tblIMEIQCFailLog { get; set; }
     }
 }

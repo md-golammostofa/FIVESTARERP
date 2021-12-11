@@ -20,5 +20,6 @@ namespace ERPBLL.Production.Interface
         IMEITransferToRepairInfoDTO GetIMEIWiseItemInfo(string imei, string qrCode, string status, long orgId);
         ExecutionStateWithText CheckingAvailabilityOfPackagingRepairRawStock(long modelId, long itemId, long packagingLineId, long orgId);
         bool PackagingRepairAddingFaultyWithQRCode(FaultyInfoByQRCodeDTO model, long userId, long orgId);
+        Task<IEnumerable<IMEITransferToRepairInfo>> GetAllRepairOutByPackagingLineWithTime(long packagingId, DateTime time, long orgId);
     }
 }

@@ -2,219 +2,422 @@
     ViewBag.Title = "Dashboard";
 }
 
-<div class="card-body">
-    @Html.AntiForgeryToken()
-    <div class="row" style="margin-top:-40px">
-        <div class="col-md-12">
-            <div class="row mt-1">
-                <div class="col-md-2">
-                    <div class="row">
-                        <div class="col-md-3" style="margin-top:5px">
-                            <label class="control-label font-weight-bold float-left" for="ddlAssemblyLine">LINE</label>
-                        </div>
-                        <div class="col-md-9">
-                            @Html.DropDownList("ddlAssemblyLine", (IEnumerable<SelectListItem>)ViewBag.ddlAssemblyLine, new { @class = "form-control text-center dashboard_input" })
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="row">
-                        <div class="col-md-4" style="margin-top:5px">
-                            <label class="control-label font-weight-bold float-left" for="ddlBrand">BRAND</label>
-                        </div>
-                        <div class="col-md-8">
-                            <input type="text" class="text-center dashboard_input" id="txtBrand" disabled />
-                        </div>
-                    </div>
+<div class="row text-sm">
+    <div class="col-md-12" style="margin-top:-20px">
+        <div class="card card-primary card-outline card-outline-tabs">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-one-assemblyLineWiseDashboard-tab" href="#custom-tabs-one-assemblyLineWiseDashboard" data-toggle="pill" role="tab" aria-controls="custom-tabs-one-assemblyLineWiseDashboard" aria-selected="true">Assembly Line</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-one-packegingLineWiseDashboard-tab" href="#custom-tabs-one-packegingLineWiseDashboard" data-toggle="pill" role="tab" aria-controls="custom-tabs-one-packegingLineWiseDashboard" aria-selected="true">Packeging Line</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body ccc">
+                @Html.AntiForgeryToken()
+                <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <div class="tab-pane fade show active" id="custom-tabs-one-assemblyLineWiseDashboard" role="tabpanel" aria-labelledby="custom-tabs-one-assemblyLineWiseDashboard-tab">
+                        <div class="row" style="margin-top:-10px">
+                            <div class="col-md-12">
+                                <div class="row mt-1">
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-3" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="ddlAssemblyLine">LINE</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                @Html.DropDownList("ddlAssemblyLine", (IEnumerable<SelectListItem>)ViewBag.ddlAssemblyLine, new { @class = "form-control text-center dashboard_input" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row">
+                                            <div class="col-md-4" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="ddlBrand">BRAND</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="text-center dashboard_input" id="txtBrand" disabled />
+                                            </div>
+                                        </div>
 
-                </div>
-                <div class="col-md-2">
-                    <div class="row">
-                        <div class="col-md-4" style="margin-top:5px">
-                            <label class="control-label font-weight-bold float-left" for="ddlModel">MODEL</label>
-                        </div>
-                        <div class="col-md-8">
-                            <input type="text" class="text-center dashboard_input" id="txtModel" disabled />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="row">
-                        <div class="col-md-3" style="margin-top:5px">
-                            <label class="control-label font-weight-bold float-left" for="ddlColor">COLOR</label>
-                        </div>
-                        <div class="col-md-9">
-                            <input type="text" class="text-center dashboard_input" id="txtColor" disabled />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="row">
-                        <div class="col-md-2" style="margin-top:5px">
-                            <label class="control-label font-weight-bold float-left" for="txtTime">T&D</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" class="text-center dashboard_input" id="txtTime" disabled />
-                        </div>
-                        <div class="col-md-6">
-                            <input type="text" class="text-center dashboard_input" id="txtDate" disabled />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br />
-            <div class="row">
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" value="INPUT" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" value="COMPLETED" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" value="PENDING" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" value="QC_1" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" value="QC_2" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" value="QC_3" disabled />
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="text-center dashboard_input" value="REPAIR DONE" disabled />
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="text-center dashboard_input" value="REPAIR PENDING" disabled />
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="text-center dashboard_input" value="MINI WAREHOUSE" disabled />
-                </div>
-            </div>
-            <br />
-            <div class="row">
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" id="txtLotIn" style="color: red; font-size: 30px" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" id="txtQCPass" style="color: red; font-size: 30px" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" id="txtPending" style="color: red; font-size: 30px" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtQC_1_Fail" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtQC_2_Fail" disabled />
-                </div>
-                <div class="col-md-1">
-                    <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtQC_3_Fail" disabled />
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtRepairDone" disabled />
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtRepairPending" disabled />
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtMiniWarehouse" disabled />
-                </div>
-            </div>
-            <br />
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4">
-                            <input type="text" class="text-center dashboard_input" value="INPUT VS OUTPUT" disabled />
-                        </div>
-                        <div class="col-md-4"></div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4 ">
-                            <input type="text" class="text-center dashboard_input" value="REPAIR IN VS OUT" disabled />
-                        </div>
-                        <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row">
+                                            <div class="col-md-4" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="ddlModel">MODEL</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="text-center dashboard_input" id="txtModel" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row">
+                                            <div class="col-md-4" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="ddlColor">COLOR</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="text-center dashboard_input" id="txtColor" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-2" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="txtTime">T&D</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="text-center dashboard_input" id="txtTime" disabled />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="text-center dashboard_input" id="txtDate" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="INPUT" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="COMPLETE" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="PENDING" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="QC_1" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="QC_2" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="QC_3" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" value="REPAIR DONE" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" value="REPAIR PENDING" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" value="MINI WAREHOUSE" disabled />
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" id="txtLotIn" style="color: red; font-size: 30px" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" id="txtQCPass" style="color: red; font-size: 30px" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" id="txtPending" style="color: red; font-size: 30px" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtQC_1_Fail" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtQC_2_Fail" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtQC_3_Fail" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtRepairDone" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtRepairPending" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtMiniWarehouse" disabled />
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="text-center dashboard_input" value="INPUT VS OUTPUT" disabled />
+                                            </div>
+                                            <div class="col-md-4"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4 ">
+                                                <input type="text" class="text-center dashboard_input" value="REPAIR IN VS OUT" disabled />
+                                            </div>
+                                            <div class="col-md-4">
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div id="barChartContainer" style="position: relative; height:40vh; width:80vw">
-                            <canvas id="INPUT_OUTPUT_Bar_Chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                @*<div class="col-md-2"></div>*@
-                <div class="col-md-6">
-                    <div class="row">
-                        <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
-                            <canvas id="REPAIR_IN_OUT_Bar_Chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br />
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4">
-                            <input type="text" class="text-center dashboard_input" value="QC_1" disabled />
-                        </div>
-                        <div class="col-md-4"></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4 ">
-                            <input type="text" class="text-center dashboard_input" value="QC_2" disabled />
-                        </div>
-                        <div class="col-md-4">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div id="barChartContainer" style="position: relative; height:40vh; width:80vw">
+                                                <canvas id="INPUT_OUTPUT_Bar_Chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-2"></div>*@
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
+                                                <canvas id="REPAIR_IN_OUT_Bar_Chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="text-center dashboard_input" value="QC_1" disabled />
+                                            </div>
+                                            <div class="col-md-4"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4 ">
+                                                <input type="text" class="text-center dashboard_input" value="QC_2" disabled />
+                                            </div>
+                                            <div class="col-md-4">
 
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4 ">
-                            <input type="text" class="text-center dashboard_input" value="QC_3" disabled />
-                        </div>
-                        <div class="col-md-4">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4 ">
+                                                <input type="text" class="text-center dashboard_input" value="QC_3" disabled />
+                                            </div>
+                                            <div class="col-md-4">
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
+                                                <canvas id="QC_1_Problem_HorizontalBarChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
+                                                <canvas id="QC_2_Problem_HorizontalBarChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
+                                                <canvas id="QC_3_Problem_HorizontalBarChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="row">
-                        <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
-                            <canvas id="QC_1_Problem_HorizontalBarChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
-                            <canvas id="QC_2_Problem_HorizontalBarChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
-                            <canvas id="QC_3_Problem_HorizontalBarChart"></canvas>
+                    <div class="tab-pane fade show" id="custom-tabs-one-packegingLineWiseDashboard" role="tabpanel" aria-labelledby="custom-tabs-one-packegingLineWiseDashboard-tab">
+                        <div class="row" style="margin-top:-10px">
+                            <div class="col-md-12">
+                                <div class="row mt-1">
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-3" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="ddlAssemblyLine">LINE</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                @Html.DropDownList("ddlPackegingLine", (IEnumerable<SelectListItem>)ViewBag.ddlPackegingLine, new { @class = "form-control text-center dashboard_input" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row">
+                                            <div class="col-md-4" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="ddlBrandForPackeging">BRAND</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="text-center dashboard_input" id="txtBrandForPackeging" disabled />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row">
+                                            <div class="col-md-4" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="ddlModelForPackeging">MODEL</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="text-center dashboard_input" id="txtModelForPackeging" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="row">
+                                            <div class="col-md-4" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="ddlColorForPackeging">COLOR</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="text-center dashboard_input" id="txtColorForPackeging" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-2" style="margin-top:5px">
+                                                <label class="control-label font-weight-bold float-left" for="txtTimeForPackeging">T&D</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="text-center dashboard_input" id="txtTimeForPackeging" disabled />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="text-center dashboard_input" id="txtDateForPackeging" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="INPUT" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="COMPLETE" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="PENDING" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="QC PASS" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="BATTERY" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" value="QC FAIL" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" value="REPAIR DONE" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" value="REPAIR PENDING" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" value="CARTON" disabled />
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" id="txtIMEIWriteForPackeging" style="color: red; font-size: 30px" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" id="txtHandsetForPackeging" style="color: red; font-size: 30px" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" id="txtPendingForPackeging" style="color: red; font-size: 30px" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtQCPassForPackeging" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtBatteryForPackeging" disabled />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtQCFailForPackeging" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtRepairDoneForPackeging" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtRepairPendingForPackeging" disabled />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="text-center dashboard_input" style="color: red; font-size: 30px" id="txtCartonForPackeging" disabled />
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="text-center dashboard_input" value="INPUT VS COMPLETE" disabled />
+                                            </div>
+                                            <div class="col-md-4"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4 ">
+                                                <input type="text" class="text-center dashboard_input" value="REPAIR IN VS OUT" disabled />
+                                            </div>
+                                            <div class="col-md-4">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div id="barChartContainer" style="position: relative; height:40vh; width:80vw">
+                                                <canvas id="INPUT_COMPLETE_ForPackeging_Bar_Chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md-2"></div>*@
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
+                                                <canvas id="REPAIR_IN_OUT_ForPackeging_Bar_Chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="text-center dashboard_input" value="QC FAIL TOP 10 PROBLEM" disabled />
+                                            </div>
+                                            <div class="col-md-4"></div>
+                                        </div>
+                                    </div>                                 
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div id="chartContainer" style="position: relative; height:40vh; width:80vw">
+                                                <canvas id="QC_FAIL_Problem_ForPackeging_HorizontalBarChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -227,6 +430,7 @@
 
     <script type="text/javascript">
 
+        // Assembly Line Wise
         var ddlddlAssemblyLine = $("#ddlAssemblyLine");
         var ProblemNames = '';
         var RepetedProblems = '';
@@ -237,31 +441,38 @@
         var Hour = '';
         var assembly = '';
 
+        // Packeging Line
+        var ddlPackegingLine = $("#ddlPackegingLine");
+        var packeging = '';
+
         $(document).ready(function () {
             $("#cw").addClass("ccc");
-            initialLoad();
+            initialLoadForAssembly();
+            initialLoadForPackeging();
             setInterval('refreshPage()', 120000);
         })
 
         function refreshPage() {
             if (assembly !== "") {
                 ddlddlAssemblyLine.val(assembly);
-                initialLoad();
+                initialLoadForAssembly();
             }
             else {
-                initialLoad();
+                initialLoadForAssembly();
+            }
+            if (packeging !== "") {
+                ddlPackegingLine.val(packeging);
+                initialLoadForPackeging();
+            }
+            else {
+                initialLoadForPackeging();
             }
             //initialLoad();
             //location.reload();
         }
 
-        ddlddlAssemblyLine.change(function () {
-            assembly = ddlddlAssemblyLine.val();
-            initialLoad();
-        })
-
-        function initialLoad() {
-            loadDashboardData();
+        function initialLoadForAssembly() {
+            loadAssemblyLineWiseDashboardData();
             LoadINPUT_OUTPUTBarChart();
             LoadREPAIRIN_OUTBarChart();
             LoadQC_1_Problem_HorizontalBarChart();
@@ -269,7 +480,21 @@
             LoadQC_3_Problem_HorizontalBarChart();
         }
 
-        function loadDashboardData() {
+        function initialLoadForPackeging() {
+            loadPackegingLineWiseDashboardData();
+            LoadIMEIINPUT_OUTPUTBarChart();
+            LoadIMEIREPAIRIN_OUTBarChart();
+            LoadIMEIQCProblem_HorizontalBarChart();
+        }
+
+        //#region Assembly Line
+
+        ddlddlAssemblyLine.change(function () {
+            assembly = ddlddlAssemblyLine.val();
+            initialLoadForAssembly();
+        })
+
+        function loadAssemblyLineWiseDashboardData() {
             var data = JSON.stringify({ assemblyId: TryParseInt(ddlddlAssemblyLine.val(), 0) });
             $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/User/GetAssemblyLineWiseDashboardData', data, getToken())).then(function (res, status) {
                 if (status === "success") {
@@ -280,7 +505,7 @@
                     $("#txtDate").val(res.Date);
                     $("#txtLotIn").val(res.LotIn);
                     $("#txtQCPass").val(res.QCPass);
-                    $("#txtPending").val(res.Pending); 
+                    $("#txtPending").val(res.Pending);
                     $("#txtQC_1_Fail").val(res.TotalQC1);
                     $("#txtQC_2_Fail").val(res.TotalQC2);
                     $("#txtQC_3_Fail").val(res.TotalQC3);
@@ -407,86 +632,6 @@
         }
 
         var ctx2 = document.getElementById('REPAIR_IN_OUT_Bar_Chart').getContext('2d');
-        var option3 = {
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        fontColor: 'red',
-                        fontSize: 14,
-                        //callback: function (val) {
-                        //    return Number.isInteger(val) ? val : null;
-                        //}
-                    },
-                    gridLines: {
-                        offsetGridLines: true,
-                        drawBorder: false,
-                        display: false,
-                        //color: "black",
-                        //borderDash: [8, 4],
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'TIME',
-                        fontColor: 'white',
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        fontColor: 'black',
-                        fontSize: 14,
-                        fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                    },
-                    gridLines: {
-                        //borderDash: [8, 4],
-                        //color: "black",
-                        //offsetGridLines: true,
-                        //drawBorder: true,
-                        //display: true,
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'CAPACITY',
-                        fontColor: 'white',
-                        fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                    }
-                }],
-
-            },
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: 'rgba(255, 255, 255,1.0)',
-                    fontSize: 14
-                },
-            },
-            tooltips: {
-                enabled: true
-            },
-            hover: {
-                animationDuration: 1
-            },
-            animation: {
-                duration: 1,
-                onComplete: function () {
-                    var chartInstance = this.chart,
-                        ctx2 = chartInstance.ctx2;
-                    ctx2.textAlign = 'center';
-                    ctx2.fillStyle = "rgba(0, 0, 0, 1)";
-                    ctx2.textBaseline = 'bottom';
-                    // Loop through each data in the datasets
-                    this.data.datasets.forEach(function (dataset, i) {
-                        var meta = chartInstance.controller.getDatasetMeta(i);
-                        meta.data.forEach(function (bar, index) {
-                            var data = dataset.data[index];
-                            ctx2.fillText(data, bar._model.x, bar._model.y);
-                        });
-                    });
-                }
-            }
-        }
 
         function LoadREPAIRIN_OUTBarChart() {
             var data = JSON.stringify({ assemblyId: TryParseInt(ddlddlAssemblyLine.val(), 0) });
@@ -675,6 +820,140 @@
                 consoleLog(error);
             })
         }
+        //#endregion
+
+        //#region Packeging Line
+
+        ddlPackegingLine.change(function () {
+            packeging = ddlPackegingLine.val();
+            initialLoadForPackeging();
+        })
+
+        function loadPackegingLineWiseDashboardData() {
+            var data = JSON.stringify({ packegingId: TryParseInt(ddlPackegingLine.val(), 0) });
+            $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/User/GetPackegingLineWiseDashboardData', data, getToken())).then(function (res, status) {
+                if (status === "success") {
+                    $("#txtBrandForPackeging").val(res.BrandName);
+                    $("#txtModelForPackeging").val(res.ModelName);
+                    $("#txtColorForPackeging").val(res.ColorName);
+                    $("#txtTimeForPackeging").val(res.Time);
+                    $("#txtDateForPackeging").val(res.Date);
+                    $("#txtIMEIWriteForPackeging").val(res.IMEIWrite);
+                    $("#txtHandsetForPackeging").val(res.Handset);
+                    $("#txtPendingForPackeging").val(res.Pending);
+                    $("#txtQCPassForPackeging").val(res.QCPass);
+                    $("#txtBatteryForPackeging").val(res.BatteryWrite);
+                    $("#txtQCFailForPackeging").val(res.QCFail);
+                    $("#txtRepairDoneForPackeging").val(res.RepairDone);
+                    $("#txtRepairPendingForPackeging").val(res.RepairPending);
+                    $("#txtCartonForPackeging").val(res.Carton);
+                }
+            }).fail(function (error) {
+                consoleLog(error);
+            })
+        }
+
+        var ctxForPackeging = document.getElementById('INPUT_COMPLETE_ForPackeging_Bar_Chart').getContext('2d');
+        function LoadIMEIINPUT_OUTPUTBarChart() {
+            var data = JSON.stringify({ packegingId: TryParseInt(ddlPackegingLine.val(), 0) });
+            $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/User/GetIMEIINPUT_OUTPUTBarchart', data, getToken())).then(function (res, status) {
+                if (status === "success") {
+                    var IMEIInCount = res.IMEIInCount;
+                    var IMEIOutCount = res.IMEIOutCount;
+                    var Hour = res.Hour;
+                    var BarChart = new Chart(ctxForPackeging, {
+                        type: 'bar',
+                        data: {
+                            labels: Hour,
+                            datasets: [{
+                                label: "INPUT",
+                                data: IMEIInCount,
+                                backgroundColor: ['rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)'],
+                                borderWidth: 1,
+                            }, {
+                                label: "COMPLETE",
+                                data: IMEIOutCount,
+                                backgroundColor: ['rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)'],
+                                borderWidth: 1,
+                            }]
+                        },
+                        options: option2
+                    });
+                }
+            }).fail(function (error) {
+                consoleLog(error);
+            })
+        }
+
+        var ctx2ForPackeging = document.getElementById('REPAIR_IN_OUT_ForPackeging_Bar_Chart').getContext('2d');
+        function LoadIMEIREPAIRIN_OUTBarChart() {
+            var data = JSON.stringify({ packegingId: TryParseInt(ddlPackegingLine.val(), 0) });
+            $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/User/GetIMEIREPAIRIN_OUTBarchart', data, getToken())).then(function (res, status) {
+                if (status === "success") {
+                    var RepairInCount = res.RepairInCount;
+                    var RepairOutCount = res.RepairOutCount;
+                    var Hour = res.Hour;
+                    var BarChart = new Chart(ctx2ForPackeging, {
+                        type: 'bar',
+                        data: {
+                            labels: Hour,
+                            datasets: [{
+                                label: "IN",
+                                data: RepairInCount,
+                                backgroundColor: ['rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)', 'rgba(255, 255, 255,1.0)'],
+                                borderWidth: 1,
+                            }, {
+                                label: "OUT",
+                                data: RepairOutCount,
+                                backgroundColor: ['rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)', 'rgba(255, 0, 0,1.0)'],
+                                borderWidth: 1,
+                            }]
+                        },
+                        options: option2
+                    });
+                }
+            }).fail(function (error) {
+                consoleLog(error);
+            })
+        }
+
+        function LoadIMEIQCProblem_HorizontalBarChart() {
+            var data = JSON.stringify({ packegingId: TryParseInt(ddlPackegingLine.val(), 0) });
+            $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/User/GetIMEIQCProblem_HorizontalBarChart', data, getToken())).then(function (res, status) {
+                if (status === "success") {
+                    var ProblemNames = res.ProblemNames;
+                    var RepetedProblems = res.RepetedProblems;
+                    var horizontalBarChart = new Chart(QC_FAIL_Problem_ForPackeging_HorizontalBarChart, {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: ProblemNames,
+                            datasets: [{
+                                label: "QCFail",
+                                data: RepetedProblems,
+                                backgroundColor: ['rgba(255, 0, 0,1.0)',
+                                    'rgba(255, 0, 0,1.0)',
+                                    'rgba(255, 0, 0,1.0)',
+                                    'rgba(255, 0, 0,1.0)',
+                                    'rgba(255, 0, 0,1.0)',
+                                    'rgba(255, 0, 0,1.0)',
+                                    'rgba(255, 0, 0,1.0)',
+                                    'rgba(255, 0, 0,1.0)',
+                                    'rgba(255, 0, 0,1.0)',
+                                    'rgba(255, 0, 0,1.0)',
+                                ],
+                                borderColor: 'rgba(255, 255, 255,1.0)',
+                                borderWidth: 1,
+                            }]
+                        },
+                        options: option
+                    });
+                }
+            }).fail(function (error) {
+                consoleLog(error);
+            })
+        }
+
+        //#endregion
 
     </script>
 

@@ -18,12 +18,20 @@ namespace ERPBLL.Production
         private readonly TempQRCodeTraceRepository _tempQRCodeTraceRepository;
         private readonly LotInLogRepository _lotInLogRepository;
         private readonly WeightCheckedIMEILogRepository _weightCheckedIMEILogRepository;
-        public TempQRCodeTraceBusiness(IProductionUnitOfWork productionDb)
+        private readonly IIMEIWriteByQRCodeLogBusiness _iMEIWriteByQRCodeLogBusiness;
+        private readonly IMEIWriteByQRCodeLogRepository _iMEIWriteByQRCodeLogRepository;
+        private readonly IBatteryWriteByIMEILogBusiness _batteryWriteByIMEILogBusiness;
+        private readonly BatteryWriteByIMEILogRepository _batteryWriteByIMEILogRepository;
+        public TempQRCodeTraceBusiness(IProductionUnitOfWork productionDb, IIMEIWriteByQRCodeLogBusiness iMEIWriteByQRCodeLogBusiness, IBatteryWriteByIMEILogBusiness batteryWriteByIMEILogBusiness)
         {
             this._productionDb = productionDb;
+            this._iMEIWriteByQRCodeLogBusiness = iMEIWriteByQRCodeLogBusiness;
             this._tempQRCodeTraceRepository = new TempQRCodeTraceRepository(this._productionDb);
             this._lotInLogRepository = new LotInLogRepository(this._productionDb);
             this._weightCheckedIMEILogRepository = new WeightCheckedIMEILogRepository(this._productionDb);
+            this._iMEIWriteByQRCodeLogRepository = new IMEIWriteByQRCodeLogRepository(this._productionDb);
+            this._batteryWriteByIMEILogBusiness = batteryWriteByIMEILogBusiness;
+            this._batteryWriteByIMEILogRepository = new BatteryWriteByIMEILogRepository(this._productionDb);
         }
 
         public async Task<TempQRCodeTrace> GetIMEIinQRCode(string imei, string status, long floorId, long packagingId, long orgId)
@@ -99,8 +107,55 @@ namespace ERPBLL.Production
                 imeiInDb.UpdateDate = DateTime.Now;
                 imeiInDb.UpUserId = userId;
                 _tempQRCodeTraceRepository.Update(imeiInDb);
+
+                //Update Battery Code
+                //if (imeiInDb.BatteryCode != null)
+                //{
+                //    var logInfo = await _batteryWriteByIMEILogBusiness.GetLogInfoByIMEI(imeiInDb.IMEI, orgId);
+                //    if (logInfo != null)
+                //    {
+                //        logInfo.BatteryCode = imeiInDb.BatteryCode;
+                //        logInfo.UpdateDate = DateTime.Now;
+                //        logInfo.UpUserId = userId;
+                //        _batteryWriteByIMEILogRepository.Update(logInfo);
+                //    }
+                //}
+                //else
+                //{
+                    BatteryWriteByIMEILog batteryWrite = new BatteryWriteByIMEILog()
+                    {
+                        AssemblyId = imeiInDb.AssemblyId,
+                        AssemblyLineName = imeiInDb.AssemblyLineName,
+                        BatteryCode = imeiInDb.BatteryCode,
+                        CodeId = imeiInDb.CodeId,
+                        CodeNo = imeiInDb.CodeNo,
+                        ColorId = imeiInDb.ColorId,
+                        ColorName = imeiInDb.ColorName,
+                        DescriptionId = imeiInDb.DescriptionId,
+                        EntryDate = DateTime.Now,
+                        EUserId = userId,
+                        IMEI = imeiInDb.IMEI,
+                        ItemId = imeiInDb.ItemId,
+                        ItemName = imeiInDb.ItemName,
+                        ItemTypeId = imeiInDb.ItemTypeId,
+                        ModelName = imeiInDb.ModelName,
+                        OrganizationId = orgId,
+                        PackagingLineId = imeiInDb.PackagingLineId,
+                        PackagingLineName = imeiInDb.PackagingLineName,
+                        ProductionFloorId = imeiInDb.ProductionFloorId,
+                        ProductionFloorName = imeiInDb.ProductionFloorName,
+                        QCLineId = imeiInDb.QCLineId,
+                        QCLineName = imeiInDb.QCLineName,
+                        ReferenceId = imeiInDb.ReferenceId,
+                        ReferenceNumber = imeiInDb.ReferenceNumber,
+                        Remarks = imeiInDb.Remarks,
+                        StateStatus = imeiInDb.StateStatus,
+                        WarehouseId = imeiInDb.WarehouseId, 
+                    };
+                    _batteryWriteByIMEILogRepository.Insert(batteryWrite);
+                //}
             }
-            return await _tempQRCodeTraceRepository.SaveAsync();
+            return await _batteryWriteByIMEILogRepository.SaveAsync();
         }
 
         public async Task<bool> SaveQRCodeIEMIAsync(IMEIWriteDTO dto, long userId, long orgId)
@@ -119,8 +174,53 @@ namespace ERPBLL.Production
                 qrCodeInDb.PackagingLineName = dto.packagingLineName;
                 qrCodeInDb.UpUserId = userId;
                 _tempQRCodeTraceRepository.Update(qrCodeInDb);
+
+                if (qrCodeInDb.PreviousIMEI != null)
+                {
+                    var logInfo = await _iMEIWriteByQRCodeLogBusiness.GetLogInfoByIMEI(qrCodeInDb.PreviousIMEI, orgId);
+                    if (logInfo != null)
+                    {
+                        logInfo.IMEI = qrCodeInDb.IMEI;
+                        logInfo.UpdateDate = DateTime.Now;
+                        logInfo.UpUserId = userId;
+                        _iMEIWriteByQRCodeLogRepository.Update(logInfo);
+                    }
+                }
+                else
+                {
+                    IMEIWriteByQRCodeLog iMEIWrite = new IMEIWriteByQRCodeLog()
+                    {
+                        AssemblyId = qrCodeInDb.AssemblyId,
+                        AssemblyLineName = qrCodeInDb.AssemblyLineName,
+                        CodeId = qrCodeInDb.CodeId,
+                        CodeNo = qrCodeInDb.CodeNo,
+                        ColorId = qrCodeInDb.ColorId,
+                        ColorName = qrCodeInDb.ColorName,
+                        DescriptionId = qrCodeInDb.DescriptionId,
+                        EntryDate = DateTime.Now,
+                        EUserId = userId,
+                        IMEI = qrCodeInDb.IMEI,
+                        ItemId = qrCodeInDb.ItemId,
+                        ItemName = qrCodeInDb.ItemName,
+                        ItemTypeId = qrCodeInDb.ItemTypeId,
+                        ModelName = qrCodeInDb.ModelName,
+                        OrganizationId = orgId,
+                        PackagingLineId = qrCodeInDb.PackagingLineId,
+                        PackagingLineName = qrCodeInDb.PackagingLineName,
+                        ProductionFloorId = qrCodeInDb.ProductionFloorId,
+                        ProductionFloorName = qrCodeInDb.ProductionFloorName,
+                        QCLineId = qrCodeInDb.QCLineId,
+                        QCLineName = qrCodeInDb.QCLineName,
+                        ReferenceId = qrCodeInDb.ReferenceId,
+                        ReferenceNumber = qrCodeInDb.ReferenceNumber,
+                        Remarks = qrCodeInDb.Remarks,
+                        StateStatus = qrCodeInDb.StateStatus,
+                        WarehouseId = qrCodeInDb.WarehouseId,
+                    };
+                    _iMEIWriteByQRCodeLogRepository.Insert(iMEIWrite);
+                }
             }
-            return await _tempQRCodeTraceRepository.SaveAsync();
+            return await _iMEIWriteByQRCodeLogRepository.SaveAsync();
         }
 
         public bool SaveQRCodeStatusByLotIn(string qrCode, long orgId, long userId)
@@ -246,9 +346,24 @@ where CAST(tqrt.UpdateDate as date) = CAST(GETDATE() as date) and tqrt.AssemblyI
             //Left Join [Inventory-MC].dbo.tblBrand b on des.BrandId = b.BrandId
             //where CAST(tqrt.UpdateDate as date) = CAST(GETDATE() as date) and tqrt.AssemblyId={0} and tqrt.OrganizationId={1} Order By tqrt.UpdateDate Desc", assemblyId, orgId));
         }
+        public IEnumerable<TempQRCodeTraceDTO> GetPackegingLineWiseDataForDashBoard(long packegingId, long orgId)
+        {
+            var queryForIMEIWrite = _productionDb.Db.Database.SqlQuery<TempQRCodeTraceDTO>(string.Format(@"Select b.BrandName,imei.ItemName,des.DescriptionName'ModelName',imei.ColorName 
+From tblIMEIWriteByQRCodeLog imei
+--Left Join [Production].dbo.tblTempQRCodeTrace tqrt on tqrt.CodeId = imei.CodeId
+Left Join [Inventory].dbo.tblDescriptions des on imei.DescriptionId = des.DescriptionId
+Left Join [Inventory].dbo.tblBrand b on des.BrandId = b.BrandId
+--Left Join [Inventory].dbo.tblColors cl on imei.ColorId = cl.ColorId
+where CAST(imei.EntryDate as date) = CAST(GETDATE() as date) and imei.PackagingLineId={0} and imei.OrganizationId={1} and imei.StateStatus = 'PackagingLine' order by imei.IMEIWriteLogId desc", packegingId, orgId)).ToList();
+            return queryForIMEIWrite;
+        }
         public DashboardAssemblyLineWiseDataDTO GetAssemblyDashBoard(long assemblyId, long orgId)
         {
             return _productionDb.Db.Database.SqlQuery<DashboardAssemblyLineWiseDataDTO>(string.Format(@"EXEC spAssemblyDashboard {0},{1}", assemblyId, orgId)).FirstOrDefault();
+        }
+        public PackegingLineWiseDashboardDataDTO GetPackegingDashBoard(long packegingId, long orgId)
+        {
+            return _productionDb.Db.Database.SqlQuery<PackegingLineWiseDashboardDataDTO>(string.Format(@"EXEC [spPackegingDashboard] {0},{1}", packegingId, orgId)).FirstOrDefault();
         }
         public IEnumerable<TempQRCodeTraceDTO> GetDailyProductionSummeryReport(long assemblyId, long modelId, string fromDate, string toDate, long orgId)
         {

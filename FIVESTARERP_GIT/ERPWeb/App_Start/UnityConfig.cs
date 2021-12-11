@@ -76,6 +76,10 @@ namespace ERPWeb
 
             // Production Database
             #region Production
+            container.RegisterType<IIMEIQCPassLogBusiness, IMEIQCPassLogBusiness>();
+            container.RegisterType<IIMEIQCFailLogBusiness, IMEIQCFailLogBusiness>();
+            container.RegisterType<IIMEIWriteByQRCodeLogBusiness, IMEIWriteByQRCodeLogBusiness>();
+            container.RegisterType<IBatteryWriteByIMEILogBusiness, BatteryWriteByIMEILogBusiness>();
             container.RegisterType<IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness, MiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness>();
             container.RegisterType<IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness, MiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness>();
             container.RegisterType<IMiniStockTransferToSemiFinishGoodsWarehouseBusiness, MiniStockTransferToSemiFinishGoodsWarehouseBusiness>();

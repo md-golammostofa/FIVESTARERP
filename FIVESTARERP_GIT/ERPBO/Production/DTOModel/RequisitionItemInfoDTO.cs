@@ -42,6 +42,8 @@ namespace ERPBO.Production.DTOModel
         public string RepairLineName { get; set; }
         [StringLength(100)]
         public string ModelName { get; set; }
+        public long ColorId { get; set; }
+        public string ColorName { get; set; }
         [StringLength(100)]
         public string WarehouseName { get; set; }
         [StringLength(100)]

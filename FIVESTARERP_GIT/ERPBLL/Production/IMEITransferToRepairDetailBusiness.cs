@@ -1,8 +1,10 @@
 ﻿using ERPBLL.Production.Interface;
+using ERPBO.Production.DomainModels;
 using ERPBO.Production.DTOModel;
 using ERPDAL.ProductionDAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +45,10 @@ namespace ERPBLL.Production
             query = string.Format(@"Select * From [Production].dbo.tblIMEITransferToRepairDetail ip
 Where 1=1 {0} order by IMEITRDetailId desc", param);
             return query;
+        }
+        public async Task<IEnumerable<IMEITransferToRepairDetail>> GetAllProblemByPackagingLineWithTime(long packagingId, DateTime time, long orgId)
+        {
+            return await _iMEITransferToRepairDetailRepository.GetAllAsync(s => s.PackagingLineId == packagingId && DbFunctions.TruncateTime(s.EntryDate) == DbFunctions.TruncateTime(time) && s.OrganizationId == orgId);
         }
     }
 }

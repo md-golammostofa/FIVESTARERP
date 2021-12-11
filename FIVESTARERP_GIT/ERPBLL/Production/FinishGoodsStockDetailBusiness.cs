@@ -32,7 +32,7 @@ namespace ERPBLL.Production
         private readonly FinishGoodsStockDetailRepository _finishGoodsStockDetailRepository; // repo
         private readonly FinishGoodsStockInfoRepository _finishGoodsStockInfoRepository; // repo
         private readonly TempQRCodeTraceRepository _tempQRCodeTraceRepository;
-
+        private readonly IMEIQCPassLogRepository _iMEIQCPassLogRepository;
         public FinishGoodsStockDetailBusiness(IProductionUnitOfWork productionDb, IItemBusiness itemBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, TempQRCodeTraceRepository tempQRCodeTraceRepository)
         {
             // Database
@@ -50,6 +50,7 @@ namespace ERPBLL.Production
             this._finishGoodsStockDetailRepository = new FinishGoodsStockDetailRepository(this._productionDb);
             this._finishGoodsStockInfoRepository = new FinishGoodsStockInfoRepository(this._productionDb);
             this._tempQRCodeTraceRepository = new TempQRCodeTraceRepository(this._productionDb);
+            this._iMEIQCPassLogRepository = new IMEIQCPassLogRepository(this._productionDb);
         }
 
         public IEnumerable<FinishGoodsStockDetail> GelAllFinishGoodsStockDetailByOrgId(long orgId)
@@ -415,7 +416,39 @@ Where 1=1 {0}", Utility.ParamChecker(param));
                 imeiInDb.UpdateDate = DateTime.Now;
                 imeiInDb.UpUserId = userId;
                 _tempQRCodeTraceRepository.Update(imeiInDb);
-                if (await _tempQRCodeTraceRepository.SaveAsync())
+
+                IMEIQCPassLog passLog = new IMEIQCPassLog()
+                {
+                    AssemblyId = imeiInDb.AssemblyId,
+                    AssemblyLineName = imeiInDb.AssemblyLineName,
+                    CodeId = imeiInDb.CodeId,
+                    CodeNo = imeiInDb.CodeNo,
+                    ColorId = imeiInDb.ColorId,
+                    ColorName = imeiInDb.ColorName,
+                    DescriptionId = imeiInDb.DescriptionId,
+                    EntryDate = DateTime.Now,
+                    EUserId = userId,
+                    IMEI = imeiInDb.IMEI,
+                    ItemId = imeiInDb.ItemId,
+                    ItemName = imeiInDb.ItemName,
+                    ItemTypeId = imeiInDb.ItemTypeId,
+                    ModelName = imeiInDb.ModelName,
+                    OrganizationId = orgId,
+                    PackagingLineId = imeiInDb.PackagingLineId,
+                    PackagingLineName = imeiInDb.PackagingLineName,
+                    ProductionFloorId = imeiInDb.ProductionFloorId,
+                    ProductionFloorName = imeiInDb.ProductionFloorName,
+                    QCLineId = imeiInDb.QCLineId,
+                    QCLineName = imeiInDb.QCLineName,
+                    ReferenceId = imeiInDb.ReferenceId,
+                    ReferenceNumber = imeiInDb.ReferenceNumber,
+                    Remarks = imeiInDb.Remarks,
+                    StateStatus = imeiInDb.StateStatus,
+                    WarehouseId = imeiInDb.WarehouseId,
+                };
+                _iMEIQCPassLogRepository.Insert(passLog);
+
+                if (await _iMEIQCPassLogRepository.SaveAsync())
                 {
                     if(await _packagingLineStockDetailBusiness.SavePackagingLineStockOutAsync(packagingRawStocks, userId, orgId, string.Empty))
                     {

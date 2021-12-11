@@ -8,6 +8,7 @@ using ERPBO.Production.DTOModel;
 using ERPDAL.ProductionDAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,7 +78,7 @@ namespace ERPBLL.Production
                     EntryDate = DateTime.Now,
                     Remarks = domainInfo.Flag,
                     Flag = domainInfo.Flag,
-                    RefferenceNumber = domainInfo.RefferenceNumber
+                    RefferenceNumber = domainInfo.RefferenceNumber,
                 };
                 FinishGoodsStockDetailDTO stock = new FinishGoodsStockDetailDTO()
                 {
@@ -245,8 +246,8 @@ namespace ERPBLL.Production
                         RefferenceNumber = info.RefferenceNumber,
                         OrganizationId = orgId,
                         UnitId = finishGoodsStock.UnitId.Value,
-                        Remarks = ""
-
+                        Remarks = "",
+                        PackagingLineId = item.PackagingLineId.Value,
                     };
                     details.Add(detail);
 
@@ -386,6 +387,12 @@ Inner Join [Inventory].dbo.tblWarehouses w on fsi.WarehouseId =w.Id
 Inner Join [Inventory].dbo.tblDescriptions de on fsi.DescriptionId =de.DescriptionId
 Where 1=1 and fsi.OrganizationId={0} {1} ORDER BY fsi.SendId DESC", orgId,Utility.ParamChecker(param));
             return _productionDb.Db.Database.SqlQuery<FinishGoodsSendToWarehouseInfoDTO>(query).ToList();
+        }
+        public async Task<IEnumerable<HandsetCountWithHourDTO>> GetAllHandsetByPackagingLineWithTime(long packagingId, DateTime time, long orgId)
+        {
+            return await _productionDb.Db.Database.SqlQuery<HandsetCountWithHourDTO>(string.Format(@"Select FORMAT(CAST(EntryDate AS DATETIME), 'hh:00')'Hour', ISNULL(Sum(TotalQty),0)'Qty' From tblFinishGoodsSendToWarehouseInfo Where Cast(EntryDate as date) = Cast(GetDate() as date) and PackagingLineId = {0} and OrganizationId = {1}
+Group By FORMAT(CAST(EntryDate AS DATETIME), 'hh:00') 
+ORDER BY FORMAT(CAST(EntryDate AS DATETIME), 'hh:00')", packagingId,orgId)).ToListAsync();
         }
     }
 }

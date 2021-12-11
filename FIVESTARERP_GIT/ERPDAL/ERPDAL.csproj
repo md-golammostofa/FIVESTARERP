@@ -949,6 +949,26 @@
     <Compile Include="ProductionContextMigrations\202112050555346_Production_add_prp_in_tblPackegingFaultyStockInfo_Detail.Designer.cs">
       <DependentUpon>202112050555346_Production_add_prp_in_tblPackegingFaultyStockInfo_Detail.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProductionContextMigrations\202112080852538_Production_add_tblIMEIWriteByQRCodeLog.cs" />
+    <Compile Include="ProductionContextMigrations\202112080852538_Production_add_tblIMEIWriteByQRCodeLog.Designer.cs">
+      <DependentUpon>202112080852538_Production_add_tblIMEIWriteByQRCodeLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202112080854271_Production_add_tblBatteryWriteByIMEILog.cs" />
+    <Compile Include="ProductionContextMigrations\202112080854271_Production_add_tblBatteryWriteByIMEILog.Designer.cs">
+      <DependentUpon>202112080854271_Production_add_tblBatteryWriteByIMEILog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202112081058475_Production_add_tblIMEIQCPassLog.cs" />
+    <Compile Include="ProductionContextMigrations\202112081058475_Production_add_tblIMEIQCPassLog.Designer.cs">
+      <DependentUpon>202112081058475_Production_add_tblIMEIQCPassLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202112081100470_Production_add_tblIMEIQCFailLog.cs" />
+    <Compile Include="ProductionContextMigrations\202112081100470_Production_add_tblIMEIQCFailLog.Designer.cs">
+      <DependentUpon>202112081100470_Production_add_tblIMEIQCFailLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProductionContextMigrations\202112110447079_Production_add_prp_tblFinishGoodSendToWarehouseDetail.cs" />
+    <Compile Include="ProductionContextMigrations\202112110447079_Production_add_prp_tblFinishGoodSendToWarehouseDetail.Designer.cs">
+      <DependentUpon>202112110447079_Production_add_prp_tblFinishGoodSendToWarehouseDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProductionContextMigrations\Configuration.cs" />
     <Compile Include="ProductionDAL\ProductionRepository.cs" />
     <Compile Include="ProductionDAL\ProductionUnitOfWork.cs" />
@@ -1703,6 +1723,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202112050555346_Production_add_prp_in_tblPackegingFaultyStockInfo_Detail.resx">
       <DependentUpon>202112050555346_Production_add_prp_in_tblPackegingFaultyStockInfo_Detail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202112080852538_Production_add_tblIMEIWriteByQRCodeLog.resx">
+      <DependentUpon>202112080852538_Production_add_tblIMEIWriteByQRCodeLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202112080854271_Production_add_tblBatteryWriteByIMEILog.resx">
+      <DependentUpon>202112080854271_Production_add_tblBatteryWriteByIMEILog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202112081058475_Production_add_tblIMEIQCPassLog.resx">
+      <DependentUpon>202112081058475_Production_add_tblIMEIQCPassLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202112081100470_Production_add_tblIMEIQCFailLog.resx">
+      <DependentUpon>202112081100470_Production_add_tblIMEIQCFailLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202112110447079_Production_add_prp_tblFinishGoodSendToWarehouseDetail.resx">
+      <DependentUpon>202112110447079_Production_add_prp_tblFinishGoodSendToWarehouseDetail.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.resx">
       <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>

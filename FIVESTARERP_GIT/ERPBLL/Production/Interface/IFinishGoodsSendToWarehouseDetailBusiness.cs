@@ -13,5 +13,6 @@ namespace ERPBLL.Production.Interface
         IEnumerable<FinishGoodsSendToWarehouseDetail> GetFinishGoodsDetailByInfoId(long infoId, long orgId);
         IEnumerable<FinishGoodsSendDetailListDTO> GetGoodsSendDetailList(long? lineId, long? warehouseId, long? modelId, long ?itemTypeId, long? itemId, string status, string refNum, long orgId, string fromDate, string toDate);
         IEnumerable<FinishGoodsSendToWarehouseDetailDTO> GetFinishGoodsSendToWarehouseDetailsByQuery(long? warehouseId, long? itemTypeId, long? itemId, string imei, string qrCode, long? transferId, string refNum, long orgId);
+        Task<IEnumerable<FinishGoodsSendToWarehouseDetail>> GetAllHandsetByPackagingLineWithTime(long packagingId, DateTime time, long orgId);
     }
 }

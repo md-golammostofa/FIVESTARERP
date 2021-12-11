@@ -3120,7 +3120,8 @@ namespace ERPWeb.Controllers
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "StockReturnList")
             {
                 var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId, null, null, packagingId, warehouseId, returnId, returnCode, StockRetunFlag.PackagingLine, status, fromDate, toDate, User.OrgId);
-
+                ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
+                dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
 

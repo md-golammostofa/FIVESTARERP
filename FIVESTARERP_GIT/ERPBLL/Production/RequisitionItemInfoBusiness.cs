@@ -223,7 +223,7 @@ Where 1=1 {0}", Utility.ParamChecker(param));
             List<QRCodeTraceDTO> qRCodeTraces = new List<QRCodeTraceDTO>();
             List<RequisitionItemInfoDTO> reqItemDto = new List<RequisitionItemInfoDTO>();
             reqItemDto = this._productionDb.Db.Database.SqlQuery<RequisitionItemInfoDTO>(string.Format(@"Select rii.ReqItemInfoId,ri.ReqInfoId,ri.ReqInfoCode,ri.LineId 'FloorId',pl.LineNumber 'FloorName',ri.AssemblyLineId,al.AssemblyLineName,
-ri.DescriptionId,
+ri.DescriptionId,i.ColorId,cl.ColorName,
 de.DescriptionName 'ModelName',rii.WarehouseId,w.WarehouseName,
 rii.ItemTypeId,it.ItemName 'ItemTypeName',rii.ItemId,i.ItemName,rii.Quantity,(Select SUM(Quantity) From tblRequisitionItemInfo Where ReqInfoId = ri.ReqInfoId) 'TotalItems'
 From [Production].dbo.tblRequsitionInfo ri
@@ -234,6 +234,7 @@ Inner Join [Inventory].dbo.tblDescriptions de on ri.DescriptionId = de.Descripti
 Inner Join [Inventory].dbo.tblItems i on rii.ItemId = i.ItemId
 Inner Join [Inventory].dbo.tblItemTypes it on rii.ItemTypeId = it.ItemId
 Inner Join [Inventory].dbo.tblWarehouses w on rii.WarehouseId=w.Id
+Inner Join [Inventory].dbo.tblColors cl on i.ColorId = cl.ColorId
 Where 1= 1 and ri.OrganizationId={0} and ri.ReqInfoId = {1}", orgId, refNo)).ToList();
 
             string tCode = reqItemDto.FirstOrDefault().ReqInfoCode.Substring(4);
@@ -269,13 +270,13 @@ Where 1= 1 and ri.OrganizationId={0} and ri.ReqInfoId = {1}", orgId, refNo)).ToL
                         ItemId = reqItemDto[i].ItemId,
                         WarehouseId = reqItemDto[i].WarehouseId,
                         CodeId = 0,
-                        ColorName = string.Empty,
                         OrganizationId = orgId,
                         EUserId = userId,
                         EntryDate = DateTime.Now,
                         ReferenceId = reqItemDto[i].ReqInfoId.ToString(),
                         ReferenceNumber = reqItemDto[i].ReqInfoCode,
-                        ColorId = _itemBusiness.GetItemById(reqItemDto[i].ItemId, orgId).ColorId.Value,
+                        ColorId = reqItemDto[i].ColorId,//_itemBusiness.GetItemById(reqItemDto[i].ItemId, orgId).ColorId.Value,
+                        ColorName = reqItemDto[i].ColorName,
                         ModelName = reqItemDto[i].ModelName,
                         WarehouseName = reqItemDto[i].WarehouseName,
                         ItemTypeName = reqItemDto[i].ItemTypeName,

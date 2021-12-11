@@ -1,4 +1,5 @@
-﻿using ERPBO.Production.DTOModel;
+﻿using ERPBO.Production.DomainModels;
+using ERPBO.Production.DTOModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace ERPBLL.Production.Interface
     public interface IIMEITransferToRepairDetailBusiness
     {
         IEnumerable<IMEITransferToRepairDetailDTO> GetIMEIProblemDTOByQuery(long transferId, string qrCode, string imei, long orgId);
+        Task<IEnumerable<IMEITransferToRepairDetail>> GetAllProblemByPackagingLineWithTime(long packagingId, DateTime time, long orgId);
     }
 }

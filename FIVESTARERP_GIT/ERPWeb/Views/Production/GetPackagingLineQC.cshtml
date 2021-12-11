@@ -164,7 +164,7 @@
         // QC pass //
 
         txtQCPassIMEI.change(function myfunction() {
-            if ($.trim(txtQCPassIMEI.val()).length >= 15) {
+            if ($.trim(txtQCPassIMEI.val()).length == 15) {
                 fnFinishGoods($.trim(txtQCPassIMEI.val()));
             }
             else {

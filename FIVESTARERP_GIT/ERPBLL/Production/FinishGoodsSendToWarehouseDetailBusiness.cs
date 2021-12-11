@@ -5,6 +5,7 @@ using ERPBO.Production.DTOModel;
 using ERPDAL.ProductionDAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -149,7 +150,10 @@ Inner Join [Inventory].dbo.tblItems i on fgd.ItemId = i.ItemId
 Where 1=1 and fgd.OrganizationId={0} {1}", orgId, Utility.ParamChecker(param));
             return query;
         }
-
+        public async Task<IEnumerable<FinishGoodsSendToWarehouseDetail>> GetAllHandsetByPackagingLineWithTime(long packagingId, DateTime time, long orgId)
+        {
+            return await _finishGoodsSendToWarehouseDetailRepository.GetAllAsync(s => s.PackagingLineId == packagingId && DbFunctions.TruncateTime(s.EntryDate) == DbFunctions.TruncateTime(time) && s.OrganizationId == orgId);
+        }
 
     }
 }
