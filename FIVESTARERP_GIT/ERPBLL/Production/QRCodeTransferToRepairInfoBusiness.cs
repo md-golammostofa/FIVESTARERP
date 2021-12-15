@@ -126,7 +126,7 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
             var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
 
             // Assembly Line Raw Material Stock
-            List<AssemblyLineStockDetailDTO> stockDetailDTOs = new List<AssemblyLineStockDetailDTO>();
+            //List<AssemblyLineStockDetailDTO> stockDetailDTOs = new List<AssemblyLineStockDetailDTO>();
 
             List<TransferFromQCDetail> transferDetails = new List<TransferFromQCDetail>();
             if (transferInfo != null) // If there is a pending transfer information
@@ -136,26 +136,26 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
                 transferId = transferInfo.TFQInfoId;
                 //transferDetails = (List<TransferFromQCDetail>)(await _transferFromQCDetailBusiness.GetTransferFromQCDetailByInfoAsync(transferInfo.TFQInfoId, orgId));\
 
-                foreach (var item in itemPreparationDetail)
-                {
-                    AssemblyLineStockDetailDTO assemblyStock = new AssemblyLineStockDetailDTO
-                    {
-                        ProductionLineId = dto.FloorId,
-                        AssemblyLineId = dto.AssemblyLineId,
-                        DescriptionId = dto.DescriptionId,
-                        WarehouseId = item.WarehouseId,
-                        ItemTypeId = item.ItemTypeId,
-                        ItemId = item.ItemId,
-                        OrganizationId = orgId,
-                        EUserId = orgId,
-                        Quantity = item.Quantity,
-                        EntryDate = DateTime.Now,
-                        UnitId = item.UnitId,
-                        RefferenceNumber = code,
-                        StockStatus = StockStatus.StockOut
-                    };
-                    stockDetailDTOs.Add(assemblyStock);
-                }
+                //foreach (var item in itemPreparationDetail)
+                //{
+                    //AssemblyLineStockDetailDTO assemblyStock = new AssemblyLineStockDetailDTO
+                    //{
+                    //    ProductionLineId = dto.FloorId,
+                    //    AssemblyLineId = dto.AssemblyLineId,
+                    //    DescriptionId = dto.DescriptionId,
+                    //    WarehouseId = item.WarehouseId,
+                    //    ItemTypeId = item.ItemTypeId,
+                    //    ItemId = item.ItemId,
+                    //    OrganizationId = orgId,
+                    //    EUserId = orgId,
+                    //    Quantity = item.Quantity,
+                    //    EntryDate = DateTime.Now,
+                    //    UnitId = item.UnitId,
+                    //    RefferenceNumber = code,
+                    //    StockStatus = StockStatus.StockOut
+                    //};
+                    //stockDetailDTOs.Add(assemblyStock);
+                //}
             }
             else
             {
@@ -198,23 +198,23 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
                     };
                     transferDetails.Add(transferDetail);
 
-                    AssemblyLineStockDetailDTO assemblyStock = new AssemblyLineStockDetailDTO
-                    {
-                        ProductionLineId = dto.FloorId,
-                        AssemblyLineId = dto.AssemblyLineId,
-                        DescriptionId = dto.DescriptionId,
-                        WarehouseId = item.WarehouseId,
-                        ItemTypeId = item.ItemTypeId,
-                        ItemId = item.ItemId,
-                        OrganizationId = orgId,
-                        EUserId = orgId,
-                        Quantity = item.Quantity,
-                        EntryDate = DateTime.Now,
-                        UnitId = item.UnitId,
-                        RefferenceNumber = code,
-                        StockStatus = StockStatus.StockIn
-                    };
-                    stockDetailDTOs.Add(assemblyStock);
+                    //AssemblyLineStockDetailDTO assemblyStock = new AssemblyLineStockDetailDTO
+                    //{
+                    //    ProductionLineId = dto.FloorId,
+                    //    AssemblyLineId = dto.AssemblyLineId,
+                    //    DescriptionId = dto.DescriptionId,
+                    //    WarehouseId = item.WarehouseId,
+                    //    ItemTypeId = item.ItemTypeId,
+                    //    ItemId = item.ItemId,
+                    //    OrganizationId = orgId,
+                    //    EUserId = orgId,
+                    //    Quantity = item.Quantity,
+                    //    EntryDate = DateTime.Now,
+                    //    UnitId = item.UnitId,
+                    //    RefferenceNumber = code,
+                    //    StockStatus = StockStatus.StockIn
+                    //};
+                    //stockDetailDTOs.Add(assemblyStock);
                 }
 
                 transferInfo.TransferFromQCDetails = transferDetails;
@@ -254,8 +254,8 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
             {
                 if(await _qCItemStockDetailBusiness.SaveQCItemStockOutAsync(qCItemStockDetails, userId, orgId))
                 {
-                    if (await _assemblyLineStockDetailBusiness.SaveAssemblyLineStockOutAsync(stockDetailDTOs, userId, orgId,string.Empty))
-                    {
+                    //if (await _assemblyLineStockDetailBusiness.SaveAssemblyLineStockOutAsync(stockDetailDTOs, userId, orgId,string.Empty))
+                    //{
                         // QR Code //
                         if(_tempQRCodeTraceBusiness.UpdateQRCodeStatus(dto.QRCode, QRCodeStatus.AssemblyRepair, orgId)){
                             QRCodeTransferToRepairInfo qRCodeTransferToRepairInfo = new QRCodeTransferToRepairInfo
@@ -446,50 +446,85 @@ Where 1= 1 {0}", Utility.ParamChecker(param));
                                 IsSuccess = await _qRCodeTransferToRepairInfoRepository.SaveAsync();
                             }
                         }
-                    }
+                    //}
                 }
-            }
-           
+            }          
             return IsSuccess;
         }
 
-        public bool SaveQRCodeStatusByTrasnferInfoId(long transferId, string status, long userId, long orgId)
+        public async Task<bool> SaveQRCodeStatusByTrasnferInfoId(long transferId, string status, long userId, long orgId)
         {
             if (_transferFromQCInfoBusiness.SaveTransferInfoStateStatus(transferId, status, userId, orgId))
             {
                 var qrCodesInDb = GetQRCodeTransferToRepairInfoByTransferId(transferId, orgId);
                 List<RepairIn> repairIns = new List<RepairIn>();
+                List<AssemblyLineStockDetailDTO> stockDetailDTOs = new List<AssemblyLineStockDetailDTO>();
+
                 foreach (var item in qrCodesInDb)
                 {
-                    item.StateStatus = FinishGoodsSendStatus.Received;
-                    item.UpdateDate = DateTime.Now;
-                    item.UpUserId = userId;
+                    // Item Preparation Info //
+                    var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Production, item.DescriptionId, item.ItemId.Value, orgId);
 
-                    RepairIn repairIn = new RepairIn()
+                    // Item Preparation Detail //
+                    var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
+
+                    foreach (var item2 in itemPreparationDetail)
                     {
-                        FloorId = item.FloorId,
-                        AssemblyLineId = item.AssemblyLineId,
-                        DescriptionId = item.DescriptionId,
-                        RepairLineId = item.RepairLineId,
-                        WarehouseId = item.WarehouseId,
-                        ItemTypeId = item.ItemTypeId,
-                        ItemId = item.ItemId,
-                        QCLineId = item.QCLineId,
-                        SubQCId = item.SubQCId,
-                        OrganizationId = orgId,
-                        StateStatus = FinishGoodsSendStatus.Received,
-                        EntryDate = DateTime.Now,
-                        EUserId = userId,
-                        QRCode = item.QRCode,
-                        TransferCode = item.TransferCode,
-                        TransferId = item.TransferId,
-                        QRTRInfoId = item.QRTRInfoId,
-                    };
+                        AssemblyLineStockDetailDTO assemblyStock = new AssemblyLineStockDetailDTO
+                        {
+                            ProductionLineId = item.FloorId,
+                            AssemblyLineId = item.AssemblyLineId,
+                            DescriptionId = item.DescriptionId,
+                            WarehouseId = item2.WarehouseId,
+                            ItemTypeId = item2.ItemTypeId,
+                            ItemId = item2.ItemId,
+                            OrganizationId = orgId,
+                            EUserId = orgId,
+                            Quantity = item2.Quantity,
+                            EntryDate = DateTime.Now,
+                            UnitId = item2.UnitId,
+                            RefferenceNumber = item.TransferCode,
+                            StockStatus = StockStatus.StockOut
+                        };
+                        stockDetailDTOs.Add(assemblyStock);
+                    }
 
-                    _repairInRepository.Insert(repairIn);
-                    _qRCodeTransferToRepairInfoRepository.Update(item);
+                    if (itemPreparationDetail.Count() > 0)
+                    {
+                        item.StateStatus = FinishGoodsSendStatus.Received;
+                        item.UpdateDate = DateTime.Now;
+                        item.UpUserId = userId;
+
+                        RepairIn repairIn = new RepairIn()
+                        {
+                            FloorId = item.FloorId,
+                            AssemblyLineId = item.AssemblyLineId,
+                            DescriptionId = item.DescriptionId,
+                            RepairLineId = item.RepairLineId,
+                            WarehouseId = item.WarehouseId,
+                            ItemTypeId = item.ItemTypeId,
+                            ItemId = item.ItemId,
+                            QCLineId = item.QCLineId,
+                            SubQCId = item.SubQCId,
+                            OrganizationId = orgId,
+                            StateStatus = FinishGoodsSendStatus.Received,
+                            EntryDate = DateTime.Now,
+                            EUserId = userId,
+                            QRCode = item.QRCode,
+                            TransferCode = item.TransferCode,
+                            TransferId = item.TransferId,
+                            QRTRInfoId = item.QRTRInfoId,
+                        };
+                        repairIns.Add(repairIn);
+                        //_repairInRepository.Insert(repairIn);
+                        _qRCodeTransferToRepairInfoRepository.Update(item);
+                    }
                 }
-            }
+                if (await _assemblyLineStockDetailBusiness.SaveAssemblyLineStockOutAsync(stockDetailDTOs, userId, orgId, string.Empty))
+                {
+                    _repairInRepository.InsertAll(repairIns);
+                }
+            }            
             return _qRCodeTransferToRepairInfoRepository.Save();
         }
 

@@ -26,9 +26,10 @@ namespace ERPBLL.Production
         private readonly IFinishGoodsSendToWarehouseDetailBusiness _finishGoodsSendToWarehouseDetailBusiness;
         private readonly IWarehouseStockDetailBusiness _warehouseStockDetailBusiness;
         private readonly IHandSetStockBusiness _handSetStockBusiness;
+        private readonly IPackagingItemStockDetailBusiness _packagingItemStockDetailBusiness;
         // Repository //
         public readonly FinishGoodsSendToWarehouseInfoRepository _finishGoodsSendToWarehouseInfoRepository;
-        public FinishGoodsSendToWarehouseInfoBusiness(IProductionUnitOfWork productionDb, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness, IItemBusiness itemBusiness, IFinishGoodsSendToWarehouseDetailBusiness finishGoodsSendToWarehouseDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness,TempQRCodeTraceBusiness tempQRCodeTraceBusiness, QRCodeTraceBusiness qRCodeTraceBusiness, IHandSetStockBusiness handSetStockBusiness)
+        public FinishGoodsSendToWarehouseInfoBusiness(IProductionUnitOfWork productionDb, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness, IItemBusiness itemBusiness, IFinishGoodsSendToWarehouseDetailBusiness finishGoodsSendToWarehouseDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, TempQRCodeTraceBusiness tempQRCodeTraceBusiness, QRCodeTraceBusiness qRCodeTraceBusiness, IHandSetStockBusiness handSetStockBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness)
         {
             this._productionDb = productionDb;
             this._finishGoodsSendToWarehouseInfoRepository = new FinishGoodsSendToWarehouseInfoRepository(this._productionDb);
@@ -39,6 +40,7 @@ namespace ERPBLL.Production
             this._tempQRCodeTraceBusiness = tempQRCodeTraceBusiness;
             this._qRCodeTraceBusiness = qRCodeTraceBusiness;
             this._handSetStockBusiness = handSetStockBusiness;
+            this._packagingItemStockDetailBusiness = packagingItemStockDetailBusiness;
         }
 
         public IEnumerable<FinishGoodsSendToWarehouseInfo> GetFinishGoodsSendToWarehouseList(long orgId)
@@ -170,8 +172,9 @@ namespace ERPBLL.Production
             }
             if (_finishGoodsSendToWarehouseInfoRepository.Save() == true)
             {
-                if (_warehouseStockDetailBusiness.SaveWarehouseStockIn(detailDTOs, userId, orgId)) {
-                    IsSuccess = _handSetStockBusiness.SaveHandSetItemStockIn(handSetStocks,userId,0,orgId);
+                if (_warehouseStockDetailBusiness.SaveWarehouseStockIn(detailDTOs, userId, orgId))
+                {
+                    IsSuccess = _handSetStockBusiness.SaveHandSetItemStockIn(handSetStocks, userId, 0, orgId);
                 };
             }
             return IsSuccess;
@@ -209,6 +212,10 @@ namespace ERPBLL.Production
 
                 // Finish Goods Stock Out //
                 List<FinishGoodsStockDetailDTO> finishGoodsStocks = new List<FinishGoodsStockDetailDTO>();
+
+                //Packaging Item/Handset Stock Out
+                List<PackagingItemStockDetailDTO> packagingItemStocks = new List<PackagingItemStockDetailDTO>();
+
                 var allItemInDb = _itemBusiness.GetAllItemByOrgId(orgId).ToList();
                 foreach (var item in qrCodeInDb)
                 {
@@ -251,6 +258,25 @@ namespace ERPBLL.Production
                     };
                     details.Add(detail);
 
+                    PackagingItemStockDetailDTO packagingItemStock = new PackagingItemStockDetailDTO()
+                    {
+                        ProductionFloorId = item.PackagingLineId,
+                        PackagingLineId = item.PackagingLineId,
+                        WarehouseId = item.WarehouseId,
+                        ItemTypeId = item.ItemTypeId,
+                        ItemId = item.ItemId,
+                        Quantity = 1,
+                        DescriptionId = item.DescriptionId,
+                        UnitId = allItemInDb.FirstOrDefault(s => s.ItemId == item.ItemId).UnitId,
+                        OrganizationId = orgId,
+                        EntryDate = DateTime.Now,
+                        EUserId = userId,
+                        StockStatus = StockStatus.StockOut,
+                        ReferenceNumber = item.IMEI,
+                        Remarks = item.CodeNo
+                    };
+                    packagingItemStocks.Add(packagingItemStock);
+
                     item.StateStatus = QRCodeStatus.Carton;
                     item.CartonNo = dto.CartoonNo;
                 }
@@ -263,9 +289,13 @@ namespace ERPBLL.Production
                     // Stock Out
                     if (await _finishGoodsStockDetailBusiness.SaveFinishGoodsStockOutAsync(finishGoodsStocks, userId, orgId))
                     {
-                        // Transfer 
-                        _finishGoodsSendToWarehouseInfoRepository.Insert(info);
-                        return await _finishGoodsSendToWarehouseInfoRepository.SaveAsync();
+                        //Packaging Item
+                        if (await _packagingItemStockDetailBusiness.SavePackagingItemStockOutAsync(packagingItemStocks, userId, orgId))
+                        {
+                            // Transfer 
+                            _finishGoodsSendToWarehouseInfoRepository.Insert(info);
+                            return await _finishGoodsSendToWarehouseInfoRepository.SaveAsync();
+                        }
                     }
                 }
             }
@@ -274,16 +304,16 @@ namespace ERPBLL.Production
 
         public IEnumerable<FinishGoodsSendToWarehouseInfoDTO> GetFinishGoodsSendToWarehouseInfosByQuery(long? floorId, long? packagingLineId, long? warehouseId, long? modelId, string status, string transferCode, string fromDate, string toDate, long? transferId, long orgId)
         {
-            return this._productionDb.Db.Database.SqlQuery<FinishGoodsSendToWarehouseInfoDTO>(QueryForFinishGoodsSendToWarehouseInfo(floorId, packagingLineId, warehouseId, modelId, status, transferCode,fromDate,toDate, transferId, orgId)).ToList();
+            return this._productionDb.Db.Database.SqlQuery<FinishGoodsSendToWarehouseInfoDTO>(QueryForFinishGoodsSendToWarehouseInfo(floorId, packagingLineId, warehouseId, modelId, status, transferCode, fromDate, toDate, transferId, orgId)).ToList();
         }
 
         private string QueryForFinishGoodsSendToWarehouseInfo(long? floorId, long? packagingLineId, long? warehouseId, long? modelId, string status, string transferCode, string fromDate, string toDate, long? transferId, long orgId)
         {
             string param = string.Empty;
             string query = string.Empty;
-            if(floorId != null && floorId > 0)
+            if (floorId != null && floorId > 0)
             {
-                param += string.Format(@" and fgs.LineId={0}",floorId);
+                param += string.Format(@" and fgs.LineId={0}", floorId);
             }
             if (packagingLineId != null && packagingLineId > 0)
             {
@@ -301,7 +331,7 @@ namespace ERPBLL.Production
             {
                 param += string.Format(@" and fgs.SendId={0}", transferId);
             }
-            if (!string.IsNullOrEmpty(status) && status.Trim() !="") 
+            if (!string.IsNullOrEmpty(status) && status.Trim() != "")
             {
                 param += string.Format(@" and fgs.StateStatus='{0}'", status);
             }
@@ -332,7 +362,7 @@ Inner Join [Production].dbo.tblProductionLines pl on fgs.LineId = pl.LineId
 Inner Join [Production].dbo.tblPackagingLine pac on fgs.PackagingLineId = pac.PackagingLineId
 Inner Join [Inventory].dbo.tblWarehouses w on fgs.WarehouseId = w.Id
 Inner Join [Inventory].dbo.tblDescriptions de on fgs.DescriptionId = de.DescriptionId
-Where 1=1 and fgs.TotalQty > 0 and fgs.OrganizationId={0} {1} Order by fgs.SendId desc", orgId,Utility.ParamChecker(param));
+Where 1=1 and fgs.TotalQty > 0 and fgs.OrganizationId={0} {1} Order by fgs.SendId desc", orgId, Utility.ParamChecker(param));
             return query;
         }
 
@@ -340,9 +370,9 @@ Where 1=1 and fgs.TotalQty > 0 and fgs.OrganizationId={0} {1} Order by fgs.SendI
         {
             string param = string.Empty;
             string query = string.Empty;
-            if(lineId != null && lineId.Value > 0)
+            if (lineId != null && lineId.Value > 0)
             {
-                param += string.Format(@" and fsi.LineId={0}",lineId);
+                param += string.Format(@" and fsi.LineId={0}", lineId);
             }
             if (warehouseId != null && warehouseId.Value > 0)
             {
@@ -352,7 +382,7 @@ Where 1=1 and fgs.TotalQty > 0 and fgs.OrganizationId={0} {1} Order by fgs.SendI
             {
                 param += string.Format(@" and fsi.DescriptionId={0}", modelId);
             }
-            if (!string.IsNullOrEmpty(status) && status.Trim() !="")
+            if (!string.IsNullOrEmpty(status) && status.Trim() != "")
             {
                 param += string.Format(@" and fsi.StateStatus='{0}'", status.Trim());
             }
@@ -385,14 +415,14 @@ Inner Join tblProductionLines pl  on fsi.LineId =pl.LineId
 Inner Join tblPackagingLine pac on fsi.PackagingLineId =pac.PackagingLineId
 Inner Join [Inventory].dbo.tblWarehouses w on fsi.WarehouseId =w.Id
 Inner Join [Inventory].dbo.tblDescriptions de on fsi.DescriptionId =de.DescriptionId
-Where 1=1 and fsi.OrganizationId={0} {1} ORDER BY fsi.SendId DESC", orgId,Utility.ParamChecker(param));
+Where 1=1 and fsi.OrganizationId={0} {1} ORDER BY fsi.SendId DESC", orgId, Utility.ParamChecker(param));
             return _productionDb.Db.Database.SqlQuery<FinishGoodsSendToWarehouseInfoDTO>(query).ToList();
         }
         public async Task<IEnumerable<HandsetCountWithHourDTO>> GetAllHandsetByPackagingLineWithTime(long packagingId, DateTime time, long orgId)
         {
             return await _productionDb.Db.Database.SqlQuery<HandsetCountWithHourDTO>(string.Format(@"Select FORMAT(CAST(EntryDate AS DATETIME), 'hh:00')'Hour', ISNULL(Sum(TotalQty),0)'Qty' From tblFinishGoodsSendToWarehouseInfo Where Cast(EntryDate as date) = Cast(GetDate() as date) and PackagingLineId = {0} and OrganizationId = {1}
 Group By FORMAT(CAST(EntryDate AS DATETIME), 'hh:00') 
-ORDER BY FORMAT(CAST(EntryDate AS DATETIME), 'hh:00')", packagingId,orgId)).ToListAsync();
+ORDER BY FORMAT(CAST(EntryDate AS DATETIME), 'hh:00')", packagingId, orgId)).ToListAsync();
         }
     }
 }

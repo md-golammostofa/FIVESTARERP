@@ -205,8 +205,8 @@
                 var data = JSON.stringify({ qrCode: $.trim(txtSearchQRCode.val()) });
                 if (validateQRCodeInRepair()) {
                     $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/GetRepairItemDetailsByQRCode', data, getToken())).then(function (res, status) {
-                        console.log(res);
-                        console.log(status);
+                        //console.log(res);
+                        //console.log(status);
                         if (!$.isEmptyObject(res.info)) {
                             //alert("foo")
                             bindQrCodeDetails(res.info);
@@ -312,8 +312,9 @@
                     var td1 = "<td class='text-center text-bold'>" + (index + 1) + "</td>";
                     var td2 = "<td>" + item.ItemName + "[" + item.ItemTypeName + "-" + item.WarehouseName + "]" + "</td>";
                     var td3 = "<td class='text-center text-bold'>" + item.Quantity + "</td>";
-                    var td4 = "<td class='text-center'><input type='checkbox' class='chkChinaFaulty' name='chinaFaulty'" + isChecked + "  /></td>"
-                    var td5 = "<td class='text-center'><a href='#' class='btn btn-sm btn-secondary data-item-del' data-item-val='0'><i class='far fa-minus-square'></i></a></td>";
+                    var td4 = "<td class='text-center'><input type='checkbox' class='chkChinaFaulty' name='chinaFaulty'" + isChecked + "  disabled/></td>"
+                    var td5 = "<td class='text-center' data-item-val='0'></td>";
+                    //<a href='#' class='btn btn-sm btn-secondary data-item-del' data-item-val='0'><i class='far fa-minus-square'></i></a>
                     var td6 = "<td class='hide warehouse'>" + item.WarehouseId + "</td>";
                     var td7 = "<td class='hide itemType'>" + item.ItemTypeId + "</td>";
                     var td8 = "<td class='hide item'>" + item.ItemId + "</td>";
@@ -393,7 +394,7 @@
 
         function IsRepairLineStockAvailable() {
             getItemValues();
-            return ajaxBooleanChecker(JSON.stringify({ itemId: item, repairId: hdfRepairLineId.val(), modelId: hdfModelId.val(), qty: 1 }), '/Common/IsAssemblyRepairLineStockAvailable', getToken()) == true;
+            return ajaxBooleanChecker(JSON.stringify({ itemId: item, repairId: hdfRepairLineId.val(), modelId: hdfModelId.val(), qty: txtQuantity.val() }), '/Common/IsAssemblyRepairLineStockAvailable', getToken()) == true;
         }
 
         $("#btnAddToList").click(function (e) {
@@ -410,7 +411,7 @@
                     var td2 = "<td>" + itemText + "</td>";
                     var td3 = "<td class='text-center text-bold'>" + txtQuantity.val() + "</td>";
                     var td4 = "<td class='text-center'><input type='checkbox' class='chkChinaFaulty' name='chinaFaulty' checked='checked' /></td>";
-                    var td5 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i></a></td>";
+                    var td5 = "<td class='text-center' data-item-val='1'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i></a></td>";
                     var td6 = "<td class='hide warehouse'>" + warehouse + "</td>";
                     var td7 = "<td class='hide itemType'>" + itemType + "</td>";
                     var td8 = "<td class='hide item'>" + item + "</td>";
@@ -435,6 +436,19 @@
                 if ($('#tblFaultItems tbody tr').length == 0) {
                     $("#btnFaulty").hide();
                     $("#btnRepairDone").show();
+                }
+                else {
+                    $.each($('#tblFaultItems tbody tr'), function (index, item) {
+                        var tds = $(this).children('td');
+                        if (tds.eq(4).attr("data-item-val") == "1") {
+                            $("#btnFaulty").show();
+                            $("#btnRepairDone").hide();
+                        }
+                        if (tds.eq(4).attr("data-item-val") == "0") {
+                            $("#btnFaulty").hide();
+                            $("#btnRepairDone").show();
+                        }
+                    })
                 }
             }, 1000);
            
@@ -461,7 +475,7 @@
 
         function fnSaveFaultyItems() {
             var newFaultyRows = $("#tblFaultItems tbody").find("tr.new-item");
-            console.log(newFaultyRows);
+            //console.log(newFaultyRows);
             if (newFaultyRows.length > 0) {
                 var faultyItems = []; faultyItems.length = 0;
                 $.each(newFaultyRows, function (index, item) {
@@ -478,13 +492,13 @@
                 var FaultyInfo = { QRCode: hdfQRCode.val(), TransferId: TryParseInt(hdfTransferId.val(), 0), ModelId: TryParseInt(hdfModelId.val(), 0) };
                 FaultyInfo.FaultyItems = faultyItems;
                 var data = JSON.stringify({ model: FaultyInfo });
-                console.log('FaultyItems');
-                console.log(data);
+                //console.log('FaultyItems');
+                //console.log(data);
                 //return;
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveFaultyItemByQRCodeScaning', data, getToken())).then(function (res, status) {
                     //alert(res.IsSuccess);
                     //return console.log(res.IsSuccess);
-                    console.log(status);
+                    //console.log(status);
                     if (res == true) {
                         toastrSuccessAlert("Faulty item added");
                         
@@ -550,8 +564,8 @@
         function fnGetFaultyItemsAfterSubmit(qrCode, transferId) {
             var data = JSON.stringify({ qrCode: qrCode, transferId: transferId })
             $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Common/GetFaultyItemsByQRCode', data, getToken())).then(function (res, status) {
-                console.log(res);
-                console.log(status);
+                //console.log(res);
+                //console.log(status);
                 if (res.faultyItems !== null && status === "success") {
                     bindQRCodeFaultyItems(res.faultyItems);
                 }
@@ -562,13 +576,10 @@
 
         function fnRepairDone() {
                 var data = JSON.stringify({ QRCode: hdfQRCode.val(), AssemblyLineId: TryParseInt(hdfAssemblyLineId.val(), 0), RepairLineId: TryParseInt(hdfRepairLineId.val(), 0), QCLineId: TryParseInt(hdfQCLineId.val(), 0), ModelId: TryParseInt(hdfModelId.val(), 0), ItemId: TryParseInt(hdfItem.val(), 0) })
-                console.log("Repair Done");
+                //console.log("Repair Done");
                 //return console.log(data);
                 
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveRepairItemByQRCodeScaning', data, getToken())).then(function (res, status) {
-                    console.log(res.IsSuccess);
-                    console.log(res.Msg);
-                    console.log(status);
                     if (res.IsSuccess === true) {
                         toastrSuccessAlert("Successfully Repair Done");
                         clearHdf();

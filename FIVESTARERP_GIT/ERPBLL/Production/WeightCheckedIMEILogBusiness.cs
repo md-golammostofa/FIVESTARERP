@@ -1,5 +1,7 @@
 ﻿using ERPBLL.Common;
+using ERPBLL.Inventory.Interface;
 using ERPBLL.Production.Interface;
+using ERPBO.Inventory.DomainModels;
 using ERPBO.Production.DomainModels;
 using ERPBO.Production.DTOModel;
 using ERPDAL.ProductionDAL;
@@ -15,11 +17,21 @@ namespace ERPBLL.Production
     public class WeightCheckedIMEILogBusiness : IWeightCheckedIMEILogBusiness
     {
         private readonly IProductionUnitOfWork _productionDb;
+        private readonly ITempQRCodeTraceBusiness _tempQRCodeTraceBusiness;
+        private readonly IPackagingLineStockDetailBusiness _packagingLineStockDetailBusiness;
+        private readonly IItemPreparationInfoBusiness _itemPreparationInfoBusiness;
+        private readonly IItemPreparationDetailBusiness _itemPreparationDetailBusiness;
         private readonly WeightCheckedIMEILogRepository _weightCheckedIMEILogRepository;
-        public WeightCheckedIMEILogBusiness(IProductionUnitOfWork productionDb)
+        private readonly TempQRCodeTraceRepository _tempQRCodeTraceRepository;
+        public WeightCheckedIMEILogBusiness(IProductionUnitOfWork productionDb, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness)
         {
             this._productionDb = productionDb;
-            _weightCheckedIMEILogRepository = new WeightCheckedIMEILogRepository(this._productionDb);
+            this._tempQRCodeTraceBusiness = tempQRCodeTraceBusiness;
+            this._packagingLineStockDetailBusiness = packagingLineStockDetailBusiness;
+            this._itemPreparationDetailBusiness = itemPreparationDetailBusiness;
+            this._itemPreparationInfoBusiness = itemPreparationInfoBusiness;
+            this._weightCheckedIMEILogRepository = new WeightCheckedIMEILogRepository(this._productionDb);
+            this._tempQRCodeTraceRepository = new TempQRCodeTraceRepository(this._productionDb);
         }
         public IEnumerable<WeightCheckedIMEILog> GetAllWeightCheckedInfoByUserId(long userId, long orgId, DateTime date)
         {
@@ -64,6 +76,73 @@ From tblWeightCheckedIMEILog bs
 Left Join [ControlPanel-MC].dbo.tblApplicationUsers au on bs.EUserId = au.UserId
 Where bs.EUserId= {0}{1}", userId, Utility.ParamChecker(param));
             return query;
+        }
+        public async Task<bool> SaveIMEIStatusForWeightCheck(string imei, long orgId, long userId)
+        {
+            var imeiInfo = _tempQRCodeTraceBusiness.GetTempQRCodeTraceByIMEI(imei, orgId);
+            if (imeiInfo != null && imeiInfo.StateStatus == QRCodeStatus.Bettery)
+            {
+                // Item Preparation Info //
+                var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Packaging, imeiInfo.DescriptionId.Value, imeiInfo.ItemId.Value, orgId);
+
+                // Item Preparation Detail //
+                var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
+
+                // Packaging Line Stock //
+                List<PackagingLineStockDetailDTO> packagingRawStocks = new List<PackagingLineStockDetailDTO>();
+
+                foreach (var item in itemPreparationDetail)
+                {
+                    PackagingLineStockDetailDTO packagingRawStock = new PackagingLineStockDetailDTO()
+                    {
+                        ProductionLineId = imeiInfo.PackagingLineId,
+                        PackagingLineId = imeiInfo.PackagingLineId,
+                        WarehouseId = item.WarehouseId,
+                        ItemTypeId = item.ItemTypeId,
+                        ItemId = item.ItemId,
+                        Quantity = item.Quantity,
+                        DescriptionId = imeiInfo.DescriptionId,
+                        UnitId = item.UnitId,
+                        OrganizationId = orgId,
+                        EntryDate = DateTime.Now,
+                        EUserId = userId,
+                        StockStatus = StockStatus.StockOut,
+                        RefferenceNumber = imeiInfo.IMEI,
+                        Remarks = imeiInfo.CodeNo
+                    };
+                    packagingRawStocks.Add(packagingRawStock);
+                }
+
+                imeiInfo.StateStatus = QRCodeStatus.Weight;
+                imeiInfo.UpdateDate = DateTime.Now;
+                imeiInfo.UpUserId = userId;
+                _tempQRCodeTraceRepository.Update(imeiInfo);
+
+                WeightCheckedIMEILog weightCheck = new WeightCheckedIMEILog();
+                weightCheck.AssemblyId = imeiInfo.AssemblyId;
+                weightCheck.CodeId = imeiInfo.CodeId;
+                weightCheck.CodeNo = imeiInfo.CodeNo;
+                weightCheck.DescriptionId = imeiInfo.DescriptionId;
+                weightCheck.EntryDate = DateTime.Now;
+                weightCheck.EUserId = userId;
+                weightCheck.IMEI = imeiInfo.IMEI;
+                weightCheck.ItemId = imeiInfo.ItemId;
+                weightCheck.ItemTypeId = imeiInfo.ItemTypeId;
+                weightCheck.OrganizationId = imeiInfo.OrganizationId;
+                weightCheck.ProductionFloorId = imeiInfo.ProductionFloorId;
+                weightCheck.ReferenceId = imeiInfo.ReferenceId;
+                weightCheck.ReferenceNumber = imeiInfo.ReferenceNumber;
+                weightCheck.Remarks = imeiInfo.Remarks;
+                weightCheck.StateStatus = imeiInfo.StateStatus;
+                weightCheck.WarehouseId = imeiInfo.WarehouseId;
+
+                _weightCheckedIMEILogRepository.Insert(weightCheck);
+                if (await _weightCheckedIMEILogRepository.SaveAsync())
+                {
+                    return await _packagingLineStockDetailBusiness.SavePackagingLineStockOutAsync(packagingRawStocks, userId, orgId, string.Empty);
+                }
+            }
+            return false;
         }
     }
 }

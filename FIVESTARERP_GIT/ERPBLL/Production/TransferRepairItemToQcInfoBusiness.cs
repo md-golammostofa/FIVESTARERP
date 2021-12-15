@@ -306,29 +306,51 @@ namespace ERPBLL.Production
 
                 // Repair Speare Parts Stock
                 List<RepairLineStockDetailDTO> repairLineStocks = new List<RepairLineStockDetailDTO>();
+                //Assembly Line
+                List<AssemblyLineStockDetailDTO> stockDetailDTOs = new List<AssemblyLineStockDetailDTO>();
+
                 foreach (var item in itemPreparationDetail)
                 {
-                    var itemInfo = allItemsInDb.FirstOrDefault(s => s.ItemId == item.ItemId);
-                    RepairLineStockDetailDTO repairLineStock = new RepairLineStockDetailDTO()
+                    //var itemInfo = allItemsInDb.FirstOrDefault(s => s.ItemId == item.ItemId);
+                    //RepairLineStockDetailDTO repairLineStock = new RepairLineStockDetailDTO()
+                    //{
+                    //    ProductionLineId = QrCodeInfoDto.FloorId,
+                    //    AssemblyLineId = QrCodeInfoDto.AssemblyLineId,
+                    //    RepairLineId = QrCodeInfoDto.RepairLineId,
+                    //    QCLineId = QrCodeInfoDto.QCLineId,
+                    //    DescriptionId = itemPreparationInfo.DescriptionId,
+                    //    ItemTypeId = item.ItemTypeId,
+                    //    ItemId = item.ItemId,
+                    //    WarehouseId = item.WarehouseId,
+                    //    Quantity = item.Quantity,
+                    //    StockStatus = StockStatus.StockOut,
+                    //    EntryDate = DateTime.Now,
+                    //    EUserId = user,
+                    //    OrganizationId = orgId,
+                    //    RefferenceNumber = code,
+                    //    Remarks = "Stock Out By Repair Done-" + QrCodeInfoDto.QRCode,
+                    //    UnitId = itemInfo.UnitId
+                    //};
+                    //repairLineStocks.Add(repairLineStock);
+
+                    AssemblyLineStockDetailDTO assemblyStock = new AssemblyLineStockDetailDTO
                     {
                         ProductionLineId = QrCodeInfoDto.FloorId,
                         AssemblyLineId = QrCodeInfoDto.AssemblyLineId,
-                        RepairLineId = QrCodeInfoDto.RepairLineId,
-                        QCLineId = QrCodeInfoDto.QCLineId,
-                        DescriptionId = itemPreparationInfo.DescriptionId,
+                        DescriptionId = QrCodeInfoDto.DescriptionId,
+                        WarehouseId = item.WarehouseId,
                         ItemTypeId = item.ItemTypeId,
                         ItemId = item.ItemId,
-                        WarehouseId = item.WarehouseId,
-                        Quantity = item.Quantity,
-                        StockStatus = StockStatus.StockOut,
-                        EntryDate = DateTime.Now,
-                        EUserId = user,
                         OrganizationId = orgId,
+                        EUserId = orgId,
+                        Quantity = item.Quantity,
+                        EntryDate = DateTime.Now,
+                        UnitId = item.UnitId,
                         RefferenceNumber = code,
-                        Remarks = "Stock Out By Repair Done-" + QrCodeInfoDto.QRCode,
-                        UnitId = itemInfo.UnitId
+                        StockStatus = StockStatus.StockIn,
+                        Remarks = "Stock In By Repair Done-" + QrCodeInfoDto.QRCode,
                     };
-                    repairLineStocks.Add(repairLineStock);
+                    stockDetailDTOs.Add(assemblyStock);
                 }
 
                 // Repair Item Stocks
@@ -355,50 +377,52 @@ namespace ERPBLL.Production
 
                 if (await _repairItemStockDetailBusiness.SaveRepairItemStockOutAsync(repairItemStocks, user, orgId))
                 {
-
-                    //if (await _repairLineStockDetailBusiness.SaveRepairLineStockOutAsync(repairLineStocks, user, orgId, string.Empty))
-                    //{
-                    if (transferInfo.TRQInfoId > 0)
+                    if (await _assemblyLineStockDetailBusiness.SaveAssemblyLineStockInAsync(stockDetailDTOs, user, orgId))
                     {
-                        _transferRepairItemToQcInfoRepository.Update(transferInfo);
-                        _transferRepairItemToQcDetailRepository.InsertAll(transferRepairItemDetails);
+                        //if (await _repairLineStockDetailBusiness.SaveRepairLineStockOutAsync(repairLineStocks, user, orgId, string.Empty))
+                        //{
+                        if (transferInfo.TRQInfoId > 0)
+                        {
+                            _transferRepairItemToQcInfoRepository.Update(transferInfo);
+                            _transferRepairItemToQcDetailRepository.InsertAll(transferRepairItemDetails);
+                        }
+                        else
+                        {
+                            _transferRepairItemToQcInfoRepository.Insert(transferInfo);
+                        }
+
+                        var qrCodeInfoInDb = await _qRCodeTransferToRepairInfoBusiness.GetQRCodeTransferToRepairInfoByIdAsync(QrCodeInfoDto.QRTRInfoId, orgId);
+                        qrCodeInfoInDb.StateStatus = "Repair-Done";
+                        qrCodeInfoInDb.UpdateDate = DateTime.Now;
+                        qrCodeInfoInDb.UpUserId = user;
+
+                        RepairOut repairOut = new RepairOut()
+                        {
+                            FloorId = qrCodeInfoInDb.FloorId,
+                            AssemblyLineId = qrCodeInfoInDb.AssemblyLineId,
+                            DescriptionId = qrCodeInfoInDb.DescriptionId,
+                            RepairLineId = qrCodeInfoInDb.RepairLineId,
+                            WarehouseId = qrCodeInfoInDb.WarehouseId,
+                            ItemTypeId = qrCodeInfoInDb.ItemTypeId,
+                            ItemId = qrCodeInfoInDb.ItemId,
+                            QCLineId = qrCodeInfoInDb.QCLineId,
+                            SubQCId = qrCodeInfoInDb.SubQCId,
+                            OrganizationId = orgId,
+                            StateStatus = "Repair-Done",
+                            EntryDate = DateTime.Now,
+                            EUserId = user,
+                            QRCode = qrCodeInfoInDb.QRCode,
+                            TransferCode = qrCodeInfoInDb.TransferCode,
+                            TransferId = qrCodeInfoInDb.TransferId,
+                            QRTRInfoId = qrCodeInfoInDb.QRTRInfoId,
+                        };
+
+                        _repairOutRepository.Insert(repairOut);
+                        _qRCodeTransferToRepairInfoRepository.Update(qrCodeInfoInDb);
+
+                        return await _transferRepairItemToQcInfoRepository.SaveAsync();
+                        //}
                     }
-                    else
-                    {
-                        _transferRepairItemToQcInfoRepository.Insert(transferInfo);
-                    }
-
-                    var qrCodeInfoInDb = await _qRCodeTransferToRepairInfoBusiness.GetQRCodeTransferToRepairInfoByIdAsync(QrCodeInfoDto.QRTRInfoId, orgId);
-                    qrCodeInfoInDb.StateStatus = "Repair-Done";
-                    qrCodeInfoInDb.UpdateDate = DateTime.Now;
-                    qrCodeInfoInDb.UpUserId = user;
-
-                    RepairOut repairOut = new RepairOut()
-                    {
-                        FloorId = qrCodeInfoInDb.FloorId,
-                        AssemblyLineId = qrCodeInfoInDb.AssemblyLineId,
-                        DescriptionId = qrCodeInfoInDb.DescriptionId,
-                        RepairLineId = qrCodeInfoInDb.RepairLineId,
-                        WarehouseId = qrCodeInfoInDb.WarehouseId,
-                        ItemTypeId = qrCodeInfoInDb.ItemTypeId,
-                        ItemId = qrCodeInfoInDb.ItemId,
-                        QCLineId = qrCodeInfoInDb.QCLineId,
-                        SubQCId = qrCodeInfoInDb.SubQCId,
-                        OrganizationId = orgId,
-                        StateStatus = "Repair-Done",
-                        EntryDate = DateTime.Now,
-                        EUserId = user,
-                        QRCode = qrCodeInfoInDb.QRCode,
-                        TransferCode = qrCodeInfoInDb.TransferCode,
-                        TransferId = qrCodeInfoInDb.TransferId,
-                        QRTRInfoId = qrCodeInfoInDb.QRTRInfoId,
-                    };
-
-                    _repairOutRepository.Insert(repairOut);
-                    _qRCodeTransferToRepairInfoRepository.Update(qrCodeInfoInDb);
-
-                    return await _transferRepairItemToQcInfoRepository.SaveAsync();
-                    //}
                 }
             }
             return false;

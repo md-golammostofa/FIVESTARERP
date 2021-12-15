@@ -673,7 +673,7 @@
             e.preventDefault();
 
             if (validationForm()) {
-
+                disable("#btnSubmit");
                 var info = { FloorId: TryParseInt(ddlProductionFloor.val(), 0), QCLineId: TryParseInt(ddlQCLine.val(), 0), SubQCId: TryParseInt(ddlSubQC.val(),0), RepairLineId: TryParseInt(ddlRepairLine.val(), 0), QRCode: txtItemQRCode.val(), AssemblyLineId: qrCodeDataObj.Assembly, DescriptionId: qrCodeDataObj.Model, ItemId: qrCodeDataObj.Item, ItemTypeId: qrCodeDataObj.ItemType, WarehouseId: qrCodeDataObj.Warehouse };
 
                 var problems = []; problems.length = 0;
@@ -686,14 +686,14 @@
                 })
                 info.QRCodeProblems = problems;
                 var data = JSON.stringify({ model: info })
-                console.log("Info Data");
-                console.log(data);
+                //console.log("Info Data");
+                //console.log(data);
                 //return;
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQRCodeWiseQcItemTransfer', data, getToken())).then(function (res, status) {
-                    console.log(res);
-                    console.log(status);
-                    console.log("res.IsSuccess");
-                    console.log(res.IsSuccess);
+                    //console.log(res);
+                    //console.log(status);
+                    //console.log("res.IsSuccess");
+                    //console.log(res.IsSuccess);
                     if (res.IsSuccess === true) {
                         toastrSuccessAlert('Successful');
                         $("#tblProb tbody").empty();
@@ -711,9 +711,11 @@
                     else {
                         bootbox.alert("This QrCode already has been transfered to Repair");
                     }
+                    enable("#btnSubmit");
                 }).fail(function (error) {
                     console.log(error);
                     bootbox.alert("Fail");
+                    enable("#btnSubmit");
                 })
             }
         })

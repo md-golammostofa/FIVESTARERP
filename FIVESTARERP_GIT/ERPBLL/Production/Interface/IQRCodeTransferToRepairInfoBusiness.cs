@@ -16,7 +16,7 @@ namespace ERPBLL.Production.Interface
         Task<bool> SaveQRCodeTransferToRepairAsync(QRCodeTransferToRepairInfoDTO dto, long userId, long orgId);
         IEnumerable<QRCodeTransferToRepairInfoDTO> GetQRCodeTransferToRepairInfoByTransferIdByQuery(long transferId, long orgId);
         QRCodeTransferToRepairInfoDTO GetQRCodeWiseItemInfo(string qrCode, string status, long orgId);
-        bool SaveQRCodeStatusByTrasnferInfoId(long transferId,string status,long userId, long orgId);
+        Task<bool> SaveQRCodeStatusByTrasnferInfoId(long transferId,string status,long userId, long orgId);
         bool StockOutByAddingFaultyWithQRCode(FaultyInfoByQRCodeDTO model, long userId, long orgId);
         ExecutionStateWithText CheckingAvailabilityOfSparepartsWithRepairLineStock(long modelId, long itemId, long repairLineId,long orgId);
         Task<QRCodeTransferToRepairInfo> GetQRCodeTransferToRepairInfoByIdAsync(long id, long orgId);

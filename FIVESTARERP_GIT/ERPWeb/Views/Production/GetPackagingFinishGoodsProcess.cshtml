@@ -493,13 +493,19 @@
                 var td1 = '<td class="text-center text-bold">'+(rowNum+1)+'</td>';
                 var td2 = '<td>' + $.trim(txtIMEIScaning.val()) + '</td>';
                 var td3 = '<td>' + obj.ItemName + ' [' + obj.ItemTypeName + '-' + obj.WarehouseName+']' + '</td>';
-                var td4 = '<td class="text-center"><a href="#" class="btn btn-sm btn-danger btn-flat data-del-onfly"><i class="fas fa-trash"></i></a></td>';
+                var td4 = '<td class="text-center"><a href="#" class="btn btn-sm btn-danger btn-flat data-onfly-del"><i class="fas fa-trash"></i></a></td>';
                 var td5 = '<td class="hide">' + obj.IMEI + '</td>';
                 var td6 = '<td class="hide">' + obj.CodeNo + '</td>';
                 var tr = '<tr>' + td1 + td2 + td3 + td4 + td5 + td6 + '</tr>';
                 $("#tblIMEIItem tbody").append(tr);
             }
         }
+        $(document).on("click", "a.data-onfly-del", function (e) {
+            e.preventDefault();
+            var index = $(this).parent().parents('tbody tr').index();
+            removeTableRow("#tblIMEIItem tbody", index);
+            fnFixTheTbodyRowSerial("#tblIMEIItem", index);
+        })
 
         function validateCarton() {
             var isValid = true;

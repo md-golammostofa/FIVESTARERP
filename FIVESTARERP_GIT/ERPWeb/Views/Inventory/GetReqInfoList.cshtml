@@ -32,7 +32,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <h5 class="text-center text-bold">
-                                                   Production-Requisition List
+                                                    Production-Requisition List
                                                 </h5>
                                             </div>
                                             <div class="col-md-3">
@@ -195,8 +195,7 @@
             }
         })
 
-        txtReqCode.keyup(function ()
-        {
+        txtReqCode.keyup(function () {
             LoadDataTable();
         })
 
@@ -204,12 +203,10 @@
             LoadDataTable();
         })
 
-        function LoadDataTable()
-        {
-            var data = { reqCode: txtReqCode.val().trim(), warehouseId: TryParseInt(ddlWarehouseName.val(), 0), modelId: TryParseInt(ddlModelName.val(), 0), status: ddlStateStatus.val(), line: TryParseInt(ddlLineNumber.val(), 0), fromDate: dptFromDate.val(), toDate: dptToDate.val(), requisitionType: ddlRequisitionType.val(), reqInfoId:0, page: pageNo };
+        function LoadDataTable() {
+            var data = { reqCode: txtReqCode.val().trim(), warehouseId: TryParseInt(ddlWarehouseName.val(), 0), modelId: TryParseInt(ddlModelName.val(), 0), status: ddlStateStatus.val(), line: TryParseInt(ddlLineNumber.val(), 0), fromDate: dptFromDate.val(), toDate: dptToDate.val(), requisitionType: ddlRequisitionType.val(), reqInfoId: 0, page: pageNo };
 
-            $.when(getReqWithData('html', 'GET', '/Inventory/GetReqInfoParitalList', data)).then(function (res, status)
-            {
+            $.when(getReqWithData('html', 'GET', '/Inventory/GetReqInfoParitalList', data)).then(function (res, status) {
                 if (status === "success") {
                     $("#dataContainer1").fadeOut('500', function () {
                         $("#dataContainer1").empty();
@@ -223,8 +220,7 @@
             pageNo = 1;
         }
 
-        function OpenModal()
-        {
+        function OpenModal() {
             $("#dataContainer").empty();
             hdfReqInfoId.val('0');
             hdfRowIndex.val("");
@@ -250,7 +246,7 @@
             })
         })
 
-        $(document).on('click',".btnReject", function(e) {
+        $(document).on('click', ".btnReject", function (e) {
             e.preventDefault();
             fnRequisitionStateChange(hdfReqInfoId.val(), hdfRowIndex.val(), reqStatus.reject);
         })
@@ -260,21 +256,18 @@
             fnRequisitionStateChange(hdfReqInfoId.val(), hdfRowIndex.val(), reqStatus.recheck);
         })
 
-        function validateByStock()
-        {
+        function validateByStock() {
             var isValid = true;
             $("#alert-error").empty();
-            if (TryParseInt(hdfReqInfoId.val(), 0) > 0)
-            {
+            if (TryParseInt(hdfReqInfoId.val(), 0) > 0) {
                 var data = JSON.stringify({ reqInfoId: TryParseInt(hdfReqInfoId.val(), 0) });
                 var ajxVal = ajaxValueChecker2(data, '/Common/IsStockAvailableForRequisition', getToken());
                 isValid = ajxVal.isSuccess;
-                if (ajxVal.isSuccess === false)
-                {
+                if (ajxVal.isSuccess === false) {
                     $("#alert-error").empty();
                     var warning = '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h5><i class="icon fas fa-ban"></i> Error!</h5><p id="alert-text">' + ajxVal.text + '</p></div>';
                     $("#alert-error").html(warning);
-                }   
+                }
             }
             return isValid;
         }
@@ -288,9 +281,11 @@
 
         function fnRequisitionStateChange(id, index, status) {
             if (id > 0) {
+                disable(".btnApproved");
+                disable(".btnRecheck");
+                disable(".btnReject");
                 var data = JSON.stringify({ reqId: id, status: status });
-                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Inventory/SaveRequisitionStatus', data, getToken())).then(function (res, status)
-                {
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Inventory/SaveRequisitionStatus', data, getToken())).then(function (res, status) {
                     if (status == "success" && res === true) {
                         $("#modalReqDetails").modal("toggle").toggle("fast");
                         hdfReqInfoId.val('0');
@@ -301,8 +296,14 @@
                             LoadDataTable();
                         }, 1500);
                     }
+                    enable(".btnApproved");
+                    enable(".btnRecheck");
+                    enable(".btnReject");
                 }).fail(function (error) {
                     console.log(error);
+                    enable(".btnApproved");
+                    enable(".btnRecheck");
+                    enable(".btnReject");
                 })
             }
         }

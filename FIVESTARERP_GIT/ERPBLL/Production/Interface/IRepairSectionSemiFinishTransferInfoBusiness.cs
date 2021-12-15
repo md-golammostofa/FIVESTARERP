@@ -10,7 +10,7 @@ namespace ERPBLL.Production.Interface
 {
    public interface IRepairSectionSemiFinishTransferInfoBusiness
     {
-        bool SaveRepairSectionSemiFinishTransferItem(long[] qRCodesId, int qty, long userId, long orgId);
+        Task<bool> SaveRepairSectionSemiFinishTransferItem(long[] qRCodesId, int qty, long userId, long orgId);
         IEnumerable<RepairSectionSemiFinishTransferInfoDTO> RepairSectionSemiFinishGoodReceive(long orgId);
         RepairSectionSemiFinishTransferInfo GetQRCodeDetailsByInfoId(long infoId,long orgId);
         bool UpdateStatusRepairSection(long infoId, long userId, long orgId);

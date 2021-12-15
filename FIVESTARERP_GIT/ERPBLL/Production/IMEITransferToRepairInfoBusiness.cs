@@ -145,7 +145,7 @@ Where 1= 1 and imei.OrganizationId={0} {1}", orgId,Utility.ParamChecker(param));
             // Item Preparation Detail //
             var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
 
-            List<PackagingLineStockDetailDTO> packagingLineStocks = new List<PackagingLineStockDetailDTO>();
+            //List<PackagingLineStockDetailDTO> packagingLineStocks = new List<PackagingLineStockDetailDTO>();
             List<TransferToPackagingRepairDetail> transferDetails = new List<TransferToPackagingRepairDetail>();
 
             if (transferInfo != null)
@@ -154,27 +154,27 @@ Where 1= 1 and imei.OrganizationId={0} {1}", orgId,Utility.ParamChecker(param));
                 //transferInfo.UpUserId = userId;
                 //transferInfo.UpdateDate = DateTime.Now;
                 code = transferInfo.TransferCode;
-                foreach (var item in itemPreparationDetail)
-                {
-                    PackagingLineStockDetailDTO packagingLineStock = new PackagingLineStockDetailDTO
-                    {
-                        ProductionLineId = imeiItem.ProductionFloorId,
-                        PackagingLineId = imeiItem.PackagingLineId,
-                        DescriptionId = imeiItem.DescriptionId,
-                        WarehouseId = item.WarehouseId,
-                        ItemTypeId = item.ItemTypeId,
-                        ItemId = item.ItemId,
-                        OrganizationId = orgId,
-                        EUserId = orgId,
-                        Quantity = item.Quantity,
-                        EntryDate = DateTime.Now,
-                        UnitId = item.UnitId,
-                        RefferenceNumber = code,
-                        Remarks= "Stock Out By Pakaging Line QC",
-                        StockStatus = StockStatus.StockOut
-                    };
-                    packagingLineStocks.Add(packagingLineStock);
-                }
+                //foreach (var item in itemPreparationDetail)
+                //{
+                //    PackagingLineStockDetailDTO packagingLineStock = new PackagingLineStockDetailDTO
+                //    {
+                //        ProductionLineId = imeiItem.ProductionFloorId,
+                //        PackagingLineId = imeiItem.PackagingLineId,
+                //        DescriptionId = imeiItem.DescriptionId,
+                //        WarehouseId = item.WarehouseId,
+                //        ItemTypeId = item.ItemTypeId,
+                //        ItemId = item.ItemId,
+                //        OrganizationId = orgId,
+                //        EUserId = orgId,
+                //        Quantity = item.Quantity,
+                //        EntryDate = DateTime.Now,
+                //        UnitId = item.UnitId,
+                //        RefferenceNumber = code,
+                //        Remarks= "Stock Out By Pakaging Line QC",
+                //        StockStatus = StockStatus.StockOut
+                //    };
+                //    packagingLineStocks.Add(packagingLineStock);
+                //}
             }
             else
             {
@@ -200,24 +200,24 @@ Where 1= 1 and imei.OrganizationId={0} {1}", orgId,Utility.ParamChecker(param));
                 
                 foreach (var item in itemPreparationDetail)
                 {
-                    PackagingLineStockDetailDTO packagingLineStock = new PackagingLineStockDetailDTO
-                    {
-                        ProductionLineId = imeiItem.ProductionFloorId,
-                        PackagingLineId = imeiItem.PackagingLineId,
-                        DescriptionId = imeiItem.DescriptionId,
-                        WarehouseId = item.WarehouseId,
-                        ItemTypeId = item.ItemTypeId,
-                        ItemId = item.ItemId,
-                        OrganizationId = orgId,
-                        EUserId = orgId,
-                        Quantity = item.Quantity,
-                        EntryDate = DateTime.Now,
-                        UnitId = item.UnitId,
-                        RefferenceNumber = code,
-                        StockStatus = StockStatus.StockOut,
-                        Remarks = "Stock Out By Pakaging Line QC"
-                    };
-                    packagingLineStocks.Add(packagingLineStock);
+                    //PackagingLineStockDetailDTO packagingLineStock = new PackagingLineStockDetailDTO
+                    //{
+                    //    ProductionLineId = imeiItem.ProductionFloorId,
+                    //    PackagingLineId = imeiItem.PackagingLineId,
+                    //    DescriptionId = imeiItem.DescriptionId,
+                    //    WarehouseId = item.WarehouseId,
+                    //    ItemTypeId = item.ItemTypeId,
+                    //    ItemId = item.ItemId,
+                    //    OrganizationId = orgId,
+                    //    EUserId = orgId,
+                    //    Quantity = item.Quantity,
+                    //    EntryDate = DateTime.Now,
+                    //    UnitId = item.UnitId,
+                    //    RefferenceNumber = code,
+                    //    StockStatus = StockStatus.StockOut,
+                    //    Remarks = "Stock Out By Pakaging Line QC"
+                    //};
+                    //packagingLineStocks.Add(packagingLineStock);
 
                     TransferToPackagingRepairDetail transferDetail = new TransferToPackagingRepairDetail()
                     {
@@ -239,24 +239,24 @@ Where 1= 1 and imei.OrganizationId={0} {1}", orgId,Utility.ParamChecker(param));
                 }
                 transferInfo.TransferToPackagingRepairDetails = transferDetails;
             }
-            List<PackagingItemStockDetailDTO> packagingItemStocks = new List<PackagingItemStockDetailDTO>() {
-                new PackagingItemStockDetailDTO(){
-                    ProductionFloorId= imeiItem.ProductionFloorId,
-                    PackagingLineId = imeiItem.PackagingLineId,
-                    DescriptionId = imeiItem.DescriptionId,
-                    WarehouseId = imeiItem.WarehouseId,
-                    ItemTypeId = imeiItem.ItemTypeId,
-                    ItemId = imeiItem.ItemId,
-                    Quantity = 1,
-                    OrganizationId = orgId,
-                    EUserId = userId,
-                    EntryDate = DateTime.Now,
-                    UnitId = allItemsInDb.FirstOrDefault(s=> s.ItemId == imeiItem.ItemId).UnitId,
-                    ReferenceNumber =code,
-                    StockStatus = StockStatus.StockIn,
-                    Remarks= "Stock Out By Pakaging Line QC"
-                }
-            };
+            //List<PackagingItemStockDetailDTO> packagingItemStocks = new List<PackagingItemStockDetailDTO>() {
+            //    new PackagingItemStockDetailDTO(){
+            //        ProductionFloorId= imeiItem.ProductionFloorId,
+            //        PackagingLineId = imeiItem.PackagingLineId,
+            //        DescriptionId = imeiItem.DescriptionId,
+            //        WarehouseId = imeiItem.WarehouseId,
+            //        ItemTypeId = imeiItem.ItemTypeId,
+            //        ItemId = imeiItem.ItemId,
+            //        Quantity = 1,
+            //        OrganizationId = orgId,
+            //        EUserId = userId,
+            //        EntryDate = DateTime.Now,
+            //        UnitId = allItemsInDb.FirstOrDefault(s=> s.ItemId == imeiItem.ItemId).UnitId,
+            //        ReferenceNumber =code,
+            //        StockStatus = StockStatus.StockOut,
+            //        Remarks= "Stock Out By Pakaging Line QC"
+            //    }
+            //};
 
             IMEITransferToRepairInfo iMEITransferToRepairInfo = new IMEITransferToRepairInfo()
             {
@@ -287,10 +287,10 @@ Where 1= 1 and imei.OrganizationId={0} {1}", orgId,Utility.ParamChecker(param));
 
             if(await _transferToPackagingRepairInfoRepository.SaveAsync())
             {
-                if (await _packagingItemStockDetailBusiness.SavePackagingItemStockOutAsync(packagingItemStocks, userId, orgId))
-                {
-                    if (await _packagingLineStockDetailBusiness.SavePackagingLineStockOutAsync(packagingLineStocks, userId, orgId, string.Empty))
-                    {
+                //if (await _packagingItemStockDetailBusiness.SavePackagingItemStockOutAsync(packagingItemStocks, userId, orgId))
+                //{
+                    //if (await _packagingLineStockDetailBusiness.SavePackagingLineStockOutAsync(packagingLineStocks, userId, orgId, string.Empty))
+                    //{
                         // Temp QRCode
                         imeiItem.StateStatus = QRCodeStatus.PackagingRepair;
                         imeiItem.UpdateDate = DateTime.Now;
@@ -362,8 +362,8 @@ Where 1= 1 and imei.OrganizationId={0} {1}", orgId,Utility.ParamChecker(param));
                             _iMEITransferToRepairInfoRepository.Insert(iMEITransferToRepairInfo);
                             return await _iMEITransferToRepairInfoRepository.SaveAsync();
                         }
-                    }
-                }
+                    //}
+                //}
             }
             return IsSuccess;
         }

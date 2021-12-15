@@ -991,8 +991,8 @@
         function fnPackagingRepairReceive(id, status) {
             var data = JSON.stringify({ transferId: id, status: status });
             $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SavePackagingQCTransferItemInRepair', data, getToken())).then(function (res, status) {
-                console.log(res);
-                console.log(status);
+                //console.log(res);
+                //console.log(status);
                 if (res === true && status === "success") {
                     toastrSuccessAlert(execuStatus.successSave);
                     fnRemoveARowFromTbody(".tblReceiveRepairableItems", hdfRowIndex.val());

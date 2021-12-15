@@ -832,7 +832,7 @@
                 console.log("Requisition Object");
                 console.log(RequisitionInfo);
                 var data = JSON.stringify({ model: RequisitionInfo })
-                
+                disable("#btnSubmit");
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveRequisitionWithItemInfoAndDetail', data, getToken())).then(function (res, status) {
                     console.log(res);
                     console.log(status);
@@ -842,8 +842,9 @@
                         LoadDataTableForReqList();
                         $("#custom-tabs-two-requisitionList-tab").trigger('click');
                     }
+                    enable("#btnSubmit");
                 }).fail(function (error) {
-
+                    enable("#btnSubmit");
                 })
             }
         })

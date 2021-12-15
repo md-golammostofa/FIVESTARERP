@@ -338,58 +338,58 @@ Where 1=1 {0}", Utility.ParamChecker(param));
             if(imeiInDb != null && imeiInDb.StateStatus == QRCodeStatus.Packaging)
             {
                 // Item Preparation Info //
-                var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Packaging, imeiInDb.DescriptionId.Value, imeiInDb.ItemId.Value, orgId);
+                //var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Packaging, imeiInDb.DescriptionId.Value, imeiInDb.ItemId.Value, orgId);
 
                 // Item Preparation Detail //
-                var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
+               // var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
 
                 // All items in Db
                 var allItemsInDb = _itemBusiness.GetAllItemByOrgId(orgId);
 
                 // Packaging Line Stock //
-                List<PackagingLineStockDetailDTO> packagingRawStocks = new List<PackagingLineStockDetailDTO>();
+                //List<PackagingLineStockDetailDTO> packagingRawStocks = new List<PackagingLineStockDetailDTO>();
                 
-                foreach (var item in itemPreparationDetail)
-                {
-                    PackagingLineStockDetailDTO packagingRawStock = new PackagingLineStockDetailDTO()
-                    {
-                        ProductionLineId = imeiInDb.PackagingLineId,
-                        PackagingLineId = imeiInDb.PackagingLineId,
-                        WarehouseId = item.WarehouseId,
-                        ItemTypeId = item.ItemTypeId,
-                        ItemId = item.ItemId,
-                        Quantity = item.Quantity,
-                        DescriptionId = imeiInDb.DescriptionId,
-                        UnitId = item.UnitId,
-                        OrganizationId = orgId,
-                        EntryDate = DateTime.Now,
-                        EUserId = userId,
-                        StockStatus = StockStatus.StockOut,
-                        RefferenceNumber = imeiInDb.IMEI,
-                        Remarks = imeiInDb.CodeNo
-                    };
-                    packagingRawStocks.Add(packagingRawStock);
-                }
+                //foreach (var item in itemPreparationDetail)
+                //{
+                //    PackagingLineStockDetailDTO packagingRawStock = new PackagingLineStockDetailDTO()
+                //    {
+                //        ProductionLineId = imeiInDb.PackagingLineId,
+                //        PackagingLineId = imeiInDb.PackagingLineId,
+                //        WarehouseId = item.WarehouseId,
+                //        ItemTypeId = item.ItemTypeId,
+                //        ItemId = item.ItemId,
+                //        Quantity = item.Quantity,
+                //        DescriptionId = imeiInDb.DescriptionId,
+                //        UnitId = item.UnitId,
+                //        OrganizationId = orgId,
+                //        EntryDate = DateTime.Now,
+                //        EUserId = userId,
+                //        StockStatus = StockStatus.StockOut,
+                //        RefferenceNumber = imeiInDb.IMEI,
+                //        Remarks = imeiInDb.CodeNo
+                //    };
+                //    packagingRawStocks.Add(packagingRawStock);
+                //}
 
-                // Packaging Item Stock //
-                List<PackagingItemStockDetailDTO> packagingItemStocks = new List<PackagingItemStockDetailDTO>() {
-                    new PackagingItemStockDetailDTO (){
-                        ProductionFloorId = imeiInDb.PackagingLineId,
-                        PackagingLineId = imeiInDb.PackagingLineId,
-                        WarehouseId = imeiInDb.WarehouseId,
-                        ItemTypeId = imeiInDb.ItemTypeId,
-                        ItemId = imeiInDb.ItemId,
-                        Quantity  = 1,
-                        DescriptionId = imeiInDb.DescriptionId,
-                        UnitId = allItemsInDb.FirstOrDefault(s=> s.ItemId == imeiInDb.ItemId).UnitId,
-                        OrganizationId = orgId,
-                        EntryDate = DateTime.Now,
-                        EUserId = userId,
-                        StockStatus = StockStatus.StockOut,
-                        ReferenceNumber = imeiInDb.IMEI,
-                        Remarks = imeiInDb.CodeNo
-                    }
-                };
+                // Packaging Item/Handset Stock //
+                //List<PackagingItemStockDetailDTO> packagingItemStocks = new List<PackagingItemStockDetailDTO>() {
+                //    new PackagingItemStockDetailDTO (){
+                //        ProductionFloorId = imeiInDb.PackagingLineId,
+                //        PackagingLineId = imeiInDb.PackagingLineId,
+                //        WarehouseId = imeiInDb.WarehouseId,
+                //        ItemTypeId = imeiInDb.ItemTypeId,
+                //        ItemId = imeiInDb.ItemId,
+                //        Quantity  = 1,
+                //        DescriptionId = imeiInDb.DescriptionId,
+                //        UnitId = allItemsInDb.FirstOrDefault(s=> s.ItemId == imeiInDb.ItemId).UnitId,
+                //        OrganizationId = orgId,
+                //        EntryDate = DateTime.Now,
+                //        EUserId = userId,
+                //        StockStatus = StockStatus.StockOut,
+                //        ReferenceNumber = imeiInDb.IMEI,
+                //        Remarks = imeiInDb.CodeNo
+                //    }
+                //};
 
                 // Add Finish Goods Stock
                 List<FinishGoodsStockDetailDTO> finishGoodsStocks = new List<FinishGoodsStockDetailDTO>() {
@@ -450,15 +450,14 @@ Where 1=1 {0}", Utility.ParamChecker(param));
 
                 if (await _iMEIQCPassLogRepository.SaveAsync())
                 {
-                    if(await _packagingLineStockDetailBusiness.SavePackagingLineStockOutAsync(packagingRawStocks, userId, orgId, string.Empty))
-                    {
-                        if (await _packagingItemStockDetailBusiness.SavePackagingItemStockOutAsync(packagingItemStocks, userId, orgId))
-                        {
+                    //if(await _packagingLineStockDetailBusiness.SavePackagingLineStockOutAsync(packagingRawStocks, userId, orgId, string.Empty))
+                    //{
+                        //if (await _packagingItemStockDetailBusiness.SavePackagingItemStockOutAsync(packagingItemStocks, userId, orgId))
+                        //{
                             return await this.SaveFinishGoodsStockInAsync(finishGoodsStocks, userId, orgId);
-                        }
-                    }
-                }
-                
+                        //}
+                    //}
+                }                
             }
             return false;
         }

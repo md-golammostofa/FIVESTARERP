@@ -311,8 +311,8 @@
                 var data = JSON.stringify({ imei: $.trim(txtQCFailIMEI.val()), problems: problems });
                 //return console.log(data);
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveIMEITransferByPackagingQC', data, getToken())).then(function (res, status) {
-                    console.log(res);
-                    console.log(status);
+                    //console.log(res);
+                    //console.log(status);
                     if (res.isSuccess) {
                         toastrSuccessAlert(execuStatus.successSave);
                         resetQCFail();

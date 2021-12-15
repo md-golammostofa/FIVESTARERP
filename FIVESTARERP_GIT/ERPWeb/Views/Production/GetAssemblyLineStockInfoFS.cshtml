@@ -563,6 +563,7 @@
         })
 
         function fnTransferStateChange(id, status) {
+            disable(".btnAccepted");
             var data = JSON.stringify({ reqInfoId: id, status: status });
             $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveRequisitionItemsByAssemblyOrRepairOrPackaging', data, getToken())).then(function (res, status) {
                 if (res === true && status === "success") {
@@ -576,11 +577,12 @@
                         LoadDataTableStockInfo();
                     }, 1300);
                 }
+                enable(".btnAccepted");
             }).fail(function (error) {
                 console.log(error);
+                enable(".btnAccepted");
             })
         }
-
 
         // Stock Return List //
 

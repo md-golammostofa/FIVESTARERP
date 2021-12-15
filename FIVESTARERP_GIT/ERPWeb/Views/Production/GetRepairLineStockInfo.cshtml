@@ -2136,6 +2136,7 @@
         })
 
         function fnTransferStateChangeReceiveQCItem(id, status) {
+            disable(".btnAcceptedRFQ");
             var data = JSON.stringify({ transferId: id, status: status });
             $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQCTransferStatus', data, getToken())).then(function (res, status) {
                 if (res === true && status === "success") {
@@ -2149,8 +2150,10 @@
                         LoadDataTableItemStock();
                     }, 1000);
                 }
+                enable(".btnAcceptedRFQ");
             }).fail(function (error) {
                 console.log(error);
+                enable(".btnAcceptedRFQ");
             })
         }
 
@@ -2469,7 +2472,7 @@
                                     $('.toastrDefaultSuccess').trigger('click');
                                     redirectPage('@Url.Action("GetRepairLineStockInfo")');
                                 }, 1000);
-                            }
+                                }
                                 else {
                                     $('.toastrDefaultError').trigger('click');
                                 }

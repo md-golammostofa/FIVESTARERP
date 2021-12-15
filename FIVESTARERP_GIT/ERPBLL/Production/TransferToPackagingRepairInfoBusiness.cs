@@ -19,9 +19,10 @@ namespace ERPBLL.Production
         private readonly ITransferToPackagingRepairDetailBusiness _transferToPackagingRepairDetailBusiness;
         private readonly IPackagingRepairItemStockDetailBusiness _packagingRepairItemStockDetailBusiness;
         private readonly IPackagingRepairRawStockDetailBusiness _packagingRepairRawStockDetailBusiness;
+        private readonly IPackagingItemStockDetailBusiness _packagingItemStockDetailBusiness;
         // Repository //
         private readonly TransferToPackagingRepairInfoRepository _transferToPackagingRepairInfoRepository;
-        public TransferToPackagingRepairInfoBusiness(IProductionUnitOfWork productionDb, ITransferToPackagingRepairDetailBusiness transferToPackagingRepairDetailBusiness, IPackagingRepairItemStockDetailBusiness packagingRepairItemStockDetailBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness)
+        public TransferToPackagingRepairInfoBusiness(IProductionUnitOfWork productionDb, ITransferToPackagingRepairDetailBusiness transferToPackagingRepairDetailBusiness, IPackagingRepairItemStockDetailBusiness packagingRepairItemStockDetailBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness)
         {
             // Database//
             this._productionDb = productionDb;
@@ -29,6 +30,7 @@ namespace ERPBLL.Production
             this._transferToPackagingRepairDetailBusiness = transferToPackagingRepairDetailBusiness;
             this._packagingRepairItemStockDetailBusiness = packagingRepairItemStockDetailBusiness;
             this._packagingRepairRawStockDetailBusiness = packagingRepairRawStockDetailBusiness;
+            this._packagingItemStockDetailBusiness = packagingItemStockDetailBusiness;
             // Repositorys //
             this._transferToPackagingRepairInfoRepository = new TransferToPackagingRepairInfoRepository(this._productionDb);
         }
@@ -60,8 +62,9 @@ namespace ERPBLL.Production
                 // Transfer Info Status //
                 if (_transferToPackagingRepairInfoRepository.Save())
                 {
-                    var transferDetails = _transferToPackagingRepairDetailBusiness.GetTransferToPackagingRepairDetailsByTransferId(transferId, orgId);
-                    // Packaging Repair Item Stock //
+                    //var transferDetails = _transferToPackagingRepairDetailBusiness.GetTransferToPackagingRepairDetailsByTransferId(transferId, orgId);
+
+                    // Packaging Repair Item/Handset Stock //
                     List<PackagingRepairItemStockDetailDTO> packagingRepairItems = new List<PackagingRepairItemStockDetailDTO>() {
                         new PackagingRepairItemStockDetailDTO(){
                             FloorId = transferInfo.ProductionFloorId,
@@ -81,35 +84,56 @@ namespace ERPBLL.Production
                         }
                     };
 
+                    //Packaging Line Item/Handset Stock
+                    List<PackagingItemStockDetailDTO> packagingItemStocks = new
+                        List<PackagingItemStockDetailDTO>() {
+                            new PackagingItemStockDetailDTO(){
+                                ProductionFloorId= transferInfo.ProductionFloorId,
+                                PackagingLineId = transferInfo.PackagingLineId,
+                                DescriptionId = transferInfo.DescriptionId,
+                                WarehouseId = transferInfo.WarehouseId,
+                                ItemTypeId = transferInfo.ItemTypeId,
+                                ItemId = transferInfo.ItemId,
+                                Quantity = transferInfo.Quantity,
+                                OrganizationId = orgId,
+                                EUserId = userId,
+                                EntryDate = DateTime.Now,
+                                UnitId = transferInfo.UnitId,
+                                ReferenceNumber =transferInfo.TransferCode,
+                                StockStatus = StockStatus.StockOut,
+                                Remarks= "Stock Out By Pakaging Line QC"
+                            }
+                          };
+
                     // Packaging Repair Raw Stock //
-                    List<PackagingRepairRawStockDetailDTO> packagingRepairRawStocks = new List<PackagingRepairRawStockDetailDTO>();
-                    foreach (var item in transferDetails)
-                    {
-                        PackagingRepairRawStockDetailDTO packagingRepairRawStockDetail = new PackagingRepairRawStockDetailDTO()
-                        {
-                            FloorId = item.ProductionFloorId,
-                            PackagingLineId= item.PackagingLineId,
-                            DescriptionId = item.DescriptionId,
-                            WarehouseId = item.WarehouseId,
-                            ItemTypeId = item.ItemTypeId,
-                            ItemId = item.ItemId,
-                            Quantity = (item.Quantity * transferInfo.Quantity),
-                            UnitId = item.UnitId,
-                            EUserId = userId,
-                            EntryDate = DateTime.Now,
-                            OrganizationId = orgId,
-                            RefferenceNumber = transferInfo.TransferCode,
-                            StockStatus = StockStatus.StockIn,
-                            Remarks = "Stock In By Packaging QC Transfer"
-                        };
-                        packagingRepairRawStocks.Add(packagingRepairRawStockDetail);
-                    }
+                    //List<PackagingRepairRawStockDetailDTO> packagingRepairRawStocks = new List<PackagingRepairRawStockDetailDTO>();
+                    //foreach (var item in transferDetails)
+                    //{
+                    //    PackagingRepairRawStockDetailDTO packagingRepairRawStockDetail = new PackagingRepairRawStockDetailDTO()
+                    //    {
+                    //        FloorId = item.ProductionFloorId,
+                    //        PackagingLineId= item.PackagingLineId,
+                    //        DescriptionId = item.DescriptionId,
+                    //        WarehouseId = item.WarehouseId,
+                    //        ItemTypeId = item.ItemTypeId,
+                    //        ItemId = item.ItemId,
+                    //        Quantity = (item.Quantity * transferInfo.Quantity),
+                    //        UnitId = item.UnitId,
+                    //        EUserId = userId,
+                    //        EntryDate = DateTime.Now,
+                    //        OrganizationId = orgId,
+                    //        RefferenceNumber = transferInfo.TransferCode,
+                    //        StockStatus = StockStatus.StockIn,
+                    //        Remarks = "Stock In By Packaging QC Transfer"
+                    //    };
+                    //    packagingRepairRawStocks.Add(packagingRepairRawStockDetail);
+                    //}
 
                     if (_packagingRepairItemStockDetailBusiness.SavePackagingRepairItemStockIn(packagingRepairItems, userId, orgId))
                     {
-                        IsSuccess = _packagingRepairRawStockDetailBusiness.SavePackagingRepairRawStockIn(packagingRepairRawStocks, userId, orgId);
+                        IsSuccess = _packagingItemStockDetailBusiness.SavePackagingItemStockOut(packagingItemStocks, userId, orgId);
+                        //IsSuccess = _packagingRepairRawStockDetailBusiness.SavePackagingRepairRawStockIn(packagingRepairRawStocks, userId, orgId);
                     }
-
                 }
             }
             return IsSuccess;

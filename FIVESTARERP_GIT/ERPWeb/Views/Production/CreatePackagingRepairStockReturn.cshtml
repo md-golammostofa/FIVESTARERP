@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Packaging Stock Return";
+    ViewBag.Title = "Packaging Repair Stock Return";
 }
 
 <div class="row" style="margin-top:-15px">
@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-md-6">
                         <h5 class="text-center text-bold">
-                            Packagings Stock Return
+                            Packagings Repair Stock Return
                         </h5>
                     </div>
                     <div class="col-md-3">
@@ -106,8 +106,8 @@
                 var packaging = ddlPackagingLineWithProduction.val().split("#");
                 var data = JSON.stringify({ packagingLine: packaging[0], floorId: packaging[1], modelId: TryParseInt(ddlModelName.val(),0) });
                 $.when(postReqWithToken(dataType.applicationJson, dataType.html, type.post, '/Production/GetPackagingRepairStockItemsForReturn', data, getToken())).then(function (res,status) {
-                    console.log(res);
-                    console.log(status);
+                    //console.log(res);
+                    //console.log(status);
                     $("#dataContainer1").fadeOut('500', function () {
                         $("#dataContainer1").empty();
                         $("#dataContainer1").append(res).fadeIn('500');

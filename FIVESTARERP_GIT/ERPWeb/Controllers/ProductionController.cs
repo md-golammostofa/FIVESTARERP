@@ -3050,6 +3050,7 @@ namespace ERPWeb.Controllers
             //ViewBag.UserPrivilege = UserPrivilege("Production", "GetPackagingLineStockInfo");
             if (string.IsNullOrEmpty(flag))
             {
+                ViewBag.ddlLineNumber = _productionLineBusiness.GetAllProductionLineByOrgId(User.OrgId).Select(line => new SelectListItem { Text = line.LineNumber, Value = line.LineId.ToString() }).ToList();
                 ViewBag.ddlPackagingLineWithProduction = _packagingLineBusiness.GetPackagingLinesWithProduction(User.OrgId).Select(line => new SelectListItem { Text = line.text, Value = line.value.ToString() }).ToList();
 
                 ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(des => new SelectListItem { Text = des.DescriptionName, Value = des.DescriptionId.ToString() }).ToList();
@@ -3759,13 +3760,13 @@ namespace ERPWeb.Controllers
 
         // Receive QC Item
         [HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult SaveQCTransferStatus(long transferId, string status)
+        public async Task<ActionResult> SaveQCTransferStatus(long transferId, string status)
         {
             bool IsSuccess = false;
             if (transferId > 0 && status == RequisitionStatus.Accepted)
             {
                 //IsSuccess = _transferFromQCInfoBusiness.SaveTransferInfoStateStatus(transferId, status, User.UserId, User.OrgId);
-                IsSuccess = _qRCodeTransferToRepairInfoBusiness.SaveQRCodeStatusByTrasnferInfoId(transferId, status, User.UserId, User.OrgId);
+                IsSuccess = await _qRCodeTransferToRepairInfoBusiness.SaveQRCodeStatusByTrasnferInfoId(transferId, status, User.UserId, User.OrgId);
             }
             return Json(IsSuccess);
         }
@@ -3911,12 +3912,12 @@ namespace ERPWeb.Controllers
             }
         }
 
-        public ActionResult SaveRepairSectionSemiFinishTransfer(long[] qRCodes, int qty)
+        public async Task<ActionResult> SaveRepairSectionSemiFinishTransfer(long[] qRCodes, int qty)
         {
             bool isSuccess = false;
             if (qty > 0)
             {
-                isSuccess = _repairSectionSemiFinishTransferInfoBusiness.SaveRepairSectionSemiFinishTransferItem(qRCodes, qty, User.UserId, User.OrgId);
+                isSuccess = await _repairSectionSemiFinishTransferInfoBusiness.SaveRepairSectionSemiFinishTransferItem(qRCodes, qty, User.UserId, User.OrgId);
             }
             return Json(isSuccess);
         }
@@ -5047,7 +5048,10 @@ namespace ERPWeb.Controllers
                 var imeiItemInfoItemProblems = _iMEITransferToRepairDetailBusiness.GetIMEIProblemDTOByQuery(imeiItemInfo.IMEITRInfoId, imeiItemInfo.QRCode, string.Empty, User.OrgId);
 
                 List<Dropdown> dropdowns = new List<Dropdown>();
-                dropdowns = _itemBusiness.GetItemPreparationItems(imeiItemInfo.DescriptionId, imeiItemInfo.ItemId.Value, ItemPreparationType.Packaging, User.OrgId).Select(i => new Dropdown { text = i.ItemName, value = i.ItemId }).ToList();
+                var packagingItemPre = _itemBusiness.GetItemPreparationItems(imeiItemInfo.DescriptionId, imeiItemInfo.ItemId.Value, ItemPreparationType.Packaging, User.OrgId).Select(i => new Dropdown { text = i.ItemName, value = i.ItemId }).ToList();
+                dropdowns.AddRange(packagingItemPre);
+                var productionItemPre = _itemBusiness.GetItemPreparationItems(imeiItemInfo.DescriptionId, imeiItemInfo.ItemId.Value, ItemPreparationType.Production, User.OrgId).Select(i => new Dropdown { text = i.ItemName, value = i.ItemId }).ToList();
+                dropdowns.AddRange(productionItemPre);
 
                 // IMEI Details
                 IMEITransferToRepairInfoViewModel imeiItemInfoViewModel = new IMEITransferToRepairInfoViewModel();
@@ -5071,14 +5075,14 @@ namespace ERPWeb.Controllers
         public async Task<ActionResult> SavePackgingRepairItemTransferByIMEIScaning(TransferPackagigRepairItemByIMEIScanningViewModel model)
         {
             bool IsSuccess = false;
-            var stockAvailable = _iMEITransferToRepairInfoBusiness.CheckingAvailabilityOfPackagingRepairRawStock(model.ModelId, model.ItemId, model.PackagingLineId, User.OrgId);
-            if (ModelState.IsValid && stockAvailable.isSuccess)
+            //var stockAvailable = _iMEITransferToRepairInfoBusiness.CheckingAvailabilityOfPackagingRepairRawStock(model.ModelId, model.ItemId, model.PackagingLineId, User.OrgId);
+            if (ModelState.IsValid /*&& stockAvailable.isSuccess*/)
             {
                 TransferPackagigRepairItemByIMEIScanningDTO dto = new TransferPackagigRepairItemByIMEIScanningDTO();
                 AutoMapper.Mapper.Map(model, dto);
                 IsSuccess = await _transferPackagingRepairItemToQcInfoBusiness.SaveTransferByIMEIScanningAsync(dto, User.UserId, User.OrgId);
             }
-            return Json(new { IsSuccess = IsSuccess, Msg = stockAvailable.text });
+            return Json(new { IsSuccess = IsSuccess, Msg = ""/*stockAvailable.text*/ });
         }
 
         [HttpPost, ValidateJsonAntiForgeryToken]
@@ -5654,12 +5658,12 @@ namespace ERPWeb.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult SaveIMEIStatusForWeightCheck(string imei)
+        public async Task<ActionResult> SaveIMEIStatusForWeightCheck(string imei)
         {
             bool IsSuccess = false;
             if (!string.IsNullOrEmpty(imei))
             {
-                IsSuccess = _tempQRCodeTraceBusiness.SaveIMEIStatusForWeightCheck(imei, User.OrgId, User.UserId);
+                IsSuccess = await _weightCheckedIMEILogBusiness.SaveIMEIStatusForWeightCheck(imei, User.OrgId, User.UserId);
             }
             return Json(IsSuccess);
         }

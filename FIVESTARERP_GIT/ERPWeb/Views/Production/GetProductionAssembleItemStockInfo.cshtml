@@ -1192,6 +1192,7 @@
             e.preventDefault();
             bootbox.confirm("Are you sure you want to save?", function (result) {
                 if (result) {
+                    disable(".btnReceiveSemiFinish");
                    var infoId = $(".tblRepairSectionSemiFinishGoodDetails tbody tr").children('td').eq('16').html();
                         var details = []; details.length = 0;
                         $.each($(".tblRepairSectionSemiFinishGoodDetails tbody tr"), function (index, item) {
@@ -1231,8 +1232,10 @@
                             else {
                                 $('.toastrDefaultError').trigger('click');
                             }
+                            enable(".btnReceiveSemiFinish");
                         }).fail(function (error) {
-                            consoleLog(error)
+                            consoleLog(error);
+                            enable(".btnReceiveSemiFinish");
                         })
                     }
                 });

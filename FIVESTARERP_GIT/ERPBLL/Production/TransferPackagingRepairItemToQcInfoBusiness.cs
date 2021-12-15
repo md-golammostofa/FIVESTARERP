@@ -167,10 +167,10 @@ namespace ERPBLL.Production
                 var transferInfo = await GetTransferPackagingRepairItemToQcInfoByIdAsync(dto.FloorId, dto.PackagingLineId, dto.ModelId, dto.ItemId, RequisitionStatus.Approved, orgId);
 
                 // Item Preparation Info //
-                var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Packaging, dto.ModelId, dto.ItemId, orgId);
+                //var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Packaging, dto.ModelId, dto.ItemId, orgId);
 
                 // Item Preparation Detail //
-                var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
+                //var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
 
                 // All items in Db
                 var allItemsInDb = _itemBusiness.GetAllItemByOrgId(orgId);
@@ -241,31 +241,51 @@ namespace ERPBLL.Production
                         Remarks ="Stock Out By Packaging Repair For QC Transfer"
                     }
                 };
-                // Packaging Repair Raw Stock //
-
-                List<PackagingRepairRawStockDetailDTO> rawStocks = new List<PackagingRepairRawStockDetailDTO>();
-
-                foreach (var item in itemPreparationDetail)
-                {
-                    PackagingRepairRawStockDetailDTO rawStock = new PackagingRepairRawStockDetailDTO()
-                    {
-                        FloorId = imeiInfoDto.ProductionFloorId,
+                // Packaging Line Item/Handset Stock
+                List<PackagingItemStockDetailDTO> packagingItemStocks = new List<PackagingItemStockDetailDTO>() {
+                    new PackagingItemStockDetailDTO(){
+                        ProductionFloorId= imeiInfoDto.ProductionFloorId,
                         PackagingLineId = imeiInfoDto.PackagingLineId,
                         DescriptionId = imeiInfoDto.DescriptionId,
-                        WarehouseId = item.WarehouseId,
-                        ItemTypeId = item.ItemTypeId,
-                        ItemId = item.ItemId,
-                        Quantity = item.Quantity,
-                        UnitId = allItemsInDb.FirstOrDefault(s => s.ItemId == item.ItemId).UnitId,
+                        WarehouseId = imeiInfoDto.WarehouseId,
+                        ItemTypeId = imeiInfoDto.ItemTypeId,
+                        ItemId = imeiInfoDto.ItemId,
+                        Quantity = 1,
                         OrganizationId = orgId,
                         EUserId = user,
                         EntryDate = DateTime.Now,
-                        RefferenceNumber = code,
-                        StockStatus = StockStatus.StockOut,
-                        Remarks = "Stock Out By Packaging Repair For QC Transfer"
-                    };
-                    rawStocks.Add(rawStock);
-                }
+                        UnitId = allItemsInDb.FirstOrDefault(s=> s.ItemId == imeiInfoDto.ItemId).UnitId,
+                        ReferenceNumber =code,
+                        StockStatus = StockStatus.StockIn,
+                        Remarks= "Stock In By Pakaging Repair Section QC"
+                    }
+                };
+
+                // Packaging Repair Raw Stock //
+
+                //List<PackagingRepairRawStockDetailDTO> rawStocks = new List<PackagingRepairRawStockDetailDTO>();
+
+                //foreach (var item in itemPreparationDetail)
+                //{
+                //    PackagingRepairRawStockDetailDTO rawStock = new PackagingRepairRawStockDetailDTO()
+                //    {
+                //        FloorId = imeiInfoDto.ProductionFloorId,
+                //        PackagingLineId = imeiInfoDto.PackagingLineId,
+                //        DescriptionId = imeiInfoDto.DescriptionId,
+                //        WarehouseId = item.WarehouseId,
+                //        ItemTypeId = item.ItemTypeId,
+                //        ItemId = item.ItemId,
+                //        Quantity = item.Quantity,
+                //        UnitId = allItemsInDb.FirstOrDefault(s => s.ItemId == item.ItemId).UnitId,
+                //        OrganizationId = orgId,
+                //        EUserId = user,
+                //        EntryDate = DateTime.Now,
+                //        RefferenceNumber = code,
+                //        StockStatus = StockStatus.StockOut,
+                //        Remarks = "Stock Out By Packaging Repair For QC Transfer"
+                //    };
+                //    rawStocks.Add(rawStock);
+                //}
 
                 var imeiInfoInDb = await _iMEITransferToRepairInfoBusiness.GetIMEITransferToRepairInfosByTransferIdAsync(imeiInfoDto.IMEITRInfoId, orgId);
                 imeiInfoInDb.StateStatus = "Repair-Done";
@@ -285,10 +305,13 @@ namespace ERPBLL.Production
 
                 if(await _transferPackagingRepairItemToQcInfoRepository.SaveAsync())
                 {
-                    if (await _packagingRepairRawStockDetailBusiness.SavePackagingRepairRawStockOutAsync(rawStocks, user, orgId))
-                    {
-                       return await _packagingRepairItemStockDetailBusiness.SavePackagingRepairItemStockOutAsync(itemStocks, user, orgId);
-                    }
+                    //if (await _packagingRepairRawStockDetailBusiness.SavePackagingRepairRawStockOutAsync(rawStocks, user, orgId))
+                    //{
+                       if(await _packagingRepairItemStockDetailBusiness.SavePackagingRepairItemStockOutAsync(itemStocks, user, orgId))
+                        {
+                            return await _packagingItemStockDetailBusiness.SavePackagingItemStockInAsync(packagingItemStocks, user, orgId);
+                        }
+                    //}
                 }
             }
             return false;
@@ -368,7 +391,7 @@ Left Join [Inventory].dbo.tblWarehouses w on ti.WarehouseId = w.Id
 Left Join [Inventory].dbo.tblItemTypes it on ti.ItemTypeId = it.ItemId
 Left Join [Inventory].dbo.tblItems i on ti.ItemId = i.ItemId
 Inner Join [ControlPanel].dbo.tblApplicationUsers app on ti.EUserId = app.UserId
-Where 1= 1 {0}", param);
+Where 1= 1 {0} ORDER BY ti.TPRQInfoId DESC", param);
 
             return query;
         }

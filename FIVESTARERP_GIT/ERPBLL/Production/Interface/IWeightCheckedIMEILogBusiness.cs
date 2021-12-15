@@ -12,5 +12,6 @@ namespace ERPBLL.Production.Interface
     {
         IEnumerable<WeightCheckedIMEILog> GetAllWeightCheckedInfoByUserId(long userId, long orgId, DateTime date);
         IEnumerable<WeightCheckedIMEILogDTO> GetAllDataByDateWise(string fromDate, string toDate, string imei, long userId);
+        Task<bool> SaveIMEIStatusForWeightCheck(string imei, long orgId, long userId);
     }
 }
