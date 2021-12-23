@@ -448,20 +448,20 @@
             })
         }
 
-        ////
-        $(document).on('click', '.btnAcceptPackRepairTransfer', function (e) {
-            e.preventDefault();
-            if (TryParseInt(hdfInfoId.val(), 0) > 0) {
-                fnReceiveItemFromRepairTransfer(TryParseInt(hdfInfoId.val(), 0), reqStatus.accepted);
-            }
-        })
+        ////OFF For Repaire done
+        //$(document).on('click', '.btnAcceptPackRepairTransfer', function (e) {
+        //    e.preventDefault();
+        //    if (TryParseInt(hdfInfoId.val(), 0) > 0) {
+        //        fnReceiveItemFromRepairTransfer(TryParseInt(hdfInfoId.val(), 0), reqStatus.accepted);
+        //    }
+        //})
 
         function fnReceiveItemFromRepairTransfer(id, status) {
             var data = JSON.stringify({ transferId: id, status: status });
             disable(".btnAcceptPackRepairTransfer");
             $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SavePackagingRapairToQCTransferInfoStateStatus', data, getToken())).then(function (res, status) {
-                console.log(res);
-                console.log(status);
+                //console.log(res);
+                //console.log(status);
                 if (res === true && status === "success") {
                     toastrSuccessAlert(execuStatus.successSave);
                     $("#modalDetails").modal('toggle').toggle('fast');

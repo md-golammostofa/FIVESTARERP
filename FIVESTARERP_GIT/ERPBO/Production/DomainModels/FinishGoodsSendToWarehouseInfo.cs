@@ -17,6 +17,7 @@ namespace ERPBO.Production.DomainModels
         public long PackagingLineId { get; set; }
         public long WarehouseId { get; set; }
         public long DescriptionId { get; set; }
+        public long ColorId { get; set; }
         [StringLength(150)]
         public string Remarks { get; set; }
         [StringLength(150)]

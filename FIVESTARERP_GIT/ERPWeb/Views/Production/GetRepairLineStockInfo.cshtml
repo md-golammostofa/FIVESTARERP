@@ -2135,26 +2135,34 @@
             fnTransferStateChangeReceiveQCItem(hdfInfoId.val(), reqStatus.accepted);
         })
 
+        function validateQRCodeStockForRepairReceive(id) {
+            return ajaxBooleanChecker(JSON.stringify({ transferId: id }), '/Common/IsStockAvailableInAssemblyForRepairReceive', getToken()) == true;
+        }
         function fnTransferStateChangeReceiveQCItem(id, status) {
-            disable(".btnAcceptedRFQ");
-            var data = JSON.stringify({ transferId: id, status: status });
-            $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQCTransferStatus', data, getToken())).then(function (res, status) {
-                if (res === true && status === "success") {
-                    $("#modalTransferDetails").modal("toggle").toggle("fast");
-                    hdfInfoId.val('0');
-                    toastrSuccessAlert('Items received successfully')
-                    $("#modalContainer1").empty();
-                    setTimeout(function () {
-                        LoadDataTableReceiveItems();
-                        LoadDataTableStock();
-                        LoadDataTableItemStock();
-                    }, 1000);
-                }
-                enable(".btnAcceptedRFQ");
-            }).fail(function (error) {
-                console.log(error);
-                enable(".btnAcceptedRFQ");
-            })
+            if (validateQRCodeStockForRepairReceive(id)) {
+                disable(".btnAcceptedRFQ");
+                var data = JSON.stringify({ transferId: id, status: status });
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQCTransferStatus', data, getToken())).then(function (res, status) {
+                    if (res === true && status === "success") {
+                        $("#modalTransferDetails").modal("toggle").toggle("fast");
+                        hdfInfoId.val('0');
+                        toastrSuccessAlert('Items received successfully');
+                        $("#modalContainer1").empty();
+                        setTimeout(function () {
+                            LoadDataTableReceiveItems();
+                            LoadDataTableStock();
+                            LoadDataTableItemStock();
+                        }, 1000);
+                    }
+                    enable(".btnAcceptedRFQ");
+                }).fail(function (error) {
+                    console.log(error);
+                    enable(".btnAcceptedRFQ");
+                })
+            }
+            else {
+                toastrErrorAlert("Stock Not Available!");
+            }
         }
 
         // Transfer List //

@@ -210,7 +210,7 @@ namespace ERPWeb.Controllers
 
                 ViewBag.ddlCategories = new SelectList(_categoryBusiness.GetCategories(User.OrgId), "CategoryId", "CategoryName");
 
-                ViewBag.ddlColors = _colorBusiness.GetAllColorByOrgId(User.OrgId).Select(s => new SelectListItem
+                ViewBag.ddlColors = _colorBusiness.GetAllColorByOrgId(User.OrgId).Where(s => s.IsActive).Select(s => new SelectListItem
                 {
                     Value = s.ColorId.ToString(),
                     Text = s.ColorName

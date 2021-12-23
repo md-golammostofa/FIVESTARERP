@@ -13,6 +13,9 @@ using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -134,9 +137,10 @@ namespace ERPWeb.Controllers
         private readonly IItemPreparationDetailBusiness _itemPreparationDetailBusiness;
         private readonly IItemPreparationInfoBusiness _itemPreparationInfoBusiness;
         private readonly IWarehouseStockDetailBusiness _warehouseStockDetailBusiness;
+        private readonly IColorBusiness _colorBusiness;
         #endregion
 
-        public ProductionController(IRequsitionInfoBusiness requsitionInfoBusiness, IWarehouseBusiness warehouseBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IProductionLineBusiness productionLineBusiness, IItemBusiness itemBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IProductionStockDetailBusiness productionStockDetailBusiness, IProductionStockInfoBusiness productionStockInfoBusiness, IItemReturnInfoBusiness itemReturnInfoBusiness, IItemReturnDetailBusiness itemReturnDetailBusiness, IDescriptionBusiness descriptionBusiness, IFinishGoodsInfoBusiness finishGoodsInfoBusiness, IFinishGoodsRowMaterialBusiness finishGoodsRowMaterialBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness, IFinishGoodsSendToWarehouseInfoBusiness finishGoodsSendToWarehouseInfoBusiness, IFinishGoodsSendToWarehouseDetailBusiness finishGoodsSendToWarehouseDetailBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IAssemblyLineBusiness assemblyLineBusiness, ITransferStockToAssemblyInfoBusiness transferStockToAssemblyInfoBusiness, ITransferStockToAssemblyDetailBusiness transferStockToAssemblyDetailBusiness, IAssemblyLineStockInfoBusiness assemblyLineStockInfoBusiness, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IQualityControlBusiness qualityControlBusiness, ITransferStockToQCInfoBusiness transferStockToQCInfoBusiness, ITransferStockToQCDetailBusiness transferStockToQCDetailBusiness, IQCLineStockInfoBusiness qCLineStockInfoBusiness, IQCLineStockDetailBusiness qCLineStockDetailBusiness, IRepairLineBusiness repairLineBusiness, IPackagingLineBusiness packagingLineBusiness, ITransferFromQCInfoBusiness transferFromQCInfoBusiness, ITransferFromQCDetailBusiness transferFromQCDetailBusiness, IPackagingLineStockInfoBusiness packagingLineStockInfoBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, ITransferStockToPackagingLine2InfoBusiness transferStockToPackagingLine2InfoBusiness, ITransferStockToPackagingLine2DetailBusiness transferStockToPackagingLine2DetailBusiness, IRepairLineStockInfoBusiness repairLineStockInfoBusiness, IRepairLineStockDetailBusiness repairLineStockDetailBusiness, ITransferRepairItemToQcInfoBusiness transferRepairItemToQcInfoBusiness, ITransferRepairItemToQcDetailBusiness transferRepairItemToQcDetailBusiness, IQCItemStockInfoBusiness qCItemStockInfoBusiness, IQCItemStockDetailBusiness qCItemStockDetailBusiness, IRepairItemStockInfoBusiness repairItemStockInfoBusiness, IRepairItemStockDetailBusiness repairItemStockDetailBusiness, IPackagingItemStockInfoBusiness packagingItemStockInfoBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IFaultyItemStockInfoBusiness faultyItemStockInfoBusiness, IFaultyCaseBusiness faultyCaseBusiness, IRepairItemBusiness repairItemBusiness, IRepairSectionFaultyItemTransferInfoBusiness repairSectionFaultyItemTransferInfoBusiness, IRepairSectionRequisitionInfoBusiness repairSectionRequisitionInfoBusiness, IRepairSectionRequisitionDetailBusiness repairSectionRequisitionDetailBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IProductionFaultyStockDetailBusiness productionFaultyStockDetailBusiness, IProductionFaultyStockInfoBusiness productionFaultyStockInfoBusiness, IRepairSectionFaultyItemTransferDetailBusiness repairSectionFaultyItemTransferDetailBusiness, IQCPassTransferInformationBusiness qCPassTransferInformationBusiness, IProductionAssembleStockDetailBusiness productionAssembleStockDetailBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness, IProductionToPackagingStockTransferInfoBusiness productionToPackagingStockTransferInfoBusiness, IProductionToPackagingStockTransferDetailBusiness productionToPackagingStockTransferDetailBusiness, IQRCodeTransferToRepairInfoBusiness qRCodeTransferToRepairInfoBusiness, IQRCodeProblemBusiness qRCodeProblemBusiness, IRequisitionItemInfoBusiness requisitionItemInfoBusiness, IRequisitionItemDetailBusiness requisitionItemDetailBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IQCPassTransferDetailBusiness qCPassTransferDetailBusiness, IMiniStockTransferInfoBusiness miniStockTransferInfoBusiness, IMiniStockTransferDetailBusiness miniStockTransferDetailBusiness, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, ITransferToPackagingRepairInfoBusiness transferToPackagingRepairInfoBusiness, ITransferToPackagingRepairDetailBusiness transferToPackagingRepairDetailBusiness, IPackagingRepairRawStockInfoBusiness packagingRepairRawStockInfoBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness, IPackagingRepairItemStockInfoBusiness packagingRepairItemStockInfoBusiness, IPackagingRepairItemStockDetailBusiness packagingRepairItemStockDetailBusiness, IIMEITransferToRepairDetailBusiness iMEITransferToRepairDetailBusiness, ITransferPackagingRepairItemToQcInfoBusiness transferPackagingRepairItemToQcInfoBusiness, ITransferPackagingRepairItemToQcDetailBusiness transferPackagingRepairItemToQcDetailBusiness, IPackagingFaultyStockInfoBusiness packagingFaultyStockInfoBusiness, IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness, IIMEIGenerator iMEIGenerator, IGeneratedIMEIBusiness generatedIMEIBusiness, IStockItemReturnInfoBusiness stockItemReturnInfoBusiness, IStockItemReturnDetailBusiness stockItemReturnDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, ILotInLogBusiness lotInLogBusiness, IRepairSectionSemiFinishTransferInfoBusiness repairSectionSemiFinishTransferInfoBusiness, IRepairSectionSemiFinishTransferDetailsBusiness repairSectionSemiFinishTransferDetailsBusiness, IRepairSectionSemiFinishStockInfoBusiness repairSectionSemiFinishStockInfoBusiness, ISubQCBusiness subQCBusiness, IHalfDoneStockTransferToWarehouseInfoBusiness halfDoneStockTransferToWarehouseInfoBusiness, IHalfDoneStockTransferToWarehouseDetailBusiness halfDoneStockTransferToWarehouseDetailsBusiness, IMiniStockTransferToSemiFinishGoodsWarehouseBusiness miniStockTransferToSemiFinishGoodsWarehouseBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness, IWeightCheckedIMEILogBusiness weightCheckedIMEILogBusiness)
+        public ProductionController(IRequsitionInfoBusiness requsitionInfoBusiness, IWarehouseBusiness warehouseBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IProductionLineBusiness productionLineBusiness, IItemBusiness itemBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IProductionStockDetailBusiness productionStockDetailBusiness, IProductionStockInfoBusiness productionStockInfoBusiness, IItemReturnInfoBusiness itemReturnInfoBusiness, IItemReturnDetailBusiness itemReturnDetailBusiness, IDescriptionBusiness descriptionBusiness, IFinishGoodsInfoBusiness finishGoodsInfoBusiness, IFinishGoodsRowMaterialBusiness finishGoodsRowMaterialBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness, IFinishGoodsSendToWarehouseInfoBusiness finishGoodsSendToWarehouseInfoBusiness, IFinishGoodsSendToWarehouseDetailBusiness finishGoodsSendToWarehouseDetailBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IAssemblyLineBusiness assemblyLineBusiness, ITransferStockToAssemblyInfoBusiness transferStockToAssemblyInfoBusiness, ITransferStockToAssemblyDetailBusiness transferStockToAssemblyDetailBusiness, IAssemblyLineStockInfoBusiness assemblyLineStockInfoBusiness, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IQualityControlBusiness qualityControlBusiness, ITransferStockToQCInfoBusiness transferStockToQCInfoBusiness, ITransferStockToQCDetailBusiness transferStockToQCDetailBusiness, IQCLineStockInfoBusiness qCLineStockInfoBusiness, IQCLineStockDetailBusiness qCLineStockDetailBusiness, IRepairLineBusiness repairLineBusiness, IPackagingLineBusiness packagingLineBusiness, ITransferFromQCInfoBusiness transferFromQCInfoBusiness, ITransferFromQCDetailBusiness transferFromQCDetailBusiness, IPackagingLineStockInfoBusiness packagingLineStockInfoBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, ITransferStockToPackagingLine2InfoBusiness transferStockToPackagingLine2InfoBusiness, ITransferStockToPackagingLine2DetailBusiness transferStockToPackagingLine2DetailBusiness, IRepairLineStockInfoBusiness repairLineStockInfoBusiness, IRepairLineStockDetailBusiness repairLineStockDetailBusiness, ITransferRepairItemToQcInfoBusiness transferRepairItemToQcInfoBusiness, ITransferRepairItemToQcDetailBusiness transferRepairItemToQcDetailBusiness, IQCItemStockInfoBusiness qCItemStockInfoBusiness, IQCItemStockDetailBusiness qCItemStockDetailBusiness, IRepairItemStockInfoBusiness repairItemStockInfoBusiness, IRepairItemStockDetailBusiness repairItemStockDetailBusiness, IPackagingItemStockInfoBusiness packagingItemStockInfoBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IFaultyItemStockInfoBusiness faultyItemStockInfoBusiness, IFaultyCaseBusiness faultyCaseBusiness, IRepairItemBusiness repairItemBusiness, IRepairSectionFaultyItemTransferInfoBusiness repairSectionFaultyItemTransferInfoBusiness, IRepairSectionRequisitionInfoBusiness repairSectionRequisitionInfoBusiness, IRepairSectionRequisitionDetailBusiness repairSectionRequisitionDetailBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IProductionFaultyStockDetailBusiness productionFaultyStockDetailBusiness, IProductionFaultyStockInfoBusiness productionFaultyStockInfoBusiness, IRepairSectionFaultyItemTransferDetailBusiness repairSectionFaultyItemTransferDetailBusiness, IQCPassTransferInformationBusiness qCPassTransferInformationBusiness, IProductionAssembleStockDetailBusiness productionAssembleStockDetailBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness, IProductionToPackagingStockTransferInfoBusiness productionToPackagingStockTransferInfoBusiness, IProductionToPackagingStockTransferDetailBusiness productionToPackagingStockTransferDetailBusiness, IQRCodeTransferToRepairInfoBusiness qRCodeTransferToRepairInfoBusiness, IQRCodeProblemBusiness qRCodeProblemBusiness, IRequisitionItemInfoBusiness requisitionItemInfoBusiness, IRequisitionItemDetailBusiness requisitionItemDetailBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IQCPassTransferDetailBusiness qCPassTransferDetailBusiness, IMiniStockTransferInfoBusiness miniStockTransferInfoBusiness, IMiniStockTransferDetailBusiness miniStockTransferDetailBusiness, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, ITransferToPackagingRepairInfoBusiness transferToPackagingRepairInfoBusiness, ITransferToPackagingRepairDetailBusiness transferToPackagingRepairDetailBusiness, IPackagingRepairRawStockInfoBusiness packagingRepairRawStockInfoBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness, IPackagingRepairItemStockInfoBusiness packagingRepairItemStockInfoBusiness, IPackagingRepairItemStockDetailBusiness packagingRepairItemStockDetailBusiness, IIMEITransferToRepairDetailBusiness iMEITransferToRepairDetailBusiness, ITransferPackagingRepairItemToQcInfoBusiness transferPackagingRepairItemToQcInfoBusiness, ITransferPackagingRepairItemToQcDetailBusiness transferPackagingRepairItemToQcDetailBusiness, IPackagingFaultyStockInfoBusiness packagingFaultyStockInfoBusiness, IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness, IIMEIGenerator iMEIGenerator, IGeneratedIMEIBusiness generatedIMEIBusiness, IStockItemReturnInfoBusiness stockItemReturnInfoBusiness, IStockItemReturnDetailBusiness stockItemReturnDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, ILotInLogBusiness lotInLogBusiness, IRepairSectionSemiFinishTransferInfoBusiness repairSectionSemiFinishTransferInfoBusiness, IRepairSectionSemiFinishTransferDetailsBusiness repairSectionSemiFinishTransferDetailsBusiness, IRepairSectionSemiFinishStockInfoBusiness repairSectionSemiFinishStockInfoBusiness, ISubQCBusiness subQCBusiness, IHalfDoneStockTransferToWarehouseInfoBusiness halfDoneStockTransferToWarehouseInfoBusiness, IHalfDoneStockTransferToWarehouseDetailBusiness halfDoneStockTransferToWarehouseDetailsBusiness, IMiniStockTransferToSemiFinishGoodsWarehouseBusiness miniStockTransferToSemiFinishGoodsWarehouseBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness, IWeightCheckedIMEILogBusiness weightCheckedIMEILogBusiness, IColorBusiness colorBusiness)
         {
             #region Production
             this._weightCheckedIMEILogBusiness = weightCheckedIMEILogBusiness;
@@ -244,12 +248,13 @@ namespace ERPWeb.Controllers
             this._itemPreparationDetailBusiness = itemPreparationDetailBusiness;
             this._itemPreparationInfoBusiness = itemPreparationInfoBusiness;
             this._warehouseStockDetailBusiness = warehouseStockDetailBusiness;
+            this._colorBusiness = colorBusiness;
             #endregion
         }
 
         #region Production Belts Config
 
-        public  ActionResult ProductionBeltConfig(string flag)
+        public ActionResult ProductionBeltConfig(string flag)
         {
             if (string.IsNullOrEmpty(flag))
             {
@@ -258,7 +263,7 @@ namespace ERPWeb.Controllers
                 ViewBag.ddlQCLineNumber = _qualityControlBusiness.GetQualityControls(User.OrgId).Select(qc => new SelectListItem { Text = qc.QCName, Value = qc.QCId.ToString() }).ToList();
                 return View();
             }
-            else if (!string.IsNullOrEmpty(flag) && flag.Trim() =="floor")
+            else if (!string.IsNullOrEmpty(flag) && flag.Trim() == "floor")
             {
                 //GetProductionLineList
                 IEnumerable<ProductionLineDTO> dto = _productionLineBusiness.GetAllProductionLineByOrgId(User.OrgId).Select(line => new ProductionLineDTO
@@ -276,7 +281,7 @@ namespace ERPWeb.Controllers
                 }).OrderBy(line => line.LineId).ToList();
                 IEnumerable<ProductionLineViewModel> viewModel = new List<ProductionLineViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModel);
-                return PartialView("_floor",viewModel);
+                return PartialView("_floor", viewModel);
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() == "assembly")
             {
@@ -296,7 +301,7 @@ namespace ERPWeb.Controllers
                 }).ToList();
                 IEnumerable<AssemblyLineViewModel> assemblyLineViewModels = new List<AssemblyLineViewModel>();
                 AutoMapper.Mapper.Map(assemblyLinesDtos, assemblyLineViewModels);
-                return PartialView("_assembly",assemblyLineViewModels);
+                return PartialView("_assembly", assemblyLineViewModels);
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() == "qc")
             {
@@ -316,9 +321,9 @@ namespace ERPWeb.Controllers
                 }).ToList();
                 IEnumerable<QualityControlViewModel> viewModels = new List<QualityControlViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
-                return PartialView("_qc",viewModels);
+                return PartialView("_qc", viewModels);
             }
-            else if(!string.IsNullOrEmpty(flag) && flag.Trim() == "subQc")
+            else if (!string.IsNullOrEmpty(flag) && flag.Trim() == "subQc")
             {
                 var dto = _subQCBusiness.GetAllQCByOrgId(User.OrgId).Select(q => new SubQCDTO
                 {
@@ -326,7 +331,7 @@ namespace ERPWeb.Controllers
                     SubQCName = q.SubQCName,
                     //QCId = q.QCId,
                     //QCLineNo = _qualityControlBusiness.GetQualityControlById(q.QCId, User.OrgId).QCName,
-                    Remarks=q.Remarks,
+                    Remarks = q.Remarks,
                     EntryUser = UserForEachRecord(q.EUserId.Value).UserName,
                 }).ToList();
                 IEnumerable<SubQCViewModel> viewModels = new List<SubQCViewModel>();
@@ -351,7 +356,7 @@ namespace ERPWeb.Controllers
                 }).ToList();
                 IEnumerable<RepairLineViewModel> viewModels = new List<RepairLineViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
-                return PartialView("_repair",viewModels);
+                return PartialView("_repair", viewModels);
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() == "packaging")
             {
@@ -403,7 +408,7 @@ namespace ERPWeb.Controllers
         public ActionResult SaveProductionLine(ProductionLineViewModel productionLineViewModel)
         {
             bool isSuccess = false;
-            var privilege = UserPrivilege("Production", "GetProductionLineList") ;
+            var privilege = UserPrivilege("Production", "GetProductionLineList");
             //var permission = (productionLineViewModel.LineId == 0 && privilege.Add) || (productionLineViewModel.LineId > 0 && privilege.Edit);
             //&& permission
             if (ModelState.IsValid)
@@ -932,7 +937,7 @@ namespace ERPWeb.Controllers
                 }).ToList();
         }
 
-        public ActionResult GetRepairSectionRequisitionChecking(string flag, long? repairLineId, long? packagingLineId, long? modelId, long? warehouseId, string status, string requisitionCode, string fromDate, string toDate, long? reqInfoId,string reqFor, int page = 1)
+        public ActionResult GetRepairSectionRequisitionChecking(string flag, long? repairLineId, long? packagingLineId, long? modelId, long? warehouseId, string status, string requisitionCode, string fromDate, string toDate, long? reqInfoId, string reqFor, int page = 1)
         {
             if (string.IsNullOrEmpty(flag))
             {
@@ -954,7 +959,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && (flag.Trim().ToLower() == Flag.Search.ToLower() || flag.Trim().ToLower() == Flag.View.ToLower()))
             {
-                var dto = _repairSectionRequisitionInfoBusiness.GetRepairSectionRequisitionInfoList(repairLineId, packagingLineId, modelId, warehouseId, status, requisitionCode, fromDate, toDate, "Production",string.Empty, User.OrgId);
+                var dto = _repairSectionRequisitionInfoBusiness.GetRepairSectionRequisitionInfoList(repairLineId, packagingLineId, modelId, warehouseId, status, requisitionCode, fromDate, toDate, "Production", string.Empty, User.OrgId);
                 // Pagination //
                 ViewBag.PagerData = GetPagerData(dto.Count(), pageSize, page);
                 dto = dto.Skip((page - 1) * pageSize).Take(pageSize).ToList();
@@ -1150,7 +1155,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "MiniStockTransferToWarehouse")
             {
-                var dto = _miniStockTransferToSemiFinishGoodsWarehouseBusiness.GetMiniStockTransferToSemiFinishGoodsWarehouseByQuery(floorId , modelId, warehouseId, itemTypeId, itemId,null, lessOrEq, User.OrgId);
+                var dto = _miniStockTransferToSemiFinishGoodsWarehouseBusiness.GetMiniStockTransferToSemiFinishGoodsWarehouseByQuery(floorId, modelId, warehouseId, itemTypeId, itemId, null, lessOrEq, User.OrgId);
                 ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
                 dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<MiniStockTransferToSemiFinishGoodsWarehouseViewModel> viewModels = new List<MiniStockTransferToSemiFinishGoodsWarehouseViewModel>();
@@ -1159,7 +1164,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "MiniStockRequisitionToWarehouseForSemiFinish")
             {
-                var dto = _miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness.GetMiniStockRequisitionInfoByQuery(reqNo, status,lessOrEq, fromDate, toDate, User.OrgId);
+                var dto = _miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness.GetMiniStockRequisitionInfoByQuery(reqNo, status, lessOrEq, fromDate, toDate, User.OrgId);
                 ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
                 dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<MiniStockRequisitionToSemiFinishGoodsWarehouseInfoViewModel> viewModels = new List<MiniStockRequisitionToSemiFinishGoodsWarehouseInfoViewModel>();
@@ -1175,7 +1180,7 @@ namespace ERPWeb.Controllers
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetHalfDoneStockTranferToWarehouse", viewModels);
             }
-            
+
             else /*if(!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "search")*/
             {
                 //GetProductionAssembleStockInfoByQuery
@@ -2015,7 +2020,7 @@ namespace ERPWeb.Controllers
             var privilege = UserPrivilege("Production", "GetAssemblyLines");
             //var permission = (model.AssemblyLineId == 0 && privilege.Add) || (model.AssemblyLineId > 0 && privilege.Edit);
             //&& permission
-            if (ModelState.IsValid )
+            if (ModelState.IsValid)
             {
                 AssemblyLineDTO dto = new AssemblyLineDTO();
                 AutoMapper.Mapper.Map(model, dto);
@@ -2025,7 +2030,7 @@ namespace ERPWeb.Controllers
         }
 
         // Assembly Stock Info
-        
+
 
         // Assembly Stock Transfer
         public ActionResult GetAssemblyStockTransferList(string flag, long? lineId, long? assemblyId, long? qcId, long? modelId, long? warehouseId, string status, string transferCode, string fromDate, string toDate, long? transferInfoId, int page = 1)
@@ -3045,7 +3050,7 @@ namespace ERPWeb.Controllers
             }
         }
 
-        public ActionResult GetPackagingLineStockInfo(string flag, long? lineId, long? packagingId, long? qcId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq,long? returnId,string returnCode,string status,string fromDate,string toDate, int page = 1)
+        public ActionResult GetPackagingLineStockInfo(string flag, long? lineId, long? packagingId, long? qcId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq, long? returnId, string returnCode, string status, string fromDate, string toDate, int page = 1)
         {
             //ViewBag.UserPrivilege = UserPrivilege("Production", "GetPackagingLineStockInfo");
             if (string.IsNullOrEmpty(flag))
@@ -3159,18 +3164,19 @@ namespace ERPWeb.Controllers
         {
             ViewBag.ddlPackagingLineWithProduction = _packagingLineBusiness.GetPackagingLinesWithProduction(User.OrgId).Select(s => new SelectListItem
             {
-                Text= s.text,
+                Text = s.text,
                 Value = s.value
             }).ToList();
 
-            ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(s => new SelectListItem {
+            ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(s => new SelectListItem
+            {
                 Text = s.DescriptionName,
                 Value = s.DescriptionId.ToString()
             }).ToList();
             return View();
         }
 
-        public ActionResult GetPackagingStockItemsForReturn(long packagingLine,long floorId, long modelId)
+        public ActionResult GetPackagingStockItemsForReturn(long packagingLine, long floorId, long modelId)
         {
             var data = _packagingLineStockInfoBusiness.GetPackagingLineStocksForReturnStock(packagingLine, floorId, modelId, User.OrgId);
             IEnumerable<PackagingLineStockInfoViewModel> viewModels = new List<PackagingLineStockInfoViewModel>();
@@ -3497,7 +3503,7 @@ namespace ERPWeb.Controllers
             return Json(IsSuccess);
         }
 
-        
+
 
         public ActionResult CreateRepairStockTransfer()
         {
@@ -3845,7 +3851,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag == "StockReturnList")
             {
-                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId, null, repairId, null, warehouseId, returnId, returnCode,StockRetunFlag.AssemblyRepair, status, fromDate, toDate, User.OrgId);
+                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId, null, repairId, null, warehouseId, returnId, returnCode, StockRetunFlag.AssemblyRepair, status, fromDate, toDate, User.OrgId);
                 ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
                 dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
@@ -3854,7 +3860,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag == "FaultyStockReturnList")
             {
-                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId,null, repairId, null, warehouseId, returnId, returnCode, StockRetunFlag.AssemblyRepairFaulty, status, fromDate, toDate, User.OrgId);
+                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId, null, repairId, null, warehouseId, returnId, returnCode, StockRetunFlag.AssemblyRepairFaulty, status, fromDate, toDate, User.OrgId);
                 ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
                 dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
@@ -4028,7 +4034,7 @@ namespace ERPWeb.Controllers
         #region Faulty Stock By Repair
 
         #region Faulty Item Stock
-        public ActionResult GetFaultyItemStockInfo(string flag, long? lineId, long? repairId, long? qcId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq,string reqFor, int page = 1)
+        public ActionResult GetFaultyItemStockInfo(string flag, long? lineId, long? repairId, long? qcId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq, string reqFor, int page = 1)
         {
             //ViewBag.UserPrivilege = UserPrivilege("Production", "GetFaultyItemStockInfo");
             if (string.IsNullOrEmpty(flag))
@@ -4056,7 +4062,7 @@ namespace ERPWeb.Controllers
             else
             {
                 lessOrEq = "0";
-                IEnumerable<FaultyItemStockInfoDTO> dto = _faultyItemStockInfoBusiness.GetFaultyItemStockInfosByQuery(lineId, repairId, modelId, warehouseId, itemTypeId, itemId, lessOrEq,reqFor, User.OrgId);
+                IEnumerable<FaultyItemStockInfoDTO> dto = _faultyItemStockInfoBusiness.GetFaultyItemStockInfosByQuery(lineId, repairId, modelId, warehouseId, itemTypeId, itemId, lessOrEq, reqFor, User.OrgId);
 
                 // Pagination //
                 ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
@@ -4236,7 +4242,7 @@ namespace ERPWeb.Controllers
         #region Repair Section Requisition
         public ActionResult CreateRepairSectionRequisition(string reqFor)
         {
-            ViewBag.ddlWarehouse = _warehouseBusiness.GetAllWarehouseByOrgId(User.OrgId).Where(s=> !s.WarehouseName.Contains("Warehouse 3")).Select(line => new SelectListItem { Text = line.WarehouseName, Value = line.Id.ToString() }).ToList();
+            ViewBag.ddlWarehouse = _warehouseBusiness.GetAllWarehouseByOrgId(User.OrgId).Where(s => !s.WarehouseName.Contains("Warehouse 3")).Select(line => new SelectListItem { Text = line.WarehouseName, Value = line.Id.ToString() }).ToList();
 
             ViewBag.ddlRepairLine = _repairLineBusiness.GetRepairLineWithFloor(User.OrgId).Select(des => new SelectListItem { Text = des.text, Value = des.value }).ToList();
 
@@ -4259,7 +4265,7 @@ namespace ERPWeb.Controllers
             return Json(IsSuccess);
         }
 
-        public ActionResult GetRepairSectionRequisitionInfoList(string flag, long? repairLineId, long? modelId, long? warehouseId, string status, string requisitionCode, string fromDate, string toDate, long? reqInfoId,string reqFor, int page = 1)
+        public ActionResult GetRepairSectionRequisitionInfoList(string flag, long? repairLineId, long? modelId, long? warehouseId, string status, string requisitionCode, string fromDate, string toDate, long? reqInfoId, string reqFor, int page = 1)
         {
             if (string.IsNullOrEmpty(flag))
             {
@@ -4279,7 +4285,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && (flag.Trim().ToLower() == Flag.Search.ToLower() || flag.Trim().ToLower() == Flag.View.ToLower()))
             {
-                var dto = _repairSectionRequisitionInfoBusiness.GetRepairSectionRequisitionInfoList(repairLineId,null, modelId, warehouseId, status, requisitionCode, fromDate, toDate, "Repair", reqFor, User.OrgId);
+                var dto = _repairSectionRequisitionInfoBusiness.GetRepairSectionRequisitionInfoList(repairLineId, null, modelId, warehouseId, status, requisitionCode, fromDate, toDate, "Repair", reqFor, User.OrgId);
                 // Pagination //
                 ViewBag.PagerData = GetPagerData(dto.Count(), pageSize, page);
                 dto = dto.Skip((page - 1) * pageSize).Take(pageSize).ToList();
@@ -4332,7 +4338,7 @@ namespace ERPWeb.Controllers
                 if (status == RequisitionStatus.Accepted)
                 {
                     var reqInfo = _repairSectionRequisitionInfoBusiness.GetRepairSectionRequisitionById(requisitionId, User.OrgId);
-                    if(reqInfo.ReqFor == "Repair")
+                    if (reqInfo.ReqFor == "Repair")
                     {
                         IsSuccess = _repairLineStockDetailBusiness.StockInByRepairSectionRequisition(requisitionId, status, User.UserId, User.OrgId);
                     }
@@ -4393,7 +4399,7 @@ namespace ERPWeb.Controllers
                 {
                     CaseId = s.CaseId,
                     ProblemDescription = s.ProblemDescription,
-                    QRCode=s.QRCode
+                    QRCode = s.QRCode
                 }).ToList();
 
                 List<FaultyCaseViewModel> viewModels = new List<FaultyCaseViewModel>();
@@ -4489,7 +4495,7 @@ namespace ERPWeb.Controllers
         {
             bool IsSuccess = false;
             //var stockAvailable = _qRCodeTransferToRepairInfoBusiness.CheckingAvailabilityOfSparepartsWithRepairLineStock(model.ModelId, model.ItemId, model.RepairLineId, User.OrgId);
-            if (ModelState.IsValid )
+            if (ModelState.IsValid)
             {
                 TransferRepairItemByQRCodeScanningDTO dto = new TransferRepairItemByQRCodeScanningDTO();
                 AutoMapper.Mapper.Map(model, dto);
@@ -4530,12 +4536,12 @@ namespace ERPWeb.Controllers
         }
 
         [HttpPost, ValidateJsonAntiForgeryToken]
-        public  ActionResult SaveVoidAFaultyItem(long transferId, string qrCode, long itemId)
+        public ActionResult SaveVoidAFaultyItem(long transferId, string qrCode, long itemId)
         {
             bool IsSuccess = false;
-            if(transferId > 0 && !string.IsNullOrEmpty(qrCode) &&  itemId > 0)
+            if (transferId > 0 && !string.IsNullOrEmpty(qrCode) && itemId > 0)
             {
-                IsSuccess= _repairLineStockDetailBusiness.SaveVoidAFaultyItem(transferId, qrCode, itemId, User.UserId, User.OrgId);
+                IsSuccess = _repairLineStockDetailBusiness.SaveVoidAFaultyItem(transferId, qrCode, itemId, User.UserId, User.OrgId);
             }
             return Json(IsSuccess);
         }
@@ -4550,7 +4556,7 @@ namespace ERPWeb.Controllers
             return View();
         }
 
-        #region Production - Requisition - New [21-July-2020] // FiveStar
+        #region Production - Requisition
         public ActionResult GetRequisitionByItemInfoAndDetail(string flag, long? floorId, long? assemblyId, long? packagingId, long? repairLineId, long? warehouseId, long? modelId, string reqCode, string reqType, string reqFor, string fromDate, string toDate, string status, long? reqInfoId, string reqFlag)
         {
             if (string.IsNullOrEmpty(flag))
@@ -4607,7 +4613,7 @@ namespace ERPWeb.Controllers
         //GetAllItemDetails
         public ActionResult GetAllItemByModel(long model)
         {
-            var allItems = _itemBusiness.GetAllItemDetails(model,User.OrgId);
+            var allItems = _itemBusiness.GetAllItemDetails(model, User.OrgId);
             var dropDown = allItems.Where(s => s.ItemName.Contains("Warehouse 3")).Select(s => new Dropdown { text = s.ItemName, value = s.ItemId.ToString() }).ToList();
             return Json(dropDown);
         }
@@ -4638,7 +4644,7 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region Assembly-QC
-        public ActionResult GetAssemblyLineStockInfoFS(string flag, long? lineId, long? assemblyId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq, long? reqInfoId,long? returnId,string returnCode,string status,string fromDate,string toDate, int page = 1)
+        public ActionResult GetAssemblyLineStockInfoFS(string flag, long? lineId, long? assemblyId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq, long? reqInfoId, long? returnId, string returnCode, string status, string fromDate, string toDate, int page = 1)
         {
             //ViewBag.UserPrivilege = UserPrivilege("Production", "GetAssemblyLineStockInfo");
             if (string.IsNullOrEmpty(flag))
@@ -4676,15 +4682,15 @@ namespace ERPWeb.Controllers
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetAssemblyLineStockInfoFS", viewModels);
             }
-            else if (!string.IsNullOrEmpty(flag) && flag.Trim() !="" && flag == "StockReturnList")
+            else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "StockReturnList")
             {
-               var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId, assemblyId, null, null, warehouseId, returnId, returnCode, StockRetunFlag.AssemblyLine, status, fromDate, toDate, User.OrgId);
+                var dto = _stockItemReturnInfoBusiness.GetStockItemReturnInfosByQuery(modelId, lineId, assemblyId, null, null, warehouseId, returnId, returnCode, StockRetunFlag.AssemblyLine, status, fromDate, toDate, User.OrgId);
                 ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
                 dto = dto.Skip((page - 1) * 15).Take(15).ToList();
                 List<StockItemReturnInfoViewModel> viewModels = new List<StockItemReturnInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
 
-                return PartialView("_GetStockReturnList",viewModels);
+                return PartialView("_GetStockReturnList", viewModels);
             }
             return View();
         }
@@ -4727,7 +4733,7 @@ namespace ERPWeb.Controllers
             }).ToList();
             return View();
         }
-        [HttpPost,ValidateJsonAntiForgeryToken]
+        [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult GetAssemblyStockItemsForReturn(long assemblyId, long floorId, long modelId)
         {
             var data = _assemblyLineStockInfoBusiness.GetAssemblyLineStocksForReturnStock(assemblyId, floorId, modelId, User.OrgId);
@@ -4736,7 +4742,7 @@ namespace ERPWeb.Controllers
             return PartialView(viewModels);
         }
 
-        [HttpPost,ValidateJsonAntiForgeryToken]
+        [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult SaveStockReturnItems(List<StockItemReturnDetailViewModel> model)
         {
             bool IsSuccess = false;
@@ -4744,7 +4750,7 @@ namespace ERPWeb.Controllers
             {
                 List<StockItemReturnDetailDTO> dto = new List<StockItemReturnDetailDTO>();
                 AutoMapper.Mapper.Map(model, dto);
-                IsSuccess =_stockItemReturnInfoBusiness.SaveStockItemReturn(dto, User.UserId, User.OrgId);
+                IsSuccess = _stockItemReturnInfoBusiness.SaveStockItemReturn(dto, User.UserId, User.OrgId);
             }
             return Json(IsSuccess);
         }
@@ -4774,20 +4780,20 @@ namespace ERPWeb.Controllers
             return Json(IsSuccess);
         }
 
-        [HttpPost,ValidateJsonAntiForgeryToken]
+        [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult GenerateIMEI(string qrCode, int noOfSim)
         {
             List<string> IMEIs = new List<string>();
-            if(!string.IsNullOrEmpty(qrCode) && qrCode.Trim() !="" && noOfSim > 0)
+            if (!string.IsNullOrEmpty(qrCode) && qrCode.Trim() != "" && noOfSim > 0)
             {
-                IMEIs= _iMEIGenerator.IMEIGenerateByQRCode(qrCode, noOfSim, User.UserId, User.OrgId);
+                IMEIs = _iMEIGenerator.IMEIGenerateByQRCode(qrCode, noOfSim, User.UserId, User.OrgId);
             }
             return Json(IMEIs);
         }
 
         public ActionResult GetGeneratedIMEIList()
         {
-            var dto = _generatedIMEIBusiness.GetGeneratedIMEIDTOs(User.UserId,User.OrgId);
+            var dto = _generatedIMEIBusiness.GetGeneratedIMEIDTOs(User.UserId, User.OrgId);
             List<GeneratedIMEIViewModel> generatedIMEIViews = new List<GeneratedIMEIViewModel>();
             AutoMapper.Mapper.Map(dto, generatedIMEIViews);
             return PartialView("_GetGeneratedIMEIList", generatedIMEIViews);
@@ -4798,17 +4804,17 @@ namespace ERPWeb.Controllers
         {
             var status = string.Format(@"'MiniStock','PackagingLine'");
             var data = await _tempQRCodeTraceBusiness.GetTempQRCodeTraceByCodeWithFloorAsync(Utility.ParamChecker(code), status, floorId, User.OrgId);
-            if(data == null)
+            if (data == null)
             {
                 data = new TempQRCodeTrace();
             }
             return Json(data);
         }
 
-        
+
         #endregion
 
-        #region Battery Code //
+        #region Battery Code
         public ActionResult BatteryWrite()
         {
             ViewBag.ddlPackagingLine = _packagingLineBusiness.GetPackagingLinesWithProduction(User.OrgId).Select(s => new SelectListItem
@@ -4893,7 +4899,7 @@ namespace ERPWeb.Controllers
                 {
                     CaseId = s.CaseId,
                     ProblemDescription = s.ProblemDescription,
-                    QRCode=s.QRCode
+                    QRCode = s.QRCode
                 }).ToList();
 
                 List<FaultyCaseViewModel> viewModels = new List<FaultyCaseViewModel>();
@@ -5000,7 +5006,7 @@ namespace ERPWeb.Controllers
             return Json(executionState);
         }
 
-       
+
         [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult SavePackagingQCTransferItemInRepair(long transferId, string status)
         {
@@ -5024,7 +5030,7 @@ namespace ERPWeb.Controllers
             executionState.text = (IsExist == false ? "This IMEI already has been transfered To Repair/Finish Goods" : "");
             if (!string.IsNullOrEmpty(imei) && imei.Trim() != "" && IsExist)
             {
-                executionState.isSuccess= await _finishGoodsStockDetailBusiness.SaveFinishGoodsByIMEIAsync(imei, User.UserId, User.OrgId);
+                executionState.isSuccess = await _finishGoodsStockDetailBusiness.SaveFinishGoodsByIMEIAsync(imei, User.UserId, User.OrgId);
             }
             return Json(executionState);
         }
@@ -5063,7 +5069,7 @@ namespace ERPWeb.Controllers
 
                 // IMEI Faulty Items
                 IEnumerable<PackagingFaultyStockDetailViewModel> faultyItemsViewModel = new List<PackagingFaultyStockDetailViewModel>();
-                var faultyItemsDto = _packagingFaultyStockDetailBusiness.GetPackagingFaultyItemStockDetailsByQrCode(imeiItemInfo.QRCode, string.Empty,imeiItemInfo.TransferId, User.OrgId);
+                var faultyItemsDto = _packagingFaultyStockDetailBusiness.GetPackagingFaultyItemStockDetailsByQrCode(imeiItemInfo.QRCode, string.Empty, imeiItemInfo.TransferId, User.OrgId);
                 AutoMapper.Mapper.Map(faultyItemsDto, faultyItemsViewModel);
 
                 return Json(new { info = imeiItemInfoViewModel, problems = imeiProblemViewModel, faultyItems = faultyItemsViewModel, items = dropdowns });
@@ -5101,11 +5107,11 @@ namespace ERPWeb.Controllers
         public ActionResult SavePackagingRepairAddingFaultyWithQRCode(FaultyInfoByQRCodeViewModel model)
         {
             bool IsSuccess = false;
-            if(ModelState.IsValid && model.FaultyItems.Count > 0)
+            if (ModelState.IsValid && model.FaultyItems.Count > 0)
             {
                 FaultyInfoByQRCodeDTO dto = new FaultyInfoByQRCodeDTO();
                 AutoMapper.Mapper.Map(model, dto);
-                IsSuccess= _iMEITransferToRepairInfoBusiness.PackagingRepairAddingFaultyWithQRCode(dto, User.UserId, User.OrgId);
+                IsSuccess = _iMEITransferToRepairInfoBusiness.PackagingRepairAddingFaultyWithQRCode(dto, User.UserId, User.OrgId);
             }
             return Json(IsSuccess);
         }
@@ -5113,7 +5119,7 @@ namespace ERPWeb.Controllers
 
         #region Pakaging Repair Process
         // Pakaging Repair Process //
-        public ActionResult GetPackagingRepairProcess(string flag, long? floorId, long? packagingLineId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string status, string fromDate, string toDate, string transferCode, long? transferId,long? reqInfoId, string qrCode, string imei, string lessOrEq,string requisitionCode,long? returnId, string returnCode, int page=1)
+        public ActionResult GetPackagingRepairProcess(string flag, long? floorId, long? packagingLineId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string status, string fromDate, string toDate, string transferCode, long? transferId, long? reqInfoId, string qrCode, string imei, string lessOrEq, string requisitionCode, long? returnId, string returnCode, int page = 1)
         {
             if (string.IsNullOrEmpty(flag))
             {
@@ -5150,7 +5156,7 @@ namespace ERPWeb.Controllers
                     Value = s.value
                 }).ToList();
 
-                ViewBag.ddlWarehouse = _warehouseBusiness.GetAllWarehouseByOrgId(User.OrgId).Where(s=> !s.WarehouseName.Contains("Warehouse 3")).Select(s => new SelectListItem
+                ViewBag.ddlWarehouse = _warehouseBusiness.GetAllWarehouseByOrgId(User.OrgId).Where(s => !s.WarehouseName.Contains("Warehouse 3")).Select(s => new SelectListItem
                 {
                     Text = s.WarehouseName,
                     Value = s.Id.ToString()
@@ -5215,7 +5221,7 @@ namespace ERPWeb.Controllers
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetPackagingRepairItemTransferToQCDetail", viewModels);
             }
-            else if(!string.IsNullOrEmpty(flag) && flag.Trim() == "FaultyStock")
+            else if (!string.IsNullOrEmpty(flag) && flag.Trim() == "FaultyStock")
             {
                 var dto = _packagingFaultyStockInfoBusiness.GetPackagingFaultyStockInfosByQuery(floorId, packagingLineId, modelId, warehouseId, itemTypeId, itemId, lessOrEq, User.OrgId);
                 ViewBag.PagerData = GetPagerData(dto.Count(), 15, page);
@@ -5226,7 +5232,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() == "RequisitionList")
             {
-                var dto = _repairSectionRequisitionInfoBusiness.GetRepairSectionRequisitionInfoList(null,packagingLineId, modelId, warehouseId, status, requisitionCode, fromDate, toDate, "Packaging", "Packaging", User.OrgId);
+                var dto = _repairSectionRequisitionInfoBusiness.GetRepairSectionRequisitionInfoList(null, packagingLineId, modelId, warehouseId, status, requisitionCode, fromDate, toDate, "Packaging", "Packaging", User.OrgId);
                 // Pagination //
                 //ViewBag.PagerData = GetPagerData(dto.Count(), pageSize, page);
                 //dto = dto.Skip((page - 1) * pageSize).Take(pageSize).ToList();
@@ -5346,7 +5352,7 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region Packaging Finish Goods Process
-        public ActionResult GetPackagingFinishGoodsProcess(string flag, long? floorId,long? packagingLineId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq,string status,string transferCode, long? transferId,string fromDate, string toDate, int page = 1)
+        public ActionResult GetPackagingFinishGoodsProcess(string flag, long? floorId, long? packagingLineId, long? modelId, long? warehouseId, long? itemTypeId, long? itemId, string lessOrEq, string status, string transferCode, long? transferId, string fromDate, string toDate, int page = 1)
         {
             if (string.IsNullOrEmpty(flag))
             {
@@ -5366,18 +5372,19 @@ namespace ERPWeb.Controllers
 
                 var warehouse = _warehouseBusiness.GetAllWarehouseByOrgId(User.OrgId);
 
-                ViewBag.ddlWarehouse3 = warehouse.Where(s=> s.WarehouseName.Contains("Warehouse 3")).Select(s => new SelectListItem { Text = s.WarehouseName, Value = s.Id.ToString() }).ToList();
+                ViewBag.ddlWarehouse3 = warehouse.Where(s => s.WarehouseName.Contains("Warehouse 3")).Select(s => new SelectListItem { Text = s.WarehouseName, Value = s.Id.ToString() }).ToList();
+                ViewBag.ddlItemName = _itemBusiness.GetAllItemByOrgId(User.OrgId).Where(s => s.DescriptionId != null && s.ColorId != null).Select(s => new SelectListItem { Text = s.ItemName, Value = s.ItemId.ToString() }).ToList();
             }
-            if (!string.IsNullOrEmpty(flag) && flag.Trim()!="" && flag.ToLower() =="stockinfo")
+            if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag.ToLower() == "stockinfo")
             {
-                var dto =_finishGoodsStockInfoBusiness.GetFinishGoodsStockInfosQuery(floorId, packagingLineId, modelId, warehouseId, itemTypeId, itemId, lessOrEq, User.OrgId);
+                var dto = _finishGoodsStockInfoBusiness.GetFinishGoodsStockInfosQuery(floorId, packagingLineId, modelId, warehouseId, itemTypeId, itemId, lessOrEq, User.OrgId);
                 List<FinishGoodsStockInfoViewModel> viewModels = new List<FinishGoodsStockInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetPackagingFinishGoodsStock", viewModels);
             }
             if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag.ToLower() == "transferinfo")
             {
-                var dto =_finishGoodsSendToWarehouseInfoBusiness.GetFinishGoodsSendToWarehouseInfosByQuery(floorId, packagingLineId, warehouseId, modelId, status, transferCode, fromDate, toDate, transferId, User.OrgId);
+                var dto = _finishGoodsSendToWarehouseInfoBusiness.GetFinishGoodsSendToWarehouseInfosByQuery(floorId, packagingLineId, warehouseId, modelId, status, transferCode, fromDate, toDate, transferId, User.OrgId);
                 List<FinishGoodsSendToWarehouseInfoViewModel> viewModels = new List<FinishGoodsSendToWarehouseInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
 
@@ -5385,7 +5392,7 @@ namespace ERPWeb.Controllers
             }
             if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag.ToLower() == "transferdetail")
             {
-                var dto = _finishGoodsSendToWarehouseDetailBusiness.GetFinishGoodsSendToWarehouseDetailsByQuery(null, null,null,string.Empty,string.Empty,transferId,string.Empty, User.OrgId);
+                var dto = _finishGoodsSendToWarehouseDetailBusiness.GetFinishGoodsSendToWarehouseDetailsByQuery(null, null, null, string.Empty, string.Empty, transferId, string.Empty, User.OrgId);
                 List<FinishGoodsSendToWarehouseDetailViewModel> viewModels = new List<FinishGoodsSendToWarehouseDetailViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetFinishGoodsTransferDetail", viewModels);
@@ -5393,7 +5400,7 @@ namespace ERPWeb.Controllers
             return View();
         }
 
-        [HttpPost,ValidateJsonAntiForgeryToken]
+        [HttpPost, ValidateJsonAntiForgeryToken]
         public async Task<ActionResult> SaveFinishGoodsForPacking(FinishGoodsSendToWarehouseInfoViewModel model)
         {
             bool IsSuccess = false;
@@ -5401,9 +5408,981 @@ namespace ERPWeb.Controllers
             {
                 FinishGoodsSendToWarehouseInfoDTO dto = new FinishGoodsSendToWarehouseInfoDTO();
                 AutoMapper.Mapper.Map(model, dto);
-                IsSuccess = await _finishGoodsSendToWarehouseInfoBusiness.SaveFinishGoodsCartonAsync(dto, User.UserId, User.OrgId);
+                var result = await _finishGoodsSendToWarehouseInfoBusiness.SaveFinishGoodsCartonAsync(dto, User.UserId, User.OrgId);
+                if (result > 0)
+                {
+                    IsSuccess = true;
+                    var file = await CartonPackagingPrint(result);
+                    return Json(new { IsSuccess = IsSuccess, File = file });
+                }
             }
             return Json(IsSuccess);
+        }
+        public async Task<string> CartonPackagingPrint(long id)
+        {
+            byte[] defaultImageBytes = Utility.GetImageBytes(Server.MapPath("~/Content/dist/img/Capture.PNG"));
+            List<CartonStickerPrintForBarcodeGeneretor> barcodeImeiList = new List<CartonStickerPrintForBarcodeGeneretor>();
+
+            var finishGoodsInfo = _finishGoodsSendToWarehouseInfoBusiness.GetFinishGoodsSendToWarehouseById(id, User.OrgId);
+            List<FinishGoodsSendToWarehouseInfoDTO> infoDTOs = new List<FinishGoodsSendToWarehouseInfoDTO>();
+            FinishGoodsSendToWarehouseInfoDTO infoDTO = new FinishGoodsSendToWarehouseInfoDTO();
+            infoDTO.CartoonNo = finishGoodsInfo.CartoonNo;
+            infoDTO.NetWeight = finishGoodsInfo.NetWeight;
+            infoDTO.GrossWeight = finishGoodsInfo.GrossWeight;
+            infoDTO.TotalQtyString = finishGoodsInfo.TotalQty.ToString();
+            infoDTO.ModelName = _descriptionBusiness.GetDescriptionOneByOrdId(finishGoodsInfo.DescriptionId, User.OrgId).DescriptionName;
+            infoDTO.ColorName = _colorBusiness.GetColorOneByOrgId(finishGoodsInfo.ColorId, User.OrgId).ColorName;
+            infoDTOs.Add(infoDTO);
+
+            #region 20 PC
+
+            if (finishGoodsInfo.TotalQty > 0 && finishGoodsInfo.TotalQty <= 20)
+            {
+                var data = await _finishGoodsSendToWarehouseDetailBusiness.GetDynamicTableDataForCartonSticker(id, User.OrgId);
+                foreach (var item in data)
+                {
+                    CartonStickerPrintForBarcodeGeneretor barcodeImei = new CartonStickerPrintForBarcodeGeneretor();
+                    barcodeImeiList.Add(barcodeImei);
+
+                    if (!string.IsNullOrEmpty(item.IMEI1))
+                    {
+                        string[] imei = item.IMEI1.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI1 == null)
+                            {
+                                barcodeImei.BarCodeIMEI1 = GenerateCode128(i);
+                                barcodeImei.IMEI1 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI2 = GenerateCode128(i);
+                                barcodeImei.IMEI2 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI1 = defaultImageBytes;
+                        barcodeImei.IMEI1 = null;
+                        barcodeImei.BarCodeIMEI2 = defaultImageBytes;
+                        barcodeImei.IMEI2 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI2))
+                    {
+                        string[] imei = item.IMEI2.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI3 == null)
+                            {
+                                barcodeImei.BarCodeIMEI3 = GenerateCode128(i);
+                                barcodeImei.IMEI3 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI4 = GenerateCode128(i);
+                                barcodeImei.IMEI4 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI3 = defaultImageBytes;
+                        barcodeImei.IMEI3 = null;
+                        barcodeImei.BarCodeIMEI4 = defaultImageBytes;
+                        barcodeImei.IMEI4 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI3))
+                    {
+                        string[] imei = item.IMEI3.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI5 == null)
+                            {
+                                barcodeImei.BarCodeIMEI5 = GenerateCode128(i);
+                                barcodeImei.IMEI5 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI6 = GenerateCode128(i);
+                                barcodeImei.IMEI6 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI5 = defaultImageBytes;
+                        barcodeImei.IMEI5 = null;
+                        barcodeImei.BarCodeIMEI6 = defaultImageBytes;
+                        barcodeImei.IMEI6 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI4))
+                    {
+                        string[] imei = item.IMEI4.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI7 == null)
+                            {
+                                barcodeImei.BarCodeIMEI7 = GenerateCode128(i);
+                                barcodeImei.IMEI7 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI8 = GenerateCode128(i);
+                                barcodeImei.IMEI8 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI7 = defaultImageBytes;
+                        barcodeImei.IMEI7 = null;
+                        barcodeImei.BarCodeIMEI8 = defaultImageBytes;
+                        barcodeImei.IMEI8 = null;
+                    }
+                }
+                LocalReport localReport = new LocalReport();
+                string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptBarcodeForCartonSticker20PCs.rdlc");
+                if (System.IO.File.Exists(reportPath))
+                {
+                    localReport.ReportPath = reportPath;
+                    ReportDataSource dataSource = new ReportDataSource("dsCartonStickerForBarcode", barcodeImeiList);
+                    ReportDataSource dataSource2 = new ReportDataSource("dsCartoonInfo", infoDTOs);
+                    localReport.DataSources.Clear();
+                    localReport.DataSources.Add(dataSource);
+                    localReport.DataSources.Add(dataSource2);
+                    localReport.Refresh();
+                    localReport.DisplayName = "ALL IMEI";
+                }
+
+                string reportType = "PDF";
+                string mimeType;
+                string encoding;
+                string fileNameExtention = ".pdf";
+                string deviceInfo =
+                    "<DeviceInfo>" +
+                    "<OutputFormat>PDF</OutputFormat>" +
+                    "<PageWidth>4in</PageWidth>" +
+                    "<PageHeight>5.97in</PageHeight>" +
+                    "<MarginTop>0.05in</MarginTop>" +
+                    "<MarginLeft>0.05in</MarginLeft>" +
+                    "<MarginRight>0.05in</MarginRight>" +
+                    "<MarginBottom>0.05in</MarginBottom>" +
+                    "</DeviceInfo>";
+                Warning[] warnings;
+                string[] streams;
+
+                var renderedBytes = localReport.Render(
+                    reportType,
+                    deviceInfo,
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtention,
+                    out streams,
+                    out warnings
+                    );
+
+                var base64 = Convert.ToBase64String(renderedBytes);
+                var file = String.Format("{0}", base64);
+                return file;
+            }
+            #endregion
+
+            #region 40 PC
+
+            else if (finishGoodsInfo.TotalQty > 20 && finishGoodsInfo.TotalQty <= 40)
+            {
+                var data = await _finishGoodsSendToWarehouseDetailBusiness.GetDynamicTableDataForCartonSticker(id, User.OrgId);
+                foreach (var item in data)
+                {
+                    CartonStickerPrintForBarcodeGeneretor barcodeImei = new CartonStickerPrintForBarcodeGeneretor();
+                    barcodeImeiList.Add(barcodeImei);
+
+                    if (!string.IsNullOrEmpty(item.IMEI1))
+                    {
+                        string[] imei = item.IMEI1.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI1 == null)
+                            {
+                                barcodeImei.BarCodeIMEI1 = GenerateCode128(i);
+                                barcodeImei.IMEI1 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI2 = GenerateCode128(i);
+                                barcodeImei.IMEI2 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI1 = defaultImageBytes;
+                        barcodeImei.IMEI1 = null;
+                        barcodeImei.BarCodeIMEI2 = defaultImageBytes;
+                        barcodeImei.IMEI2 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI2))
+                    {
+                        string[] imei = item.IMEI2.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI3 == null)
+                            {
+                                barcodeImei.BarCodeIMEI3 = GenerateCode128(i);
+                                barcodeImei.IMEI3 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI4 = GenerateCode128(i);
+                                barcodeImei.IMEI4 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI3 = defaultImageBytes;
+                        barcodeImei.IMEI3 = null;
+                        barcodeImei.BarCodeIMEI4 = defaultImageBytes;
+                        barcodeImei.IMEI4 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI3))
+                    {
+                        string[] imei = item.IMEI3.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI5 == null)
+                            {
+                                barcodeImei.BarCodeIMEI5 = GenerateCode128(i);
+                                barcodeImei.IMEI5 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI6 = GenerateCode128(i);
+                                barcodeImei.IMEI6 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI5 = defaultImageBytes;
+                        barcodeImei.IMEI5 = null;
+                        barcodeImei.BarCodeIMEI6 = defaultImageBytes;
+                        barcodeImei.IMEI6 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI4))
+                    {
+                        string[] imei = item.IMEI4.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI7 == null)
+                            {
+                                barcodeImei.BarCodeIMEI7 = GenerateCode128(i);
+                                barcodeImei.IMEI7 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI8 = GenerateCode128(i);
+                                barcodeImei.IMEI8 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI7 = defaultImageBytes;
+                        barcodeImei.IMEI7 = null;
+                        barcodeImei.BarCodeIMEI8 = defaultImageBytes;
+                        barcodeImei.IMEI8 = null;
+                    }
+                }
+                LocalReport localReport = new LocalReport();
+                string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptBarcodeForCartonSticker40PCs.rdlc");
+                if (System.IO.File.Exists(reportPath))
+                {
+                    localReport.ReportPath = reportPath;
+                    ReportDataSource dataSource = new ReportDataSource("dsCartonSticker", barcodeImeiList);
+                    ReportDataSource dataSource2 = new ReportDataSource("dsCartonInfo", infoDTOs);
+                    localReport.DataSources.Clear();
+                    localReport.DataSources.Add(dataSource);
+                    localReport.DataSources.Add(dataSource2);
+                    localReport.Refresh();
+                    localReport.DisplayName = "ALL IMEI";
+                }
+
+                string reportType = "PDF";
+                string mimeType;
+                string encoding;
+                string fileNameExtention = ".pdf";
+                string deviceInfo =
+                    "<DeviceInfo>" +
+                    "<OutputFormat>PDF</OutputFormat>" +
+                    "<PageWidth>4in</PageWidth>" +
+                    "<PageHeight>5.97in</PageHeight>" +
+                    "<MarginTop>0.05in</MarginTop>" +
+                    "<MarginLeft>0.05in</MarginLeft>" +
+                    "<MarginRight>0.05in</MarginRight>" +
+                    "<MarginBottom>0.05in</MarginBottom>" +
+                    "</DeviceInfo>";
+                Warning[] warnings;
+                string[] streams;
+
+                var renderedBytes = localReport.Render(
+                    reportType,
+                    deviceInfo,
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtention,
+                    out streams,
+                    out warnings
+                    );
+
+                var base64 = Convert.ToBase64String(renderedBytes);
+                var file = String.Format("{0}", base64);
+                return file;
+            }
+            #endregion
+
+            #region 50 PC
+
+            else if (finishGoodsInfo.TotalQty > 40 && finishGoodsInfo.TotalQty <= 50)
+            {
+                var data = await _finishGoodsSendToWarehouseDetailBusiness.GetDynamicTableDataForCartonSticker(id, User.OrgId);
+                foreach (var item in data)
+                {
+                    CartonStickerPrintForBarcodeGeneretor barcodeImei = new CartonStickerPrintForBarcodeGeneretor();
+                    barcodeImeiList.Add(barcodeImei);
+
+                    if (!string.IsNullOrEmpty(item.IMEI1))
+                    {
+                        string[] imei = item.IMEI1.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI1 == null)
+                            {
+                                barcodeImei.BarCodeIMEI1 = GenerateCode128(i);
+                                barcodeImei.IMEI1 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI2 = GenerateCode128(i);
+                                barcodeImei.IMEI2 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI1 = defaultImageBytes;
+                        barcodeImei.IMEI1 = null;
+                        barcodeImei.BarCodeIMEI2 = defaultImageBytes;
+                        barcodeImei.IMEI2 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI2))
+                    {
+                        string[] imei = item.IMEI2.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI3 == null)
+                            {
+                                barcodeImei.BarCodeIMEI3 = GenerateCode128(i);
+                                barcodeImei.IMEI3 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI4 = GenerateCode128(i);
+                                barcodeImei.IMEI4 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI3 = defaultImageBytes;
+                        barcodeImei.IMEI3 = null;
+                        barcodeImei.BarCodeIMEI4 = defaultImageBytes;
+                        barcodeImei.IMEI4 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI3))
+                    {
+                        string[] imei = item.IMEI3.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI5 == null)
+                            {
+                                barcodeImei.BarCodeIMEI5 = GenerateCode128(i);
+                                barcodeImei.IMEI5 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI6 = GenerateCode128(i);
+                                barcodeImei.IMEI6 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI5 = defaultImageBytes;
+                        barcodeImei.IMEI5 = null;
+                        barcodeImei.BarCodeIMEI6 = defaultImageBytes;
+                        barcodeImei.IMEI6 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI4))
+                    {
+                        string[] imei = item.IMEI4.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI7 == null)
+                            {
+                                barcodeImei.BarCodeIMEI7 = GenerateCode128(i);
+                                barcodeImei.IMEI7 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI8 = GenerateCode128(i);
+                                barcodeImei.IMEI8 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI7 = defaultImageBytes;
+                        barcodeImei.IMEI7 = null;
+                        barcodeImei.BarCodeIMEI8 = defaultImageBytes;
+                        barcodeImei.IMEI8 = null;
+                    }
+                }
+                LocalReport localReport = new LocalReport();
+                string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptBarcodeForCartonSticker50PCs.rdlc");
+                if (System.IO.File.Exists(reportPath))
+                {
+                    localReport.ReportPath = reportPath;
+                    ReportDataSource dataSource = new ReportDataSource("dsCartonSticker", barcodeImeiList);
+                    ReportDataSource dataSource2 = new ReportDataSource("dsCartonInfo", infoDTOs);
+                    localReport.DataSources.Clear();
+                    localReport.DataSources.Add(dataSource);
+                    localReport.DataSources.Add(dataSource2);
+                    localReport.Refresh();
+                    localReport.DisplayName = "ALL IMEI";
+                }
+
+                string reportType = "PDF";
+                string mimeType;
+                string encoding;
+                string fileNameExtention = ".pdf";
+                string deviceInfo =
+                    "<DeviceInfo>" +
+                    "<OutputFormat>PDF</OutputFormat>" +
+                    "<PageWidth>4in</PageWidth>" +
+                    "<PageHeight>5.97in</PageHeight>" +
+                    "<MarginTop>0.05in</MarginTop>" +
+                    "<MarginLeft>0.05in</MarginLeft>" +
+                    "<MarginRight>0.05in</MarginRight>" +
+                    "<MarginBottom>0.05in</MarginBottom>" +
+                    "</DeviceInfo>";
+                Warning[] warnings;
+                string[] streams;
+
+                var renderedBytes = localReport.Render(
+                    reportType,
+                    deviceInfo,
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtention,
+                    out streams,
+                    out warnings
+                    );
+
+                var base64 = Convert.ToBase64String(renderedBytes);
+                var file = String.Format("{0}", base64);
+                return file;
+            }
+            #endregion
+
+            else
+            {
+                return string.Empty;
+            }
+        }
+        public async Task<ActionResult> SingleCartonPrint(long id)
+        {
+            byte[] defaultImageBytes = Utility.GetImageBytes(Server.MapPath("~/Content/dist/img/Capture.PNG"));
+            List<CartonStickerPrintForBarcodeGeneretor> barcodeImeiList = new List<CartonStickerPrintForBarcodeGeneretor>();
+
+            var finishGoodsInfo = _finishGoodsSendToWarehouseInfoBusiness.GetFinishGoodsSendToWarehouseById(id, User.OrgId);
+            List<FinishGoodsSendToWarehouseInfoDTO> infoDTOs = new List<FinishGoodsSendToWarehouseInfoDTO>();
+            FinishGoodsSendToWarehouseInfoDTO infoDTO = new FinishGoodsSendToWarehouseInfoDTO();
+            infoDTO.CartoonNo = finishGoodsInfo.CartoonNo;
+            infoDTO.NetWeight = finishGoodsInfo.NetWeight;
+            infoDTO.GrossWeight = finishGoodsInfo.GrossWeight;
+            infoDTO.TotalQtyString = finishGoodsInfo.TotalQty.ToString();
+            infoDTO.ModelName = _descriptionBusiness.GetDescriptionOneByOrdId(finishGoodsInfo.DescriptionId, User.OrgId).DescriptionName;
+            infoDTO.ColorName = _colorBusiness.GetColorOneByOrgId(finishGoodsInfo.ColorId, User.OrgId).ColorName;
+            infoDTOs.Add(infoDTO);
+
+            #region 20 PC
+
+            if (finishGoodsInfo.TotalQty > 0 && finishGoodsInfo.TotalQty <= 20)
+            {
+                var data = await _finishGoodsSendToWarehouseDetailBusiness.GetDynamicTableDataForCartonSticker(id, User.OrgId);
+                foreach (var item in data)
+                {
+                    CartonStickerPrintForBarcodeGeneretor barcodeImei = new CartonStickerPrintForBarcodeGeneretor();
+                    barcodeImeiList.Add(barcodeImei);
+
+                    if (!string.IsNullOrEmpty(item.IMEI1))
+                    {
+                        string[] imei = item.IMEI1.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI1 == null)
+                            {
+                                barcodeImei.BarCodeIMEI1 = GenerateCode128(i);
+                                barcodeImei.IMEI1 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI2 = GenerateCode128(i);
+                                barcodeImei.IMEI2 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI1 = defaultImageBytes;
+                        barcodeImei.IMEI1 = null;
+                        barcodeImei.BarCodeIMEI2 = defaultImageBytes;
+                        barcodeImei.IMEI2 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI2))
+                    {
+                        string[] imei = item.IMEI2.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI3 == null)
+                            {
+                                barcodeImei.BarCodeIMEI3 = GenerateCode128(i);
+                                barcodeImei.IMEI3 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI4 = GenerateCode128(i);
+                                barcodeImei.IMEI4 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI3 = defaultImageBytes;
+                        barcodeImei.IMEI3 = null;
+                        barcodeImei.BarCodeIMEI4 = defaultImageBytes;
+                        barcodeImei.IMEI4 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI3))
+                    {
+                        string[] imei = item.IMEI3.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI5 == null)
+                            {
+                                barcodeImei.BarCodeIMEI5 = GenerateCode128(i);
+                                barcodeImei.IMEI5 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI6 = GenerateCode128(i);
+                                barcodeImei.IMEI6 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI5 = defaultImageBytes;
+                        barcodeImei.IMEI5 = null;
+                        barcodeImei.BarCodeIMEI6 = defaultImageBytes;
+                        barcodeImei.IMEI6 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI4))
+                    {
+                        string[] imei = item.IMEI4.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI7 == null)
+                            {
+                                barcodeImei.BarCodeIMEI7 = GenerateCode128(i);
+                                barcodeImei.IMEI7 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI8 = GenerateCode128(i);
+                                barcodeImei.IMEI8 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI7 = defaultImageBytes;
+                        barcodeImei.IMEI7 = null;
+                        barcodeImei.BarCodeIMEI8 = defaultImageBytes;
+                        barcodeImei.IMEI8 = null;
+                    }
+                }
+                LocalReport localReport = new LocalReport();
+                string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptBarcodeForCartonSticker20PCs.rdlc");
+                if (System.IO.File.Exists(reportPath))
+                {
+                    localReport.ReportPath = reportPath;
+                    ReportDataSource dataSource = new ReportDataSource("dsCartonSticker", barcodeImeiList);
+                    ReportDataSource dataSource2 = new ReportDataSource("dsCartonInfo", infoDTOs);
+                    localReport.DataSources.Clear();
+                    localReport.DataSources.Add(dataSource);
+                    localReport.DataSources.Add(dataSource2);
+                    localReport.Refresh();
+                    localReport.DisplayName = "ALL IMEI";
+                }
+
+                string reportType = "PDF";
+                string mimeType;
+                string encoding;
+                string fileNameExtention = ".pdf";
+                string deviceInfo =
+                    "<DeviceInfo>" +
+                    "<OutputFormat>PDF</OutputFormat>" +
+                    "<PageWidth>4in</PageWidth>" +
+                    "<PageHeight>5.97in</PageHeight>" +
+                    "<MarginTop>0.05in</MarginTop>" +
+                    "<MarginLeft>0.05in</MarginLeft>" +
+                    "<MarginRight>0.05in</MarginRight>" +
+                    "<MarginBottom>0.05in</MarginBottom>" +
+                    "</DeviceInfo>";
+                Warning[] warnings;
+                string[] streams;
+
+                var renderedBytes = localReport.Render(
+                    reportType,
+                    deviceInfo,
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtention,
+                    out streams,
+                    out warnings
+                    );
+
+                var base64 = Convert.ToBase64String(renderedBytes);
+                var file = String.Format("{0}", base64);
+                return Json(new { File = file });
+            }
+            #endregion
+
+            #region 40 PC
+
+            else if (finishGoodsInfo.TotalQty > 20 && finishGoodsInfo.TotalQty <= 40)
+            {
+                var data = await _finishGoodsSendToWarehouseDetailBusiness.GetDynamicTableDataForCartonSticker(id, User.OrgId);
+                foreach (var item in data)
+                {
+                    CartonStickerPrintForBarcodeGeneretor barcodeImei = new CartonStickerPrintForBarcodeGeneretor();
+                    barcodeImeiList.Add(barcodeImei);
+
+                    if (!string.IsNullOrEmpty(item.IMEI1))
+                    {
+                        string[] imei = item.IMEI1.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI1 == null)
+                            {
+                                barcodeImei.BarCodeIMEI1 = GenerateCode128(i);
+                                barcodeImei.IMEI1 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI2 = GenerateCode128(i);
+                                barcodeImei.IMEI2 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI1 = defaultImageBytes;
+                        barcodeImei.IMEI1 = null;
+                        barcodeImei.BarCodeIMEI2 = defaultImageBytes;
+                        barcodeImei.IMEI2 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI2))
+                    {
+                        string[] imei = item.IMEI2.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI3 == null)
+                            {
+                                barcodeImei.BarCodeIMEI3 = GenerateCode128(i);
+                                barcodeImei.IMEI3 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI4 = GenerateCode128(i);
+                                barcodeImei.IMEI4 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI3 = defaultImageBytes;
+                        barcodeImei.IMEI3 = null;
+                        barcodeImei.BarCodeIMEI4 = defaultImageBytes;
+                        barcodeImei.IMEI4 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI3))
+                    {
+                        string[] imei = item.IMEI3.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI5 == null)
+                            {
+                                barcodeImei.BarCodeIMEI5 = GenerateCode128(i);
+                                barcodeImei.IMEI5 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI6 = GenerateCode128(i);
+                                barcodeImei.IMEI6 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI5 = defaultImageBytes;
+                        barcodeImei.IMEI5 = null;
+                        barcodeImei.BarCodeIMEI6 = defaultImageBytes;
+                        barcodeImei.IMEI6 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI4))
+                    {
+                        string[] imei = item.IMEI4.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI7 == null)
+                            {
+                                barcodeImei.BarCodeIMEI7 = GenerateCode128(i);
+                                barcodeImei.IMEI7 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI8 = GenerateCode128(i);
+                                barcodeImei.IMEI8 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI7 = defaultImageBytes;
+                        barcodeImei.IMEI7 = null;
+                        barcodeImei.BarCodeIMEI8 = defaultImageBytes;
+                        barcodeImei.IMEI8 = null;
+                    }
+                }
+                LocalReport localReport = new LocalReport();
+                string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptBarcodeForCartonSticker40PCs.rdlc");
+                if (System.IO.File.Exists(reportPath))
+                {
+                    localReport.ReportPath = reportPath;
+                    ReportDataSource dataSource = new ReportDataSource("dsCartonSticker", barcodeImeiList);
+                    ReportDataSource dataSource2 = new ReportDataSource("dsCartonInfo", infoDTOs);
+                    localReport.DataSources.Clear();
+                    localReport.DataSources.Add(dataSource);
+                    localReport.DataSources.Add(dataSource2);
+                    localReport.Refresh();
+                    localReport.DisplayName = "ALL IMEI";
+                }
+
+                string reportType = "PDF";
+                string mimeType;
+                string encoding;
+                string fileNameExtention = ".pdf";
+                string deviceInfo =
+                    "<DeviceInfo>" +
+                    "<OutputFormat>PDF</OutputFormat>" +
+                    "<PageWidth>4in</PageWidth>" +
+                    "<PageHeight>5.97in</PageHeight>" +
+                    "<MarginTop>0.05in</MarginTop>" +
+                    "<MarginLeft>0.05in</MarginLeft>" +
+                    "<MarginRight>0.05in</MarginRight>" +
+                    "<MarginBottom>0.05in</MarginBottom>" +
+                    "</DeviceInfo>";
+                Warning[] warnings;
+                string[] streams;
+
+                var renderedBytes = localReport.Render(
+                    reportType,
+                    deviceInfo,
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtention,
+                    out streams,
+                    out warnings
+                    );
+
+                var base64 = Convert.ToBase64String(renderedBytes);
+                var file = String.Format("{0}", base64);
+                return Json(new { File = file });
+            }
+            #endregion
+
+            #region 50 PC
+
+            else if (finishGoodsInfo.TotalQty > 40 && finishGoodsInfo.TotalQty <= 50)
+            {
+                var data = await _finishGoodsSendToWarehouseDetailBusiness.GetDynamicTableDataForCartonSticker(id, User.OrgId);
+                foreach (var item in data)
+                {
+                    CartonStickerPrintForBarcodeGeneretor barcodeImei = new CartonStickerPrintForBarcodeGeneretor();
+                    barcodeImeiList.Add(barcodeImei);
+
+                    if (!string.IsNullOrEmpty(item.IMEI1))
+                    {
+                        string[] imei = item.IMEI1.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI1 == null)
+                            {
+                                barcodeImei.BarCodeIMEI1 = GenerateCode128(i);
+                                barcodeImei.IMEI1 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI2 = GenerateCode128(i);
+                                barcodeImei.IMEI2 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI1 = defaultImageBytes;
+                        barcodeImei.IMEI1 = null;
+                        barcodeImei.BarCodeIMEI2 = defaultImageBytes;
+                        barcodeImei.IMEI2 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI2))
+                    {
+                        string[] imei = item.IMEI2.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI3 == null)
+                            {
+                                barcodeImei.BarCodeIMEI3 = GenerateCode128(i);
+                                barcodeImei.IMEI3 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI4 = GenerateCode128(i);
+                                barcodeImei.IMEI4 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI3 = defaultImageBytes;
+                        barcodeImei.IMEI3 = null;
+                        barcodeImei.BarCodeIMEI4 = defaultImageBytes;
+                        barcodeImei.IMEI4 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI3))
+                    {
+                        string[] imei = item.IMEI3.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI5 == null)
+                            {
+                                barcodeImei.BarCodeIMEI5 = GenerateCode128(i);
+                                barcodeImei.IMEI5 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI6 = GenerateCode128(i);
+                                barcodeImei.IMEI6 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI5 = defaultImageBytes;
+                        barcodeImei.IMEI5 = null;
+                        barcodeImei.BarCodeIMEI6 = defaultImageBytes;
+                        barcodeImei.IMEI6 = null;
+                    }
+                    if (!string.IsNullOrEmpty(item.IMEI4))
+                    {
+                        string[] imei = item.IMEI4.Split(',');
+                        foreach (var i in imei)
+                        {
+                            if (barcodeImei.BarCodeIMEI7 == null)
+                            {
+                                barcodeImei.BarCodeIMEI7 = GenerateCode128(i);
+                                barcodeImei.IMEI7 = i;
+                            }
+                            else
+                            {
+                                barcodeImei.BarCodeIMEI8 = GenerateCode128(i);
+                                barcodeImei.IMEI8 = i;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        barcodeImei.BarCodeIMEI7 = defaultImageBytes;
+                        barcodeImei.IMEI7 = null;
+                        barcodeImei.BarCodeIMEI8 = defaultImageBytes;
+                        barcodeImei.IMEI8 = null;
+                    }
+                }
+                LocalReport localReport = new LocalReport();
+                string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptBarcodeForCartonSticker50PCs.rdlc");
+                if (System.IO.File.Exists(reportPath))
+                {
+                    localReport.ReportPath = reportPath;
+                    ReportDataSource dataSource = new ReportDataSource("dsCartonSticker", barcodeImeiList);
+                    ReportDataSource dataSource2 = new ReportDataSource("dsCartonInfo", infoDTOs);
+                    localReport.DataSources.Clear();
+                    localReport.DataSources.Add(dataSource);
+                    localReport.DataSources.Add(dataSource2);
+                    localReport.Refresh();
+                    localReport.DisplayName = "ALL IMEI";
+                }
+
+                string reportType = "PDF";
+                string mimeType;
+                string encoding;
+                string fileNameExtention = ".pdf";
+                string deviceInfo =
+                    "<DeviceInfo>" +
+                    "<OutputFormat>PDF</OutputFormat>" +
+                    "<PageWidth>4in</PageWidth>" +
+                    "<PageHeight>5.97in</PageHeight>" +
+                    "<MarginTop>0.05in</MarginTop>" +
+                    "<MarginLeft>0.05in</MarginLeft>" +
+                    "<MarginRight>0.05in</MarginRight>" +
+                    "<MarginBottom>0.05in</MarginBottom>" +
+                    "</DeviceInfo>";
+                Warning[] warnings;
+                string[] streams;
+
+                var renderedBytes = localReport.Render(
+                    reportType,
+                    deviceInfo,
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtention,
+                    out streams,
+                    out warnings
+                    );
+
+                var base64 = Convert.ToBase64String(renderedBytes);
+                var file = String.Format("{0}", base64);
+                return Json(new { File = file});
+            }
+            #endregion
+
+            else
+            {
+                return null;
+            }
         }
 
         #endregion
@@ -5456,7 +6435,7 @@ namespace ERPWeb.Controllers
         #region Reports UI
         public ActionResult GetDailyProductionSummery()
         {
-            ViewBag.ddlModel = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(s=> new SelectListItem { Text = s.DescriptionName, Value = s.DescriptionId.ToString()});
+            ViewBag.ddlModel = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(s => new SelectListItem { Text = s.DescriptionName, Value = s.DescriptionId.ToString() });
             ViewBag.ddlAssembly = _assemblyLineBusiness.GetAssemblyLines(User.OrgId).Select(s => new SelectListItem { Text = s.AssemblyLineName, Value = s.AssemblyLineId.ToString() });
             return View();
         }
@@ -5507,7 +6486,7 @@ namespace ERPWeb.Controllers
                 );
             return File(renderedBytes, mimeType);
         }
-        public ActionResult QRCodeProblemList(string flag,long? qcLine,long? modelId,long? qcId, string qrCode = "", string prbName = "")
+        public ActionResult QRCodeProblemList(string flag, long? qcLine, long? modelId, long? qcId, string qrCode = "", string prbName = "")
         {
             if (string.IsNullOrEmpty(flag))
             {
@@ -5539,7 +6518,7 @@ namespace ERPWeb.Controllers
             {
                 var dto = _halfDoneStockTransferToWarehouseInfoBusiness.GetAllTransferList(User.OrgId).Select(t => new HalfDoneStockTransferToWarehouseInfoDTO
                 {
-                    TransferCode=t.TransferCode,
+                    TransferCode = t.TransferCode,
                     //MSTWInfoId=t.MSTWInfoId,
                     //TransferStatus=t.TransferStatus,
                     //ReturnStatus=t.ReturnStatus
@@ -5594,7 +6573,7 @@ namespace ERPWeb.Controllers
             var dto = _miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness.GetMiniStockRequisitionDetailByQuery(reqInfoId, null, null, null, null, null, User.OrgId);
             List<MiniStockRequisitionToSemiFinishGoodsWarehouseDetailViewModel> viewModels = new List<MiniStockRequisitionToSemiFinishGoodsWarehouseDetailViewModel>();
             AutoMapper.Mapper.Map(dto, viewModels);
-            return PartialView("_MiniStockRequisitionToSemiFinishGoodsWarehouseDetails",viewModels);
+            return PartialView("_MiniStockRequisitionToSemiFinishGoodsWarehouseDetails", viewModels);
         }
 
         public ActionResult UpdateMiniWarehouseRequisitionStatus(long reqInfoId)
@@ -5631,7 +6610,7 @@ namespace ERPWeb.Controllers
         {
             ViewBag.TransferInfo = _halfDoneStockTransferToWarehouseInfoBusiness.GetTransferInfoById(transferInfoId, User.OrgId);
 
-            var dto = _halfDoneStockTransferToWarehouseDetailsBusiness.GetHalfDoneTransferDetailByQuery(transferInfoId, null, null, null, null, null,null,null,null, User.OrgId);
+            var dto = _halfDoneStockTransferToWarehouseDetailsBusiness.GetHalfDoneTransferDetailByQuery(transferInfoId, null, null, null, null, null, null, null, null, User.OrgId);
             List<HalfDoneStockTransferToWarehouseDetailViewModel> viewModels = new List<HalfDoneStockTransferToWarehouseDetailViewModel>();
             AutoMapper.Mapper.Map(dto, viewModels);
             return PartialView("_HalfDoneTransferToWarehouseDetails", viewModels);
@@ -5697,13 +6676,31 @@ namespace ERPWeb.Controllers
         }
         #endregion
 
+        #region Stock Return Item Details
         public ActionResult GetStockReturnItemsDetail(long returnId)
         {
-            var dto =_stockItemReturnDetailBusiness.GetStockItemReturnDetails(returnId, User.OrgId);
-            List <StockItemReturnDetailViewModel> viewModel = new List<StockItemReturnDetailViewModel>();
+            var dto = _stockItemReturnDetailBusiness.GetStockItemReturnDetails(returnId, User.OrgId);
+            List<StockItemReturnDetailViewModel> viewModel = new List<StockItemReturnDetailViewModel>();
             AutoMapper.Mapper.Map(dto, viewModel);
             return PartialView(viewModel);
         }
+        #endregion
+
+        #region Barcode
+
+        [HttpPost]
+        private byte[] GenerateCode128(string barcode)
+        {
+            Zen.Barcode.BarcodeDraw barcode1 = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
+            var ms = new MemoryStream();
+            byte[] imei;
+            Image image = barcode1.Draw(barcode, 12);
+            image.Save(ms, ImageFormat.Png);
+            imei = ms.ToArray();
+            return imei;
+        }
+
+        #endregion
 
         public ActionResult GetStickerOneData()
         {

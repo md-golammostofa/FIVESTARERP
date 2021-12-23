@@ -529,8 +529,10 @@
     <Compile Include="Production\DTOModel\AssemblyLineDTO.cs" />
     <Compile Include="Production\DTOModel\AssemblyLineStockDetailDTO.cs" />
     <Compile Include="Production\DTOModel\BatteryWriteByIMEILogDTO.cs" />
+    <Compile Include="Production\DTOModel\CartonStickerPrintForBarcodeGeneretor.cs" />
     <Compile Include="Production\DTOModel\DashboardAssemblyLineWiseDataDTO.cs" />
     <Compile Include="Production\DTOModel\DashBoardAssemblyProgressDTO.cs" />
+    <Compile Include="Production\DTOModel\DynamicIMEIDataForCartonStickerDTO.cs" />
     <Compile Include="Production\DTOModel\FaultyCaseDTO.cs" />
     <Compile Include="Inventory\DTOModel\ItemPreparationDetailWithInfoDTO.cs" />
     <Compile Include="Production\DTOModel\BatteryWriteDTO.cs" />

@@ -16,6 +16,7 @@ using ERPBO.Production.DTOModel;
 using ERPBO.Production.ViewModels;
 using ERPBLL.SalesAndDistribution.Interface;
 using System;
+using ERPBO.Inventory.DomainModels;
 
 namespace ERPWeb.Controllers
 {
@@ -43,6 +44,7 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region Production
+        private readonly IPackagingItemStockInfoBusiness _packagingItemStockInfoBusiness;
         private readonly IPackagingRepairRawStockInfoBusiness _packagingRepairRawStockInfoBusiness;
         private readonly IPackagingRepairItemStockInfoBusiness _packagingRepairItemStockInfoBusiness;
         private readonly IRequsitionInfoBusiness _requsitionInfoBusiness;
@@ -93,7 +95,7 @@ namespace ERPWeb.Controllers
         private readonly IDealerBusiness _dealerBusiness;
         #endregion
 
-        public CommonController(IWarehouseBusiness warehouseBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IItemBusiness itemBusiness, IRequsitionInfoBusiness requsitionInfoBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IProductionLineBusiness productionLineBusiness, IProductionStockInfoBusiness productionStockInfoBusiness, IAppUserBusiness appUserBusiness, IWarehouseStockInfoBusiness warehouseStockInfoBusiness, IRoleBusiness roleBusiness, IBranchBusiness branchBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IOrganizationBusiness organizationBusiness, IUserAuthorizationBusiness userAuthorizationBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, IAssemblyLineBusiness assemblyLineBusiness, IQualityControlBusiness qualityControlBusiness, ISupplierBusiness supplierBusiness, IAssemblyLineStockInfoBusiness assemblyLineStockInfoBusiness, IRepairLineBusiness repairLineBusiness, IPackagingLineBusiness packagingLineBusiness, IQCLineStockInfoBusiness qCLineStockInfoBusiness, IPackagingLineStockInfoBusiness packagingLineStockInfoBusiness, IRepairLineStockInfoBusiness repairLineStockInfoBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IFaultyItemStockInfoBusiness faultyItemStockInfoBusiness, IRepairItemStockInfoBusiness repairItemStockInfoBusiness, IQCItemStockInfoBusiness qCItemStockInfoBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness, IFaultyCaseBusiness faultyCaseBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IQRCodeTransferToRepairInfoBusiness qRCodeTransferToRepairInfoBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IIQCBusiness iQCBusiness, IIQCItemReqDetailList iQCItemReqDetailList, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, IPackagingFaultyStockInfoBusiness packagingFaultyStockInfoBusiness,IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness, IDescriptionBusiness descriptionBusiness, IModuleBusiness moduleBusiness, IManiMenuBusiness maniMenuBusiness, ISubMenuBusiness subMenuBusiness, ERPBLL.Inventory.Interface.IColorBusiness colorBusiness, IDistrictBusiness districtBusiness, IZoneBusiness zoneBusiness, ISalesRepresentativeBusiness salesRepresentativeBusiness, ERPBLL.Inventory.Interface.IBrandCategoriesBusiness brandCategoriesBusiness, ERPBLL.Inventory.Interface.IModelColorBusiness modelColorBusiness, IDealerBusiness dealerBusiness, ERPBLL.Inventory.Interface.ICategoryBusiness categoryBusiness, ERPBLL.Inventory.Interface.IBrandBusiness brandBusiness, IRepairSectionSemiFinishStockInfoBusiness repairSectionSemiFinishStockInfoBusiness, ISubQCBusiness subQCBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness, ISemiFinishGoodsWarehouseStockInfoBusiness semiFinishGoodsWarehouseStockInfoBusiness, IPackagingRepairItemStockInfoBusiness packagingRepairItemStockInfoBusiness, IPackagingRepairRawStockInfoBusiness packagingRepairRawStockInfoBusiness)
+        public CommonController(IWarehouseBusiness warehouseBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IItemBusiness itemBusiness, IRequsitionInfoBusiness requsitionInfoBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IProductionLineBusiness productionLineBusiness, IProductionStockInfoBusiness productionStockInfoBusiness, IAppUserBusiness appUserBusiness, IWarehouseStockInfoBusiness warehouseStockInfoBusiness, IRoleBusiness roleBusiness, IBranchBusiness branchBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IOrganizationBusiness organizationBusiness, IUserAuthorizationBusiness userAuthorizationBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, IAssemblyLineBusiness assemblyLineBusiness, IQualityControlBusiness qualityControlBusiness, ISupplierBusiness supplierBusiness, IAssemblyLineStockInfoBusiness assemblyLineStockInfoBusiness, IRepairLineBusiness repairLineBusiness, IPackagingLineBusiness packagingLineBusiness, IQCLineStockInfoBusiness qCLineStockInfoBusiness, IPackagingLineStockInfoBusiness packagingLineStockInfoBusiness, IRepairLineStockInfoBusiness repairLineStockInfoBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IFaultyItemStockInfoBusiness faultyItemStockInfoBusiness, IRepairItemStockInfoBusiness repairItemStockInfoBusiness, IQCItemStockInfoBusiness qCItemStockInfoBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness, IFaultyCaseBusiness faultyCaseBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IQRCodeTransferToRepairInfoBusiness qRCodeTransferToRepairInfoBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IIQCBusiness iQCBusiness, IIQCItemReqDetailList iQCItemReqDetailList, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, IPackagingFaultyStockInfoBusiness packagingFaultyStockInfoBusiness,IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness, IDescriptionBusiness descriptionBusiness, IModuleBusiness moduleBusiness, IManiMenuBusiness maniMenuBusiness, ISubMenuBusiness subMenuBusiness, ERPBLL.Inventory.Interface.IColorBusiness colorBusiness, IDistrictBusiness districtBusiness, IZoneBusiness zoneBusiness, ISalesRepresentativeBusiness salesRepresentativeBusiness, ERPBLL.Inventory.Interface.IBrandCategoriesBusiness brandCategoriesBusiness, ERPBLL.Inventory.Interface.IModelColorBusiness modelColorBusiness, IDealerBusiness dealerBusiness, ERPBLL.Inventory.Interface.ICategoryBusiness categoryBusiness, ERPBLL.Inventory.Interface.IBrandBusiness brandBusiness, IRepairSectionSemiFinishStockInfoBusiness repairSectionSemiFinishStockInfoBusiness, ISubQCBusiness subQCBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness, ISemiFinishGoodsWarehouseStockInfoBusiness semiFinishGoodsWarehouseStockInfoBusiness, IPackagingRepairItemStockInfoBusiness packagingRepairItemStockInfoBusiness, IPackagingRepairRawStockInfoBusiness packagingRepairRawStockInfoBusiness, IPackagingItemStockInfoBusiness packagingItemStockInfoBusiness)
         {
             #region Inventory Module
             this._semiFinishGoodsWarehouseStockInfoBusiness = semiFinishGoodsWarehouseStockInfoBusiness;
@@ -116,6 +118,7 @@ namespace ERPWeb.Controllers
             #endregion
 
             #region Production Module
+            this._packagingItemStockInfoBusiness = packagingItemStockInfoBusiness;
             this._packagingRepairRawStockInfoBusiness = packagingRepairRawStockInfoBusiness;
             this._packagingRepairItemStockInfoBusiness = packagingRepairItemStockInfoBusiness;
             this._miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness = miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness;
@@ -378,13 +381,13 @@ namespace ERPWeb.Controllers
         [HttpPost]
         public ActionResult GetCategories()
         {
-            var data = _categoryBusiness.GetCategories(User.OrgId).Select(s => new Dropdown { value = s.CategoryId.ToString(), text = s.CategoryName }).ToList();
+            var data = _categoryBusiness.GetCategories(User.OrgId).Where(s => s.IsActive).Select(s => new Dropdown { value = s.CategoryId.ToString(), text = s.CategoryName }).ToList();
             return Json(data);
         }
         [HttpPost]
         public ActionResult GetBrands()
         {
-            var data = _brandBusiness.GetBrands(User.OrgId).Select(s => new Dropdown { value = s.BrandId.ToString(), text = s.BrandName }).ToList();
+            var data = _brandBusiness.GetBrands(User.OrgId).Where(s => s.IsActive).Select(s => new Dropdown { value = s.BrandId.ToString(), text = s.BrandName }).ToList();
             return Json(data);
         }
         [HttpPost]
@@ -402,7 +405,7 @@ namespace ERPWeb.Controllers
         [HttpPost]
         public ActionResult GetColors()
         {
-            var data = _colorBusiness.GetAllColorByOrgId(User.OrgId).Select(s => new Dropdown { value = s.ColorId.ToString(), text = s.ColorName }).ToList();
+            var data = _colorBusiness.GetAllColorByOrgId(User.OrgId).Where(s=> s.IsActive).Select(s => new Dropdown { value = s.ColorId.ToString(), text = s.ColorName }).ToList();
             return Json(data);
         }
 
@@ -787,6 +790,99 @@ namespace ERPWeb.Controllers
         #endregion
 
         [HttpPost]
+        public async Task<ActionResult> IStockAvailableForCartonSticker(long itemId, long lineId, long packagingId, long modelId, int qty)
+        {
+            var finishGoodStock = await _finishGoodsStockInfoBusiness.GetAllFinishGoodsStockInfoByLineAndModelIdAsync(User.OrgId, itemId, lineId, packagingId, modelId);
+            var packagingItemStock = _packagingItemStockInfoBusiness.GetPackagingItemStockInfoByPackagingId(packagingId, modelId, itemId, User.OrgId);
+            if (finishGoodStock != null && packagingItemStock != null)
+            {
+                if (finishGoodStock.StockInQty - finishGoodStock.StockOutQty < qty || packagingItemStock.Quantity - packagingItemStock.TransferQty < qty)
+                {
+                    return Json(false);
+                }
+            }
+            else
+            {
+                return Json(false);
+            }
+            return Json(true);
+        }
+
+        [HttpPost]
+        public ActionResult IsExistsIMEIWeightChecked(string imei)
+        {
+            var IsExists = _tempQRCodeTraceBusiness.IsExistIMEIWithStatus(imei, QRCodeStatus.Weight, User.OrgId);
+            return Json(IsExists);
+        }
+        [HttpPost]
+        public async Task<ActionResult> IsStockAvailableInAssemblyForRepairReceive(long transferId)
+        {
+            var qrCodesInDb = _qRCodeTransferToRepairInfoBusiness.GetQRCodeTransferToRepairInfoByTransferId(transferId, User.OrgId);
+            if (qrCodesInDb != null)
+            {
+                foreach (var item in qrCodesInDb)
+                {
+                    var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Production, item.DescriptionId, item.ItemId.Value, User.OrgId);
+
+                    var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, User.OrgId);
+
+                    foreach (var itemP in itemPreparationDetail)
+                    {
+                        var assemblyLineStock = await _assemblyLineStockInfoBusiness.GetAssemblyLineStockInfoByAssemblyAndItemAndModelIdAsync(item.AssemblyLineId, itemP.ItemId, item.DescriptionId, User.OrgId);
+                        if (assemblyLineStock != null)
+                        {
+                            if ((assemblyLineStock.StockInQty - assemblyLineStock.StockOutQty) < itemP.Quantity)
+                            {
+                                return Json(false);
+                            }
+                        }
+                    }
+
+                    //var lineStock = await _assemblyLineStockInfoBusiness.GetAssemblyLineStockInfoByAssemblyAndItemAndModelIdAsync(item.AssemblyLineId, item.ItemId.Value, item.DescriptionId, User.OrgId);
+                    //if (lineStock != null)
+                    //{
+                    //    if ((lineStock.StockInQty - lineStock.StockOutQty) <= 0)
+                    //    {
+                    //        return Json(false);
+                    //    }
+                    //}
+                }
+                return Json(true);
+            }
+            return Json(false);
+        }
+        [HttpPost]
+        public async Task<ActionResult> IsStockAvailableInAssembly(string qrCode)
+        {
+            var qrCodeInfo = await _tempQRCodeTraceBusiness.GetTempQRCodeTraceByCodeAsync(qrCode, User.OrgId);
+            if (qrCodeInfo != null)
+            {
+                var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Production, qrCodeInfo.DescriptionId.Value, qrCodeInfo.ItemId.Value, User.OrgId);
+
+                var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, User.OrgId);
+
+                foreach (var item in itemPreparationDetail)
+                {
+                    var assemblyLineStock = await _assemblyLineStockInfoBusiness.GetAssemblyLineStockInfoByAssemblyAndItemAndModelIdAsync(qrCodeInfo.AssemblyId.Value, item.ItemId, qrCodeInfo.DescriptionId.Value, User.OrgId);
+                    if (assemblyLineStock != null)
+                    {
+                        if ((assemblyLineStock.StockInQty - assemblyLineStock.StockOutQty) < item.Quantity)
+                        {
+                            return Json(false);
+                        }
+                    }
+                }
+                return Json(true);
+
+                //var lineStock = await _assemblyLineStockInfoBusiness.GetAssemblyLineStockInfoByAssemblyAndItemAndModelIdAsync(qrCodeInfo.AssemblyId.Value, qrCodeInfo.ItemId.Value, qrCodeInfo.DescriptionId.Value, User.OrgId);
+                //if (lineStock != null)
+                //{
+                //    return (lineStock.StockInQty - lineStock.StockOutQty) > 0 ? Json(true) : Json(false);
+                //}
+            }
+            return Json(false);
+        }
+        [HttpPost]
         public ActionResult IsExistsIMEIInTStock(string imei)
         {
             var data = _tempQRCodeTraceBusiness.GetIMEIFromTStock(imei);
@@ -1079,6 +1175,12 @@ namespace ERPWeb.Controllers
 
         #region Inventory Module
 
+        [HttpPost]
+        public ActionResult GetModelIdByItemId(long itemId)
+        {
+            var data = _itemBusiness.GetItemById(itemId, User.OrgId);
+            return Json(data);
+        }
         [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult GetUnitByItemId(long itemId)
         {
@@ -1409,6 +1511,30 @@ namespace ERPWeb.Controllers
                 }
             }
             return Json(false);
+        }
+        [HttpPost]
+        public async Task<ActionResult> IsPackagingLineStockAvailableForItemPreparetion(string imei)
+        {
+            var imeiInfo = _tempQRCodeTraceBusiness.GetTempQRCodeTraceByIMEI(imei, User.OrgId);
+            if (imeiInfo != null)
+            {
+                var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Packaging, imeiInfo.DescriptionId.Value, imeiInfo.ItemId.Value, User.OrgId);
+
+                var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, User.OrgId);
+
+                foreach (var item in itemPreparationDetail)
+                {
+                    var packagingLineStock = _packagingLineStockInfoBusiness.GetPackagingLineStockInfoByPackagingAndItemAndModelId(imeiInfo.PackagingLineId.Value, item.ItemId, imeiInfo.DescriptionId.Value, User.OrgId);
+                    if (packagingLineStock != null)
+                    {
+                        if ((packagingLineStock.StockInQty - packagingLineStock.StockOutQty) < item.Quantity)
+                        {
+                            return Json(false);
+                        }
+                    }
+                }
+            }
+            return Json(true);
         }
         #endregion
 

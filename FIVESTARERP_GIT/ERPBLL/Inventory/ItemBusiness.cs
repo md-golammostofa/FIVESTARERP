@@ -87,6 +87,7 @@ Order By w.WarehouseName,it.ItemName,i.ItemName", model,orgId)).ToList();
                 IsActive = it.IsActive,
                 Remarks = it.Remarks,
                 ColorId = it.ColorId,
+                DescriptionId = it.DescriptionId,
             }).FirstOrDefault();
         }
 

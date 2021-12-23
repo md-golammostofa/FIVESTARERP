@@ -79,7 +79,8 @@ Left Join [Production].dbo.tblPackagingLine pac on pis.PackagingLineId = pac.Pac
 Left Join [Inventory].dbo.tblDescriptions de on pis.DescriptionId = de.DescriptionId
 Left Join [Inventory].dbo.tblWarehouses w on pis.WarehouseId = w.Id
 Left Join [Inventory].dbo.tblItemTypes it on pis.ItemTypeId = it.ItemId
-Left Join [Inventory].dbo.tblItems i on pis.ItemId = i.ItemId where 1=1 and pis.OrganizationId={0} {1}", orgId, Utility.ParamChecker(param));
+Left Join [Inventory].dbo.tblItems i on pis.ItemId = i.ItemId 
+where 1=1 and pis.OrganizationId={0} {1}", orgId, Utility.ParamChecker(param));
             return query;
         }
     }

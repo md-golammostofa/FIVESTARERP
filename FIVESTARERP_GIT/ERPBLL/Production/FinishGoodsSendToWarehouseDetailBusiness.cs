@@ -154,6 +154,9 @@ Where 1=1 and fgd.OrganizationId={0} {1}", orgId, Utility.ParamChecker(param));
         {
             return await _finishGoodsSendToWarehouseDetailRepository.GetAllAsync(s => s.PackagingLineId == packagingId && DbFunctions.TruncateTime(s.EntryDate) == DbFunctions.TruncateTime(time) && s.OrganizationId == orgId);
         }
-
+        public async Task<IEnumerable<DynamicIMEIDataForCartonStickerDTO>> GetDynamicTableDataForCartonSticker(long cartonInfo, long orgId)
+        {
+            return await _productionDb.Db.Database.SqlQuery<DynamicIMEIDataForCartonStickerDTO>(string.Format(@"EXEC spCartonSticker {0}, {1}", cartonInfo, orgId)).ToListAsync();
+        }
     }
 }

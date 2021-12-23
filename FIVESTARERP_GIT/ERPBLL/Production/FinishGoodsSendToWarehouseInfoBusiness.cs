@@ -179,32 +179,37 @@ namespace ERPBLL.Production
             }
             return IsSuccess;
         }
-
-        public async Task<bool> SaveFinishGoodsCartonAsync(FinishGoodsSendToWarehouseInfoDTO dto, long userId, long orgId)
+        public string GetGeneratedCartoonNumber(long orgId)
         {
-            var qrCodesFromUI = dto.FinishGoodsSendToWarehouseDetails.Select(s => s.QRCode).Distinct().ToList();
-            var qrCodeInDb = await _tempQRCodeTraceBusiness.GetTempQRCodeTracesByQRCodesAsync(qrCodesFromUI, orgId);
-            qrCodeInDb = qrCodeInDb.Where(s => s.StateStatus == QRCodeStatus.Weight).ToList();
-            if (qrCodeInDb.Count() > 0)
+            return _productionDb.Db.Database.SqlQuery<string>(string.Format(@"EXEC spCartonNoAutoGenerate {0}", orgId)).SingleOrDefault();
+        }
+        public async Task<long> SaveFinishGoodsCartonAsync(FinishGoodsSendToWarehouseInfoDTO dto, long userId, long orgId)
+        {
+            var imeiFromUI = dto.FinishGoodsSendToWarehouseDetails.Select(s => s.AllIMEI).Distinct().ToList();
+            var imeiInDb = await _tempQRCodeTraceBusiness.GetTempQRCodeTracesByIMEIAsync(imeiFromUI, orgId);
+            imeiInDb = imeiInDb.Where(s => s.StateStatus == QRCodeStatus.Weight).ToList();
+            var getItemInfo = _itemBusiness.GetItemById(dto.ItemId, orgId);
+            if (imeiInDb.Count() > 0)
             {
                 // Finish Goods Send Info //
                 FinishGoodsSendToWarehouseInfo info = new FinishGoodsSendToWarehouseInfo()
                 {
-                    DescriptionId = dto.DescriptionId,
+                    DescriptionId = getItemInfo.DescriptionId.Value,
+                    ColorId = getItemInfo.ColorId.Value,
                     WarehouseId = dto.WarehouseId,
-                    PackagingLineId = qrCodeInDb.FirstOrDefault().PackagingLineId.Value,
-                    LineId = qrCodeInDb.FirstOrDefault().ProductionFloorId.Value,
-                    TotalQty = qrCodeInDb.Count(),
-                    CartoonNo = dto.CartoonNo,
+                    PackagingLineId = imeiInDb.FirstOrDefault().PackagingLineId.Value,
+                    LineId = imeiInDb.FirstOrDefault().ProductionFloorId.Value,
+                    TotalQty = imeiInDb.Count(),
+                    CartoonNo = GetGeneratedCartoonNumber(orgId),
                     StateStatus = FinishGoodsSendStatus.Send,
                     Width = dto.Width,
                     Height = dto.Height,
                     EntryDate = DateTime.Now,
                     EUserId = userId,
+                    GrossWeight = dto.GrossWeight,
                     NetWeight = dto.NetWeight,
                     OrganizationId = orgId,
                     RefferenceNumber = "FGT-" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"),
-
                 };
 
                 // Finish Goods Send Detail //
@@ -217,7 +222,7 @@ namespace ERPBLL.Production
                 List<PackagingItemStockDetailDTO> packagingItemStocks = new List<PackagingItemStockDetailDTO>();
 
                 var allItemInDb = _itemBusiness.GetAllItemByOrgId(orgId).ToList();
-                foreach (var item in qrCodeInDb)
+                foreach (var item in imeiInDb)
                 {
                     FinishGoodsStockDetailDTO finishGoodsStock = new FinishGoodsStockDetailDTO()
                     {
@@ -260,7 +265,7 @@ namespace ERPBLL.Production
 
                     PackagingItemStockDetailDTO packagingItemStock = new PackagingItemStockDetailDTO()
                     {
-                        ProductionFloorId = item.PackagingLineId,
+                        ProductionFloorId = item.ProductionFloorId,
                         PackagingLineId = item.PackagingLineId,
                         WarehouseId = item.WarehouseId,
                         ItemTypeId = item.ItemTypeId,
@@ -278,13 +283,15 @@ namespace ERPBLL.Production
                     packagingItemStocks.Add(packagingItemStock);
 
                     item.StateStatus = QRCodeStatus.Carton;
-                    item.CartonNo = dto.CartoonNo;
+                    item.CartonNo = info.CartoonNo;
+                    item.UpdateDate = DateTime.Now;
+                    item.UpUserId = userId;
                 }
 
                 info.FinishGoodsSendToWarehouseDetails = details;
 
                 // Temp QRCode Status Update //
-                if (await _tempQRCodeTraceBusiness.UpdateQRCodeBatchAsync(qrCodeInDb.ToList(), orgId))
+                if (await _tempQRCodeTraceBusiness.UpdateQRCodeBatchAsync(imeiInDb.ToList(), orgId))
                 {
                     // Stock Out
                     if (await _finishGoodsStockDetailBusiness.SaveFinishGoodsStockOutAsync(finishGoodsStocks, userId, orgId))
@@ -294,12 +301,15 @@ namespace ERPBLL.Production
                         {
                             // Transfer 
                             _finishGoodsSendToWarehouseInfoRepository.Insert(info);
-                            return await _finishGoodsSendToWarehouseInfoRepository.SaveAsync();
+                            if(await _finishGoodsSendToWarehouseInfoRepository.SaveAsync())
+                            {
+                                return info.SendId;
+                            }
                         }
                     }
                 }
             }
-            return false;
+            return 0;
         }
 
         public IEnumerable<FinishGoodsSendToWarehouseInfoDTO> GetFinishGoodsSendToWarehouseInfosByQuery(long? floorId, long? packagingLineId, long? warehouseId, long? modelId, string status, string transferCode, string fromDate, string toDate, long? transferId, long orgId)

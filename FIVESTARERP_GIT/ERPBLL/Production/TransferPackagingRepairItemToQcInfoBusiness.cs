@@ -7,6 +7,7 @@ using ERPBO.Production.DTOModel;
 using ERPDAL.ProductionDAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,7 @@ namespace ERPBLL.Production
         private readonly TransferPackagingRepairItemToQcInfoRepository _transferPackagingRepairItemToQcInfoRepository;
         private readonly TransferPackagingRepairItemToQcDetailRepository _transferPackagingRepairItemToQcDetailRepository;
         private readonly IMEITransferToRepairInfoRepository _iMEITransferToRepairInfoRepository;
+        private readonly TempQRCodeTraceRepository _tempQRCodeTraceRepository;
 
         public TransferPackagingRepairItemToQcInfoBusiness(IProductionUnitOfWork productionDb, IItemBusiness itemBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, IPackagingRepairItemStockDetailBusiness packagingRepairItemStockDetailBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness, ITransferPackagingRepairItemToQcDetailBusiness transferPackagingRepairItemToQcDetailBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness)
         {
@@ -51,11 +53,17 @@ namespace ERPBLL.Production
             this._transferPackagingRepairItemToQcInfoRepository = new TransferPackagingRepairItemToQcInfoRepository(this._productionDb);
             this._transferPackagingRepairItemToQcDetailRepository = new TransferPackagingRepairItemToQcDetailRepository(this._productionDb);
             this._iMEITransferToRepairInfoRepository = new IMEITransferToRepairInfoRepository(this._productionDb);
+            this._tempQRCodeTraceRepository = new TempQRCodeTraceRepository(this._productionDb);
         }
 
         public async Task<TransferPackagingRepairItemToQcInfo> GetTransferPackagingRepairItemToQcInfoByIdAsync(long floorId, long packagingLineId, long modelId, long itemId, string status, long orgId)
         {
             return await this._transferPackagingRepairItemToQcInfoRepository.GetOneByOrgAsync(s => s.FloorId == floorId && s.PackagingLineId == packagingLineId && s.DescriptionId == modelId && s.ItemId == itemId && s.StateStatus == status && s.OrganizationId == orgId);
+        }
+
+        public async Task<TransferPackagingRepairItemToQcInfo> GetTransferPackagingRepairItemToQcInfoByTodayAsync(long floorId, long packagingLineId, long modelId, long itemId, string status, DateTime date, long orgId)
+        {
+            return await this._transferPackagingRepairItemToQcInfoRepository.GetOneByOrgAsync(s => s.FloorId == floorId && s.PackagingLineId == packagingLineId && s.DescriptionId == modelId && s.ItemId == itemId && s.StateStatus == status && s.OrganizationId == orgId && DbFunctions.TruncateTime(s.EntryDate) == DbFunctions.TruncateTime(date));
         }
 
         public async Task<TransferPackagingRepairItemToQcInfo> GetTransferPackagingRepairItemToQcInfoByIdAsync(long transferId, long orgId)
@@ -79,34 +87,34 @@ namespace ERPBLL.Production
                 var transferDetail = await _transferPackagingRepairItemToQcDetailBusiness.GetPackagingRepairItemToQcDetailsByTransferIdAsync(transferInDb.TPRQInfoId, orgId);
 
                 // Item Preparation Info //
-                var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Packaging, transferInDb.DescriptionId, transferInDb.ItemId, orgId);
+                //var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Packaging, transferInDb.DescriptionId, transferInDb.ItemId, orgId);
 
                 // Item Preparation Detail //
-                var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
+                //var itemPreparationDetail = (List<ItemPreparationDetail>)await _itemPreparationDetailBusiness.GetItemPreparationDetailsByInfoIdAsync(itemPreparationInfo.PreparationInfoId, orgId);
 
                 // Packaging Line Stock //
-                List<PackagingLineStockDetailDTO> packagingRawStocks = new List<PackagingLineStockDetailDTO>();
-                foreach (var item in itemPreparationDetail)
-                {
-                    PackagingLineStockDetailDTO packagingRawStock = new PackagingLineStockDetailDTO()
-                    {
-                        ProductionLineId = transferInDb.FloorId,
-                        PackagingLineId = transferInDb.PackagingLineId,
-                        WarehouseId = item.WarehouseId,
-                        ItemTypeId = item.ItemTypeId,
-                        ItemId = item.ItemId,
-                        Quantity  = item.Quantity,
-                        DescriptionId = transferInDb.DescriptionId,
-                        UnitId = item.UnitId,
-                        OrganizationId = orgId,
-                        EntryDate = DateTime.Now,
-                        EUserId = userId,
-                        StockStatus = StockStatus.StockIn,
-                        RefferenceNumber = transferInDb.TransferCode,
-                        Remarks = "Stock In By Packaging Repair Transfer"
-                    };
-                    packagingRawStocks.Add(packagingRawStock);
-                }
+                //List<PackagingLineStockDetailDTO> packagingRawStocks = new List<PackagingLineStockDetailDTO>();
+                //foreach (var item in itemPreparationDetail)
+                //{
+                //    PackagingLineStockDetailDTO packagingRawStock = new PackagingLineStockDetailDTO()
+                //    {
+                //        ProductionLineId = transferInDb.FloorId,
+                //        PackagingLineId = transferInDb.PackagingLineId,
+                //        WarehouseId = item.WarehouseId,
+                //        ItemTypeId = item.ItemTypeId,
+                //        ItemId = item.ItemId,
+                //        Quantity  = item.Quantity,
+                //        DescriptionId = transferInDb.DescriptionId,
+                //        UnitId = item.UnitId,
+                //        OrganizationId = orgId,
+                //        EntryDate = DateTime.Now,
+                //        EUserId = userId,
+                //        StockStatus = StockStatus.StockIn,
+                //        RefferenceNumber = transferInDb.TransferCode,
+                //        Remarks = "Stock In By Packaging Repair Transfer"
+                //    };
+                //    packagingRawStocks.Add(packagingRawStock);
+                //}
 
                 // Packaging Item Stock //
                 List<PackagingItemStockDetailDTO> packagingItemStocks = new List<PackagingItemStockDetailDTO>() {
@@ -141,16 +149,15 @@ namespace ERPBLL.Production
                 _transferPackagingRepairItemToQcInfoRepository.Update(transferInDb);
                 if (await _transferPackagingRepairItemToQcInfoRepository.SaveAsync())
                 {
-                    if (await _packagingLineStockDetailBusiness.SavePackagingLineStockInAsync(packagingRawStocks, userId, orgId))
-                    {
+                    //if (await _packagingLineStockDetailBusiness.SavePackagingLineStockInAsync(packagingRawStocks, userId, orgId))
+                    //{
                         if (await _packagingItemStockDetailBusiness.SavePackagingItemStockInAsync(packagingItemStocks, userId, orgId))
                         {
                             return await _tempQRCodeTraceBusiness.UpdateQRCodeBatchAsync(getQRCodeForUpdate.ToList(), orgId);
                         }
-                    }
+                    //}
                 }
             }
-
             return false;
         }
 
@@ -164,7 +171,7 @@ namespace ERPBLL.Production
             if(imeiInfoDto != null)
             {
                 // Preivous Transfer Information
-                var transferInfo = await GetTransferPackagingRepairItemToQcInfoByIdAsync(dto.FloorId, dto.PackagingLineId, dto.ModelId, dto.ItemId, RequisitionStatus.Approved, orgId);
+                var transferInfo = await GetTransferPackagingRepairItemToQcInfoByTodayAsync(dto.FloorId, dto.PackagingLineId, dto.ModelId, dto.ItemId, RequisitionStatus.Accepted, DateTime.Today, orgId);
 
                 // Item Preparation Info //
                 //var itemPreparationInfo = await _itemPreparationInfoBusiness.GetPreparationInfoByModelAndItemAndTypeAsync(ItemPreparationType.Packaging, dto.ModelId, dto.ItemId, orgId);
@@ -208,7 +215,7 @@ namespace ERPBLL.Production
                         FloorId = imeiInfoDto.ProductionFloorId,
                         PackagingLineId = imeiInfoDto.PackagingLineId,
                         Quantity = 1,
-                        StateStatus = RequisitionStatus.Approved,
+                        StateStatus = RequisitionStatus.Accepted,
                         DescriptionId = dto.ModelId,
                         ItemId = dto.ItemId,
                         ItemTypeId = imeiInfoDto.ItemTypeId.Value,
@@ -220,7 +227,6 @@ namespace ERPBLL.Production
                     };
                     transferInfo.TransferPackagingRepairItemToQcDetails = transferPackagingRepairItemDetails;
                 }
-
                 // Packaging Repair Item Stock //
                 List<PackagingRepairItemStockDetailDTO> itemStocks = new List<PackagingRepairItemStockDetailDTO>() {
                     new PackagingRepairItemStockDetailDTO()
@@ -286,6 +292,12 @@ namespace ERPBLL.Production
                 //    };
                 //    rawStocks.Add(rawStock);
                 //}
+
+                var getQRCodeForUpdate = await _tempQRCodeTraceBusiness.GetTempQRCodeTraceByCodeAsync(imeiInfoDto.QRCode, orgId);
+                getQRCodeForUpdate.StateStatus = QRCodeStatus.Packaging;
+                getQRCodeForUpdate.UpdateDate = DateTime.Now;
+                getQRCodeForUpdate.UpUserId = user;
+                _tempQRCodeTraceRepository.Update(getQRCodeForUpdate);
 
                 var imeiInfoInDb = await _iMEITransferToRepairInfoBusiness.GetIMEITransferToRepairInfosByTransferIdAsync(imeiInfoDto.IMEITRInfoId, orgId);
                 imeiInfoInDb.StateStatus = "Repair-Done";

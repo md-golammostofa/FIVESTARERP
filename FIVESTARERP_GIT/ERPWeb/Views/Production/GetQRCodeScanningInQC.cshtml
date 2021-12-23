@@ -385,6 +385,9 @@
         function validateQRCodeForQCPass() {
             return ajaxBooleanChecker(JSON.stringify({ qrCode: $.trim(txtItemQRCodeForQCPass.val()) }), '/Common/IsExistInAssembly', getToken()) == true;
         }
+        function validateQRCodeStockForQCPass() {
+            return ajaxBooleanChecker(JSON.stringify({ qrCode: $.trim(txtItemQRCodeForQCPass.val()) }), '/Common/IsStockAvailableInAssembly', getToken()) == true;
+        }
         function validationFormForQCPass() {
             var isValid = true;
             $(".error").addClass("hide");
@@ -424,48 +427,55 @@
             qrCodeDataObj = {};
             if ($.trim(txtItemQRCodeForQCPass.val()) !== "") {
                 if (validateQRCodeForQCPass()) {
-                    var data = JSON.stringify({ qrCode: $.trim(txtItemQRCodeForQCPass.val()) });
-                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Common/GetQRCodeTraceByCodeAsync', data, getToken())).then(function (res, status) {
-                        if (status === "success" && res.Item > 0) {
-                            qrCodeDataObj = res;
-                            if (validationFormForQCPass()) {
-                                var info = { FloorId: TryParseInt(ddlProductionFloorForQCPass.val(), 0), QCLineId: TryParseInt(ddlQCLineForQCPass.val(), 0), QRCode: txtItemQRCodeForQCPass.val(), AssemblyLineId: qrCodeDataObj.Assembly, DescriptionId: qrCodeDataObj.Model, ItemId: qrCodeDataObj.Item, ItemTypeId: qrCodeDataObj.ItemType, WarehouseId: qrCodeDataObj.Warehouse };
+                    if (validateQRCodeStockForQCPass()) {
+                        var data = JSON.stringify({ qrCode: $.trim(txtItemQRCodeForQCPass.val()) });
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Common/GetQRCodeTraceByCodeAsync', data, getToken())).then(function (res, status) {
+                            if (status === "success" && res.Item > 0) {
+                                qrCodeDataObj = res;
+                                if (validationFormForQCPass()) {
+                                    var info = { FloorId: TryParseInt(ddlProductionFloorForQCPass.val(), 0), QCLineId: TryParseInt(ddlQCLineForQCPass.val(), 0), QRCode: txtItemQRCodeForQCPass.val(), AssemblyLineId: qrCodeDataObj.Assembly, DescriptionId: qrCodeDataObj.Model, ItemId: qrCodeDataObj.Item, ItemTypeId: qrCodeDataObj.ItemType, WarehouseId: qrCodeDataObj.Warehouse };
 
-                                var data = JSON.stringify({ model: info })
+                                    var data = JSON.stringify({ model: info })
 
-                                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQRCodeWiseQcItemTransfer', data, getToken())).then(function (res, status) {
+                                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQRCodeWiseQcItemTransfer', data, getToken())).then(function (res, status) {
 
-                                    if (res.IsSuccess === true) {
-                                        txtItemQRCodeForQCPass.val('');
-                                        txtItemQRCodeForQCPass.focus();
-                                        toastrSuccessAlert('Successfully Saved');
-                                        LoadQCPassData();
-                                    }
-                                    else {
-                                        bootbox.alert("This QrCode already has been transfered to MiniStock");
-                                    }
-                                }).fail(function (error) {
-                                    console.log(error);
-                                    bootbox.alert("Fail");
-                                })
+                                        if (res.IsSuccess === true) {
+                                            txtItemQRCodeForQCPass.val('');
+                                            txtItemQRCodeForQCPass.focus();
+                                            toastrSuccessAlert('Successfully Saved');
+                                            LoadQCPassData();
+                                        }
+                                        else {
+                                            bootbox.alert("This QrCode already has been transfered to MiniStock");
+                                        }
+                                    }).fail(function (error) {
+                                        console.log(error);
+                                        bootbox.alert("Fail");
+                                    })
+                                }
+                                else {
+                                    txtItemQRCodeForQCPass.val('');
+                                    txtItemQRCodeForQCPass.focus();
+                                }
                             }
                             else {
                                 txtItemQRCodeForQCPass.val('');
                                 txtItemQRCodeForQCPass.focus();
                             }
-                        }
-                        else {
-                            txtItemQRCodeForQCPass.val('');
-                            txtItemQRCodeForQCPass.focus();
-                        }
-                    }).fail(function (error) {
-                        console.log(error);
-                    })
+                        }).fail(function (error) {
+                            console.log(error);
+                        })
+                    }
+                    else {
+                        txtItemQRCodeForQCPass.val('');
+                        txtItemQRCodeForQCPass.focus();
+                        toastrErrorAlert("Stock not Available!");
+                    }
                 }
                 else {
                     txtItemQRCodeForQCPass.val('');
                     txtItemQRCodeForQCPass.focus();
-                    toastrErrorAlert('QRCode may has been transfered')
+                    toastrErrorAlert('QRCode may has been transfered');
                 }
             }
         })
@@ -668,55 +678,63 @@
             }
             return isValid;
         }
-
+        function validateQRCodeStockForQCFail() {
+            return ajaxBooleanChecker(JSON.stringify({ qrCode: $.trim(txtItemQRCode.val()) }), '/Common/IsStockAvailableInAssembly', getToken()) == true;
+        }
         $("#btnSubmit").click(function (e) {
             e.preventDefault();
 
             if (validationForm()) {
-                disable("#btnSubmit");
-                var info = { FloorId: TryParseInt(ddlProductionFloor.val(), 0), QCLineId: TryParseInt(ddlQCLine.val(), 0), SubQCId: TryParseInt(ddlSubQC.val(),0), RepairLineId: TryParseInt(ddlRepairLine.val(), 0), QRCode: txtItemQRCode.val(), AssemblyLineId: qrCodeDataObj.Assembly, DescriptionId: qrCodeDataObj.Model, ItemId: qrCodeDataObj.Item, ItemTypeId: qrCodeDataObj.ItemType, WarehouseId: qrCodeDataObj.Warehouse };
+                if (validateQRCodeStockForQCFail()) {
+                    disable("#btnSubmit");
+                    var info = { FloorId: TryParseInt(ddlProductionFloor.val(), 0), QCLineId: TryParseInt(ddlQCLine.val(), 0), SubQCId: TryParseInt(ddlSubQC.val(), 0), RepairLineId: TryParseInt(ddlRepairLine.val(), 0), QRCode: $.trim(txtItemQRCode.val()), AssemblyLineId: qrCodeDataObj.Assembly, DescriptionId: qrCodeDataObj.Model, ItemId: qrCodeDataObj.Item, ItemTypeId: qrCodeDataObj.ItemType, WarehouseId: qrCodeDataObj.Warehouse };
 
-                var problems = []; problems.length = 0;
-                $.each($("#tblProb tbody tr"), function (index, item) {
-                    var tds = $(this).children('td');
-                    problems.push({
-                        ProblemId: TryParseInt(tds.eq(3).html(), 0),
-                        ProblemName: tds.eq(1).html()
+                    var problems = []; problems.length = 0;
+                    $.each($("#tblProb tbody tr"), function (index, item) {
+                        var tds = $(this).children('td');
+                        problems.push({
+                            ProblemId: TryParseInt(tds.eq(3).html(), 0),
+                            ProblemName: tds.eq(1).html()
+                        })
                     })
-                })
-                info.QRCodeProblems = problems;
-                var data = JSON.stringify({ model: info })
-                //console.log("Info Data");
-                //console.log(data);
-                //return;
-                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQRCodeWiseQcItemTransfer', data, getToken())).then(function (res, status) {
-                    //console.log(res);
-                    //console.log(status);
-                    //console.log("res.IsSuccess");
-                    //console.log(res.IsSuccess);
-                    if (res.IsSuccess === true) {
-                        toastrSuccessAlert('Successful');
-                        $("#tblProb tbody").empty();
-                        txtItemQRCode.val('');
-                        txtItemQRCode.focus();
-                        if (problems.length > 0) {
-                            LoadQCFailData();
+                    info.QRCodeProblems = problems;
+                    var data = JSON.stringify({ model: info })
+                    //console.log("Info Data");
+                    //console.log(data);
+                    //return;
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveQRCodeWiseQcItemTransfer', data, getToken())).then(function (res, status) {
+                        //console.log(res);
+                        //console.log(status);
+                        //console.log("res.IsSuccess");
+                        //console.log(res.IsSuccess);
+                        if (res.IsSuccess === true) {
+                            toastrSuccessAlert('Successful');
+                            $("#tblProb tbody").empty();
+                            txtItemQRCode.val('');
+                            txtItemQRCode.focus();
+                            if (problems.length > 0) {
+                                LoadQCFailData();
+                            }
+                            else {
+                                LoadQCPassData();
+                            }
                         }
                         else {
-                            LoadQCPassData();
+                            bootbox.alert("This QrCode already has been transfered to Repair");
                         }
-
-
-                    }
-                    else {
-                        bootbox.alert("This QrCode already has been transfered to Repair");
-                    }
-                    enable("#btnSubmit");
-                }).fail(function (error) {
-                    console.log(error);
-                    bootbox.alert("Fail");
-                    enable("#btnSubmit");
-                })
+                        enable("#btnSubmit");
+                    }).fail(function (error) {
+                        console.log(error);
+                        bootbox.alert("Fail");
+                        enable("#btnSubmit");
+                    })
+                }
+                else {
+                    toastrErrorAlert("Stock not Available!");
+                    $("#tblProb tbody").empty();
+                    txtItemQRCode.val('');
+                    txtItemQRCode.focus();
+                }
             }
         })
 

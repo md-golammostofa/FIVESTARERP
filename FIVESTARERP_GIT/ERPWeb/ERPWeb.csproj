@@ -189,6 +189,7 @@
     <Content Include="Content\dist\img\avatar5.png" />
     <Content Include="Content\dist\img\boxed-bg.jpg" />
     <Content Include="Content\dist\img\boxed-bg.png" />
+    <Content Include="Content\dist\img\Capture.PNG" />
     <Content Include="Content\dist\img\credit\american-express.png" />
     <Content Include="Content\dist\img\credit\cirrus.png" />
     <Content Include="Content\dist\img\credit\mastercard.png" />
@@ -268,6 +269,7 @@
     <Content Include="Content\plugins\Toastr\toastr.css" />
     <Content Include="Content\plugins\Toastr\toastr.min.js" />
     <Content Include="Content\print.min.css" />
+    <Content Include="Content\printJs.css" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -327,6 +329,28 @@
     </Content>
     <Content Include="Reports\DataSets\dsDailyProductionSummery.xsc">
       <DependentUpon>dsDailyProductionSummery.xsd</DependentUpon>
+    </Content>
+    <Content Include="Reports\DataSets\dsCartonStickerForBarcode.xsc">
+      <DependentUpon>dsCartonStickerForBarcode.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\DataSets\dsCartonStickerForBarcode.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsCartonStickerForBarcode.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Reports\DataSets\dsCartonStickerForBarcode.xss">
+      <DependentUpon>dsCartonStickerForBarcode.xsd</DependentUpon>
+    </Content>
+    <Content Include="Reports\DataSets\dsCartoonInfo.xsc">
+      <DependentUpon>dsCartoonInfo.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\DataSets\dsCartoonInfo.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsCartoonInfo.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Reports\DataSets\dsCartoonInfo.xss">
+      <DependentUpon>dsCartoonInfo.xsd</DependentUpon>
     </Content>
     <None Include="Reports\DataSets\dsDailyProductionSummery.xsd">
       <Generator>MSDataSetGenerator</Generator>
@@ -394,6 +418,7 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\print.js" />
     <Content Include="Scripts\print.min.js" />
     <Content Include="Scripts\select2.full.min.js" />
     <Content Include="Scripts\site.js" />
@@ -440,6 +465,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Accounts.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSets\dsCartonStickerForBarcode.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsCartonStickerForBarcode.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSets\dsCartoonInfo.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsCartoonInfo.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reports\DataSets\dsDailyProductionSummery.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1096,6 +1131,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\ERPRpt\Production\rptLotInBarcodeSticker.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ERPRpt\Production\rptBarcodeForCartonSticker20PCs.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ERPRpt\Production\rptBarcodeForCartonSticker40PCs.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ERPRpt\Production\rptBarcodeForCartonSticker50PCs.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Reports\ERPRpt\Production\rptDailyProductionSummery.rdlc" />

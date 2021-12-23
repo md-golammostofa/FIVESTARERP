@@ -92,7 +92,7 @@ Left Join [Inventory].dbo.tblWarehouses w on ai.WarehouseId = w.Id
 Left Join [Inventory].dbo.tblItemTypes it on ai.ItemTypeId = it.ItemId
 Left Join [Inventory].dbo.tblItems i on ai.ItemId= i.ItemId
 Left Join [Inventory].dbo.tblUnits u on ai.UnitId= u.UnitId
-Where 1=1 {0}", Utility.ParamChecker(param));
+Where 1=1 {0} And (ai.StockInQty - ai.StockOutQty) > 0", Utility.ParamChecker(param));
             return query;
         }
 

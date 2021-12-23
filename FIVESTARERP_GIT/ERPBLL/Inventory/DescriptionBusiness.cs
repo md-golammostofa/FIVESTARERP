@@ -137,6 +137,7 @@ Where mc.DescriptionId = {0} and mc.OrganizationId={1}", modelId, orgId)).ToList
 
         private bool IssertModelItemColors(List<long> colors, Description description, long userId, long orgId)
         {
+            bool isSuccess = false;
             if (colors.Count > 0)
             {
                 Item item = new Item();
@@ -174,11 +175,14 @@ Where mc.DescriptionId = {0} and mc.OrganizationId={1}", modelId, orgId)).ToList
                                             ColorId = Convert.ToInt64(itemColor.ColorId),
                                             DescriptionId = description.DescriptionId,
                                         };
-                                        itemList.Add(newItem);
+                                        //itemList.Add(newItem);
+                                        itemRepository.Insert(newItem);
+                                        isSuccess = itemRepository.Save();
                                     }
                                 }
-                                itemRepository.InsertAll(itemList);
-                                return itemRepository.Save();
+                                //itemRepository.InsertAll(itemList);
+                                //return itemRepository.Save();
+                                return isSuccess;
                             }
                             else
                             {

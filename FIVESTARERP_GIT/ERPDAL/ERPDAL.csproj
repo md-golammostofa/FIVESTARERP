@@ -969,6 +969,10 @@
     <Compile Include="ProductionContextMigrations\202112110447079_Production_add_prp_tblFinishGoodSendToWarehouseDetail.Designer.cs">
       <DependentUpon>202112110447079_Production_add_prp_tblFinishGoodSendToWarehouseDetail.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProductionContextMigrations\202112230456012_Production_add_prp_tblFinishGoodsSendToWarehouseInfo.cs" />
+    <Compile Include="ProductionContextMigrations\202112230456012_Production_add_prp_tblFinishGoodsSendToWarehouseInfo.Designer.cs">
+      <DependentUpon>202112230456012_Production_add_prp_tblFinishGoodsSendToWarehouseInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProductionContextMigrations\Configuration.cs" />
     <Compile Include="ProductionDAL\ProductionRepository.cs" />
     <Compile Include="ProductionDAL\ProductionUnitOfWork.cs" />
@@ -1738,6 +1742,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProductionContextMigrations\202112110447079_Production_add_prp_tblFinishGoodSendToWarehouseDetail.resx">
       <DependentUpon>202112110447079_Production_add_prp_tblFinishGoodSendToWarehouseDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductionContextMigrations\202112230456012_Production_add_prp_tblFinishGoodsSendToWarehouseInfo.resx">
+      <DependentUpon>202112230456012_Production_add_prp_tblFinishGoodsSendToWarehouseInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SalesAndDistributionContextMigrations\202011011005081_SalesAndDistribution_AddTables.resx">
       <DependentUpon>202011011005081_SalesAndDistribution_AddTables.cs</DependentUpon>

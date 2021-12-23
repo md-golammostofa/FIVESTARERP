@@ -88,14 +88,16 @@ Where 1=1 and ps.OrganizationId={0} and ps.ProductionLineId={1} and ps.Packaging
 
             query = string.Format(@"
 Select psi.PLStockInfoId,pl.LineNumber 'ProductionLineName', psi.PackagingLineId,pac.PackagingLineName,
-psi.DescriptionId,de.DescriptionName 'ModelName',psi.WarehouseId,w.WarehouseName,psi.ItemTypeId,it.ItemName 'ItemTypeName',psi.ItemId,i.ItemName,psi.StockInQty,psi.StockOutQty
+psi.DescriptionId,de.DescriptionName 'ModelName',psi.WarehouseId,w.WarehouseName,psi.ItemTypeId,it.ItemName 'ItemTypeName',psi.ItemId,i.ItemName,psi.StockInQty,psi.StockOutQty,psi.UnitId,u.UnitSymbol 'UnitName'
 From [Production].dbo.tblPackagingLineStockInfo psi
 Inner Join [Production].dbo.tblProductionLines pl on psi.ProductionLineId = pl.LineId
 Left Join [Production].dbo.tblPackagingLine pac on psi.PackagingLineId = pac.PackagingLineId
 Left Join [Inventory].dbo.tblDescriptions de on psi.DescriptionId = de.DescriptionId
 Left Join [Inventory].dbo.tblWarehouses w on psi.WarehouseId = w.Id
 Left Join [Inventory].dbo.tblItemTypes it on psi.ItemTypeId = it.ItemId
-Left Join [Inventory].dbo.tblItems i on psi.ItemId = i.ItemId Where 1=1 {0}", Utility.ParamChecker(param));
+Left Join [Inventory].dbo.tblItems i on psi.ItemId = i.ItemId 
+Left Join [Inventory].dbo.tblUnits u on psi.UnitId= u.UnitId
+Where 1=1 {0} and (psi.StockInQty- psi.StockOutQty) > 0", Utility.ParamChecker(param));
             return query;
         }
     }

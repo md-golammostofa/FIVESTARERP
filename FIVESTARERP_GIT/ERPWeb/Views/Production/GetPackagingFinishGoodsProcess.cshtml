@@ -30,8 +30,8 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 @*<a href="#" class="float-left btn btn-sm btn-outline-primary" title="Details View">
-                                        <i class="fas fa-eye"></i> Go To Details View
-                                    </a>*@
+                                                        <i class="fas fa-eye"></i> Go To Details View
+                                                    </a>*@
                                             </div>
                                             <div class="col-md-6">
                                                 <h5 class="text-center text-bold">
@@ -91,7 +91,7 @@
                                     <div class="card-header">
                                         <div class="row">
                                             <div class="col-md-3">
-                                               
+
                                             </div>
                                             <div class="col-md-6">
                                                 <h5 class="text-center text-bold">
@@ -122,10 +122,10 @@
                                                 @Html.DropDownList("ddlModelNameTL", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm ctrl-change select2 select2-danger" })
                                             </div>
                                             <div class="col-md-3">
-                                             
+
                                             </div>
                                             <div class="col-md-2">
-                                              
+
                                             </div>
                                         </div>
                                     </div>
@@ -152,7 +152,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <h5 class="text-center text-bold">
-                                                    Finish Goods Packaging
+                                                    Finish Goods Carton
                                                 </h5>
                                             </div>
                                             <div class="col-md-3">
@@ -165,19 +165,35 @@
                         <div class="row">
                             <div class="col-md-12" style="margin-top:-10px">
                                 <div class="card card-navy">
+                                    <div class="card-header">
+
+                                    </div>
                                     <div class="card-body">
                                         <div class="row" style="margin-top:-15px">
-                                            <div class="col-md-5">
+                                            <div class="col-md-6">
                                                 <div class="row">
-                                                    <div class="col-md-7">
+                                                    <div class="col-md-6">
                                                         <label for="ddlPackagingLinePacking" class="control-label font-weight-bold">Packaging Line</label>
-                                                        @Html.DropDownList("ddlPackagingLinePacking", (IEnumerable<SelectListItem>)ViewBag.ddlPackagingLine, "--Select Packaging Line--", new { @class = "form-control form-control-sm" })
+                                                        @Html.DropDownList("ddlPackagingLinePacking", (IEnumerable<SelectListItem>)ViewBag.ddlPackagingLine, "--Select Packaging Line--", new { @class = "form-control form-control-sm select2 select2-danger" })
                                                         <span class="error hide req-pack">Packaging line is required</span>
                                                     </div>
-                                                    <div class="col-md-5">
-                                                        <label for="ddlModelPackaging" class="control-label font-weight-bold">Model</label>
-                                                        @Html.DropDownList("ddlModelPackaging", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger" })
-                                                        <span class="error hide req-model">Model is required</span>
+                                                    <div class="col-md-2">
+                                                        <label class="control-label font-weight-bold" for="txtGrossWeight">G.W(kg)</label>
+                                                        <input type="text" id="txtGrossWeight" class="form-control form-control-sm" />
+                                                        <span class="error hide req-grossWeight">G.W is required</span>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="control-label font-weight-bold" for="txtNetWeight">N.W(kg)</label>
+                                                        <input type="text" id="txtNetWeight" class="form-control form-control-sm" />
+                                                        <span class="error hide req-netWeight">N.W is required</span>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label for="ddlBoxCount" class="control-label font-weight-bold">Select Box</label>
+                                                        <select class="form-control form-control-sm" id="ddlBoxCount">
+                                                            <option value="20">20</option>
+                                                            <option value="40">40</option>
+                                                            <option value="50">50</option>
+                                                        </select>
                                                     </div>
                                                     <div class="col-md-3 hide">
                                                         <label for="ddlWarehousePackaging" class="control-label font-weight-bold">Warehouse</label>
@@ -185,29 +201,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-5">
+                                                        <label for="ddlItemName" class="control-label font-weight-bold">Model/Color</label>
+                                                        @Html.DropDownList("ddlItemName", (IEnumerable<SelectListItem>)ViewBag.ddlItemName, "--Select Model--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                                        <span class="error hide req-model">Model is Required!</span>
+                                                        <span class="error hide req-model-imei">Selected Model with IMEI Model is not Matched!</span>
+                                                    </div>
+                                                    <div class="col-md-6 hide">
+                                                        <label for="ddlModel" class="control-label font-weight-bold">Model Id</label>
+                                                        <input type="text" id="ddlModel" class="form-control form-control-sm" />
+                                                    </div>
+                                                    <div class="col-md-7">
                                                         <label class="control-label font-weight-bold" for="txtIMEIScaning">IMEI</label>
-                                                        <input type="text" id="txtIMEIScaning" class="form-control form-control-sm" placeholder="Scan IMEI Here" />
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <label class="control-label font-weight-bold" for="txtCarton">Carton No</label>
-                                                        <input type="text" id="txtCarton" class="form-control form-control-sm" />
-                                                        <span class="error hide req-carton">Input Carton</span>
-                                                    </div>
-                                                    <div class="col-md-4 hide">
-                                                        <label class="control-label font-weight-bold" for="txtQuantity">Qty</label>
-                                                        <input type="number" id="txtQuantity" class="form-control form-control-sm" />
-                                                        <span class="error hide req-qty">Input Qty</span>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="control-label font-weight-bold" for="txtNetWeight">Net Weight</label>
-                                                        <input type="number" id="txtNetWeight" class="form-control form-control-sm" />
+                                                        <input type="text" id="txtIMEIScaning" class="form-control form-control-sm" placeholder="SCAN IMEI..." autocomplete="off" required />
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-7">
+                                            <div class="col-md-6">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <table class="table table-sm table-bordered table-responsive-lg table-striped text-sm" id="tblIMEIItem">
@@ -237,23 +247,23 @@
                                         </div>
                                         <div class="row">
                                             @*<div class="col-md-2">
-                                    <label class="control-label font-weight-bold" for="dptFromDateTI">From Date</label>
-                                    <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed-2" id="dptFromDateTI" />
-                                        <div class="input-group-prepend cursor-pointer remove-dateTI dptFromDate" style="cursor:pointer">
-                                            <span class="input-group-text">&#10008;</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="control-label font-weight-bold" for="dptToDateTI">To Date</label>
-                                    <div class="input-group input-group-sm ">
-                                        <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed-2" id="dptToDateTI" />
-                                        <div class="input-group-prepend remove-dateTI dptToDate" style="cursor:pointer">
-                                            <span class="input-group-text">&#10008;</span>
-                                        </div>
-                                    </div>
-                                </div>*@
+                                                    <label class="control-label font-weight-bold" for="dptFromDateTI">From Date</label>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed-2" id="dptFromDateTI" />
+                                                        <div class="input-group-prepend cursor-pointer remove-dateTI dptFromDate" style="cursor:pointer">
+                                                            <span class="input-group-text">&#10008;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="control-label font-weight-bold" for="dptToDateTI">To Date</label>
+                                                    <div class="input-group input-group-sm ">
+                                                        <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed-2" id="dptToDateTI" />
+                                                        <div class="input-group-prepend remove-dateTI dptToDate" style="cursor:pointer">
+                                                            <span class="input-group-text">&#10008;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>*@
                                         </div>
                                     </div>
                                 </div>
@@ -295,12 +305,13 @@
         // Goods Packaging //
         var txtIMEIScaning = $("#txtIMEIScaning");
         var ddlPackagingLinePacking = $("#ddlPackagingLinePacking");
-        var ddlModelPackaging = $("#ddlModelPackaging");
+        //var ddlModelPackaging = $("#ddlModelPackaging");
         var ddlWarehousePackaging = $("#ddlWarehousePackaging");
-        var txtCarton = $("#txtCarton");
-        var txtQuantity = $("#txtCarton");
+        var txtGrossWeight = $("#txtGrossWeight");
         var txtNetWeight = $("#txtNetWeight");
-
+        var ddlBoxCount = $("#ddlBoxCount");
+        var ddlItemName = $("#ddlItemName");
+        var ddlModel = $("#ddlModel");
         // Transfer List //
         var ddlPackagingLineTL = $("#ddlPackagingLineTL");
         var ddlModelNameTL = $("#ddlModelNameTL");
@@ -313,6 +324,7 @@
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             });
+            txtIMEIScaning.focus();
         })
 
         //================== Finish Stock Info =================//
@@ -365,9 +377,9 @@
         })
 
         function LoadFinishGoodsTransferList() {
-            var packaging = ddlPackagingLineTL.val() !="" ? ddlPackagingLineTL.val().split("#"): ["0","0","0"];
-            var data = { flag:"transferinfo", floorId: packaging[1], packagingLineId: packaging[0], modelId: TryParseInt(ddlModelNameTL.val(), 0) };
-            $.when(getReqWithData(dataType.html, type.post, '/Production/GetPackagingFinishGoodsProcess', data)).then(function (res,status) {
+            var packaging = ddlPackagingLineTL.val() != "" ? ddlPackagingLineTL.val().split("#") : ["0", "0", "0"];
+            var data = { flag: "transferinfo", floorId: packaging[1], packagingLineId: packaging[0], modelId: TryParseInt(ddlModelNameTL.val(), 0) };
+            $.when(getReqWithData(dataType.html, type.post, '/Production/GetPackagingFinishGoodsProcess', data)).then(function (res, status) {
                 console.log(res);
                 if (status === "success") {
                     $("#dataContainer2").fadeOut('500', function () {
@@ -382,7 +394,7 @@
 
         $(document).on('click', '.data-item-finishGoods', function (e) {
             e.preventDefault();
-            var id = TryParseInt($(this).attr("data-item-val"),0);
+            var id = TryParseInt($(this).attr("data-item-val"), 0);
             var idx = $(this).parent().parents('tr').index();
             if (id > 0) {
                 hdfInfoId.val(id);
@@ -392,7 +404,7 @@
         })
 
         function LoadTransferDetail(id) {
-            var data = { flag:"transferdetail", transferId: id };
+            var data = { flag: "transferdetail", transferId: id };
             $.when(getReqWithData(dataType.html, type.get, '/Production/GetPackagingFinishGoodsProcess', data)).then(function (res, status) {
                 if (status === "success") {
                     hdfInfoId.val(id);
@@ -408,79 +420,210 @@
         //================== End of Transfer List  ==================//
 
         //================== Finish Goods Packaging =================//
+
+        ddlItemName.change(function () {
+            $("#ddlModel").val('');
+            if (TryParseInt(ddlItemName.val(), 0) > 0) {
+                var data = JSON.stringify({ itemId: TryParseInt(ddlItemName.val(), 0) });
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Common/GetModelIdByItemId', data, getToken())).then(function (res, status) {
+                    if (status === "success" && res != null) {
+                        $("#ddlModel").val(res.DescriptionId);
+                    }
+                }).fail(function (err) {
+                    consoleLog(err);
+                })
+            }
+        })
+        function IsExistsIMEIWeightChecked() {
+            return ajaxBooleanChecker(JSON.stringify({ imei: $.trim(txtIMEIScaning.val()) }), '/Common/IsExistsIMEIWeightChecked', getToken()) == true;
+        }
+        function IStockAvailableForCartonSticker(itemId, lineId, packagingId, modelId, qty) {
+            return ajaxBooleanChecker(JSON.stringify({ itemId: itemId, lineId: lineId, packagingId: packagingId, modelId: modelId, qty: qty}), '/Common/IStockAvailableForCartonSticker', getToken()) == true;
+        }
         txtIMEIScaning.change(function () {
-            if ($.trim(txtIMEIScaning.val()) !== "") {
-                getIMEIInfo($.trim(txtIMEIScaning.val()));
+            if ($.trim(txtIMEIScaning.val()) !== "" && $.trim(txtIMEIScaning.val()).length == 15) {
+                if (validateIMEI()) {
+                    var packaging = ddlPackagingLinePacking.val().split("#");
+                    var data = JSON.stringify({ imei: $.trim(txtIMEIScaning.val()), floorId: packaging[1], packagingId: packaging[0] });
+                    $.when(postReqWithData(dataType.applicationJson, dataType.json, type.post, '/Common/IMEIinFinishGoods', data))
+                        .then(function (res, status) {
+                            if (status === "success" && res != null) {
+                                if (res.StateStatus === "Weight-Checked") {
+                                    if (res.DescriptionId == $("#ddlModel").val()) {
+                                        if (findDuplication($.trim(txtIMEIScaning.val()))) {
+                                            bindIMEIData(res);
+                                            if ($("#tblIMEIItem tbody tr").length === TryParseInt(ddlBoxCount.val(), 0)) {
+                                                if (IStockAvailableForCartonSticker(ddlItemName.val(), packaging[1], packaging[0], $("#ddlModel").val(), $("#tblIMEIItem tbody tr").length)) {
+                                                    disable("#btnSaveCarton");
+                                                    disable("#txtIMEIScaning");
+                                                    var info = { LineId: packaging[1], PackagingLineId: packaging[0], GrossWeight: $.trim(txtGrossWeight.val()), NetWeight: $.trim(txtNetWeight.val()), WarehouseId: ddlWarehousePackaging.val(), DescriptionId: $("#ddlModel").val(), TotalQty: $("#tblIMEIItem tbody tr").length, ItemId: TryParseInt(ddlItemName.val(), 0) };
+                                                    var details = []; details.length = 0;
+                                                    $.each($("#tblIMEIItem tbody tr"), function (index, item) {
+                                                        var tds = $(this).children('td');
+                                                        details.push({
+                                                            IMEI: tds.eq('1').html(),
+                                                            QRCode: tds.eq('5').html(),
+                                                            AllIMEI: tds.eq('4').html()
+                                                        });
+                                                    })
+                                                    info.FinishGoodsSendToWarehouseDetails = details;
+
+                                                    var data = JSON.stringify({ model: info });
+
+                                                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveFinishGoodsForPacking', data, getToken())).then(function (res, status) {
+                                                        if (status === "success" && res.IsSuccess == true) {
+                                                            toastrSuccessAlert(execuStatus.successSave);
+                                                            printJS({ printable: res.File, type: 'pdf', base64: true });
+                                                            resetFinishGoodsPackagingUI();
+                                                            LoadFinishGoodsTransferList();
+                                                            LoadDataTableStockInfo();
+                                                        }
+                                                        else {
+                                                            toastrErrorAlert(execuStatus.fail)
+                                                        }
+                                                        enable("#btnSaveCarton");
+                                                        enable("#txtIMEIScaning");
+                                                        txtIMEIScaning.val('');
+                                                        txtIMEIScaning.focus();
+                                                    }).fail(function (error) {
+                                                        toastrErrorAlert(execuStatus.fail)
+                                                        console.log(error);
+                                                        enable("#btnSaveCarton");
+                                                        enable("#txtIMEIScaning");
+                                                        txtIMEIScaning.val('');
+                                                        txtIMEIScaning.focus();
+                                                    })
+                                                }
+                                                else {
+                                                    toastrErrorAlert("Stock Is Not Available!");
+                                                } 
+                                            }
+                                            txtIMEIScaning.val('');
+                                            txtIMEIScaning.focus();
+                                        }
+                                        else {
+                                            toastrErrorAlert("This IMEI Already Added!");
+                                        }
+                                    }
+                                    else {
+                                        toastrErrorAlert("IMEI Model And Selected Model Does Not Matched!");
+                                        txtIMEIScaning.val('');
+                                        txtIMEIScaning.focus();
+                                    }
+                                }
+                                else {
+                                    toastrErrorAlert("Weight Not Valid!");
+                                    txtIMEIScaning.val('');
+                                    txtIMEIScaning.focus();
+                                }
+                            }
+                            else {
+                                toastrErrorAlert("IMEI Not Found!");
+                                txtIMEIScaning.val('');
+                                txtIMEIScaning.focus();
+                            }
+
+                        }).fail(function (error) {
+                            txtIMEIScaning.val('');
+                            txtIMEIScaning.focus();
+                            toastrErrorAlert("This IMEI Invalid");
+                            console.log(error);
+                        })
+                }
+                else {
+                    txtIMEIScaning.val('');
+                    txtIMEIScaning.focus();
+                }
+            }
+            else {
+                toastrErrorAlert("IMEI Not Valid");
+                txtIMEIScaning.val('');
+                txtIMEIScaning.focus();
             }
         })
 
         function validateIMEI() {
             var isValid = true;
+            $(".error").addClass("hide");
             if (ddlPackagingLinePacking.val() == "") {
+                $(".req-pack").removeClass('hide');
                 isValid = false;
-                toastrErrorAlert('Please Select Packaging line');
             }
-            if (ddlModelPackaging.val() == "") {
+            if ($.trim(txtGrossWeight.val()) == "") {
+                $(".req-grossWeight").removeClass('hide');
                 isValid = false;
-                toastrErrorAlert('Please Select Model');
+            }
+            if ($.trim(txtNetWeight.val()) == "") {
+                $(".req-netWeight").removeClass('hide');
+                isValid = false;
+            }
+            if (TryParseInt(ddlItemName.val(), 0) <= 0) {
+                $(".req-model").removeClass('hide');
+                isValid = false;
             }
             return isValid;
         }
 
-        function getIMEIInfo(imei) {
-            //IMEIinFinishGoods
-            //string imei,long floorId, long packagingId
-            if (validateIMEI()) {
-                var packagingLine = ddlPackagingLinePacking.val() != "" ? ddlPackagingLinePacking.val().split("#") : ["0","0","0"]
-                var data = JSON.stringify({ imei: $.trim(imei), floorId: packagingLine[1], packagingId: packagingLine[0] });
-                $.when(postReqWithData(dataType.applicationJson, dataType.json, type.post, '/Common/IMEIinFinishGoods', data))
-                    .then(function (res, status)
-                    {
-                        if (status === "success") {
-                            if (res != null) {
-                                console.log("...........IMEI Carton...........");
-                                console.log(res);
-                                if (res.StateStatus === "Weight-Checked") {
-                                    if (findDuplication(res.CodeNo)) {
-                                        bindIMEIData(res);
-                                        txtIMEIScaning.val('');
-                                        txtIMEIScaning.focus();
-                                    }
-                                    else {
-                                        toastrErrorAlert("This IMEI has been already added");
-                                    }
-                                }
-                                else {
-                                    toastrErrorAlert("This IMEI may be transfered/ not complete");
-                                }
-                            }
-                            else {
-                                toastrErrorAlert("This IMEI may has been transfered/ Invalid");
-                            }
-                        }
+        //function getIMEIInfo(imei) {
+        //    //IMEIinFinishGoods
+        //    //string imei,long floorId, long packagingId
+        //    if (validateIMEI()) {
+        //        var packagingLine = ddlPackagingLinePacking.val() != "" ? ddlPackagingLinePacking.val().split("#") : ["0", "0", "0"]
+        //        var data = JSON.stringify({ imei: $.trim(imei), floorId: packagingLine[1], packagingId: packagingLine[0] });
+        //        $.when(postReqWithData(dataType.applicationJson, dataType.json, type.post, '/Common/IMEIinFinishGoods', data))
+        //            .then(function (res, status) {
+        //                if (status === "success") {
+        //                    if (res != null) {
+        //                        if (res.StateStatus === "Weight-Checked") {
+        //                            if (findDuplication(res.CodeNo)) {
+        //                                bindIMEIData(res);
+        //                                txtIMEIScaning.val('');
+        //                                txtIMEIScaning.focus();
+        //                            }
+        //                            else {
+        //                                toastrErrorAlert("This IMEI has been already added");
+        //                            }
+        //                        }
+        //                        else {
+        //                            toastrErrorAlert("Weight Not Valid!");
+        //                            txtIMEIScaning.val('');
+        //                            txtIMEIScaning.focus();
+        //                        }
+        //                    }
+        //                    else {
+        //                        toastrErrorAlert("This IMEI may has been transfered/ Invalid");
+        //                    }
+        //                }
 
-                    }).fail(function (error) {
-                        txtIMEIScaning.val('');
-                        txtIMEIScaning.focus();
-                        toastrErrorAlert("This IMEI may has been transfered/ Invalid");
-                        console.log(error);
-                })
-            }
-        }
+        //            }).fail(function (error) {
+        //                txtIMEIScaning.val('');
+        //                txtIMEIScaning.focus();
+        //                toastrErrorAlert("This IMEI may has been transfered/ Invalid");
+        //                console.log(error);
+        //            })
+        //    }
+        //}
 
         function resetFinishGoodsPackagingUI() {
             $("#tblIMEIItem tbody").empty();
             txtIMEIScaning.val('');
-            txtCarton.val('');
-            txtNetWeight.val('');
+            //txtNetWeight.val('');
+            //txtGrossWeight.val('');
             txtIMEIScaning.focus();
+            enable($("#ddlModel"));
+            enable($("#ddlItemName"));
+            enable($("#ddlPackagingLinePacking"));
         }
 
-        function findDuplication(qrCode) {
+        function findDuplication(imei) {
             var isValid = true;
-            $.each($("#tblIMEIItem tbody tr"), function (index,item) {
-                var code = $(this).children("td").eq('5').html();
-                if (code == qrCode) {
+            $.each($("#tblIMEIItem tbody tr"), function (index, item) {
+                //var code = $(this).children("td").eq('5').html();
+                //if (code == qrCode) {
+                //    isValid = false;
+                //}
+                var Imei = $(this).children("td").eq('4').html();
+                if (Imei.indexOf(imei) != -1) {
                     isValid = false;
                 }
             })
@@ -490,14 +633,17 @@
         function bindIMEIData(obj) {
             if (!$.isEmptyObject(obj)) {
                 var rowNum = $("#tblIMEIItem tbody tr").length;
-                var td1 = '<td class="text-center text-bold">'+(rowNum+1)+'</td>';
-                var td2 = '<td>' + $.trim(txtIMEIScaning.val()) + '</td>';
-                var td3 = '<td>' + obj.ItemName + ' [' + obj.ItemTypeName + '-' + obj.WarehouseName+']' + '</td>';
+                var td1 = '<td class="text-center text-bold">' + (rowNum + 1) + '</td>';
+                var td2 = '<td class="text-center">' + $.trim(txtIMEIScaning.val()) + '</td>';
+                var td3 = '<td class="text-center">' + $('#ddlItemName :selected').text() + '</td>';
                 var td4 = '<td class="text-center"><a href="#" class="btn btn-sm btn-danger btn-flat data-onfly-del"><i class="fas fa-trash"></i></a></td>';
                 var td5 = '<td class="hide">' + obj.IMEI + '</td>';
                 var td6 = '<td class="hide">' + obj.CodeNo + '</td>';
                 var tr = '<tr>' + td1 + td2 + td3 + td4 + td5 + td6 + '</tr>';
                 $("#tblIMEIItem tbody").append(tr);
+                disable($("#ddlModel"));
+                disable($("#ddlItemName"));
+                disable($("#ddlPackagingLinePacking"));
             }
         }
         $(document).on("click", "a.data-onfly-del", function (e) {
@@ -518,62 +664,69 @@
                 $(".req-pack").removeClass('hide');
                 isValid = false;
             }
-            if (ddlModelPackaging.val() == "") {
-                $(".req-model").removeClass('hide');
+            if ($.trim(txtGrossWeight.val()) == "") {
+                $(".req-grossWeight").removeClass('hide');
                 isValid = false;
             }
-            if ($.trim(txtCarton.val()) =="") {
-                $(".req-carton").removeClass('hide');
+            if ($.trim(txtNetWeight.val()) == "") {
+                $(".req-netWeight").removeClass('hide');
                 isValid = false;
             }
-            //if (TryParseInt(txtQuantity.val(), 0) <= 0) {
-            //    $(".req-qty").removeClass('hide');
-            //    isValid = false;
-            //}
-            return isValid; 
+            return isValid;
         }
 
-        
+
 
         $("#btnSaveCarton").click(function (e) {
             e.preventDefault();
             if (validateCarton()) {
-                disable("#btnSaveCarton");
                 var packaging = ddlPackagingLinePacking.val().split("#");
-                var info = { LineId: packaging[1], PackagingLineId: packaging[1], WarehouseId: ddlWarehousePackaging.val(), DescriptionId: ddlModelPackaging.val(), CartoonNo: $.trim(txtCarton.val()), NetWeight: $.trim(txtNetWeight.val()), TotalQty: $("#tblIMEIItem tbody tr").length };
+                if (IStockAvailableForCartonSticker(ddlItemName.val(), packaging[1], packaging[0], $("#ddlModel").val(), $("#tblIMEIItem tbody tr").length)) {
+                    disable("#btnSaveCarton");
+                    disable("#txtIMEIScaning");
+                    var info = { LineId: packaging[1], PackagingLineId: packaging[0], GrossWeight: $.trim(txtGrossWeight.val()), NetWeight: $.trim(txtNetWeight.val()), WarehouseId: ddlWarehousePackaging.val(), DescriptionId: $("#ddlModel").val(), TotalQty: $("#tblIMEIItem tbody tr").length, ItemId: TryParseInt(ddlItemName.val(), 0) };
+                    var details = []; details.length = 0;
+                    $.each($("#tblIMEIItem tbody tr"), function (index, item) {
+                        var tds = $(this).children('td');
+                        details.push({
+                            IMEI: tds.eq('1').html(),
+                            QRCode: tds.eq('5').html(),
+                            AllIMEI: tds.eq('4').html()
+                        });
+                    })
+                    info.FinishGoodsSendToWarehouseDetails = details;
 
-                var details = []; details.length = 0;
-                $.each($("#tblIMEIItem tbody tr"), function (index,item) {
-                    var tds = $(this).children('td');
-                    details.push({
-                        IMEI: tds.eq('1').html(),
-                        QRCode: tds.eq('5').html(),
-                        AllIMEI: tds.eq('4').html()
-                    });
-                })
-                info.FinishGoodsSendToWarehouseDetails = details;
+                    var data = JSON.stringify({ model: info });
 
-                var data = JSON.stringify({ model: info });
-
-                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveFinishGoodsForPacking', data, getToken())).then(function (res, status) {
-
-                    if (status === "success" && res == true) {
-                        toastrSuccessAlert(execuStatus.successSave);
-                        resetFinishGoodsPackagingUI();
-                        LoadFinishGoodsTransferList();
-                        LoadDataTableStockInfo();
-                    }
-                    else {
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveFinishGoodsForPacking', data, getToken())).then(function (res, status) {
+                        if (status === "success" && res.IsSuccess == true) {
+                            toastrSuccessAlert(execuStatus.successSave);
+                            printJS({ printable: res.File, type: 'pdf', base64: true });
+                            resetFinishGoodsPackagingUI();
+                            LoadFinishGoodsTransferList();
+                            LoadDataTableStockInfo();
+                        }
+                        else {
+                            toastrErrorAlert(execuStatus.fail)
+                        }
+                        enable("#btnSaveCarton");
+                        enable("#txtIMEIScaning");
+                        txtIMEIScaning.val('');
+                        txtIMEIScaning.focus();
+                    }).fail(function (error) {
                         toastrErrorAlert(execuStatus.fail)
-                    }
-                    enable("#btnSaveCarton");
-                }).fail(function (error) {
-                    toastrErrorAlert(execuStatus.fail)
-                    console.log(error);
-                    enable("#btnSaveCarton");
-                })
+                        console.log(error);
+                        enable("#btnSaveCarton");
+                        enable("#txtIMEIScaning");
+                        txtIMEIScaning.val('');
+                        txtIMEIScaning.focus();
+                    })
+                }
+                else {
+                    toastrErrorAlert("Stock Is Not Available!");
+                }
             }
         })
-        //================== End of Finish Goods Packaging =================//
-    </script>    
+                //================== End of Finish Goods Packaging =================//
+    </script>
 }

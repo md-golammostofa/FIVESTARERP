@@ -80,7 +80,10 @@ namespace ERPBLL.Production
         {
             return await _tempQRCodeTraceRepository.GetAllAsync(s => qrCodes.Contains(s.CodeNo) && s.OrganizationId == orgId);
         }
-
+        public async Task<IEnumerable<TempQRCodeTrace>> GetTempQRCodeTracesByIMEIAsync(List<string> imei, long orgId)
+        {
+            return await _tempQRCodeTraceRepository.GetAllAsync(s => imei.Contains(s.IMEI) && s.OrganizationId == orgId);
+        }
         public bool IsExistIMEIWithStatus(string imei, string status, long orgId)
         {
             return this._tempQRCodeTraceRepository.GetOneByOrg(s => s.OrganizationId == orgId && s.IMEI.Contains(imei) && s.StateStatus == status) != null;
