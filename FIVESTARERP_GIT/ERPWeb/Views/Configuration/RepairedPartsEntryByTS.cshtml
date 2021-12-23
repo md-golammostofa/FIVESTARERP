@@ -1,0 +1,180 @@
+﻿@model ERPBO.Configuration.ViewModels.FaultyStockRepairedInfoViewModel
+@{
+    ViewBag.Title = "RepairedPartsEntryByTS";
+}
+
+<div class="row" style="margin-top:-15px">
+    <div class="col-md-12">
+        <div class="card card-gray-dark">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-center text-bold">
+                            Entry Repair And Scraped Parts
+                        </h5>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row text-sm">
+    <div class="col-md-12" style="margin-top:-10px">
+        <div class="card card-navy">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6 class="card-title">
+                            Parts Information
+                        </h6>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <select class="form-control form-control-sm" id="ddlAction">
+                                <option value="Repair-Done" selected>Repair-Done</option>
+                            </select>
+                            <div class="input-group-append" style="cursor:pointer">
+                                <a id="btnSubmit" href="#" title="Submit" style="background-color:darkblue" class="input-group-text">
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" style="margin-top:-15px">
+                    <div class="col-md-12">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="hdfFSRInfoId" value="@Model.FSRInfoId" />
+                        <input type="hidden" id="hdfCode" value="@Model.Code" />
+                        <input type="hidden" id="hdfTSId" value="@Model.TSId" />
+                        <table class="table table-bordered table-sm table-responsive-lg text-bold text-sm" id="tblInfo">
+                            <tbody>
+                                <tr>
+                                    <td class="alert-primary" style="width:10%">Code</td>
+                                    <td style="width:15%; background-color:#e1dada">@Model.Code</td>
+                                    <td class="alert-primary" style="width:10%">Status</td>
+                                    <td style="width:15%; background-color:#e1dada">@Model.StateStatus</td>
+                                    <td class="alert-primary" style="width:10%">Assign Date</td>
+                                    <td style="width:12%; background-color:#e1dada">@Model.AssignDate</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        @{Html.RenderAction("RepairedPartsEntryDetails", new { @infoId = Model.FSRInfoId });}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top:-10px">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-12">
+
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var hdfFSRInfoId = $("#hdfFSRInfoId");
+        var hdfCode = $("#hdfCode");
+        var ddlAction = $("#ddlAction");
+        var hdfTSId = $("#hdfTSId");
+
+        //.issueQty
+
+        //$(document).on( '.issueQty', function (e) {
+        //    e.preventDefault();
+        //    var qty = $(this).val();
+        //    var reqQty = $(this).parent().parents('tr').children('td').eq(6).html();
+        //    if (qty > reqQty) {
+        //        $(this).val('0');
+        //    }
+        //})
+
+        function validateSubmit() {
+            var isValid = true;
+            if (ddlAction.val() === "") {
+                isValid = false;
+                bootbox.alert("Please select a Action before submit");
+            }
+            if ($(".tblStockReturnDetails tbody tr").length == 0) {
+                isValid = false;
+                bootbox.alert("Faulty details not found");
+            }
+            return isValid;
+        }
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+
+            if (validateSubmit()) {
+                bootbox.confirm("Are you sure you want to save this requisition with " + ddlAction.val() + " status", function (result) {
+                    if (result) {
+                        disable("#btnSubmit")
+                        var info = { FSRInfoId: TryParseInt(hdfFSRInfoId.val(), 0), StateStatus: ddlAction.val() };
+                        var details = []; details.length = 0;
+
+                        $.each($(".tblStockReturnDetails tbody tr"), function (index, item) {
+                            var tds = $(this).children('td');
+                            details.push({
+                                FSRDetailsId: tds.eq(1).html(),
+                                ModelId: tds.eq(2).html(),
+                                PartsId: tds.eq(3).html(),
+                                AssignQty: tds.eq(7).html(),
+                                RepairedQty: tds.eq(8).children('input[type="number"]').val(),
+                                ScrapedQty: tds.eq(9).children('input[type="number"]').val(),
+                            })
+                        })
+
+                        info.faultyStockRepairedDetails = details;
+
+                        console.log("Requisition Information");
+                        console.log(info);
+                        var data = JSON.stringify({ info: info });
+                        //return console.log(data)
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Configuration/UpdateInfoStatusAndRepaired', data, getToken())).then(function (res, status) {
+                            console.log(res);
+                            console.log(status);
+                            if (res === true && status === "success") {
+                                $('.toastrDefaultSuccess').trigger('click');
+                                 setTimeout(function () {
+                                    redirectPage('@Url.Action("GetFaultyStockRepairedListTS")');
+                                }, 1000);
+                            }
+                            else {
+                                //$('.toastrDefaultError').trigger('click');
+                                bootbox.alert("Assign Quantity And (Repaired and Scraped) Quantity is not equal");
+                            }
+                            enable("#btnSubmit");
+                        }).fail(function (error) {
+                            console.log(error);
+                            enable("#btnSubmit");
+                        })
+
+                    }// confirm
+                })// bootbox
+            }// submit
+        })
+
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+
+
+    </script>
+}

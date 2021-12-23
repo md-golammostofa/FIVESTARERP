@@ -17,13 +17,15 @@ namespace ERPBLL.Configuration
         private readonly FaultyStockTransferInfoRepository _faultyStockTransferInfoRepository;//repo
         private readonly IFaultyStockTransferInfoBusiness _faultyStockTransferInfoBusiness;
         private readonly IFaultyStockDetailBusiness _faultyStockDetailBusiness;
-        public FaultyStockTransferDetailsBusiness(IConfigurationUnitOfWork configurationDb, IFaultyStockTransferInfoBusiness faultyStockTransferInfoBusiness, IFaultyStockDetailBusiness faultyStockDetailBusiness)
+        private readonly IFaultyStockInfoBusiness _faultyStockInfoBusiness;
+        public FaultyStockTransferDetailsBusiness(IConfigurationUnitOfWork configurationDb, IFaultyStockTransferInfoBusiness faultyStockTransferInfoBusiness, IFaultyStockDetailBusiness faultyStockDetailBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness)
         {
             this._configurationDb = configurationDb;
             _faultyStockTransferDetailsRepository = new FaultyStockTransferDetailsRepository(this._configurationDb);
             _faultyStockTransferInfoRepository = new FaultyStockTransferInfoRepository(this._configurationDb);
             this._faultyStockTransferInfoBusiness = faultyStockTransferInfoBusiness;
             this._faultyStockDetailBusiness = faultyStockDetailBusiness;
+            this._faultyStockInfoBusiness = faultyStockInfoBusiness;
         }
 
         public IEnumerable<FaultyStockTransferDetails> GetAllDetails(long orgId, long branchId)
@@ -73,34 +75,38 @@ namespace ERPBLL.Configuration
 
             foreach (var item in dto.faultyStockTransferDetails)
             {
-                FaultyStockTransferDetails faulty = new FaultyStockTransferDetails
+                var faultystockCheck = _faultyStockInfoBusiness.GetAllFaultyStockByStockIn(item.ModelId, item.PartsId, orgId, branchId);
+                if((faultystockCheck.StockInQty- faultystockCheck.StockOutQty) == item.Quantity || (faultystockCheck.StockInQty - faultystockCheck.StockOutQty) > item.Quantity)
                 {
-                    ModelId = item.ModelId,
-                    PartsId = item.PartsId,
-                    CostPrice = 0,
-                    SellPrice = 0,
-                    Quantity = item.Quantity,
-                    EUserId = userId,
-                    OrganizationId = orgId,
-                    BranchId = branchId,
-                    EntryDate = DateTime.Now,
-                };
-                details.Add(faulty);
-                FaultyStockDetailDTO faultydto = new FaultyStockDetailDTO
-                {
-                    DescriptionId=item.ModelId,
-                    PartsId=item.PartsId,
-                    CostPrice=item.CostPrice,
-                    SellPrice=item.SellPrice,
-                    Quantity=item.Quantity,
-                    StateStatus="Stock-Out",
-                    EUserId=userId,
-                    OrganizationId = orgId,
-                    BranchId = branchId,
-                    EntryDate = DateTime.Now,
-                };
-                faultyStock.Add(faultydto);
-            }
+                    FaultyStockTransferDetails faulty = new FaultyStockTransferDetails
+                    {
+                        ModelId = item.ModelId,
+                        PartsId = item.PartsId,
+                        CostPrice = 0,
+                        SellPrice = 0,
+                        Quantity = item.Quantity,
+                        EUserId = userId,
+                        OrganizationId = orgId,
+                        BranchId = branchId,
+                        EntryDate = DateTime.Now,
+                    };
+                    details.Add(faulty);
+                    FaultyStockDetailDTO faultydto = new FaultyStockDetailDTO
+                    {
+                        DescriptionId = item.ModelId,
+                        PartsId = item.PartsId,
+                        CostPrice = item.CostPrice,
+                        SellPrice = item.SellPrice,
+                        Quantity = item.Quantity,
+                        StateStatus = "Stock-Out",
+                        EUserId = userId,
+                        OrganizationId = orgId,
+                        BranchId = branchId,
+                        EntryDate = DateTime.Now,
+                    };
+                    faultyStock.Add(faultydto);
+                }
+            } 
             info.faultyStockTransferDetails = details;
             _faultyStockTransferInfoRepository.Insert(info);
             if (_faultyStockTransferInfoRepository.Save())

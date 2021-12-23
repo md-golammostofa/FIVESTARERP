@@ -16,5 +16,6 @@ namespace ERPBLL.Configuration.Interface
         bool SaveMobilePartStockOut(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId);
         FaultyStockDetails GetCostAndSellPrice(long modelId, long partsId, long orgId, long branchId);
         bool SaveFaultyStockOut(List<FaultyStockDetailDTO> faultyStocksDto, long userId, long orgId, long branchId);
+        bool SaveFaultyStockOutByTSRepaired(List<FaultyStockDetailDTO> faultyStocksDto, long userId, long orgId, long branchId);
     }
 }

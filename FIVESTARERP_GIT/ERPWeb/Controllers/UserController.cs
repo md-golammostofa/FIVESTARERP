@@ -263,6 +263,16 @@ namespace ERPWeb.Controllers
                 IEnumerable<JobOrderViewModel> qcviewModel = new List<JobOrderViewModel>();
                 AutoMapper.Mapper.Map(qcdto, qcviewModel);
                 ViewBag.QCStatusViewModel = qcviewModel;
+                //TotalPending Job
+                IEnumerable<JobOrderDTO> pendingDelivery = _jobOrderBusiness.GetDashBoardPendingDeliveryJob(User.OrgId, User.BranchId);
+                IEnumerable<JobOrderViewModel> pdViewModel = new List<JobOrderViewModel>();
+                AutoMapper.Mapper.Map(pendingDelivery, pdViewModel);
+                ViewBag.PendingDelivery = pdViewModel;
+                //TodayQCPassFail
+                IEnumerable<JobOrderDTO> todayQc = _jobOrderBusiness.TodayQCPassFail(User.OrgId, User.BranchId);
+                IEnumerable<JobOrderViewModel> qcPFViewModels = new List<JobOrderViewModel>();
+                AutoMapper.Mapper.Map(todayQc, qcPFViewModels);
+                ViewBag.TodayQCPassFail = qcPFViewModels;
 
                 return View("Index2");
             }

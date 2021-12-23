@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERPBO.FrontDesk.DomainModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace ERPBO.FrontDesk.ViewModels
 
         public long? UpUserId { get; set; }
         public Nullable<DateTime> UpdateDate { get; set; }
+        public ICollection<RequsitionDetailForJobOrder> RequsitionDetailForJobOrders { get; set; }
 
         //Custom p
         [StringLength(100)]
@@ -45,5 +47,8 @@ namespace ERPBO.FrontDesk.ViewModels
         //
         //public long ModelId { get; set; }
         public string UserName { get; set; }
+        public long DescriptionId { get; set; }
+        public long? IssueUserId { get; set; }
+        public Nullable<DateTime> IssueDateDate { get; set; }
     }
 }

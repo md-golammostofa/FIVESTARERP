@@ -126,6 +126,8 @@
     <Compile Include="Configuration\FaultBusiness.cs" />
     <Compile Include="Configuration\FaultyStockDetailBusiness.cs" />
     <Compile Include="Configuration\FaultyStockInfoBusiness.cs" />
+    <Compile Include="Configuration\FaultyStockRepairedDetailsBusiness.cs" />
+    <Compile Include="Configuration\FaultyStockRepairedInfoBusiness.cs" />
     <Compile Include="Configuration\FaultyStockTransferDetailsBusiness.cs" />
     <Compile Include="Configuration\FaultyStockTransferInfoBusiness.cs" />
     <Compile Include="Configuration\HandSetStockBusiness.cs" />
@@ -142,6 +144,8 @@
     <Compile Include="Configuration\Interface\IFaultBusiness.cs" />
     <Compile Include="Configuration\Interface\IFaultyStockDetailBusiness.cs" />
     <Compile Include="Configuration\Interface\IFaultyStockInfoBusiness.cs" />
+    <Compile Include="Configuration\Interface\IFaultyStockRepairedDetailsBusiness.cs" />
+    <Compile Include="Configuration\Interface\IFaultyStockRepairedInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\IFaultyStockTransferDetailsBusiness.cs" />
     <Compile Include="Configuration\Interface\IFaultyStockTransferInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\IHandSetStockBusiness.cs" />
@@ -160,6 +164,8 @@
     <Compile Include="Configuration\Interface\ITechnicalServiceBusiness.cs" />
     <Compile Include="Configuration\Interface\ITransferDetailBusiness.cs" />
     <Compile Include="Configuration\Interface\ITransferInfoBusiness.cs" />
+    <Compile Include="Configuration\Interface\IWarehouseToFactoryReturnDetailsBusiness.cs" />
+    <Compile Include="Configuration\Interface\IWarehouseToFactoryReturnInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\IWorkShopBusiness.cs" />
     <Compile Include="Configuration\MissingStockBusiness.cs" />
     <Compile Include="Configuration\MobilePartBusiness.cs" />
@@ -176,6 +182,8 @@
     <Compile Include="Configuration\TechnicalServiceBusiness.cs" />
     <Compile Include="Configuration\TransferDetailBusiness.cs" />
     <Compile Include="Configuration\TransferInfoBusiness.cs" />
+    <Compile Include="Configuration\WarehouseToFactoryReturnDetailsBusiness.cs" />
+    <Compile Include="Configuration\WarehouseToFactoryReturnInfoBusiness.cs" />
     <Compile Include="Configuration\WorkShopBusiness.cs" />
     <Compile Include="ControlPanel\AppUserBusiness.cs" />
     <Compile Include="ControlPanel\BranchBusiness.cs" />
@@ -198,8 +206,10 @@
     <Compile Include="ControlPanel\UserAuthorizationBusiness.cs" />
     <Compile Include="ControlPanel\SubMenuBusiness.cs" />
     <Compile Include="FrontDesk\FaultyStockAssignTSBusiness.cs" />
+    <Compile Include="FrontDesk\FiveStarSMSDetailsBusiness.cs" />
     <Compile Include="FrontDesk\HandsetChangeTraceBusiness.cs" />
     <Compile Include="FrontDesk\Interface\IFaultyStockAssignTSBusiness.cs" />
+    <Compile Include="FrontDesk\Interface\IFiveStarSMSDetailsBusiness.cs" />
     <Compile Include="FrontDesk\Interface\IHandsetChangeTraceBusiness.cs" />
     <Compile Include="FrontDesk\Interface\IInvoiceDetailBusiness.cs" />
     <Compile Include="FrontDesk\Interface\IInvoiceInfoBusiness.cs" />

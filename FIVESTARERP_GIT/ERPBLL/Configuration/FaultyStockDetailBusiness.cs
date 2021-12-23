@@ -294,5 +294,71 @@ namespace ERPBLL.Configuration
             mobilePartStockDetailRepository.InsertAll(mobilePartStockDetails);
             return mobilePartStockDetailRepository.Save();
         }
+
+        public bool SaveFaultyStockOutByTSRepaired(List<FaultyStockDetailDTO> faultyStocksDto, long userId, long orgId, long branchId)
+        {
+            List<FaultyStockDetails> faultyStockDetails = new List<FaultyStockDetails>();
+            FaultyStockDetails faultyStock = new FaultyStockDetails();
+            FaultyStockInfo faultyInfo = new FaultyStockInfo();
+            foreach (var item in faultyStocksDto)
+            {
+                faultyStock = new FaultyStockDetails()
+                {
+                    BranchId = branchId,
+                    CostPrice = item.CostPrice,
+                    SellPrice = item.SellPrice,
+                    StateStatus = StockStatus.StockIn,
+                    SWarehouseId = item.SWarehouseId,
+                    EUserId = userId,
+                    OrganizationId = orgId,
+                    EntryDate = DateTime.Now,
+                    JobOrderId = item.JobOrderId,
+                    DescriptionId = item.DescriptionId,
+                    PartsId = item.PartsId,
+                    Quantity = item.Quantity,
+                    Remarks = "Stock-Out By TS Assign For Repair",
+                    TSId = item.TSId,
+
+                };
+                var faultyStockInfo = _faultyStockInfoBusiness.GetAllFaultyStockInfoByModelAndPartsIdAndCostPrice(item.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
+                if (faultyStockInfo != null)
+                {
+                    faultyStockInfo.StockOutQty += item.Quantity;
+                    faultyStockInfo.UpUserId = userId;
+                    faultyStockInfo.UpdateDate = DateTime.Now;
+                    _faultyStockInfoRepository.Update(faultyStockInfo);
+                    //FaultyStockInfoId//
+                    faultyStock.FaultyStockInfoId = faultyStockInfo.FaultyStockInfoId;
+                }
+                else
+                {
+                    faultyInfo = new FaultyStockInfo()
+                    {
+                        BranchId = branchId,
+                        CostPrice = item.CostPrice,
+                        SellPrice = item.SellPrice,
+                        SWarehouseId = item.SWarehouseId,
+                        EUserId = userId,
+                        OrganizationId = orgId,
+                        EntryDate = DateTime.Now,
+                        JobOrderId = item.JobOrderId,
+                        DescriptionId = item.DescriptionId,
+                        PartsId = item.PartsId,
+                        StockInQty = item.Quantity,
+                        StockOutQty = 0,
+                        Remarks = "",
+                    };
+                    _faultyStockInfoRepository.Insert(faultyInfo);
+                    if (_faultyStockInfoRepository.Save())
+                    {
+                        faultyStock.FaultyStockInfoId = faultyInfo.FaultyStockInfoId;
+                    }
+                }
+                faultyStockDetails.Add(faultyStock);
+            }
+
+            _faultyStockDetailRepository.InsertAll(faultyStockDetails);
+            return _faultyStockDetailRepository.Save();
+        }
     }
 }

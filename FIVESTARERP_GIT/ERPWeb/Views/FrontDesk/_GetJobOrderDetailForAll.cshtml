@@ -1,0 +1,138 @@
+﻿@model IEnumerable<ERPBO.FrontDesk.ViewModels.JobOrderViewModel>
+@{
+    string isWarrantyAvailable = Model.FirstOrDefault().IsWarrantyAvailable ? "Yes" : "No";
+    string isWarrantyPaperEnclosed = Model.FirstOrDefault().IsWarrantyPaperEnclosed ? "Yes" : "No";
+    string strWarrentStartDate = Model.FirstOrDefault().WarrantyDate.HasValue ? Model.FirstOrDefault().WarrantyDate.Value.ToString("dd-MMM-yyy") : "";
+    string strWarrentEndDate = Model.FirstOrDefault().WarrantyEndDate != null ? Model.FirstOrDefault().WarrantyEndDate.Value.ToString("dd-MMM-yyy") : "";
+    string EntryDate = Model.FirstOrDefault().EntryDate != null ? Model.FirstOrDefault().EntryDate.Value.ToString("dd-MMM-yyy") : "";
+    string RepairDate = Model.FirstOrDefault().RepairDate != null ? Model.FirstOrDefault().RepairDate.Value.ToString("dd-MMM-yyy") : "";
+    string CloseDate = Model.FirstOrDefault().CloseDate != null ? Model.FirstOrDefault().CloseDate.Value.ToString("dd-MMM-yyy") : "";
+    string probDate = Model.FirstOrDefault().ProbablyDate != null ? Model.FirstOrDefault().ProbablyDate.Value.ToString("dd-MMM-yyy") : "";
+    var jobOrder = (ERPBO.FrontDesk.ViewModels.HandsetChangeTraceViewModel)ViewBag.OldHansetInformation;
+}
+<div class="row">
+    <div class="col-md-12" style="overflow-y:scroll">
+        <table class="table table-sm table-bordered table-responsive-lg text-sm text-bold" id="tblJobOrderDetail">
+            <tr>
+                <td class="hide">@Model.FirstOrDefault().JodOrderId</td>
+                <td class="text-purple">Job Code</td>
+                <td class="font-weight-bold">@Model.FirstOrDefault().JobOrderCode</td>
+                <td class="text-purple">Invoice</td>
+                <td class="font-weight-bold">@Model.FirstOrDefault().InvoiceCode</td>
+                <td class="text-purple">Receving Date</td>
+                <td class="font-weight-bold">@EntryDate</td>
+            </tr>
+            <tr>
+                <td class="text-purple">Customer Name</td>
+                <td>@Model.FirstOrDefault().CustomerName</td>
+                <td class="text-purple">Moblie No</td>
+                <td>@Model.FirstOrDefault().MobileNo</td>
+                <td class="text-purple">Address</td>
+                <td>@Model.FirstOrDefault().Address</td>
+            </tr>
+            <tr>
+                <td class="text-purple">Customer Type</td>
+                <td>@Model.FirstOrDefault().CustomerType</td>
+                <td class="text-purple">IMEI1</td>
+                <td>@Model.FirstOrDefault().IMEI</td>
+                <td class="text-purple">IMEI2</td>
+                <td>@Model.FirstOrDefault().IMEI2</td>
+
+            </tr>
+            <tr>
+                <td class="text-purple">Type</td>
+                <td>@Model.FirstOrDefault().Type</td>
+                <td class="text-purple">Model</td>
+                <td>@Model.FirstOrDefault().ModelName</td>
+                <td class="text-purple">Color</td>
+                <td>@Model.FirstOrDefault().ModelColor</td>
+
+            </tr>
+            <tr>
+                <td class="text-purple">Accessories</td>
+                <td>@Model.FirstOrDefault().AccessoriesNames</td>
+                <td class="text-purple">Problems</td>
+                <td>@Model.FirstOrDefault().Problems</td>
+                @*<td class="text-purple">Warrenty Available</td>
+                    <td>@isWarrantyAvailable</td>*@
+                <td class="text-purple">Warrenty Paper</td>
+                <td>@isWarrantyPaperEnclosed</td>
+
+            </tr>
+            <tr>
+                <td class="text-purple">Job Status</td>
+                <td>@Model.FirstOrDefault().StateStatus</td>
+                <td class="text-purple">Work Status</td>
+                <td>@Model.FirstOrDefault().TsRepairStatus</td>
+                <td class="text-purple">Ref. Number</td>
+                <td>@Model.FirstOrDefault().ReferenceNumber</td>
+
+            </tr>
+            <tr>
+                <td class="text-purple">Warrenty Date</td>
+                <td>@strWarrentStartDate</td>
+                <td class="text-purple">Repair Date</td>
+                <td>@RepairDate</td>
+                <td class="text-purple">Probabily Date</td>
+                <td>@probDate</td>
+            </tr>
+            <tr>
+                <td class="text-purple">TS Name</td>
+                <td>@Model.FirstOrDefault().TSName</td>
+                <td class="text-purple">Issued by</td>
+                <td>@Model.FirstOrDefault().EntryUser</td>
+                <td class="text-purple">Delivery by</td>
+                <td>@Model.FirstOrDefault().CloseUser</td>
+            </tr>
+            <tr>
+                <td class="text-purple">Remarks</td>
+                <td>@Model.FirstOrDefault().Remarks</td>
+                <td class="text-purple">Used Parts</td>
+                <td colspan="3">@Model.FirstOrDefault().PartsName</td>
+            </tr>
+            <tr>
+                <td class="text-purple">Courier Name</td>
+                <td>@Model.FirstOrDefault().CourierName</td>
+                <td class="text-purple">Courier Number</td>
+                <td>@Model.FirstOrDefault().CourierNumber</td>
+                <td class="text-purple">Approx Bill</td>
+                <td>@Model.FirstOrDefault().ApproxBill</td>
+            </tr>
+
+            @if (Model.FirstOrDefault().StateStatus == ERPBLL.Common.JobOrderStatus.PendingJobOrder)
+            {
+                <tr>
+                    <td class="text-purple">
+                        JobOrder Type
+                    </td>
+                    <td colspan="5">
+                        @Html.DropDownList("ddlJobOrderType", (IEnumerable<SelectListItem>)ViewBag.ddlJobOrderType, "Select JobOrder Type", new { @class = "form-control form-control-sm ddlJobOrderType" })
+                        <span class="error hide require-type font-weight-bold">Type is required</span>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td class="text-purple">
+                        Job Order Type
+                    </td>
+                    <td>
+                        @Model.FirstOrDefault().JobOrderType
+                    </td>
+                    <td class="text-purple">Cust. Approval</td>
+                    <td colspan="3">@Model.FirstOrDefault().CustomerApproval</td>
+                </tr>
+            }
+            <tr>
+                <td class="text-purple">Eng. Remarks</td>
+                <td colspan="2">@Model.FirstOrDefault().TSRemarks</td>
+                <td class="text-purple">Call Center Remarks</td>
+                <td colspan="2">@Model.FirstOrDefault().CallCenterRemarks</td>
+            </tr>
+        </table>
+        
+    </div>
+   
+</div>
+

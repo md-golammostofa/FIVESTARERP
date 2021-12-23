@@ -36,7 +36,7 @@ namespace ERPBO.FrontDesk.DTOModels
         // Custom Properties
         public string ModelName { get; set; }
         public string AccessoriesNames { get; set; }
-        public string  TSName { get; set; }
+        public string TSName { get; set; }
         public string Problems { get; set; }
         public string EntryUser { get; set; }
         public string UpdateUser { get; set; }
@@ -106,5 +106,29 @@ namespace ERPBO.FrontDesk.DTOModels
         //05-09-21
         public Nullable<DateTime> ProbablyDate { get; set; }
         public int Total { get; set; }
+        //05-12-2021
+        public Nullable<DateTime> CallCenterAssignDate { get; set; }
+        public string TotalPOrDStatus { get; set; }
+        public long? QCName { get; set; }
+        public string QC { get; set; }
+        public int TotalPending { get; set; }
+        public int TotalDelivery { get; set; }
+        public int TodayQCPass { get; set; }
+        public int TodayQCFail { get; set; }
+        public Nullable<DateTime> QCAssignDate { get; set; }
+        public int TodayQCAssign { get; set; }
+        public int TodayDelivery { get; set; }
+        public int TodayRepair { get; set; }
+        public int TodayWarrenty { get; set; }
+        public int TodayBilling { get; set; }
+        public int TotalQCAssign { get; set; }
+        public int TotalCallCenter { get; set; }
+        public int TodayEngAssigned { get; set; }
+        public int TodayCCAssigned { get; set; }
+        public int TodayApproved { get; set; }
+        public int TodayDisApproved { get; set; }
+        public int TransferToTI { get; set; }
+        public int DaysOver10 {get;set;}
+        public int DaysOver5 { get; set; }
     }
 }

@@ -323,5 +323,43 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
             }
             return IsSuccess;
         }
+
+        public IEnumerable<TransferInfoDTO> BranchRequsitionDaysOver(long orgId, long branchId,string fromDate,string toDate)
+        {
+            return _configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(QueryForBranchRequsitinDaysOver(orgId, branchId,fromDate,toDate)).ToList();
+        }
+        private string QueryForBranchRequsitinDaysOver(long orgId,long branchId,string fromDate,string toDate)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+            if (orgId > 0)
+            {
+                param += string.Format(@"and ti.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@" and ti.BranchTo={0}", branchId);
+            }
+            if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(ti.IssueDate as date) between '{0}' and '{1}'", fDate, tDate);
+            }
+            else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(ti.IssueDate as date)='{0}'", fDate);
+            }
+            else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(ti.IssueDate as date)='{0}'", tDate);
+            }
+            query = string.Format(@"Select ti.TransferInfoId,ti.BranchId,ti.BranchTo,ti.TransferCode,ti.StateStatus,b.BranchName,
+ti.EntryDate,ti.IssueDate,ti.ReceivedDate From tblTransferInfo ti
+Left Join [ControlPanel].dbo.tblBranch b on ti.BranchId=b.BranchId Where 1=1{0} and ti.StateStatus='Pending' and DATEDIFF(DAY,Cast(ti.EntryDate as Date),Cast(GETDATE() as Date)) >3 Order By ti.EntryDate desc", Utility.ParamChecker(param));
+            return query;
+        }
     }
 }

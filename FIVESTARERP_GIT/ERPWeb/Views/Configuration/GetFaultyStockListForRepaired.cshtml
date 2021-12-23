@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewBag.Title = "Faulty Stock Repaired";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow card-primary card-outline card-tabs" style="margin-top:-20px">
+            <div class="card-header p-0 pt-1 border-bottom-0 text-sm">
+                <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-two-faultyStockRepairedList-tab" data-toggle="pill" href="#custom-tabs-two-faultyStockRepairedList" role="tab" aria-controls="custom-tabs-two-faultyStockRepairedList" aria-selected="true">Faulty Repaired</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body shadow">
+                <div class="tab-content" id="custom-tabs-two-tabContent">
+                    @Html.AntiForgeryToken()
+                    <div class="tab-pane fade show active" id="custom-tabs-two-faultyStockRepairedList" role="tabpanel" aria-labelledby="custom-tabs-two-faultyStockRepairedList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray shadow">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    List Of Faulty Stock Repaired
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <a href="/Configuration/CreateFaultyStockAssignToTS" style="background-color:darkblue" class="btn btn-outline-primary btn-sm float-lg-right" id="btnFaultyStockAssignToTS"><i class="fa fa-plus"></i> Faulty Assign TS</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-15px">
+                                <div class="card shadow card-navy">
+                                    <div class="card-body text-sm">
+                                        <div class="row text-sm">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 text-sm" id="dataContainer">
+                                                @{Html.RenderAction("GetFaultyStockListForRepaired", new { @flag = "faultyRepaired" });}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalFaultyDetails" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <input type="hidden" id="hdfFaultyInfoId" />
+                <input type="hidden" id="hdfRowIndex" />
+                <h4 id="modalHeading" class="modal-title">Faulty Repaired Parts Details</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="dataContainer1">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var hdfFaultyInfoId = $("#hdfFaultyInfoId");
+
+        $(document).on('click', 'a.data-item-details', function (e) {
+            e.preventDefault();
+            hdfFaultyInfoId.val("0")
+            var id = $(this).attr("data-item-details");
+            hdfFaultyInfoId.val(id);
+            //return console.log(id);
+            $.when(getReqWithData('html', type.get, '/Configuration/GetFaultyRepairedDetails', { infoId: id })).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer1").empty();
+                    $("#dataContainer1").append(res);
+                    $("#modalFaultyDetails").modal("toggle");
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        })
+
+        $(document).on('click', ".btnReceiveStock", function (e) {
+            e.preventDefault();
+            bootbox.confirm("Are you sure you want to Receive Stock", function (result) {
+                    if (result) {
+                        //disable("#btnSubmit")
+                        var info = {StateStatus:"Receive-Done" };
+                        var details = []; details.length = 0;
+
+                        $.each($(".tblStockReturnDetails tbody tr"), function (index, item) {
+                            var tds = $(this).children('td');
+                            details.push({
+                                FSRInfoId: tds.eq(1).html(),
+                                FSRDetailsId: tds.eq(2).html(),
+                                ModelId: tds.eq(3).html(),
+                                PartsId: tds.eq(5).html(),
+                                AssignQty: tds.eq(8).html(),
+                                RepairedQty: tds.eq(9).html(),
+                                ScrapedQty: tds.eq(10).html(),
+                            })
+                        })
+
+                        info.faultyStockRepairedDetails = details;
+
+                        console.log("Requisition Information");
+                        console.log(info);
+                        var data = JSON.stringify({ info: info });
+                        //return console.log(data)
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Configuration/UpdateInfoStatusAndReceivedStock', data, getToken())).then(function (res, status) {
+                            console.log(res);
+                            console.log(status);
+                            if (res === true && status === "success") {
+                                $('.toastrDefaultSuccess').trigger('click');
+                                 setTimeout(function () {
+                                    redirectPage('@Url.Action("GetFaultyStockListForRepaired")');
+                                }, 1000);
+                            }
+                            else {
+                                $('.toastrDefaultError').trigger('click');
+                            }
+                            //enable("#btnSubmit");
+                        }).fail(function (error) {
+                            console.log(error);
+                            //enable("#btnSubmit");
+                        })
+
+                    }// confirm
+                })// bootbox
+        })
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>
+    }

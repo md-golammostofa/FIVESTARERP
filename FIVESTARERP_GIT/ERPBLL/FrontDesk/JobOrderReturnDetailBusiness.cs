@@ -346,7 +346,7 @@ where JobStatus='Repair-Done' and 1=1 {0}", Utility.ParamChecker(param));
         {
             var data = this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderReturnDetailDTO>(string.Format(@"Select TransferCode,JobOrderCode,TransferStatus,BranchName From tblJobOrderReturnDetails jod
 Left Join [ControlPanel].dbo.tblBranch b on jod.ToBranch=b.BranchId
-Where jod.OrganizationId={0} and jod.BranchId={1}", orgId, branchId)).ToList();
+Where jod.OrganizationId={0} and jod.BranchId={1} Order By jod.EntryDate desc", orgId, branchId)).ToList();
             return data;
         }
 

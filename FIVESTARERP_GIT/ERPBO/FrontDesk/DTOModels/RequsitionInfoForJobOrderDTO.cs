@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ERPBO.FrontDesk.DomainModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,7 @@ namespace ERPBO.FrontDesk.DTOModels
         public Nullable<DateTime> EntryDate { get; set; }
         public long? UpUserId { get; set; }
         public Nullable<DateTime> UpdateDate { get; set; }
+        public ICollection<RequsitionDetailForJobOrder> RequsitionDetailForJobOrders { get; set; }
 
         //Custom p
         public string SWarehouseName { get; set; }
@@ -35,5 +37,8 @@ namespace ERPBO.FrontDesk.DTOModels
         public string BranchName { get; set; }
         public string JobCode { get; set; }
         public string UserName { get; set; }
+        public long DescriptionId { get; set; }
+        public long? IssueUserId { get; set; }
+        public Nullable<DateTime> IssueDateDate { get; set; }
     }
 }

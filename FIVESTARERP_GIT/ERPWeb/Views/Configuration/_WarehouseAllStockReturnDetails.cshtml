@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ERPBO.Configuration.ViewModels.WarehouseToFactoryReturnDetailsViewModel>
+@{
+    int sl = 0;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered table-sm table-striped" id="tblStockReturnInfo">
+            <thead class="btn-dark">
+                <tr class="text-center">
+                    <th>#SL</th>
+                    <th>Ref. Code</th>
+                    <th>Model</th>
+                    <th>Parts Name</th>
+                    <th>Parts Code</th>
+                    <th>Cost Price</th>
+                    <th>Sell Parice</th>
+                    <th>Quantity</th>
+                    <th>Return Date</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    sl = sl + 1;
+                    <tr>
+                        <td class="text-center" width="10%">@sl</td>
+                        <td>@item.ReferenceCode</td>
+                        <td>@item.ModelName</td>
+                        <td>@item.PartsName</td>
+                        <td>@item.PartsCode</td>
+                        <td>@item.CostPrice.ToString("0.00")</td>
+                        <td>@item.SellPrice.ToString("0.00")</td>
+                        <td class="text-center">@item.Quantity</td>
+                        <td>@item.EntryDate.Value.ToString("dd-MMM-yyyy")</td>
+                    </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="text-center empty-row">
+                        <td colspan="5">
+                            No Rows Found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

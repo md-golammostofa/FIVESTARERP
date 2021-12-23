@@ -513,28 +513,15 @@
             getJobOrderDetail("Detail",id)
             
         })
-        //Ts Work Details
-        $(document).on('click', 'a.data-item-tsWork', function (e) {
-            e.preventDefault();
-            var id = $(this).attr("data-item-tsWork");
-            getJobOrderDetail("TSWork", id);
-        })
-
-        // assign a T.S.
-        $(document).on('click', 'a.data-item-assignTS', function (e) {
-            e.preventDefault();
-            var id = $(this).attr("data-item-assignTS");
-            getJobOrderDetail("Assign", id);
-        })
 
         function getJobOrderDetail(flag, id) {
             hdfJobOrderId.val("0");
             if (TryParseInt(id) > 0) {
                 hdfJobOrderId.val(id)
-                var data = { flag: flag, modelId: 0, jobOrderId: id, mobileNo: '', status: "", jobCode: "", page: 1 };
+                var data = { flag: flag, jobOrderId: id};
 
                 console.log(data);
-                $.when(getReqWithData('html', 'GET', '/FrontDesk/GetJobOrderListForCallCenter', data)).then(function (res, status) {
+                $.when(getReqWithData('html', 'GET', '/FrontDesk/GetJobOrderDetails', data)).then(function (res, status) {
                     console.log(status);
                     if (status === "success") {
                         $("#dataContainer2").empty();

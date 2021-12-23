@@ -109,7 +109,7 @@ namespace ERPBLL.Configuration
                     OrganizationId = orgId,
                 };
                 scrapStockDetail.Add(detail);
-                var scrapInfo = _scrapStockInfoBusiness.GetScrapStockInfoByModelAndCostPriceAndSellPrice(item.DescriptionId.Value, item.PartsId.Value, item.CostPrice, item.SellPrice, orgId, branchId);
+                var scrapInfo = _scrapStockInfoBusiness.GetOneScrapedByModel(item.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
                 if (scrapInfo != null)
                 {
                     scrapInfo.ScrapQuantity += item.Quantity;

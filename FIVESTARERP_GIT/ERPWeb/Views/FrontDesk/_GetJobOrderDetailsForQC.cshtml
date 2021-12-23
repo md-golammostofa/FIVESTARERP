@@ -35,8 +35,8 @@
                 <td>@Model.Type</td>
                 <td class="text-blue">Model</td>
                 <td>@Model.ModelName</td>
-                <td class="text-blue">Color</td>
-                <td>@Model.ModelColor</td>
+                <td class="text-blue">JobOrder Type</td>
+                <td colspan="3">@Model.JobOrderType</td>
             </tr>
             <tr>
                 <td class="text-blue">Job Status</td>
@@ -48,9 +48,11 @@
             </tr>
             <tr>
                 <td class="text-blue">Repair Status</td>
-                <td colspan="3">@Model.TsRepairStatus</td>
+                <td >@Model.TsRepairStatus</td>
                 <td class="text-blue">TS Name</td>
                 <td>@Model.TSName</td>
+                <td class="text-blue">Repair Date</td>
+                <td>@RepairDate</td>
             </tr>
             <tr>
                 <td class="text-blue">Symptoms</td>

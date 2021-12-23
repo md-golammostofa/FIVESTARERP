@@ -94,5 +94,10 @@ Inner Join [Configuration].dbo.tblMobileParts mp On fsi.PartsId = mp.MobilePartI
 where fsi.OrganizationId={0} and fsi.BranchId={1}", orgId,branchId)).ToList();
             return data;
         }
+
+        public IEnumerable<FaultyStockInfo> GetAllFaultyByModelAndParts(long modelId, long partsId, long orgId, long branchId)
+        {
+            return _faultyStockInfoRepository.GetAll(f => f.DescriptionId == modelId && f.PartsId == partsId && f.OrganizationId == orgId && f.BranchId == branchId).ToList();
+        }
     }
 }

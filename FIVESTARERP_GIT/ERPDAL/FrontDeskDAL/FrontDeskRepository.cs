@@ -83,4 +83,8 @@ namespace ERPDAL.FrontDeskDAL
 
         }
     }
+    public class FiveStarSMSDetailsRepository : FrontDeskBaseRepository<FiveStarSMSDetails>
+    {
+        public FiveStarSMSDetailsRepository(IFrontDeskUnitOfWork frontDeskUnitOfWork) : base(frontDeskUnitOfWork) { }
+    }
 }

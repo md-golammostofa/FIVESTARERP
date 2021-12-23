@@ -5,6 +5,7 @@ using ERPBO.Configuration.DomainModels;
 using ERPBO.Configuration.DTOModels;
 using ERPBO.FrontDesk.DTOModels;
 using ERPDAL.ConfigurationDAL;
+using ERPDAL.FrontDeskDAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,10 @@ namespace ERPBLL.Configuration
     public class MobilePartStockDetailBusiness : IMobilePartStockDetailBusiness
     {
         private readonly IConfigurationUnitOfWork _configurationDb; // database
+        private readonly IFrontDeskUnitOfWork _frontDeskUnitOfWork;//db
         private readonly MobilePartStockDetailRepository mobilePartStockDetailRepository; // repo
         private readonly MobilePartStockInfoRepository mobilePartStockInfoRepository; //repo
+        private readonly RequsitionDetailForJobOrderRepository requsitionDetailForJobOrderRepository;
         private readonly IServicesWarehouseBusiness _servicesWarehouseBusiness;
         private readonly IMobilePartBusiness _mobilePartBusiness;
         private readonly IMobilePartStockInfoBusiness _mobilePartStockInfoBusiness;
@@ -26,11 +29,13 @@ namespace ERPBLL.Configuration
         private readonly ITechnicalServicesStockBusiness _technicalServicesStockBusiness;
         private readonly ITsStockReturnInfoBusiness _tsStockReturnInfoBusiness;
         private readonly IJobOrderBusiness _jobOrderBusiness;
-        public MobilePartStockDetailBusiness(IConfigurationUnitOfWork configurationDb, IServicesWarehouseBusiness servicesWarehouseBusiness, IMobilePartBusiness mobilePartBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IRequsitionDetailForJobOrderBusiness requsitionDetailForJobOrderBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, IJobOrderBusiness jobOrderBusiness)
+        public MobilePartStockDetailBusiness(IConfigurationUnitOfWork configurationDb, IFrontDeskUnitOfWork frontDeskUnitOfWork, IServicesWarehouseBusiness servicesWarehouseBusiness, IMobilePartBusiness mobilePartBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IRequsitionDetailForJobOrderBusiness requsitionDetailForJobOrderBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, IJobOrderBusiness jobOrderBusiness)
         {
             this._configurationDb = configurationDb;
+            this._frontDeskUnitOfWork = frontDeskUnitOfWork;
             mobilePartStockDetailRepository = new MobilePartStockDetailRepository(this._configurationDb);
             mobilePartStockInfoRepository = new MobilePartStockInfoRepository(this._configurationDb);
+            requsitionDetailForJobOrderRepository = new RequsitionDetailForJobOrderRepository(this._frontDeskUnitOfWork);
             this._servicesWarehouseBusiness = servicesWarehouseBusiness;
             this._mobilePartBusiness = mobilePartBusiness;
             this._mobilePartStockInfoBusiness = mobilePartStockInfoBusiness;
@@ -243,6 +248,15 @@ namespace ERPBLL.Configuration
             foreach (var item in reqDetails)
             {
                 var reqQty = item.Quantity;
+                var reqDetailsF = _requsitionDetailForJobOrderBusiness.GetDetailsByDetailsId(item.RequsitionDetailForJobOrderId, orgId, branchId);
+                if (reqDetailsF != null)
+                {
+                    reqDetailsF.IssueQty = reqQty;
+                    reqDetailsF.UpUserId = userId;
+                    reqDetailsF.UpdateDate = DateTime.Now;
+                    requsitionDetailForJobOrderRepository.Update(reqDetailsF);
+                    requsitionDetailForJobOrderRepository.Save();
+                }
                 var partsInStock = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoByModelAndBranch(orgId, modelId, branchId).Where(i => i.MobilePartId == item.PartsId && (i.StockInQty - i.StockOutQty) > 0).OrderBy(i => i.MobilePartStockInfoId).ToList();
 
                 if (partsInStock.Count() > 0)
@@ -507,7 +521,7 @@ namespace ERPBLL.Configuration
                 param += string.Format(@" and st.MobilePartId ={0}", partsId);
             }
 
-            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,
+            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,PartsCode,((GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales)-ReceiveAModel)'ParsesStock',ReceiveAModel,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer,TransferAModel,EngPending,Sales From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,p.MobilePartCode'PartsCode',
 
 (Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblMobilePartStockInfo
 Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId=st.BranchId)'GoodStock',
@@ -522,7 +536,19 @@ Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st
 Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'DustStock',
 
 (Select ISNULL(SUM(IssueQty),0) From tblTransferDetails
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo=st.BranchId)'CareTransfer'
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo=st.BranchId)'CareTransfer',
+
+(Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.tblTechnicalServicesStock
+Where StateStatus='Stock-Open' and ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'EngPending',
+
+(Select ISNULL(SUM(Quantity),0) From StockTransferDetailModelToModels
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'TransferAModel',
+
+(Select ISNULL(SUM(Quantity),0) From StockTransferDetailModelToModels
+Where ToDescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ReceiveAModel',
+
+(Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.InvoiceDetails
+Where  ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'Sales'
 
 From tblMobilePartStockInfo st
 Left Join tblModelSS m on st.DescriptionId=m.ModelId
@@ -538,7 +564,7 @@ Where 1=1{0}) tbl1
             {
                 branch = 22;
             }
-            var data= _configurationDb.Db.Database.SqlQuery<TotalStockDetailsDTO>(string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,
+            var data= _configurationDb.Db.Database.SqlQuery<TotalStockDetailsDTO>(string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,PartsCode,((GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales)-ReceiveAModel)'ParsesStock',ReceiveAModel,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer,TransferAModel,EngPending,Sales From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,p.MobilePartCode'PartsCode',
 
 (Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblMobilePartStockInfo
 Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId={0})'GoodStock',
@@ -553,7 +579,19 @@ Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0
 Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'DustStock',
 
 (Select ISNULL(SUM(IssueQty),0) From tblTransferDetails
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo={0})'CareTransfer'
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo={0})'CareTransfer',
+
+(Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.tblTechnicalServicesStock
+Where StateStatus='Stock-Open' and ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'EngPending',
+
+(Select ISNULL(SUM(Quantity),0) From StockTransferDetailModelToModels
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'TransferAModel',
+
+(Select ISNULL(SUM(Quantity),0) From StockTransferDetailModelToModels
+Where ToDescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'ReceiveAModel',
+
+(Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.InvoiceDetails
+Where  ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'Sales'
 
 From tblMobilePartStockInfo st
 Left Join tblModelSS m on st.DescriptionId=m.ModelId
@@ -575,27 +613,248 @@ Where st.BranchId={0} and st.OrganizationId={1}) tbl1", branch,orgId)).ToList();
             //{
             //    param += string.Format(@" and BranchId ={0}", branch);
             //}
-            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,
+            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,PartsCode,((GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending)-ReceiveAModel)'ParsesStock',ReceiveAModel,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer,TransferAModel,EngPending From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,p.MobilePartCode'PartsCode',
 
 (Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblMobilePartStockInfo
-Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId={0})'GoodStock',
+Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId=st.BranchId)'GoodStock',
 
 (Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblFaultyStockInfo
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'FaultyStock',
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'FaultyStock',
 
 (Select ISNULL(Sum(ScrapQuantity-ScrapOutQty),0) From tblScrapStockInfo
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'ScrapStock',
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ScrapStock',
 
 (Select ISNULL(SUM(StockInQty),0) From tblDustStockInfo
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'DustStock',
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'DustStock',
 
 (Select ISNULL(SUM(IssueQty),0) From tblTransferDetails
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo={0})'CareTransfer'
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo=st.BranchId)'CareTransfer',
+
+(Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.tblTechnicalServicesStock
+Where StateStatus='Stock-Open' and ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'EngPending',
+
+(Select ISNULL(SUM(Quantity),0) From StockTransferDetailModelToModels
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'TransferAModel',
+
+(Select ISNULL(SUM(Quantity),0) From StockTransferDetailModelToModels
+Where ToDescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ReceiveAModel'
 
 From tblMobilePartStockInfo st
 Left Join tblModelSS m on st.DescriptionId=m.ModelId
 Left Join tblMobileParts p on st.MobilePartId=p.MobilePartId
 Where 1=1{0}) tbl1
+", Utility.ParamChecker(param));
+            return query;
+        }
+        public bool UpdateReqStatusAndWarehouseStockOutAndTsStockIn(RequsitionInfoForJobOrderDTO dto, long orgId, long branchId, long userId)
+        {
+            bool IsSuccess = false;
+            var warehouse = _servicesWarehouseBusiness.GetAllServiceWarehouseByOrgId(orgId, branchId).FirstOrDefault();
+            List<MobilePartStockDetail> stockDetails = new List<MobilePartStockDetail>();
+            List<TechnicalServicesStockDTO> servicesStockDTOs = new List<TechnicalServicesStockDTO>();
+
+            foreach (var item in dto.RequsitionDetailForJobOrders)
+            {
+                var reqQty = item.IssueQty;
+                if (reqQty > 0)
+                {
+                    var reqDetails = _requsitionDetailForJobOrderBusiness.GetDetailsByDetailsId(item.RequsitionDetailForJobOrderId, orgId, branchId);
+                    if(reqDetails != null)
+                    {
+                        reqDetails.IssueQty = reqQty;
+                        reqDetails.UpUserId = userId;
+                        reqDetails.UpdateDate = DateTime.Now;
+                        requsitionDetailForJobOrderRepository.Update(reqDetails);
+                        requsitionDetailForJobOrderRepository.Save();
+                    }
+                    var partsInStock = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoByModelAndBranch(orgId, dto.DescriptionId, branchId).Where(i => i.MobilePartId == item.PartsId && (i.StockInQty - i.StockOutQty) > 0).OrderBy(i => i.MobilePartStockInfoId).ToList();
+
+                    if (partsInStock.Count() > 0)
+                    {
+                        int remainQty = reqQty;
+                        foreach (var stock in partsInStock)
+                        {
+
+                            var totalStockqty = (stock.StockInQty - stock.StockOutQty); // total stock
+                            var stockOutQty = 0;
+                            if (totalStockqty <= remainQty)
+                            {
+                                stock.StockOutQty += totalStockqty;
+                                stockOutQty = totalStockqty.Value;
+                                remainQty -= totalStockqty.Value;
+                            }
+                            else
+                            {
+                                stockOutQty = remainQty;
+                                stock.StockOutQty += remainQty;
+                                remainQty = 0;
+                            }
+
+
+                            MobilePartStockDetail stockDetail = new MobilePartStockDetail()
+                            {
+                                DescriptionId = dto.DescriptionId,
+                                SWarehouseId = warehouse.SWarehouseId,
+                                MobilePartId = item.PartsId,
+                                CostPrice = stock.CostPrice,
+                                SellPrice = stock.SellPrice,
+                                Quantity = stockOutQty,
+                                Remarks = item.Remarks,
+                                OrganizationId = orgId,
+                                BranchId = branchId,
+                                EUserId = userId,
+                                EntryDate = DateTime.Now,
+                                StockStatus = StockStatus.StockOut,
+                                ReferrenceNumber = dto.RequsitionCode
+                            };
+                            TechnicalServicesStockDTO tsStock = new TechnicalServicesStockDTO()
+                            {
+                                JobOrderId = dto.JobOrderId,
+                                SWarehouseId = warehouse.SWarehouseId,
+                                RequsitionInfoForJobOrderId = dto.RequsitionInfoForJobOrderId,
+                                PartsId = item.PartsId,
+                                CostPrice = stock.CostPrice,
+                                SellPrice = stock.SellPrice,
+                                Quantity = stockOutQty,
+                                StateStatus = "Stock-Open",
+                                UsedQty = 0,
+                                ReturnQty = 0,
+                                Remarks = item.Remarks,
+                                OrganizationId = orgId,
+                                BranchId = branchId,
+                                EUserId = userId,
+                                EntryDate = DateTime.Now,
+                            };
+                            servicesStockDTOs.Add(tsStock);
+                            stockDetails.Add(stockDetail);
+                            mobilePartStockInfoRepository.Update(stock);
+                            if (remainQty == 0)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            mobilePartStockDetailRepository.InsertAll(stockDetails);
+            if (mobilePartStockDetailRepository.Save())
+            {
+                IsSuccess = _technicalServicesStockBusiness.SaveTechnicalServicesStockIn(servicesStockDTOs, userId, orgId, branchId, dto.DescriptionId);
+                if (IsSuccess == true)
+                {
+                    return _requsitionInfoForJobOrderBusiness.SaveRequisitionStatus(dto.RequsitionInfoForJobOrderId,dto.StateStatus, userId, orgId, branchId);
+                }
+            }
+            return IsSuccess;
+        }
+
+        public bool SaveMobilePartStockInByRepaired(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId)
+        {
+            List<MobilePartStockDetail> mobilePartStockDetails = new List<MobilePartStockDetail>();
+            foreach (var item in mobilePartStockDetailDTO)
+            {
+                MobilePartStockDetail StockDetail = new MobilePartStockDetail();
+                StockDetail.MobilePartStockDetailId = item.MobilePartStockDetailId;
+                StockDetail.MobilePartId = item.MobilePartId;
+                StockDetail.SWarehouseId = item.SWarehouseId;
+                StockDetail.DescriptionId = item.DescriptionId;
+                StockDetail.CostPrice = item.CostPrice;
+                StockDetail.SellPrice = item.SellPrice;
+                StockDetail.Quantity = item.Quantity;
+                StockDetail.Remarks = "Stock-In By Repaired";
+                StockDetail.OrganizationId = orgId;
+                StockDetail.BranchId = branchId;
+                StockDetail.EUserId = userId;
+                StockDetail.EntryDate = DateTime.Now;
+                StockDetail.StockStatus = StockStatus.StockIn;
+                StockDetail.BranchFrom = item.BranchFrom;
+                StockDetail.ReferrenceNumber = item.ReferrenceNumber;
+
+                var warehouseInfo = _mobilePartStockInfoBusiness.GetMobilePartStockInfoByModelAndMobilePartsAndCostPrice(item.DescriptionId.Value, item.MobilePartId.Value, item.CostPrice, orgId, branchId);
+
+                if (warehouseInfo != null)
+                {
+                    warehouseInfo.StockInQty += item.Quantity;
+                    warehouseInfo.UpUserId = userId;
+                    warehouseInfo.UpdateDate = DateTime.Now;
+                    mobilePartStockInfoRepository.Update(warehouseInfo);
+                }
+                else
+                {
+                    MobilePartStockInfo mobilePartStockInfo = new MobilePartStockInfo();
+                    mobilePartStockInfo.SWarehouseId = item.SWarehouseId;
+                    mobilePartStockInfo.MobilePartId = item.MobilePartId;
+                    mobilePartStockInfo.DescriptionId = item.DescriptionId;
+                    mobilePartStockInfo.CostPrice = item.CostPrice;
+                    mobilePartStockInfo.SellPrice = item.SellPrice;
+                    mobilePartStockInfo.StockInQty = item.Quantity;
+                    mobilePartStockInfo.StockOutQty = 0;
+                    mobilePartStockInfo.OrganizationId = orgId;
+                    mobilePartStockInfo.BranchId = branchId;
+                    mobilePartStockInfo.EUserId = userId;
+                    mobilePartStockInfo.EntryDate = DateTime.Now;
+                    mobilePartStockInfoRepository.Insert(mobilePartStockInfo);
+                }
+                mobilePartStockDetails.Add(StockDetail);
+            }
+            mobilePartStockDetailRepository.InsertAll(mobilePartStockDetails);
+            return mobilePartStockDetailRepository.Save();
+        }
+
+        public IEnumerable<MobilePartStockDetailDTO> GetAllStockDetails(long? descriptionId, long? mobilePartId, long orgId, long branchId, string stockStatus, string fromDate, string toDate)
+        {
+            return _configurationDb.Db.Database.SqlQuery<MobilePartStockDetailDTO>(QueryForAllStockDetails(descriptionId,mobilePartId,orgId,branchId,stockStatus,fromDate,toDate)).ToList();
+        }
+        private string QueryForAllStockDetails(long? descriptionId, long? mobilePartId, long orgId, long branchId, string stockStatus, string fromDate, string toDate)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+
+            if (orgId > 0)
+            {
+                param += string.Format(@" and sd.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@" and sd.BranchId={0}", branchId);
+            }
+            if (descriptionId != null && descriptionId > 0)
+            {
+                param += string.Format(@" and sd.DescriptionId ={0}", descriptionId);
+            }
+            if (mobilePartId != null && mobilePartId > 0)
+            {
+                param += string.Format(@" and sd.MobilePartId ={0}", mobilePartId);
+            }
+            if (!string.IsNullOrEmpty(stockStatus))
+            {
+                param += string.Format(@"and sd.StockStatus Like '%{0}%'", stockStatus);
+            }
+            if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(sd.EntryDate as date) between '{0}' and '{1}'", fDate, tDate);
+            }
+            else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(sd.EntryDate as date)='{0}'", fDate);
+            }
+            else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(sd.EntryDate as date)='{0}'", tDate);
+            }
+
+            query = string.Format(@"Select m.ModelName,sd.DescriptionId,p.MobilePartName'PartsName',sd.MobilePartId,
+p.MobilePartCode'PartsCode',sd.CostPrice,
+sd.SellPrice,sd.Quantity,sd.StockStatus,sd.Remarks,sd.EntryDate 
+From tblMobilePartStockDetails sd
+Left Join tblModelSS m on sd.DescriptionId=m.ModelId
+Left join tblMobileParts p on sd.MobilePartId=p.MobilePartId
+Where 1=1{0}
+Order By sd.EntryDate desc
 ", Utility.ParamChecker(param));
             return query;
         }

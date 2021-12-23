@@ -52,8 +52,6 @@
                 <td>@Model.AccessoriesNames</td>
                 <td class="text-purple">Problems</td>
                 <td>@Model.Problems</td>
-                @*<td class="text-purple">Warrenty Available</td>
-                <td>@isWarrantyAvailable</td>*@
                 <td class="text-purple">Warrenty Paper</td>
                 <td>@isWarrantyPaperEnclosed</td>
 
@@ -65,6 +63,15 @@
                 <td>@Model.TsRepairStatus</td>
                 <td class="text-purple">Ref. Number</td>
                 <td>@Model.ReferenceNumber</td>
+
+            </tr>
+            <tr>
+                <td class="text-purple">QCName</td>
+                <td>@Model.QC</td>
+                <td class="text-purple">QC Status</td>
+                <td>@Model.QCStatus</td>
+                <td class="text-purple">QC Remarks</td>
+                <td>@Model.QCRemarks</td>
 
             </tr>
             <tr>
@@ -118,7 +125,7 @@
                     <td colspan="3">
                         @Model.JobOrderType
                     </td>
-                    
+
                 </tr>
             }
         </table>

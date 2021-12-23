@@ -1,0 +1,151 @@
+﻿
+@{
+    ViewBag.Title = "PartsReturnWarehouseToFactory";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow card-primary card-outline card-tabs" style="margin-top:-20px">
+            <div class="card-header p-0 pt-1 border-bottom-0 text-sm">
+                <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-two-warehouseToFactoryReturnInfoList-tab" data-toggle="pill" href="#custom-tabs-two-warehouseToFactoryReturnInfoList" role="tab" aria-controls="custom-tabs-two-warehouseToFactoryReturnInfoList" aria-selected="true">Parts Return(W To F)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-two-warehouseToFactoryReturnDetailsList-tab" data-toggle="pill" href="#custom-tabs-two-warehouseToFactoryReturnDetailsList" role="tab" aria-controls="custom-tabs-two-warehouseToFactoryReturnDetailsList" aria-selected="true">Parts Return Details(W To F)</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body shadow">
+                <div class="tab-content" id="custom-tabs-two-tabContent">
+                    @Html.AntiForgeryToken()
+                    <div class="tab-pane fade show active" id="custom-tabs-two-warehouseToFactoryReturnInfoList" role="tabpanel" aria-labelledby="custom-tabs-two-warehouseToFactoryReturnInfoList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray shadow">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    Parts Return List(Warehouse To Factory)
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <a href="/Configuration/CreatePartsReturnWareToFactory" style="background-color:darkblue" class="btn btn-outline-primary btn-sm float-lg-right" id="btnAddNew"><i class="fa fa-plus"></i> Return Parts</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-15px">
+                                <div class="card shadow card-navy">
+                                    <div class="card-body text-sm">
+                                        <div class="row text-sm">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 text-sm" id="dataContainer">
+                                                @{Html.RenderAction("PartsReturnWarehouseToFactory", new { @flag = "PartsReturn" });}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="custom-tabs-two-warehouseToFactoryReturnDetailsList" role="tabpanel" aria-labelledby="custom-tabs-two-warehouseToFactoryReturnDetailsList-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray shadow">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    Parts Return Details List(Warehouse To Factory)
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-15px">
+                                <div class="card shadow card-navy">
+                                    <div class="card-body text-sm">
+                                        <div class="row text-sm">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 text-sm" id="dataContainer">
+                                                @{Html.RenderAction("WarehouseAllStockReturnDetails", new { @flag = "PartsReturnDetails" });}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalReturnDetails" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <input type="hidden" id="hdfReturnInfoId" />
+                <input type="hidden" id="hdfRowIndex" />
+                <h4 id="modalHeading" class="modal-title">Return Details(Warehouse To Factory)</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="dataContainer1">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var hdfReturnInfoId = $("#hdfReturnInfoId");
+
+        $(document).on('click', 'a.data-item-details', function (e) {
+            e.preventDefault();
+            hdfReturnInfoId.val("0")
+            var id = $(this).attr("data-item-details");
+            hdfReturnInfoId.val(id);
+            //return console.log(id);
+            $.when(getReqWithData('html', type.get, '/Configuration/WarehouseStockReturnDetails', { infoId: id })).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer1").empty();
+                    $("#dataContainer1").append(res);
+                    $("#modalReturnDetails").modal("toggle");
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        })
+    </script>
+    }

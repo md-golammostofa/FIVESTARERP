@@ -190,6 +190,10 @@ namespace ERPWeb
 
             // Configuration Database
             #region Configuration
+            container.RegisterType<IFaultyStockRepairedDetailsBusiness, FaultyStockRepairedDetailsBusiness>();
+            container.RegisterType<IFaultyStockRepairedInfoBusiness, FaultyStockRepairedInfoBusiness>();
+            container.RegisterType<IWarehouseToFactoryReturnDetailsBusiness, WarehouseToFactoryReturnDetailsBusiness>();
+            container.RegisterType<IWarehouseToFactoryReturnInfoBusiness, WarehouseToFactoryReturnInfoBusiness>();
             container.RegisterType<IDustStockDetailsBusiness, DustStockDetailsBusiness>();
             container.RegisterType<IDustStockInfoBusiness, DustStockInfoBusiness>();
             container.RegisterType<IFaultyStockTransferDetailsBusiness, FaultyStockTransferDetailsBusiness>();
@@ -227,6 +231,7 @@ namespace ERPWeb
 
             // FrontDesk Database
             #region FrontDesk
+            container.RegisterType<IFiveStarSMSDetailsBusiness, FiveStarSMSDetailsBusiness>();
             container.RegisterType<IHandsetChangeTraceBusiness, HandsetChangeTraceBusiness>();
             container.RegisterType<IFaultyStockAssignTSBusiness, FaultyStockAssignTSBusiness>();
             container.RegisterType<IJobOrderReturnDetailBusiness, JobOrderReturnDetailBusiness>();

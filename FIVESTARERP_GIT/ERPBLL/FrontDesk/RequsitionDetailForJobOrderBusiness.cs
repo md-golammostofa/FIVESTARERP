@@ -44,6 +44,12 @@ where rd.RequsitionInfoForJobOrderId={0} and std.OrganizationId={1} and jo.Branc
 group by rd.RequsitionDetailForJobOrderId,rd.PartsId,rd.Quantity,parts.MobilePartName,parts.MobilePartCode,rd.RequsitionInfoForJobOrderId", reqInfoId, orgId, branchId)).ToList();
             return data;
         }
+
+        public RequsitionDetailForJobOrder GetDetailsByDetailsId(long detailId, long orgId, long branchId)
+        {
+            return requsitionDetailForJobOrderRepository.GetOneByOrg(d => d.RequsitionDetailForJobOrderId == detailId && d.OrganizationId == orgId && d.BranchId == branchId);
+        }
+
         //Nishad//
         public IEnumerable<RequsitionDetailForJobOrderDTO> GetModelWiseAvailableQtyByRequsition(long reqInfoId, long orgId, long branchId, long modelId)
         {
@@ -71,6 +77,18 @@ From tblRequsitionDetailForJobOrders rd
 Left Join [Configuration].dbo.tblMobileParts p on rd.PartsId=p.MobilePartId
 Left Join [FrontDesk].dbo.tblJobOrders jo on rd.JobOrderId=jo.JodOrderId
 Left Join [Configuration].dbo.tblModelSS m on jo.DescriptionId=m.ModelId and rd.JobOrderId=jo.JodOrderId
+Where rd.RequsitionInfoForJobOrderId={0} and rd.OrganizationId={1} and rd.BranchId={2}
+", reqInfoId, orgId, branchId)).ToList();
+            return data;
+        }
+
+        public IEnumerable<RequsitionDetailForJobOrderDTO> GetRequsitionDetailsData(long reqInfoId, long orgId, long branchId)
+        {
+            var data = this._frontDeskUnitOfWork.Db.Database.SqlQuery<RequsitionDetailForJobOrderDTO>(
+                string.Format(@"Select rd.RequsitionDetailForJobOrderId,rd.RequsitionInfoForJobOrderId,rd.PartsId,p.MobilePartName'PartsName',
+p.MobilePartCode,rd.Quantity,rd.IssueQty,rd.CostPrice,rd.SellPrice,
+rd.EntryDate From tblRequsitionDetailForJobOrders rd
+Left Join [Configuration].dbo.tblMobileParts p on rd.PartsId=p.MobilePartId
 Where rd.RequsitionInfoForJobOrderId={0} and rd.OrganizationId={1} and rd.BranchId={2}
 ", reqInfoId, orgId, branchId)).ToList();
             return data;

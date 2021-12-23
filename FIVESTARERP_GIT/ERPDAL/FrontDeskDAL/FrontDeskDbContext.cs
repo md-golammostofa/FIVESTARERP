@@ -32,5 +32,6 @@ namespace ERPDAL.FrontDeskDAL
         public DbSet<JobOrderTransferDetail> tblJobOrderTransferDetails { get; set; }
         public DbSet<JobOrderReturnDetail> tblJobOrderReturnDetails { get; set; }
         public DbSet<HandsetChangeTrace> tblHandsetChangeTraces { get; set; }
+        public DbSet<FiveStarSMSDetails> tblFiveStarSMSDetails { get; set; }
     }
 }

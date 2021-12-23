@@ -86,6 +86,10 @@ namespace ERPBO.FrontDesk.DomainModels
         public Nullable<DateTime> QCPassFailDate { get; set; }
         //05-09-21
         public Nullable<DateTime> ProbablyDate { get; set; }
+        public string TotalPOrDStatus { get; set; }
+        public long? QCName { get; set; }
+        public Nullable<DateTime> QCAssignDate { get; set; }
+        public Nullable<DateTime> CallCenterAssignDate { get; set; }
 
     }
 }

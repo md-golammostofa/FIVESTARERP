@@ -28,7 +28,7 @@
                 <div class="row text-sm">
                     <div class="col-md-4 hide">
                         <label for="ddlServicesWarehouse" class="control-label font-weight-bold">ServicesWarehouse Name</label>
-                        @Html.DropDownList("ddlServicesWarehouse", (IEnumerable<SelectListItem>)ViewBag.ddlServicesWarehouse, "--Select S.Warehouse--", new { @class = "form-control form-control-sm" })
+                        @Html.DropDownList("ddlServicesWarehouse", (IEnumerable<SelectListItem>)ViewBag.ddlServicesWarehouse, "--Select S.Warehouse--", new { @class = "form-control form-control-sm select2" })
                     </div>
                     <div class="col-md-2">
                         <label for="ddlModels" class="control-label font-weight-bold">Model</label>
@@ -36,11 +36,11 @@
                     </div>
                     <div class="col-md-2">
                         <label for="ddlMobileParts" class="control-label font-weight-bold">Parts Name</label>
-                        @Html.DropDownList("ddlMobileParts", (IEnumerable<SelectListItem>)ViewBag.ddlMobileParts, "--Select Parts--", new { @class = "form-control form-control-sm" })
+                        @Html.DropDownList("ddlMobileParts", (IEnumerable<SelectListItem>)ViewBag.ddlMobileParts, "--Select Parts--", new { @class = "form-control form-control-sm select2" })
                     </div>
                     <div class="col-md-2">
                         <label for="ddlStockStatus" class="control-label font-weight-bold">Stock Status</label>
-                        @Html.DropDownList("ddlStockStatus", (IEnumerable<SelectListItem>)ViewBag.ddlStockStatus, "Select Status", new { @class = "form-control form-control-sm ctrl-changed" })
+                        @Html.DropDownList("ddlStockStatus", (IEnumerable<SelectListItem>)ViewBag.ddlStockStatus, "Select Status", new { @class = "form-control form-control-sm select2 ctrl-changed" })
                     </div>
                     <div class="col-md-2">
                         <label class="control-label font-weight-bold">From Date</label>
@@ -107,6 +107,10 @@
             todayHighlight: true,
             autoclose: true
         });
+        $('.select2').select2();
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
     })
 
     $(document).on('click', 'div.remove-date', function () {
@@ -131,10 +135,6 @@
         LoadDataTable();
     })
 
-    ddlServicesWarehouse.change(function () {
-        LoadDataTable();
-    })
-
     ddlMobileParts.change(function () {
         LoadDataTable();
     })
@@ -148,7 +148,7 @@
 
     function LoadDataTable() {
         //string flag, long? swarehouseId, long? mobilePartId, string stockStatus, string fromDate, string toDate
-        var data = { flag: "search", swarehouseId: TryParseInt(ddlServicesWarehouse.val(), 0), mobilePartId: TryParseInt(ddlMobileParts.val(), 0), descriptionId: TryParseInt( ddlModels.val(),0), stockStatus: ddlStockStatus.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), page: pageNo };
+        var data = { flag: "search", mobilePartId: TryParseInt(ddlMobileParts.val(), 0), descriptionId: TryParseInt( ddlModels.val(),0), stockStatus: ddlStockStatus.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), page: pageNo };
 
         console.log(data);
         $.when(getReqWithData('html', 'GET', '/Configuration/MobilePartStockDetailList', data)).then(function (res, status) {

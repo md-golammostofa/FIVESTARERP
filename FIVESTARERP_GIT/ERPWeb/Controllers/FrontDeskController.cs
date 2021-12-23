@@ -16,6 +16,8 @@ using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace ERPWeb.Controllers
@@ -65,8 +67,9 @@ namespace ERPWeb.Controllers
         private readonly IJobOrderTSBusiness _jobOrderTSBusiness;
         private readonly IHandsetChangeTraceBusiness _handsetChangeTraceBusiness;
         private readonly IModelSSBusiness _modelSSBusiness;
+        private readonly IFiveStarSMSDetailsBusiness _fiveStarSMSDetailsBusiness;
 
-        public FrontDeskController(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IDescriptionBusiness descriptionBusiness, IJobOrderBusiness jobOrderBusiness, ITechnicalServiceBusiness technicalServiceBusiness,ICustomerBusiness customerBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IRequsitionDetailForJobOrderBusiness requsitionDetailForJobOrderBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IBranchBusiness branchBusiness, IMobilePartBusiness mobilePartBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, IJobOrderAccessoriesBusiness jobOrderAccessoriesBusiness, IJobOrderProblemBusiness jobOrderProblemBusiness, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IJobOrderFaultBusiness jobOrderFaultBusiness, IJobOrderServiceBusiness jobOrderServiceBusiness, IJobOrderRepairBusiness jobOrderRepairBusiness, IRepairBusiness repairBusiness, IRoleBusiness roleBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IJobOrderReportBusiness jobOrderReportBusiness, IJobOrderTransferDetailBusiness jobOrderTransferDetailBusiness, IJobOrderReturnDetailBusiness jobOrderReturnDetailBusiness, IJobOrderTSBusiness jobOrderTSBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IColorSSBusiness colorSSBusiness, IModelSSBusiness modelSSBusiness, IDealerSSBusiness dealerSSBusiness)
+        public FrontDeskController(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IDescriptionBusiness descriptionBusiness, IJobOrderBusiness jobOrderBusiness, ITechnicalServiceBusiness technicalServiceBusiness,ICustomerBusiness customerBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IRequsitionDetailForJobOrderBusiness requsitionDetailForJobOrderBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IBranchBusiness branchBusiness, IMobilePartBusiness mobilePartBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, IJobOrderAccessoriesBusiness jobOrderAccessoriesBusiness, IJobOrderProblemBusiness jobOrderProblemBusiness, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IJobOrderFaultBusiness jobOrderFaultBusiness, IJobOrderServiceBusiness jobOrderServiceBusiness, IJobOrderRepairBusiness jobOrderRepairBusiness, IRepairBusiness repairBusiness, IRoleBusiness roleBusiness, ITsStockReturnInfoBusiness tsStockReturnInfoBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IJobOrderReportBusiness jobOrderReportBusiness, IJobOrderTransferDetailBusiness jobOrderTransferDetailBusiness, IJobOrderReturnDetailBusiness jobOrderReturnDetailBusiness, IJobOrderTSBusiness jobOrderTSBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IColorSSBusiness colorSSBusiness, IModelSSBusiness modelSSBusiness, IDealerSSBusiness dealerSSBusiness, IFiveStarSMSDetailsBusiness fiveStarSMSDetailsBusiness)
         {
             this._handSetStockBusiness = handSetStockBusiness;
             this._accessoriesBusiness = accessoriesBusiness;
@@ -105,16 +108,22 @@ namespace ERPWeb.Controllers
             this._colorSSBusiness = colorSSBusiness;
             this._modelSSBusiness = modelSSBusiness;
             this._dealerSSBusiness = dealerSSBusiness;
+            this._fiveStarSMSDetailsBusiness = fiveStarSMSDetailsBusiness;
         }
 
         #region JobOrder
         [HttpGet]
-        public ActionResult GetJobOrders(string flag, string fromDate, string toDate, long? modelId, long? jobOrderId, string mobileNo = "", string status = "", string jobCode = "", string iMEI = "", string iMEI2 = "", string tab = "",string customerType="",string jobType="",string repairStatus="",string customer="",string courierNumber="",string recId="", int page = 1)
+        public ActionResult GetJobOrders(string flag, string fromDate, string toDate, long? modelId, long? jobOrderId, string mobileNo = "", string status = "", string jobCode = "", string iMEI = "", string iMEI2 = "", string tab = "",string customerType="",string jobType="",string repairStatus="",string customer="",string courierNumber="",string recId="",string pdStatus="", int page = 1)
         {
             var job = Request.QueryString["job"];
             if (!string.IsNullOrEmpty(job))
             {
                 status = job;
+            }
+            var jobpd = Request.QueryString["jobpd"];
+            if (!string.IsNullOrEmpty(jobpd))
+            {
+                pdStatus = jobpd;
             }
 
             ViewBag.UserPrivilege = UserPrivilege("FrontDesk", "GetJobOrders");
@@ -133,7 +142,7 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && (flag == "view" || flag == "search" || flag == "Detail" || flag == "Assign" || flag=="TSWork"))
             {
-                var dto = _jobOrderBusiness.GetJobOrders(mobileNo.Trim(), modelId, status.Trim(), jobOrderId, jobCode, iMEI.Trim(), iMEI2.Trim(), User.OrgId, User.BranchId, fromDate, toDate,customerType,jobType, repairStatus,customer,courierNumber,recId);
+                var dto = _jobOrderBusiness.GetJobOrders(mobileNo.Trim(), modelId, status.Trim(), jobOrderId, jobCode, iMEI.Trim(), iMEI2.Trim(), User.OrgId, User.BranchId, fromDate, toDate,customerType,jobType, repairStatus,customer,courierNumber,recId, pdStatus);
 
                 IEnumerable<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
                
@@ -184,14 +193,14 @@ namespace ERPWeb.Controllers
         public ActionResult GetJobOrderDetails(long jobOrderId)
         {
             var dto = _jobOrderBusiness.GetJobOrderDetails(jobOrderId, User.OrgId);
-            JobOrderViewModel viewModels = new JobOrderViewModel();
+            List<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
             AutoMapper.Mapper.Map(dto, viewModels);
-            return PartialView("_GetJobOrderDetail", viewModels);
+            return PartialView("_GetJobOrderDetailsForCallCenter", viewModels);
         }
         [HttpGet]
-        public ActionResult GetTsWorksDetails(string flag, string fromDate, string toDate, long? modelId, long? jobOrderId, string mobileNo = "", string status = "", string jobCode = "", string iMEI = "", string iMEI2 = "",string customerType="",string jobType="",string repairStatus="",string customer="",string courierNumber="",string recId="", int page = 1)
+        public ActionResult GetTsWorksDetails(string flag, string fromDate, string toDate, long? modelId, long? jobOrderId, string mobileNo = "", string status = "", string jobCode = "", string iMEI = "", string iMEI2 = "",string customerType="",string jobType="",string repairStatus="",string customer="",string courierNumber="",string recId="",string pdStatus="", int page = 1)
         {
-            var dto = _jobOrderBusiness.GetJobOrders(mobileNo.Trim(), modelId, status.Trim(), jobOrderId, jobCode, iMEI.Trim(), iMEI2.Trim(), User.OrgId, User.BranchId, fromDate, toDate,customerType,jobType, repairStatus,customer, courierNumber,recId);
+            var dto = _jobOrderBusiness.GetJobOrders(mobileNo.Trim(), modelId, status.Trim(), jobOrderId, jobCode, iMEI.Trim(), iMEI2.Trim(), User.OrgId, User.BranchId, fromDate, toDate,customerType,jobType, repairStatus,customer, courierNumber,recId,pdStatus);
 
             IEnumerable<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
             AutoMapper.Mapper.Map(dto, viewModels);
@@ -235,7 +244,7 @@ namespace ERPWeb.Controllers
             ViewBag.JobOrderId = jobOrder;
             return View();
         }
-
+        
         [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult SaveJobOrder(JobOrderViewModel jobOrder, List<JobOrderAccessoriesViewModel> jobOrderAccessories,List<JobOrderProblemViewModel> jobOrderProblems)
         {
@@ -246,6 +255,7 @@ namespace ERPWeb.Controllers
             {
                 if (ModelState.IsValid && jobOrderProblems.Count > 0)
                 {
+                    
                     JobOrderDTO jobOrderDTO = new JobOrderDTO();
                     List<JobOrderAccessoriesDTO> listJobOrderAccessoriesDTO = new List<JobOrderAccessoriesDTO>();
                     List<JobOrderProblemDTO> listJobOrderProblemDTO = new List<JobOrderProblemDTO>();
@@ -255,9 +265,15 @@ namespace ERPWeb.Controllers
                     AutoMapper.Mapper.Map(jobOrderProblems, listJobOrderProblemDTO);
 
                     var exe = _jobOrderBusiness.SaveJobOrderWithReport(jobOrderDTO, listJobOrderAccessoriesDTO, listJobOrderProblemDTO, User.UserId, User.OrgId, User.BranchId);
-
+                    
                     IsSuccess = exe.isSuccess;
                     file = GetJobOrderReport(Convert.ToInt64(exe.text));
+                    var job = _jobOrderBusiness.GetJobOrderById(Convert.ToInt64(exe.text),User.OrgId);
+                    //SMS
+                    var ModelName = _modelSSBusiness.GetModelById(job.DescriptionId, User.OrgId).ModelName;
+                    string Jobsms = "প্রিয়  গ্রাহক, আপনার মোবাইল Job Sheet No-" + job.JobOrderCode+"," +"Model-"+ ModelName + "- সার্ভিস করার জন্য গ্রহণ করা হয়েছে । ধন্যবাদ-ARA Care.";
+                    var sms = sendSmsForReceive(Jobsms, job.MobileNo);
+                    //End
                 }
                 return Json(new { IsSuccess = IsSuccess, file = file });
             }
@@ -282,7 +298,33 @@ namespace ERPWeb.Controllers
             }
             
         }
+        #region SmsSend
+        private async Task<ActionResult> sendSmsForReceive(string msg, string number)
+        {
+            string apiUrl = "http://sms.viatech.com.bd";
+            var data = "";
+            
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(apiUrl + string.Format("/smsapi?api_key=C200118561a480b32b3315.60333541&type=unicode&contacts={0}&senderid=8809612441973&msg={1}", number, msg)).Result;
 
+            if (response.IsSuccessStatusCode)
+            {
+                FiveStarSMSDetailsViewModel sms = new FiveStarSMSDetailsViewModel();
+                FiveStarSMSDetailsDTO dto = new FiveStarSMSDetailsDTO();
+                data = await response.Content.ReadAsStringAsync();
+                sms.MobileNo = number;
+                sms.Message = msg;
+                sms.Purpose = "Receive";
+                sms.Response = data;
+                AutoMapper.Mapper.Map(sms, dto);
+                if(data != null)
+                {
+                    var d = _fiveStarSMSDetailsBusiness.SaveSMSDetails(dto, User.UserId, User.OrgId, User.BranchId);
+                }
+            }
+            return new EmptyResult();
+        }
+        #endregion
         private string GetJobOrderReport(long jobOrderId)
         {
             string file = string.Empty;
@@ -428,9 +470,16 @@ namespace ERPWeb.Controllers
 
                 if (executionState.isSuccess)
                 {
+                    //SMS
+                    IEnumerable<JobOrderDTO> jobOrderDetails = _jobOrderBusiness.GetMultipleJobReceipt(executionState.text, User.OrgId, User.BranchId);
+                    int count = jobOrderDetails.Count();
+                    string Jobsms = "প্রিয়  গ্রাহক, আপনার মোবাইল Receving ID No-" + executionState.text + "," + "Total-" + count + "-Job সার্ভিস করার জন্য গ্রহণ করা হয়েছে । ধন্যবাদ-ARA Care.";
+                    var sms = sendSmsForReceive(Jobsms, jobOrderDetails.FirstOrDefault().MobileNo);
+                    //End
                     executionState.text = GetDealerReceiptReport(executionState.text);
+
                 }
-                
+
             }
             return Json(executionState);
         }
@@ -480,6 +529,77 @@ namespace ERPWeb.Controllers
 
             return file;
         }
+        public ActionResult GetJobOrdersPending(string flag, string fromDate, string toDate, long? modelId, long? jobOrderId, string mobileNo = "", string status = "", string jobCode = "", string iMEI = "", string iMEI2 = "", string tab = "", string customerType = "", string jobType = "", string repairStatus = "", string customer = "", string courierNumber = "", string recId = "", string pdStatus = "Pending", int page = 1)
+        {
+            var job = Request.QueryString["job"];
+            if (!string.IsNullOrEmpty(job))
+            {
+                status = job;
+            }
+            ViewBag.UserPrivilege = UserPrivilege("FrontDesk", "GetJobOrders");
+            if (string.IsNullOrEmpty(flag))
+            {
+                //ViewBag.ddlModelName = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(d => new SelectListItem { Text = d.DescriptionName, Value = d.DescriptionId.ToString() }).ToList();
+                ViewBag.ddlModelName = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
+
+                ViewBag.ddlStateStatus = Utility.ListOfJobOrderStatus().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+                ViewBag.ddlCustomerType = Utility.ListOfCustomerType().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+                ViewBag.ddlJobType = Utility.ListOfJobOrderType().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+
+                ViewBag.txtCustomerName = _dealerSSBusiness.GetAllDealerForD(User.OrgId).Select(p => new SelectListItem { Text = p.Dealer, Value = p.DealerName }).ToList();
+
+                return View();
+            }
+            else if (!string.IsNullOrEmpty(flag) && (flag == "view" || flag == "search" || flag == "Detail" || flag == "Assign" || flag == "TSWork"))
+            {
+                var dto = _jobOrderBusiness.GetJobOrdersPending(mobileNo.Trim(), modelId, status.Trim(), jobOrderId, jobCode, iMEI.Trim(), iMEI2.Trim(), User.OrgId, User.BranchId, fromDate, toDate, customerType, jobType, repairStatus, customer, courierNumber, recId, pdStatus);
+
+                IEnumerable<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
+
+                if (flag == "view" || flag == "search")
+                {
+                    // Pagination //
+                    ViewBag.PagerData = GetPagerData(dto.Count(), 50, page);
+                    dto = dto.Skip((page - 1) * 50).Take(50).ToList();
+                    //-----------------//
+                    AutoMapper.Mapper.Map(dto, viewModels);
+                    return PartialView("_GetJobOrdersPending", viewModels);
+                }
+                //if (flag == "TSWork")
+                //{
+                //    AutoMapper.Mapper.Map(dto, viewModels);
+                //    return PartialView("_GetTSWorkDetails", viewModels.FirstOrDefault());
+                //}
+                else if (flag == "Detail")// Flag = Detail
+                {
+                    var oldHandset = _handsetChangeTraceBusiness.GetOneJobByOrgId(jobOrderId.Value, User.OrgId);
+                    var handset = new HandsetChangeTraceViewModel();
+                    if (oldHandset != null)
+                    {
+                        handset = new HandsetChangeTraceViewModel
+                        {
+                            IMEI1 = oldHandset.IMEI1,
+                            IMEI2 = oldHandset.IMEI2,
+                            ModelId = oldHandset.ModelId,
+                            ModelName = (_modelSSBusiness.GetModelById(oldHandset.ModelId, User.OrgId).ModelName),
+                            Color = oldHandset.Color,
+                        };
+                    }
+                    ViewBag.OldHansetInformation = handset;
+
+                    AutoMapper.Mapper.Map(dto, viewModels);
+                    ViewBag.ddlJobOrderType = Utility.ListOfJobOrderType().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+                    return PartialView("_GetJobOrderDetail", viewModels.FirstOrDefault());
+                }
+                else
+                {
+                    // Flag= Assign
+                    ViewBag.ddlTSName = _technicalServiceBusiness.GetAllTechnicalServiceByOrgId(User.OrgId, User.BranchId).Select(r => new SelectListItem { Text = r.Name, Value = r.EngId.ToString() }).ToList();
+                    return PartialView("_GetJobOrderAssing", viewModels.FirstOrDefault());
+                }
+            }
+            return View();
+        }
         #endregion
 
         #region Multiple Job Delivery
@@ -495,7 +615,7 @@ namespace ERPWeb.Controllers
                 ViewBag.ddlCustomerType = Utility.ListOfCustomerType().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
                 ViewBag.ddlJobType = Utility.ListOfJobOrderType().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
 
-                ViewBag.ddlDealerSearch = _dealerSSBusiness.GetAllDealerForD(User.OrgId).Select(p => new SelectListItem { Text = p.Dealer, Value = p.DealerName }).ToList();
+                ViewBag.ddlDealerSearch = _dealerSSBusiness.GetAllDealerForD(User.OrgId).Select(p => new SelectListItem { Text = p.Dealer, Value = p.MobileNo }).ToList();
 
                 return View();
             }
@@ -523,11 +643,42 @@ namespace ERPWeb.Controllers
                 executionState = _jobOrderBusiness.SaveJobOrderMDelivey(jobOrders, User.UserId, User.OrgId, User.BranchId);
                 if (executionState.isSuccess)
                 {
+                    //SMS
+                    IEnumerable<JobOrderDTO> jobOrderDetails = _jobOrderBusiness.GetMultipleJobDeliveryChalan(executionState.text, User.BranchId, User.OrgId);
+                    int count = jobOrderDetails.Count();
+                    string Jobsms = "প্রিয়  গ্রাহক, আপনার মোবাইল Challan No-" + executionState.text + "," + "Total-" + count + "-Job সার্ভিস সম্পূর্ণ হওয়ার পর ফেরত প্রদান করা হয়েছে।যে কোন ধরণের বিলের জন্য রশিদ গ্রহন করুন।ধন্যবাদ- ARA Care.";
+                    var sms = sendSmsForDelivery(Jobsms, jobOrderDetails.FirstOrDefault().MobileNo);
+                    //End
                     executionState.text = GetMultipleJobDelivery(executionState.text);
                 }
-                    
+
             }
             return Json(executionState);
+        }
+        private async Task<ActionResult> sendSmsForDelivery(string msg, string number)
+        {
+            string apiUrl = "http://sms.viatech.com.bd";
+            var data = "";
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(apiUrl + string.Format("/smsapi?api_key=C200118561a480b32b3315.60333541&type=unicode&contacts={0}&senderid=8809612441973&msg={1}", number, msg)).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                FiveStarSMSDetailsViewModel sms = new FiveStarSMSDetailsViewModel();
+                FiveStarSMSDetailsDTO dto = new FiveStarSMSDetailsDTO();
+                data = await response.Content.ReadAsStringAsync();
+                sms.MobileNo = number;
+                sms.Message = msg;
+                sms.Purpose = "Delivery";
+                sms.Response = data;
+                AutoMapper.Mapper.Map(sms, dto);
+                if (data != null)
+                {
+                    var d = _fiveStarSMSDetailsBusiness.SaveSMSDetails(dto, User.UserId, User.OrgId, User.BranchId);
+                }
+            }
+            return new EmptyResult();
         }
         private string GetMultipleJobDelivery(string deliveryCode)
         {
@@ -605,8 +756,8 @@ namespace ERPWeb.Controllers
                 var dto = _jobOrderBusiness.JobOrderTransfer(User.OrgId, User.BranchId);
                 List<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
                 // Pagination //
-                ViewBag.PagerData = GetPagerData(dto.Count(), 5, page);
-                dto = dto.Skip((page - 1) * 5).Take(5).ToList();
+                ViewBag.PagerData = GetPagerData(dto.Count(), 25, page);
+                dto = dto.Skip((page - 1) * 25).Take(25).ToList();
                 //-----------------//
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetJobTransferList",viewModels);
@@ -688,8 +839,8 @@ namespace ERPWeb.Controllers
                 var dto = _jobOrderTransferDetailBusiness.GetReceiveJob(User.OrgId, User.BranchId,branchName,jobCode,transferCode,fromDate,toDate,tstatus);
                 List<JobOrderTransferDetailViewModel> viewModels = new List<JobOrderTransferDetailViewModel>();
                 // Pagination //
-                ViewBag.PagerData = GetPagerData(dto.Count(), 5, page);
-                dto = dto.Skip((page - 1) * 5).Take(5).ToList();
+                ViewBag.PagerData = GetPagerData(dto.Count(), 25, page);
+                dto = dto.Skip((page - 1) * 25).Take(25).ToList();
                 //-----------------//
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_ReceiveJobOrder", viewModels);
@@ -716,8 +867,8 @@ namespace ERPWeb.Controllers
                 var dto = _jobOrderBusiness.TransferReceiveJobOrder(User.OrgId, User.BranchId,branchName);
                 List<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
                 // Pagination //
-                ViewBag.PagerData = GetPagerData(dto.Count(), 5, page);
-                dto = dto.Skip((page - 1) * 5).Take(5).ToList();
+                ViewBag.PagerData = GetPagerData(dto.Count(), 30, page);
+                dto = dto.Skip((page - 1) * 30).Take(30).ToList();
                 //-----------------//
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_TransferReceiveJobOrder", viewModels);
@@ -808,8 +959,8 @@ namespace ERPWeb.Controllers
                 var dto = _jobOrderReturnDetailBusiness.GetReturnJobOrder(User.OrgId, User.BranchId, branchName, jobCode, transferCode,fromDate,toDate, tstatus);
                 List<JobOrderReturnDetailViewModel> viewModels = new List<JobOrderReturnDetailViewModel>();
                 // Pagination //
-                ViewBag.PagerData = GetPagerData(dto.Count(), 5, page);
-                dto = dto.Skip((page - 1) * 5).Take(5).ToList();
+                ViewBag.PagerData = GetPagerData(dto.Count(), 25, page);
+                dto = dto.Skip((page - 1) * 25).Take(25).ToList();
                 //-----------------//
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_ReceiveReturnJobOrder", viewModels);
@@ -1022,7 +1173,8 @@ namespace ERPWeb.Controllers
                 SellPrice =s.SellPrice,
                 CostPrice=s.CostPrice,
                 Quantity = s.Quantity,
-                Remarks = s.Remarks
+                Remarks = s.Remarks,
+                IssueQty=s.IssueQty
             }).ToList();
 
             
@@ -1092,8 +1244,9 @@ namespace ERPWeb.Controllers
             ViewBag.UserPrivilege = UserPrivilege("FrontDesk", "TSRequsitionInfoForJobOrderList");
 
             ///
-            IEnumerable<RequsitionDetailForJobOrderDTO> returnDTO = _requsitionDetailForJobOrderBusiness.GetModelWiseAvailableQtyByRequsition(requsitionInfoId.Value, User.OrgId, User.BranchId, jobOrderInfo.DescriptionId);
-            if (returnDTO.Count() == 0)
+            //IEnumerable<RequsitionDetailForJobOrderDTO> returnDTO = _requsitionDetailForJobOrderBusiness.GetModelWiseAvailableQtyByRequsition(requsitionInfoId.Value, User.OrgId, User.BranchId, jobOrderInfo.DescriptionId);
+            var dto = _requsitionDetailForJobOrderBusiness.GetRequsitionDetailsData(requsitionInfoId.Value, User.OrgId, User.BranchId);
+            if (dto.Count() == 0)
             {
                 IEnumerable<RequsitionDetailForJobOrderDTO> requsitionDetailsDto = _requsitionDetailForJobOrderBusiness.GetAllRequsitionDetailForJobOrderId(requsitionInfoId.Value, User.OrgId, jobOrderInfo.BranchId.Value).Select(s => new RequsitionDetailForJobOrderDTO
                 {
@@ -1115,8 +1268,9 @@ namespace ERPWeb.Controllers
             }
             else
             {
+                
                 IEnumerable<RequsitionDetailForJobOrderViewModel> returnViewModels = new List<RequsitionDetailForJobOrderViewModel>();
-                AutoMapper.Mapper.Map(returnDTO, returnViewModels);
+                AutoMapper.Mapper.Map(dto, returnViewModels);
                 ViewBag.AvailableQtyByRequsition = returnViewModels;
                 return View();
             }
@@ -1184,7 +1338,7 @@ namespace ERPWeb.Controllers
         public ActionResult IssueTsRequsition(long reqId)
         {
             var req = _requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoForJobOrderId(reqId, User.OrgId);
-            if(req !=null && req.StateStatus == "Current")
+            if(req !=null && req.StateStatus == "Current" || req.StateStatus == "Pending")
             {
                 var reqdata = _requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoData(req.RequsitionInfoForJobOrderId, User.OrgId, User.BranchId);
                 RequsitionInfoForJobOrderViewModel viewModel = new RequsitionInfoForJobOrderViewModel();
@@ -1196,7 +1350,7 @@ namespace ERPWeb.Controllers
         public ActionResult IssueTsRequsitionDetails(long reqId)
         {
             var req = _requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoForJobOrderId(reqId, User.OrgId);
-            if(reqId>0 && req.StateStatus == "Current")
+            if(reqId>0 && req.StateStatus == "Current" || req.StateStatus == "Pending")
             {
                 var data = _requsitionDetailForJobOrderBusiness.GetRequsitionDetailAndAvailableQty(req.RequsitionInfoForJobOrderId, User.OrgId, User.BranchId);
                 List<RequsitionDetailForJobOrderViewModel> viewModels = new List<RequsitionDetailForJobOrderViewModel>();
@@ -1204,6 +1358,32 @@ namespace ERPWeb.Controllers
                 return PartialView("_IssueTsRequsitionDetails", viewModels);
             }
             return RedirectToAction("TSRequsitionInfoForJobOrderList");
+        }
+
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult UpdateReqStatusAndWarehouseStockOut(RequsitionInfoForJobOrderViewModel info)
+        {
+            bool IsSuccess = false;
+            if (info.RequsitionInfoForJobOrderId > 0 && !string.IsNullOrEmpty(info.StateStatus))
+            {
+                if (RequisitionStatus.Rejected == info.StateStatus)
+                {
+                    IsSuccess = _requsitionInfoForJobOrderBusiness.SaveRequisitionStatus(info.RequsitionInfoForJobOrderId, info.StateStatus, User.UserId, User.OrgId, User.BranchId);
+                }
+                if (RequisitionStatus.Pending == info.StateStatus)
+                {
+                    IsSuccess = _requsitionInfoForJobOrderBusiness.SaveRequisitionStatus(info.RequsitionInfoForJobOrderId, info.StateStatus, User.UserId, User.OrgId, User.BranchId);
+                }
+                else
+                if (RequisitionStatus.Approved == info.StateStatus)
+                {
+                    RequsitionInfoForJobOrderDTO dto = new RequsitionInfoForJobOrderDTO();
+                    AutoMapper.Mapper.Map(info, dto);
+                    IsSuccess = _mobilePartStockDetailBusiness.UpdateReqStatusAndWarehouseStockOutAndTsStockIn(dto, User.OrgId, User.BranchId, User.UserId);
+                }
+
+            }
+            return Json(IsSuccess);
         }
         //AnotherBranchRequsition
         public ActionResult AnotherBranchRequsition()
@@ -1427,7 +1607,7 @@ namespace ERPWeb.Controllers
                 TsStockId = stock.TsStockId,
                 JobOrderId = stock.JobOrderId,
                 RequsitionInfoForJobOrderId = stock.RequsitionInfoForJobOrderId,
-                RequsitionCode = (_requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoOneByOrgId(stock.RequsitionInfoForJobOrderId, User.OrgId, jobOrder.BranchId.Value).RequsitionCode),
+                RequsitionCode = (_requsitionInfoForJobOrderBusiness.GetAllRequsitionInfoOneByOrgId(stock.RequsitionInfoForJobOrderId, User.OrgId, User.BranchId).RequsitionCode),
                 SWarehouseId = stock.SWarehouseId,
                 SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(stock.SWarehouseId.Value, User.OrgId, User.BranchId).ServicesWarehouseName),
                 PartsId = stock.PartsId,
@@ -1590,6 +1770,33 @@ namespace ERPWeb.Controllers
             }
             return Json(IsSuccess);
         }
+        #region SmsSend
+        private async Task<ActionResult> sendSmsForRepair(string msg, string number)
+        {
+            string apiUrl = "http://sms.viatech.com.bd";
+            var data = "";
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(apiUrl + string.Format("/smsapi?api_key=C200118561a480b32b3315.60333541&type=unicode&contacts={0}&senderid=8809612441973&msg={1}", number, msg)).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                FiveStarSMSDetailsViewModel sms = new FiveStarSMSDetailsViewModel();
+                FiveStarSMSDetailsDTO dto = new FiveStarSMSDetailsDTO();
+                data = await response.Content.ReadAsStringAsync();
+                sms.MobileNo = number;
+                sms.Message = msg;
+                sms.Purpose = "Repair";
+                sms.Response = data;
+                AutoMapper.Mapper.Map(sms, dto);
+                if (data != null)
+                {
+                    var d = _fiveStarSMSDetailsBusiness.SaveSMSDetails(dto, User.UserId, User.OrgId, User.BranchId);
+                }
+            }
+            return new EmptyResult();
+        }
+        #endregion
 
         [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult JobOrderTsStock(long jobOrderId)
@@ -1671,8 +1878,43 @@ namespace ERPWeb.Controllers
                 AutoMapper.Mapper.Map(info, dtoInfo);
                 AutoMapper.Mapper.Map(details, dtoDetail);
                 IsSuccess = _invoiceInfoBusiness.SaveInvoiceForJobOrder(dtoInfo, dtoDetail, User.UserId, User.OrgId, User.BranchId);
+                if (info.JobOrderId > 0)
+                {
+                    var job = _jobOrderBusiness.GetJobOrderById(info.JobOrderId, User.OrgId);
+                    var netAmount = _invoiceInfoBusiness.GetAllInvoice(job.JodOrderId, User.OrgId, User.BranchId).NetAmount;
+                    //SMS
+                    var ModelName = _modelSSBusiness.GetModelById(job.DescriptionId, User.OrgId).ModelName;
+                    string Jobsms = "প্রিয়  গ্রাহক, আপনার মোবাইল Job Sheet No-" + job.JobOrderCode + "," + "Model-" + ModelName + "-এর জন্য" + netAmount +  "টাকা বিল পরিশোধ করেছেন।বিল পরিশোধের জন্য ধন্যবাদ।দয়া করে বিলের রশিদ গ্রহন করুন।ধন্যবাদ– ARA Care.";
+                    var sms = sendSmsForInvoice(Jobsms, job.MobileNo);
+                    //End
+                }
             }
             return Json(IsSuccess);
+        }
+        private async Task<ActionResult> sendSmsForInvoice(string msg, string number)
+        {
+            string apiUrl = "http://sms.viatech.com.bd";
+            var data = "";
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(apiUrl + string.Format("/smsapi?api_key=C200118561a480b32b3315.60333541&type=unicode&contacts={0}&senderid=8809612441973&msg={1}", number, msg)).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                FiveStarSMSDetailsViewModel sms = new FiveStarSMSDetailsViewModel();
+                FiveStarSMSDetailsDTO dto = new FiveStarSMSDetailsDTO();
+                data = await response.Content.ReadAsStringAsync();
+                sms.MobileNo = number;
+                sms.Message = msg;
+                sms.Purpose = "Invoice";
+                sms.Response = data;
+                AutoMapper.Mapper.Map(sms, dto);
+                if (data != null)
+                {
+                    var d = _fiveStarSMSDetailsBusiness.SaveSMSDetails(dto, User.UserId, User.OrgId, User.BranchId);
+                }
+            }
+            return new EmptyResult();
         }
         #endregion
 
@@ -2094,6 +2336,20 @@ namespace ERPWeb.Controllers
                 return PartialView("_GetIMEICountReport", viewModels);
             }
         }
+        public ActionResult ServicesSummary(string flag,string fromDate,string toDate)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderBusiness.ServicesSummary(User.OrgId, fromDate, toDate);
+                List<ServicesSummaryViewModel> viewModels = new List<ServicesSummaryViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_ServicesSummary", viewModels);
+            }
+        }
         #endregion
         //
         #region Call Center
@@ -2255,7 +2511,18 @@ namespace ERPWeb.Controllers
                 {
                     IsSuccess = _jobOrderTSBusiness.UpdateJobOrderTsForQcFail(jobId, User.UserId, User.OrgId, User.BranchId);
                 }
-                
+                if(approval == "QC-Pass")
+                {
+                    var job = _jobOrderBusiness.GetJobOrderById(jobId, User.OrgId);
+                    if (job.CustomerType != "Dealer")
+                    {
+                        //SMS
+                        var ModelName = _modelSSBusiness.GetModelById(job.DescriptionId, User.OrgId).ModelName;
+                        string Jobsms = "প্রিয়  গ্রাহক, আপনার মোবাইল,Job Sheet No-" + job.JobOrderCode + "," + "Model-" + ModelName + "- সার্ভিস সম্পূর্ণ হয়েছে।সেটটি গ্রহণের জন্য Received Paper সহ যোগাযোগ করুন।ধন্যবাদ-ARA Care";
+                        var sms = sendSmsForRepair(Jobsms, job.MobileNo);
+                        //End
+                    }
+                }
             }
             return Json(IsSuccess);
         }
@@ -2279,6 +2546,66 @@ namespace ERPWeb.Controllers
                 IsSuccess = _jobOrderBusiness.UpdateQCStatusMultipleJob(jobOrders, User.OrgId, User.BranchId, User.UserId);
             }
             return Json(IsSuccess);
+        }
+        #endregion
+
+        #region Prob Date Over Job
+        public ActionResult GetDaysOverProbDate(string flag, string fromDate, string toDate, long? modelId, long? jobOrderId, string mobileNo = "", string status = "", string jobCode = "", string iMEI = "", string iMEI2 = "", string tab = "", string customerType = "", string jobType = "", string repairStatus = "", string customer = "", string courierNumber = "", string recId = "", string pdStatus = "")
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                ViewBag.ddlModelName = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
+
+                ViewBag.ddlStateStatus = Utility.ListOfJobOrderStatus().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+                ViewBag.ddlCustomerType = Utility.ListOfCustomerType().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+                ViewBag.ddlJobType = Utility.ListOfJobOrderType().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+
+                ViewBag.txtCustomerName = _dealerSSBusiness.GetAllDealerForD(User.OrgId).Select(p => new SelectListItem { Text = p.Dealer, Value = p.DealerName }).ToList();
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderBusiness.GetJobOrderFor3DaysOverProbDate(mobileNo.Trim(), modelId, status.Trim(), jobOrderId, jobCode, iMEI.Trim(), iMEI2.Trim(), User.OrgId, User.BranchId, fromDate, toDate, customerType, jobType, repairStatus, customer, courierNumber, recId, pdStatus);
+
+                IEnumerable<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
+                //ViewBag.PagerData = GetPagerData(dto.Count(), 5, page);
+                //dto = dto.Skip((page - 1) * 5).Take(5).ToList();
+                //-----------------//
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_Get3DaysOverProbDate", viewModels);
+            }
+        }
+        public ActionResult GetJobOrder3DaysDetails(long jobOrderId)
+        {
+            var dto = _jobOrderBusiness.GetJobOrderDetails(jobOrderId, User.OrgId);
+            List<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
+            AutoMapper.Mapper.Map(dto, viewModels);
+            return PartialView("_GetJobOrderDetailForAll", viewModels);
+        }
+        public ActionResult Get10DaysOverProbDate(string flag, string fromDate, string toDate, long? modelId, long? jobOrderId, string mobileNo = "", string status = "", string jobCode = "", string iMEI = "", string iMEI2 = "", string tab = "", string customerType = "", string jobType = "", string repairStatus = "", string customer = "", string courierNumber = "", string recId = "", string pdStatus = "")
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                ViewBag.ddlModelName = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
+
+                ViewBag.ddlStateStatus = Utility.ListOfJobOrderStatus().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+                ViewBag.ddlCustomerType = Utility.ListOfCustomerType().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+                ViewBag.ddlJobType = Utility.ListOfJobOrderType().Select(r => new SelectListItem { Text = r.text, Value = r.value }).ToList();
+
+                ViewBag.txtCustomerName = _dealerSSBusiness.GetAllDealerForD(User.OrgId).Select(p => new SelectListItem { Text = p.Dealer, Value = p.DealerName }).ToList();
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderBusiness.GetJobOrderFor10DaysOverProbDate(mobileNo.Trim(), modelId, status.Trim(), jobOrderId, jobCode, iMEI.Trim(), iMEI2.Trim(), User.OrgId, User.BranchId, fromDate, toDate, customerType, jobType, repairStatus, customer, courierNumber, recId, pdStatus);
+
+                IEnumerable<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
+                //ViewBag.PagerData = GetPagerData(dto.Count(), 5, page);
+                //dto = dto.Skip((page - 1) * 5).Take(5).ToList();
+                //-----------------//
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_Get10DaysOverProbDate", viewModels);
+            }
         }
         #endregion
     }

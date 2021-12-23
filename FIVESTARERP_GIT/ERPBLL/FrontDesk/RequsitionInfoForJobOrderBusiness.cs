@@ -150,7 +150,7 @@ order by EntryDate desc
                 requsitionInfo.EntryDate = DateTime.Now;
                 requsitionInfo.EUserId = userId;
                 requsitionInfo.OrganizationId = orgId;
-                requsitionInfo.BranchId = jobOrder.BranchId;
+                requsitionInfo.BranchId = branchId;
                 requsitionInfo.UserBranchId = branchId;
                 List<RequsitionDetailForJobOrder> requsitionDetails = new List<RequsitionDetailForJobOrder>();
 
@@ -166,7 +166,7 @@ order by EntryDate desc
                     requsitionDetail.EUserId = userId;
                     requsitionDetail.EntryDate = DateTime.Now;
                     requsitionDetail.OrganizationId = orgId;
-                    requsitionDetail.BranchId = jobOrder.BranchId;
+                    requsitionDetail.BranchId = branchId;
                     requsitionDetail.UserBranchId = branchId;
                     requsitionDetails.Add(requsitionDetail);
                 }
@@ -181,11 +181,17 @@ order by EntryDate desc
         {
             var r = GetAllRequsitionInfoForJobOrderId(reqId, orgId);
             var jobOrder = _jobOrderBusiness.GetJobOrderById(r.JobOrderId.Value, orgId);
-            var reqInfo = requsitionInfoForJobOrderRepository.GetOneByOrg(req => req.RequsitionInfoForJobOrderId == reqId && req.OrganizationId == orgId && req.BranchId == jobOrder.BranchId);
+            var reqInfo = requsitionInfoForJobOrderRepository.GetOneByOrg(req => req.RequsitionInfoForJobOrderId == reqId && req.OrganizationId == orgId && req.BranchId == branchId);
 
              //reqInfo.JobOrderId
+             
             if (reqInfo != null)
             {
+                if (status == "Approved")
+                {
+                    reqInfo.IssueUserId = userId;
+                    reqInfo.IssueDateDate = DateTime.Now;
+                }
                 reqInfo.StateStatus = status;
                 reqInfo.UpUserId = userId;
                 requsitionInfoForJobOrderRepository.Update(reqInfo);
@@ -328,7 +334,8 @@ where q.JobOrderId={0}", jobOrderId)).ToList();
         public RequsitionInfoForJobOrderDTO GetAllRequsitionInfoData(long reqInfoId, long orgId,long branchId)
         {
             return this._frontDeskUnitOfWork.Db.Database.SqlQuery<RequsitionInfoForJobOrderDTO>(
-                string.Format(@"Select ri.RequsitionInfoForJobOrderId,ri.RequsitionCode,ri.StateStatus,jo.JobOrderCode,u.UserName,m.ModelName,ri.EntryDate From tblRequsitionInfoForJobOrders ri
+                string.Format(@"Select ri.JobOrderId,jo.DescriptionId,ri.RequsitionInfoForJobOrderId,ri.RequsitionCode,ri.StateStatus,
+jo.JobOrderCode,u.UserName,m.ModelName,ri.EntryDate From tblRequsitionInfoForJobOrders ri
 Left Join [FrontDesk].dbo.tblJobOrders jo on ri.JobOrderId=jo.JodOrderId
 Left Join [ControlPanel].dbo.tblApplicationUsers u on ri.EUserId=UserId
 Left Join [Configuration].dbo.tblModelSS m on jo.DescriptionId=m.ModelId and ri.JobOrderId=jo.JodOrderId

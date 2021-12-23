@@ -32,7 +32,8 @@
             <th>Parts Name</th>
             <th>Parts Code</th>
             <th>Qty.</th>
-            <th>Remarks</th>
+            <th class="hide">Remarks</th>
+            <th>Issue Qty.</th>
         </tr>
     </thead>
     <tbody>
@@ -46,7 +47,8 @@
                 <td>@item.PartsName</td>
                 <td>@item.MobilePartCode</td>
                 <td class="text-center">@item.Quantity</td>
-                <td class="text-center">@item.Remarks</td>
+                <td class="text-center hide">@item.Remarks</td>
+                <td class="text-center">@item.IssueQty</td>
             </tr>
         }
     </tbody>

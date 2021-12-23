@@ -225,6 +225,38 @@ namespace ERPWeb.Controllers
             }
             return Json(viewModel);
         }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult PartsAvailable(long modelId,long partsId,int qty)
+        {
+            bool IsSuccess = true;
+            int stQty = 0;
+            if(modelId > 0 && partsId > 0)
+            {
+                var stock = _mobilePartStockInfoBusiness.GetPriceByModelAndParts(modelId, partsId, User.OrgId, User.BranchId);
+                stQty = stock.Sum(s => (s.StockInQty.Value - s.StockOutQty.Value));
+                if (stQty > qty || stQty == qty)
+                {
+                    IsSuccess = false;
+                }
+            }
+            return Json(IsSuccess);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult FaultyPartsAvailable(long modelId, long partsId, int qty)
+        {
+            bool IsSuccess = true;
+            int stQty = 0;
+            if (modelId > 0 && partsId > 0)
+            {
+                var stock = _faultyStockInfoBusiness.GetAllFaultyByModelAndParts(modelId, partsId, User.OrgId, User.BranchId);
+                stQty = stock.Sum(s => (s.StockInQty - s.StockOutQty));
+                if (stQty > qty || stQty == qty)
+                {
+                    IsSuccess = false;
+                }
+            }
+            return Json(IsSuccess);
+        }
 
         #endregion
 
@@ -475,7 +507,18 @@ namespace ERPWeb.Controllers
             }
             return Json(total);
         }
+        //
+        public ActionResult GetFaultyStockAvailableQty(long modelId, long partsId)
+        {
+            var stock = _faultyStockInfoBusiness.GetAllFaultyByModelAndParts(modelId,partsId,User.OrgId,User.BranchId);
 
+            int total = 0;
+            if (stock != null)
+            {
+                total = ((stock.Sum(s=>s.StockInQty))- (stock.Sum(s => s.StockOutQty)));
+            }
+            return Json(total);
+        }
         [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult GetSellPriceByCostPrice(long warehouseId, long partsId, double cprice)
         {
@@ -558,5 +601,7 @@ namespace ERPWeb.Controllers
             return Json(isExist);
         }
         #endregion
+
     }
+
 }

@@ -34,5 +34,6 @@ namespace ERPBO.Configuration.DTOModels
         public double CostPrice { get; set; }
         public double SellPrice { get; set; }
         public string PartsCode { get; set; }
+        public string PartsName { get; set; }
     }
 }

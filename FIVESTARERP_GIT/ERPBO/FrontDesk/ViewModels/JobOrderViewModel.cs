@@ -12,13 +12,12 @@ namespace ERPBO.FrontDesk.ViewModels
     public class JobOrderViewModel
     {
         public long JodOrderId { get; set; }
-        [Required,StringLength(100)]
+        [StringLength(100)]
         public string CustomerName { get; set; }
-        [Required, StringLength(15)]
+        [StringLength(15)]
         public string MobileNo { get; set; }
-        [Required, StringLength(150)]
+        [StringLength(150)]
         public string Address { get; set; }
-        [Range(1,long.MaxValue)]
         public long DescriptionId { get; set; }
         public bool IsWarrantyAvailable { get; set; }
         public bool IsWarrantyPaperEnclosed { get; set; }
@@ -71,7 +70,6 @@ namespace ERPBO.FrontDesk.ViewModels
         public string ApproxBill { get; set; }
         public bool? IsTransfer { get; set; }
         public long? TransferBranchId { get; set; }
-        [StringLength(100)]
         public string BranchName { get; set; }
         public bool? IsReturn { get; set; }
         public string TransferCode { get; set; }
@@ -88,6 +86,7 @@ namespace ERPBO.FrontDesk.ViewModels
         //
         public string MultipleDeliveryCode { get; set; }
         public string QCTransferStatus { get; set; }
+        //
         public string BrandName { get; set; }
         //31-03-2021
         public string CustomerSupportStatus { get; set; }
@@ -108,5 +107,29 @@ namespace ERPBO.FrontDesk.ViewModels
         //05-09-21
         public Nullable<DateTime> ProbablyDate { get; set; }
         public int Total { get; set; }
+        //05-12-2021
+        public Nullable<DateTime> CallCenterAssignDate { get; set; }
+        public string TotalPOrDStatus { get; set; }
+        public long? QCName { get; set; }
+        public string QC { get; set; }
+        public int TotalPending { get; set; }
+        public int TotalDelivery { get; set; }
+        public int TodayQCPass { get; set; }
+        public int TodayQCFail { get; set; }
+        public Nullable<DateTime> QCAssignDate { get; set; }
+        public int TodayQCAssign { get; set; }
+        public int TodayDelivery { get; set; }
+        public int TodayRepair { get; set; }
+        public int TodayWarrenty { get; set; }
+        public int TodayBilling { get; set; }
+        public int TotalQCAssign { get; set; }
+        public int TotalCallCenter { get; set; }
+        public int TodayEngAssigned { get; set; }
+        public int TodayCCAssigned { get; set; }
+        public int TodayApproved { get; set; }
+        public int TodayDisApproved { get; set; }
+        public int TransferToTI { get; set; }
+        public int DaysOver10 { get; set; }
+        public int DaysOver5 { get; set; }
     }
 }

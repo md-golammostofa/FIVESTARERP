@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ERPBO.FrontDesk.ViewModels.ServicesSummaryViewModel>
+@{ 
+    int sl = 0;
+}
+<div class="col-md-12 text-sm" style="overflow-y:scroll">
+    <table class="table table-bordered table-sm table-striped" id="tblPartsUsed">
+        <thead class="btn-dark">
+            <tr class="text-center">
+                <th style="vertical-align:middle">#SL</th>
+                <th style="vertical-align:middle">Branch</th>
+                <th style="vertical-align:middle">User Name</th>
+                <th style="vertical-align:middle">Designation</th>
+                <th style="vertical-align:middle">ReceiveJob</th>
+                <th style="vertical-align:middle">Feture Phone</th>
+                <th style="vertical-align:middle">Smart Phone</th>
+                <th style="vertical-align:middle">Accessories</th>
+                <th style="vertical-align:middle">Sign-In</th>
+                <th style="vertical-align:middle">Sign-Out</th>
+                <th style="vertical-align:middle">Feature Sign Out</th>
+                <th style="vertical-align:middle">Smart-SignOut</th>
+                <th style="vertical-align:middle">Accessories Sign Out</th>
+                <th style="vertical-align:middle">Total QC Assigned</th>
+                <th style="vertical-align:middle">QC Pass</th>
+                <th style="vertical-align:middle">Delivery</th>
+                <th style="vertical-align:middle">CC Approved /DisApproved</th>
+                <th style="vertical-align:middle">Income</th>
+                <th style="vertical-align:middle">Requsition</th>
+                <th style="vertical-align:middle">Eng. Pending</th>
+                <th style="vertical-align:middle">QC Pending</th>
+                <th style="vertical-align:middle">Call Center Pending</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                sl = sl + 1;
+
+            <tr>
+                <td class="text-center">@sl</td>
+                <td>@item.BranchName</td>
+                <td>@item.UserName</td>
+                <td>@item.RoleName</td>
+                <td class="text-center">@item.ReceiveJob</td>
+                <td class="text-center">@item.Featurephone</td>
+                <td class="text-center">@item.SmartPhone</td>
+                <td class="text-center">@item.Accessories</td>
+                <td class="text-center">@item.EngAssign</td>
+                <td class="text-center">@item.EngSignOut</td>
+                <td class="text-center">@item.FeaturephoneTS</td>
+                <td class="text-center">@item.SmartphoneTS</td>
+                <td class="text-center">@item.AccessoriesTS</td>
+                <td class="text-center">@item.TotalQCAssign</td>
+                <td class="text-center">@item.QCPass</td>
+                <td class="text-center">@item.Delivery</td>
+                <td class="text-center">@item.CCAppORDisAPP</td>
+                <td class="text-center">@item.InCome</td>
+                <td class="text-center">@item.Requsition</td>
+                <td class="text-center">@item.EngPending</td>
+                <td class="text-center">@item.QCPending</td>
+                <td class="text-center">@item.CallCenterPending</td>
+            </tr>
+            }
+            @if (Model.Count() == 0)
+            {
+                <tr class="text-center empty-row">
+                    <td colspan="6">
+                        No Rows Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

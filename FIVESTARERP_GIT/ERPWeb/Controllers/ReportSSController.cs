@@ -5,11 +5,14 @@ using ERPBLL.ReportSS.Interface;
 using ERPBO.Configuration.DTOModels;
 using ERPBO.FrontDesk.DTOModels;
 using ERPBO.FrontDesk.ReportModels;
+using ERPBO.FrontDesk.ViewModels;
 using ERPWeb.Filters;
 using Microsoft.Reporting.WebForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -34,8 +37,10 @@ namespace ERPWeb.Controllers
         private readonly IMobilePartStockDetailBusiness _mobilePartStockDetailBusiness;
         private readonly ITransferInfoBusiness _transferInfoBusiness;
         private readonly ITransferDetailBusiness _transferDetailBusiness;
+        private readonly IFiveStarSMSDetailsBusiness _fiveStarSMSDetailsBusiness;
+        private readonly IModelSSBusiness _modelSSBusiness;
         // GET: ReportSS
-        public ReportSSController(IJobOrderReportBusiness jobOrderReportBusiness, IJobOrderBusiness jobOrderBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartBusiness mobilePartBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IJobOrderReturnDetailBusiness jobOrderReturnDetailBusiness, IJobOrderTransferDetailBusiness jobOrderTransferDetailBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, ITransferInfoBusiness transferInfoBusiness, ITransferDetailBusiness transferDetailBusiness)
+        public ReportSSController(IJobOrderReportBusiness jobOrderReportBusiness, IJobOrderBusiness jobOrderBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartBusiness mobilePartBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IJobOrderReturnDetailBusiness jobOrderReturnDetailBusiness, IJobOrderTransferDetailBusiness jobOrderTransferDetailBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, ITransferInfoBusiness transferInfoBusiness, ITransferDetailBusiness transferDetailBusiness, IFiveStarSMSDetailsBusiness fiveStarSMSDetailsBusiness, IModelSSBusiness modelSSBusiness)
         {
             this._jobOrderReportBusiness = jobOrderReportBusiness;
             this._jobOrderBusiness = jobOrderBusiness;
@@ -54,14 +59,16 @@ namespace ERPWeb.Controllers
             this._mobilePartStockDetailBusiness = mobilePartStockDetailBusiness;
             this._transferInfoBusiness = transferInfoBusiness;
             this._transferDetailBusiness = transferDetailBusiness;
+            this._fiveStarSMSDetailsBusiness = fiveStarSMSDetailsBusiness;
+            this._modelSSBusiness = modelSSBusiness;
         }
 
         #region JobOrderList
         //[HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult GetJobOrderReport(string mobileNo, long? modelId, string jobstatus, long? jobOrderId, string jobCode, string iMEI, string iMEI2, string fromDate, string toDate, string ddlCustomerType, string ddlJobType, string repairStatus, string customer,string courierNumber,string recId, string rptType)
+        public ActionResult GetJobOrderReport(string mobileNo, long? modelId, string jobstatus, long? jobOrderId, string jobCode, string iMEI, string iMEI2, string fromDate, string toDate, string ddlCustomerType, string ddlJobType, string repairStatus, string customer,string courierNumber,string recId,string pdStatus, string rptType)
         {
             bool IsSuccess = false;
-            IEnumerable<JobOrderDTO> reportData = _jobOrderBusiness.GetJobOrders(mobileNo, modelId, jobstatus, jobOrderId, jobCode, iMEI, iMEI2, User.OrgId, User.BranchId, fromDate, toDate, ddlCustomerType, ddlJobType, repairStatus, customer, courierNumber,recId).ToList();
+            IEnumerable<JobOrderDTO> reportData = _jobOrderBusiness.GetJobOrders(mobileNo, modelId, jobstatus, jobOrderId, jobCode, iMEI, iMEI2, User.OrgId, User.BranchId, fromDate, toDate, ddlCustomerType, ddlJobType, repairStatus, customer, courierNumber,recId, pdStatus).ToList();
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
@@ -107,6 +114,31 @@ namespace ERPWeb.Controllers
             return new EmptyResult();
         }
         #endregion
+        private async Task<ActionResult> sendSmsForDelivery(string msg, string number)
+        {
+            string apiUrl = "http://sms.viatech.com.bd";
+            var data = "";
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(apiUrl + string.Format("/smsapi?api_key=C200118561a480b32b3315.60333541&type=unicode&contacts={0}&senderid=8809612441973&msg={1}", number, msg)).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                FiveStarSMSDetailsViewModel sms = new FiveStarSMSDetailsViewModel();
+                FiveStarSMSDetailsDTO dto = new FiveStarSMSDetailsDTO();
+                data = await response.Content.ReadAsStringAsync();
+                sms.MobileNo = number;
+                sms.Message = msg;
+                sms.Purpose = "Delivery";
+                sms.Response = data;
+                AutoMapper.Mapper.Map(sms, dto);
+                if (data != null)
+                {
+                    var d = _fiveStarSMSDetailsBusiness.SaveSMSDetails(dto, User.UserId, User.OrgId, User.BranchId);
+                }
+            }
+            return new EmptyResult();
+        }
 
         #region JobOrderDeliveryReceipt
         [HttpPost, ValidateJsonAntiForgeryToken]
@@ -114,6 +146,18 @@ namespace ERPWeb.Controllers
         {
             bool IsSuccess = false;
             JobOrderDTO reportData = _jobOrderBusiness.GetJobOrderReceipt(jobOrderId, User.UserId, User.OrgId, User.BranchId);
+            if(reportData.CustomerType != "Dealer")
+            {
+                var job = _jobOrderBusiness.GetJobOrderById(jobOrderId, User.OrgId);
+                if (job.CustomerType != "Dealer")
+                {
+                    //SMS
+                    var ModelName = _modelSSBusiness.GetModelById(job.DescriptionId, User.OrgId).ModelName;
+                    string Jobsms = "প্রিয়  গ্রাহক, আপনার মোবাইল,Job Sheet No-" + job.JobOrderCode + "," + "Model-" + ModelName + "-সার্ভিস সম্পূর্ণ হওয়ার পর ফেরত প্রদান করা হয়েছে।যে কোন ধরণের বিলের জন্য রশিদ গ্রহন করুন।ধন্যবাদ- ARA Care.";
+                    var sms = sendSmsForDelivery(Jobsms, job.MobileNo);
+                    //End
+                }
+            }
             List<JobOrderDTO> servicesreportData = new List<JobOrderDTO>();
             servicesreportData.Add(reportData);
 
@@ -904,9 +948,9 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region Dealer Receipt
-        public ActionResult GetDealerReceipt(string mobile, long? ddlModelName, string ddlStateStatus, long? jobOrderId, string jobCode, string iMEI, string iMEI2, string fromDate, string toDate, string ddlCustomerType, string ddlJobType, string repairStatus, string customer,string courierNumber,string recId, string rptType)
+        public ActionResult GetDealerReceipt(string mobile, long? ddlModelName, string ddlStateStatus, long? jobOrderId, string jobCode, string iMEI, string iMEI2, string fromDate, string toDate, string ddlCustomerType, string ddlJobType, string repairStatus, string customer,string courierNumber,string recId,string pdStatus, string rptType)
         {
-            IEnumerable<JobOrderDTO> reportData = _jobOrderBusiness.GetJobOrders(mobile, ddlModelName, ddlStateStatus, jobOrderId, jobCode, iMEI, iMEI2, User.OrgId, User.BranchId, fromDate, toDate, ddlCustomerType, ddlJobType, repairStatus, customer, courierNumber,recId).ToList();
+            IEnumerable<JobOrderDTO> reportData = _jobOrderBusiness.GetJobOrders(mobile, ddlModelName, ddlStateStatus, jobOrderId, jobCode, iMEI, iMEI2, User.OrgId, User.BranchId, fromDate, toDate, ddlCustomerType, ddlJobType, repairStatus, customer, courierNumber,recId,pdStatus).ToList();
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
@@ -1091,7 +1135,7 @@ namespace ERPWeb.Controllers
         public ActionResult GetDeliveryReceiptRePrint(long jobOrderId)
         {
             bool IsSuccess = false;
-            JobOrderDTO reportData = _jobOrderBusiness.GetJobOrderReceipt(jobOrderId, User.UserId, User.OrgId, User.BranchId);
+            JobOrderDTO reportData = _jobOrderReportBusiness.GetReceiptForJobOrder(jobOrderId,User.OrgId);
             List<JobOrderDTO> servicesreportData = new List<JobOrderDTO>();
             servicesreportData.Add(reportData);
 
@@ -1307,6 +1351,50 @@ namespace ERPWeb.Controllers
 
                 renderedBytes = localReport.Render(
                     "Pdf",
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+
+            return new EmptyResult();
+        }
+
+        public ActionResult ServicesSummaryReport(string fromDate,string toDate, string rptType = "EXCEL")
+        {
+            string file = string.Empty;
+            IEnumerable<ServicesSummaryDTO> dataDetails = _jobOrderBusiness.ServicesSummary(User.OrgId,fromDate,toDate);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptServicesSummary.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("ServicesSummary", dataDetails);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "Receipt";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension = ".xlsx";
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    "EXCEL",
                     "",
                     out mimeType,
                     out encoding,

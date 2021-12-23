@@ -1,0 +1,52 @@
+﻿@model IEnumerable<ERPBO.Configuration.ViewModels.FaultyStockRepairedDetailsViewModel>
+@{
+    int sl = 0;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered table-sm table-striped tblStockReturnDetails" id="tblStockReturnDetailsTs">
+            <thead class="btn-dark">
+                <tr class="text-center">
+                    <th>#SL</th>
+                    <th class="hide">info</th>
+                    <th class="hide">details</th>
+                    <th class="hide">Model</th>
+                    <th>Model</th>
+                    <th class="hide">Parts</th>
+                    <th>Parts Name</th>
+                    <th>Parts Code</th>
+                    <th>AssignQty</th>
+                    <th>Repaired</th>
+                    <th>Scraped</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    sl = sl + 1;
+                    <tr>
+                        <td class="text-center" width="10%">@sl</td>
+                        <td class="hide">@item.FSRInfoId</td>
+                        <td class="hide">@item.FSRDetailsId</td>
+                        <td class="hide">@item.ModelId</td>
+                        <td>@item.ModelName</td>
+                        <td>@item.PartsName</td>
+                        <td>@item.PartsCode</td>
+                        <td class="text-center">@item.AssignQty</td>
+                        <td class="text-center">@item.RepairedQty</td>
+                        <td class="text-center">@item.ScrapedQty</td>
+                    </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="text-center empty-row">
+                        <td colspan="10">
+                            No Rows Found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

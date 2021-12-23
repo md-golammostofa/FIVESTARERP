@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "Branch Requsition Over Days";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow card-primary card-outline card-tabs" style="margin-top:-20px">
+            <div class="card-header p-0 pt-1 border-bottom-0 text-sm">
+                <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-two-branchRequsitionDaysOver-tab" data-toggle="pill" href="#custom-tabs-two-branchRequsitionDaysOver" role="tab" aria-controls="custom-tabs-two-branchRequsitionDaysOver" aria-selected="true">3 Days Over</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body shadow">
+                <div class="tab-content" id="custom-tabs-two-tabContent">
+                    @Html.AntiForgeryToken()
+                    <div class="tab-pane fade show active" id="custom-tabs-two-branchRequsitionDaysOver" role="tabpanel" aria-labelledby="custom-tabs-two-branchRequsitionDaysOver-tab">
+                        <div class="row" style="margin-top:-15px">
+                            <div class="col-md-12">
+                                <div class="card card-gray shadow">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="text-center text-bold">
+                                                    3 Days Over Branch Requsition List
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-3">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top:-15px">
+                                <div class="card shadow card-navy">
+                                    <div class="card-body text-sm">
+                                        <div class="row text-sm">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="margin-top:-10px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 text-sm" id="dataContainer">
+                                                @{Html.RenderAction("BranchRequsitionOverDays", new { @flag = "branchRequsition" });}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="modal fade" id="modalTransferDetails" role="dialog" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header alert-secondary">
+                    <input type="hidden" id="hdfTransferInfoId" />
+                    <input type="hidden" id="hdfRowIndex" />
+                    <h4 id="modalHeading" class="modal-title">Requsition Details</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="dataContainer1">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var hdfTransferInfoId = $("#hdfTransferInfoId");
+
+        $(document).on('click', 'a.data-item-details', function (e) {
+            e.preventDefault();
+            hdfTransferInfoId.val("0")
+            var id = $(this).attr("data-item-details");
+            hdfTransferInfoId.val(id);
+            $.when(getReqWithData('html', type.get, '/Configuration/TransferStockDetails', { transferId: id })).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer1").empty();
+                    $("#dataContainer1").append(res);
+                    $("#modalTransferDetails").modal("toggle");
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        })
+    </script>
+    }

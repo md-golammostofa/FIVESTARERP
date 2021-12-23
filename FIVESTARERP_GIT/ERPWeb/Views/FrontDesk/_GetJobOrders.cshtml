@@ -7,6 +7,7 @@
     string isHandSet = string.Empty;
     string badge = string.Empty;
     string badge1 = string.Empty;
+    string badge2 = string.Empty;
 }
 <div class="row">
     <div class="col-md-12" style="overflow-y:scroll">
@@ -26,6 +27,7 @@
                         <th style="vertical-align:middle">Symptoms</th>
                         <th style="vertical-align:middle">Accessories</th>
                         <th style="vertical-align:middle">Job Type</th>
+                        <th style="vertical-align:middle">PDStatus</th>
                         <th style="vertical-align:middle">Receive Id</th>
                         <th style="vertical-align:middle">DeliveryChallan</th>
                         <th style="vertical-align:middle">Customer Name</th>
@@ -46,6 +48,7 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
+                        badge2 = item.TotalPOrDStatus == "Pending" ? "badge bg-warning" : "badge bg-danger";
                         badge1 = item.JobOrderType == "Billing" ? "badge bg-danger" : "badge bg-success";
                         badge = item.StateStatus == "QC-Assigned" ? "badge bg-warning" : (item.StateStatus == "Job-Initiated" ? "badge bg-success" : item.StateStatus == "Delivery-Done" ? "badge bg-danger" : (item.StateStatus == "TS-Assigned" ? "badge bg-secondary" :(item.StateStatus== "HandSetChange"? "badge bg-info": "badge bg-primary")));
                         sl = sl + 1;
@@ -76,7 +79,7 @@
                                 <i class="fas fa-eye"></i>
                             </a>
 
-                            @if ((item.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && item.IsTransfer == null) ||(User.RoleName=="Administrator"))
+                            @if ((item.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && item.IsTransfer == null) || (User.RoleName == "Administrator"))
                             {
                                 <a href="@Url.Action("CreateJobOrder","FrontDesk",new {@jobOrderId=item.JodOrderId })" class="btn btn-sm btn-outline-success" title="Edit Job Order"><i class="fas fa-pencil-alt"></i> </a>
                             }
@@ -97,6 +100,9 @@
                         <td>@item.Problems</td>
                         <td class="hiddendots">@item.AccessoriesNames</td>
                         <td>@item.JobOrderType</td>
+                        <td class="text-center" data-val2="@item.TotalPOrDStatus">
+                            <span class="@badge2">@item.TotalPOrDStatus</span>
+                        </td>
                         <td>@item.MultipleJobOrderCode</td>
                         <td>
                             <a href="@Url.Action("MultipleDeliveryReceiptRePrint", "ReportSS", new { @deliveryCode = item.MultipleDeliveryCode })" target="_blank" class="btn text-bold" style="color:blue" title="Download Receipt">@item.MultipleDeliveryCode</a>

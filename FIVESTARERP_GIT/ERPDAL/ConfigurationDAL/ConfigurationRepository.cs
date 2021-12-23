@@ -160,4 +160,20 @@ namespace ERPDAL.ConfigurationDAL
     {
         public DustStockDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
     }
+    public class WarehouseToFactoryReturnInfoRepository : ConfigurationBaseRepository<WarehouseToFactoryReturnInfo>
+    {
+        public WarehouseToFactoryReturnInfoRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
+    public class WarehouseToFactoryReturnDetailsRepository : ConfigurationBaseRepository<WarehouseToFactoryReturnDetails>
+    {
+        public WarehouseToFactoryReturnDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
+    public class FaultyStockRepairedInfoRepository : ConfigurationBaseRepository<FaultyStockRepairedInfo>
+    {
+        public FaultyStockRepairedInfoRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
+    public class FaultyStockRepairedDetailsRepository : ConfigurationBaseRepository<FaultyStockRepairedDetails>
+    {
+        public FaultyStockRepairedDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
 }

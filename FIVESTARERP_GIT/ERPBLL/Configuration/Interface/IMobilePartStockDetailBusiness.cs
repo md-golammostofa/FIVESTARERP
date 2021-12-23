@@ -1,5 +1,6 @@
 ﻿using ERPBO.Configuration.DomainModels;
 using ERPBO.Configuration.DTOModels;
+using ERPBO.FrontDesk.DTOModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,8 @@ namespace ERPBLL.Configuration.Interface
         bool SaveMobilePartStockInByBranchRequsition(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId);
         IEnumerable<TotalStockDetailsDTO> TotalStockDetailsReport(long orgId, long branchId, long? modelId, long? partsId);
         IEnumerable<TotalStockDetailsDTO> AllBranchTotalStock(long? branch,long orgId);
+        bool UpdateReqStatusAndWarehouseStockOutAndTsStockIn(RequsitionInfoForJobOrderDTO dto, long orgId, long branchId, long userId);
+        bool SaveMobilePartStockInByRepaired(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId);
+        IEnumerable<MobilePartStockDetailDTO> GetAllStockDetails(long? descriptionId, long? mobilePartId, long orgId, long branchId, string stockStatus, string fromDate, string toDate);
     }
 }

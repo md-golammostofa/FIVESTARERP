@@ -960,6 +960,30 @@
     <Content Include="Views\Configuration\AllBranchTotalStockList.cshtml" />
     <Content Include="Views\FrontDesk\IssueTsRequsition.cshtml" />
     <Content Include="Views\FrontDesk\_IssueTsRequsitionDetails.cshtml" />
+    <Content Include="Views\FrontDesk\GetJobOrdersPending.cshtml" />
+    <Content Include="Views\FrontDesk\_GetJobOrdersPending.cshtml" />
+    <Content Include="Views\FrontDesk\ServicesSummary.cshtml" />
+    <Content Include="Views\FrontDesk\_ServicesSummary.cshtml" />
+    <Content Include="Views\FrontDesk\GetDaysOverProbDate.cshtml" />
+    <Content Include="Views\FrontDesk\_Get3DaysOverProbDate.cshtml" />
+    <Content Include="Views\FrontDesk\_Get10DaysOverProbDate.cshtml" />
+    <Content Include="Views\FrontDesk\_GetJobOrderDetailForAll.cshtml" />
+    <Content Include="Views\Configuration\_BranchRequsitionOverDays.cshtml" />
+    <Content Include="Views\Configuration\BranchRequsitionOverDays.cshtml" />
+    <Content Include="Views\Configuration\PartsReturnWarehouseToFactory.cshtml" />
+    <Content Include="Views\Configuration\CreatePartsReturnWareToFactory.cshtml" />
+    <Content Include="Views\Configuration\_PartsReturnWarehouseToFactory.cshtml" />
+    <Content Include="Views\Configuration\_WarehouseStockReturnDetails.cshtml" />
+    <Content Include="Views\Configuration\_WarehouseAllStockReturnDetails.cshtml" />
+    <Content Include="Views\Configuration\CreateFaultyStockAssignToTS.cshtml" />
+    <Content Include="Views\Configuration\GetFaultyStockListForRepaired.cshtml" />
+    <Content Include="Views\Configuration\_GetFaultyStockListForRepaired.cshtml" />
+    <Content Include="Views\Configuration\_GetFaultyRepairedDetails.cshtml" />
+    <Content Include="Views\Configuration\GetFaultyStockRepairedListTS.cshtml" />
+    <Content Include="Views\Configuration\_GetFaultyStockRepairedListTS.cshtml" />
+    <Content Include="Views\Configuration\RepairedPartsEntryByTS.cshtml" />
+    <Content Include="Views\Configuration\_RepairedPartsEntryDetails.cshtml" />
+    <Content Include="Views\Configuration\_GetFaultyRepairedDetailsTS.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1102,6 +1126,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Reports\ServiceRpt\FrontDesk\rptQCPassFailReport.rdlc" />
+    <EmbeddedResource Include="Reports\ServiceRpt\FrontDesk\rptServicesSummary.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ERPBLL\ERPBLL.csproj">

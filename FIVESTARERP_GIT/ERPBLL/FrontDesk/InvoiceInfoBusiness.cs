@@ -138,7 +138,7 @@ where 1=1{0} order by EntryDate desc", Utility.ParamChecker(param));
             bool IsSuccess = false;
             double netamount = 0;
             netamount = ((infodto.TotalSPAmount + infodto.LabourCharge + infodto.VAT + infodto.Tax) - infodto.Discount);
-            var jobOrder = _jobOrderBusiness.GetJobOrdersByIdWithBranch(infodto.JobOrderId, branchId,orgId);
+            var jobOrder = _jobOrderBusiness.GetJobOrderById(infodto.JobOrderId,orgId);
             InvoiceInfo invoiceInfo = new InvoiceInfo();
             if (infodto.InvoiceInfoId == 0)
             {

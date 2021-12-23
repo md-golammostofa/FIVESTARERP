@@ -12,7 +12,8 @@ namespace ERPBLL.FrontDesk.Interface
 {
     public interface IJobOrderBusiness
     {
-        IEnumerable<JobOrderDTO> GetJobOrders(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode,string iMEI, string iMEI2, long orgId,long branchId, string fromDate, string toDate,string customerType,string jobType,string repairStatus, string customer,string courierNumber,string recId);
+        IEnumerable<JobOrderDTO> GetJobOrders(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode,string iMEI, string iMEI2, long orgId,long branchId, string fromDate, string toDate,string customerType,string jobType,string repairStatus, string customer,string courierNumber,string recId,string pdStatus);
+        IEnumerable<JobOrderDTO> GetJobOrdersPending(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus);
         JobOrder GetJobOrderById(long jobOrderId, long orgId);
         bool SaveJobOrder(JobOrderDTO jobOrder, List<JobOrderAccessoriesDTO> jobOrderAccessories, List<JobOrderProblemDTO> jobOrderProblems, long userId, long orgId,long branchId);
         bool UpdateJobOrderStatus(long jobOrderId, string status, string type, long userId, long orgId,long branchId);
@@ -58,7 +59,7 @@ namespace ERPBLL.FrontDesk.Interface
         JobOrder GetAllJobOrderByOrgId(long orgId);
         bool SaveJobOrderReturnAndUpdateJobOrder(long transferId, long[] jobOrders, long userId, long orgId, long branchId, string cName, string cNumber);
         bool UpdateReturnJob(long jobOrderId, long userId,long orgId);
-        JobOrderDTO GetJobOrderDetails(long jobOrderId, long orgId);
+        IEnumerable<JobOrderDTO> GetJobOrderDetails(long jobOrderId, long orgId);
         IEnumerable<DashboardApprovedRequsitionDTO> DashboardAnotherBranchRequsition(long orgId, long branchId);
         IEnumerable<DailySummaryReportDTO> DailySummaryReport(long orgId, long branchId, string fromDate, string toDate);
         IEnumerable<DailySummaryReportDTO> AllBranchDailySummaryReport(long orgId, string fromDate, string toDate);
@@ -94,6 +95,10 @@ namespace ERPBLL.FrontDesk.Interface
         bool UpdateJobTypeStatus(long jobId, string jobType, long userId, long branchId, long orgId);
        IEnumerable<JobOrder> GetIMEIChekCreateJob(string imei, long orgId, long branchId);
         bool UpdateQCStatusMultipleJob(long[] joblist, long orgId, long branchId, long userId);
-
+        IEnumerable<JobOrderDTO> GetDashBoardPendingDeliveryJob(long orgId, long branchId);
+        IEnumerable<JobOrderDTO> TodayQCPassFail(long orgId, long branchId);
+        IEnumerable<ServicesSummaryDTO> ServicesSummary(long orgId, string fromDate, string toDate);
+        IEnumerable<JobOrderDTO> GetJobOrderFor3DaysOverProbDate(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus);
+        IEnumerable<JobOrderDTO> GetJobOrderFor10DaysOverProbDate(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus);
     }
 }

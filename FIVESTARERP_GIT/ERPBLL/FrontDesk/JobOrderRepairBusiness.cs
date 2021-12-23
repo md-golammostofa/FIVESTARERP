@@ -72,6 +72,10 @@ namespace ERPBLL.FrontDesk
                 {
                     jobOrder.QCTransferStatus = "Pending";
                 }
+                else if(jobOrderRepairStatus == "CALL CENTER")
+                {
+                    jobOrder.CallCenterAssignDate = DateTime.Now;
+                }
                 else
                 {
                     jobOrder.QCTransferStatus = null;

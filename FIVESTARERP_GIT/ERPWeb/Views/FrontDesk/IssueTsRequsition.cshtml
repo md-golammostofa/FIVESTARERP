@@ -16,6 +16,7 @@
                         </h5>
                     </div>
                     <div class="col-md-3">
+
                     </div>
                 </div>
             </div>
@@ -54,6 +55,8 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" id="hdfRequisitionId" value="@Model.RequsitionInfoForJobOrderId" />
                         <input type="hidden" id="hdfRequisitionCode" value="@Model.RequsitionCode" />
+                        <input type="hidden" id="hdfModelId" value="@Model.DescriptionId" />
+                        <input type="hidden" id="hdfJobOrderId" value="@Model.JobOrderId" />
                         <table class="table table-bordered table-sm table-responsive-lg text-bold text-sm" id="tblInfo">
                             <tbody>
                                 <tr>
@@ -83,4 +86,79 @@
         </div>
     </div>
 </div>
+@section scripts{
+    <script type="text/javascript">
+        var hdfRequisitionId = $("#hdfRequisitionId");
+        var hdfRequisitionCode = $("#hdfRequisitionCode");
+        var ddlAction = $("#ddlAction");
+        var hdfModelId = $("#hdfModelId");
+        var hdfJobOrderId = $("#hdfJobOrderId");
 
+        function validateSubmit() {
+            var isValid = true;
+            if (ddlAction.val() === "") {
+                isValid = false;
+                bootbox.alert("Please select a Action before submit");
+            }
+            if ($(".tblDataDetail tbody tr").length == 0) {
+                isValid = false;
+                bootbox.alert("Requistion details not found");
+            }
+            return isValid;
+        }
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+
+            if (validateSubmit()) {
+                bootbox.confirm("Are you sure you want to save this requisition with " + ddlAction.val() + " status", function (result) {
+                    if (result) {
+                        disable("#btnSubmit")
+                        var info = { RequsitionInfoForJobOrderId: TryParseInt(hdfRequisitionId.val(), 0), StateStatus: ddlAction.val(), DescriptionId: TryParseInt(hdfModelId.val()), RequsitionCode: hdfRequisitionCode.val(), JobOrderId: TryParseInt(hdfJobOrderId.val(),0) };
+
+                        var details = []; details.length = 0;
+
+                        $.each($(".tblDataDetail tbody tr"), function (index, item) {
+                            var tds = $(this).children('td');
+                            details.push({
+                                RequsitionDetailForJobOrderId: tds.eq(1).html(),
+                                DescriptionId: tds.eq(2).html(),
+                                PartsId: tds.eq(4).html(),
+                                Quantity: tds.eq(7).html(),
+                                IssueQty: tds.eq(8).children('input[type="number"]').val()
+                            })
+                        })
+
+                        info.RequsitionDetailForJobOrders = details;
+
+                        console.log("Requisition Information");
+                        console.log(info);
+                        var data = JSON.stringify({ info: info });
+                        //return console.log(data)
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/FrontDesk/UpdateReqStatusAndWarehouseStockOut', data, getToken())).then(function (res, status) {
+                            console.log(res);
+                            console.log(status);
+                            if (res === true && status === "success") {
+                                $('.toastrDefaultSuccess').trigger('click');
+                                 setTimeout(function () {
+                                    redirectPage('@Url.Action("TSRequsitionInfoForJobOrderList")');
+                                }, 1000);
+                            }
+                            else {
+                                $('.toastrDefaultError').trigger('click');
+                            }
+                            enable("#btnSubmit");
+                        }).fail(function (error) {
+                            console.log(error);
+                            enable("#btnSubmit");
+                        })
+
+                    }// confirm
+                })// bootbox
+            }// submit
+        })
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>
+    }

@@ -264,7 +264,7 @@ Select JobOrderId From tblJobOrderTransferDetail Where TransferCode='{0}' and Or
         {
             var data= this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderTransferDetailDTO>(string.Format(@"Select TransferCode,JobOrderCode,TransferStatus,BranchName From tblJobOrderTransferDetail tsd
 Left Join [ControlPanel].dbo.tblBranch br on tsd.ToBranch=br.BranchId
-Where tsd.OrganizationId={0} and tsd.BranchId={1}", orgId, branchId)).ToList();
+Where tsd.OrganizationId={0} and tsd.BranchId={1} Order By tsd.EntryDate desc", orgId, branchId)).ToList();
             return data;
         }
 

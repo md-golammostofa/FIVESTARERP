@@ -7,18 +7,23 @@
 <table class="table table-bordered table-sm table-striped table-responsive-lg" id="tblTotalStockDetails">
     <thead class="btn-dark">
         <tr class="text-center">
-            <th>#SL</th>
-            <th class="hide"></th>
-            <th class="hide"></th>
-            <th>Model</th>
-            <th>Parts Name</th>
-            <th>Parts Code</th>
-            <th>Stock</th>
-            <th>Good Stock</th>
-            <th>Faulty Stock</th>
-            <th>Scrap Stock</th>
-            <th>Dust Stock</th>
-            <th>Care Transfer</th>
+            <th style="vertical-align:middle">#SL</th>
+            <th style="vertical-align:middle" class="hide"></th>
+            <th style="vertical-align:middle" class="hide"></th>
+            <th style="vertical-align:middle">Model</th>
+            <th style="vertical-align:middle">Parts Name</th>
+            <th style="vertical-align:middle">Parts Code</th>
+            <th style="vertical-align:middle">Parses Stock</th>
+            <th style="vertical-align:middle">Model Receive</th>
+            <th style="vertical-align:middle">Stock</th>
+            <th style="vertical-align:middle">Good Stock</th>
+            <th style="vertical-align:middle">Faulty Stock</th>
+            <th style="vertical-align:middle">Scrap Stock</th>
+            <th style="vertical-align:middle">Dust Stock</th>
+            <th style="vertical-align:middle">Care Transfer</th>
+            <th style="vertical-align:middle">Eng. Pending</th>
+            <th style="vertical-align:middle">Model Transfer</th>
+            <th style="vertical-align:middle">Sales</th>
         </tr>
     </thead>
     <tbody>
@@ -29,18 +34,23 @@
             if (stock < 20)
             {
                 <tr style="background-color:#fd8773">
-                    <td class="text-center"><b>@sl</b></td>
-                    <td class="hide">@item.DescriptionId</td>
-                    <td class="hide">@item.MobilePartId</td>
-                    <td>@item.ModelName</td>
-                    <td>@item.PartsName</td>
-                    <td>@item.PartsCode</td>
-                    <td class="text-center">@item.Stock</td>
-                    <td class="text-center">@item.GoodStock</td>
-                    <td class="text-center">@item.FaultyStock</td>
-                    <td class="text-center">@item.ScrapStock</td>
+                    <td  class="text-center"><b>@sl</b></td>
+                    <td  class="hide">@item.DescriptionId</td>
+                    <td  class="hide">@item.MobilePartId</td>
+                    <td >@item.ModelName</td>
+                    <td >@item.PartsName</td>
+                    <td >@item.PartsCode</td>
+                    <td  class="text-center">@item.ParsesStock</td>
+                    <td  class="text-center">@item.ReceiveAModel</td>
+                    <td  class="text-center">@item.Stock</td>
+                    <td  class="text-center">@item.GoodStock</td>
+                    <td  class="text-center">@item.FaultyStock</td>
+                    <td  class="text-center">@item.ScrapStock</td>
                     <td class="text-center">@item.DustStock</td>
-                    <td class="text-center">@item.CareTransfer</td>
+                    <td  class="text-center">@item.CareTransfer</td>
+                    <td class="text-center">@item.EngPending</td>
+                    <td class="text-center">@item.TransferAModel</td>
+                    <td class="text-center">@item.Sales</td>
                 </tr>
             }
             else
@@ -52,12 +62,17 @@
                     <td>@item.ModelName</td>
                     <td>@item.PartsName</td>
                     <td>@item.PartsCode</td>
+                    <td class="text-center">@item.ParsesStock</td>
+                    <td class="text-center">@item.ReceiveAModel</td>
                     <td class="text-center">@item.Stock</td>
                     <td class="text-center">@item.GoodStock</td>
                     <td class="text-center">@item.FaultyStock</td>
                     <td class="text-center">@item.ScrapStock</td>
                     <td class="text-center">@item.DustStock</td>
                     <td class="text-center">@item.CareTransfer</td>
+                    <td class="text-center">@item.EngPending</td>
+                    <td class="text-center">@item.TransferAModel</td>
+                    <td class="text-center">@item.Sales</td>
                 </tr>
             }
 

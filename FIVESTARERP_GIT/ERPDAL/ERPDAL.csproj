@@ -300,6 +300,14 @@
     <Compile Include="ConfigurationContextMigrations\202111230849069_Configuration_IssueAndRecDateTrandferToBranchReq.Designer.cs">
       <DependentUpon>202111230849069_Configuration_IssueAndRecDateTrandferToBranchReq.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigurationContextMigrations\202112180738453_Configuration_WareToFactReturn.cs" />
+    <Compile Include="ConfigurationContextMigrations\202112180738453_Configuration_WareToFactReturn.Designer.cs">
+      <DependentUpon>202112180738453_Configuration_WareToFactReturn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202112201109597_Configuration_FaultyStockRepaired.cs" />
+    <Compile Include="ConfigurationContextMigrations\202112201109597_Configuration_FaultyStockRepaired.Designer.cs">
+      <DependentUpon>202112201109597_Configuration_FaultyStockRepaired.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigurationContextMigrations\Configuration.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationBaseRepository.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationDbContext.cs" />
@@ -555,6 +563,26 @@
     <Compile Include="FrontDeskContextMigrations\202111300743527_FrontDesk_Requsition_IssueQty.cs" />
     <Compile Include="FrontDeskContextMigrations\202111300743527_FrontDesk_Requsition_IssueQty.Designer.cs">
       <DependentUpon>202111300743527_FrontDesk_Requsition_IssueQty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202112041021574_FrontDesk_FiveStarSMSDetails.cs" />
+    <Compile Include="FrontDeskContextMigrations\202112041021574_FrontDesk_FiveStarSMSDetails.Designer.cs">
+      <DependentUpon>202112041021574_FrontDesk_FiveStarSMSDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202112050516400_FrontDesk_QCandStatus.cs" />
+    <Compile Include="FrontDeskContextMigrations\202112050516400_FrontDesk_QCandStatus.Designer.cs">
+      <DependentUpon>202112050516400_FrontDesk_QCandStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202112051253366_FrontDesk_QCAssignDate.cs" />
+    <Compile Include="FrontDeskContextMigrations\202112051253366_FrontDesk_QCAssignDate.Designer.cs">
+      <DependentUpon>202112051253366_FrontDesk_QCAssignDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202112071234387_FrontDesk_CallCenterAssignDate.cs" />
+    <Compile Include="FrontDeskContextMigrations\202112071234387_FrontDesk_CallCenterAssignDate.Designer.cs">
+      <DependentUpon>202112071234387_FrontDesk_CallCenterAssignDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202112131654579_FrontDesk_ReqIssueUser.cs" />
+    <Compile Include="FrontDeskContextMigrations\202112131654579_FrontDesk_ReqIssueUser.Designer.cs">
+      <DependentUpon>202112131654579_FrontDesk_ReqIssueUser.cs</DependentUpon>
     </Compile>
     <Compile Include="FrontDeskContextMigrations\Configuration.cs" />
     <Compile Include="FrontDeskDAL\FrontDeskDbContext.cs" />
@@ -1205,6 +1233,12 @@
     <EmbeddedResource Include="ConfigurationContextMigrations\202111230849069_Configuration_IssueAndRecDateTrandferToBranchReq.resx">
       <DependentUpon>202111230849069_Configuration_IssueAndRecDateTrandferToBranchReq.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202112180738453_Configuration_WareToFactReturn.resx">
+      <DependentUpon>202112180738453_Configuration_WareToFactReturn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202112201109597_Configuration_FaultyStockRepaired.resx">
+      <DependentUpon>202112201109597_Configuration_FaultyStockRepaired.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ControlPanelContextMigrations\202006151000333_ControlPanel_AllEntities_16-May-2020.resx">
       <DependentUpon>202006151000333_ControlPanel_AllEntities_16-May-2020.cs</DependentUpon>
     </EmbeddedResource>
@@ -1387,6 +1421,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrontDeskContextMigrations\202111300743527_FrontDesk_Requsition_IssueQty.resx">
       <DependentUpon>202111300743527_FrontDesk_Requsition_IssueQty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202112041021574_FrontDesk_FiveStarSMSDetails.resx">
+      <DependentUpon>202112041021574_FrontDesk_FiveStarSMSDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202112050516400_FrontDesk_QCandStatus.resx">
+      <DependentUpon>202112050516400_FrontDesk_QCandStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202112051253366_FrontDesk_QCAssignDate.resx">
+      <DependentUpon>202112051253366_FrontDesk_QCAssignDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202112071234387_FrontDesk_CallCenterAssignDate.resx">
+      <DependentUpon>202112071234387_FrontDesk_CallCenterAssignDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202112131654579_FrontDesk_ReqIssueUser.resx">
+      <DependentUpon>202112131654579_FrontDesk_ReqIssueUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InventoryContextMigrations\202008121414323_Inventory_AllEntities_12-Aug-2020.resx">
       <DependentUpon>202008121414323_Inventory_AllEntities_12-Aug-2020.cs</DependentUpon>
