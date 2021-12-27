@@ -89,6 +89,11 @@ namespace ERPBLL.Production
             return this._tempQRCodeTraceRepository.GetOneByOrg(s => s.OrganizationId == orgId && s.IMEI.Contains(imei) && s.StateStatus == status) != null;
         }
 
+        public bool IsExistIMEIWithStatusAndPackagingLine(long lineId, string imei, string status, long orgId)
+        {
+            return this._tempQRCodeTraceRepository.GetOneByOrg(s => s.OrganizationId == orgId && s.IMEI.Contains(imei) && s.StateStatus == status && s.PackagingLineId == lineId) != null;
+        }
+
         public bool IsExistQRCodeWithStatus(string qrCode, string status, long orgId)
         {
             return this._tempQRCodeTraceRepository.GetOneByOrg(s => s.OrganizationId == orgId && s.CodeNo == qrCode && s.StateStatus == status) != null;

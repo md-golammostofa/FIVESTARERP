@@ -650,6 +650,12 @@ namespace ERPWeb.Controllers
             var IsExists = _tempQRCodeTraceBusiness.IsExistIMEIWithStatus(imei, QRCodeStatus.Bettery, User.OrgId);
             return Json(IsExists);
         }
+        [HttpPost]
+        public ActionResult IsExistsBetteryWriteWithPackagingLine(long lineId, string imei)
+        {
+            var IsExists = _tempQRCodeTraceBusiness.IsExistIMEIWithStatusAndPackagingLine(lineId, imei, QRCodeStatus.Bettery, User.OrgId);
+            return Json(IsExists);
+        }
 
         [HttpPost]
         public async Task<ActionResult> IMEIinFinishGoods(string imei,long floorId, long packagingId)

@@ -38,5 +38,6 @@ namespace ERPBLL.Production.Interface
         IEnumerable<TempQRCodeTraceDTO> GetPackegingLineWiseDataForDashBoard(long packegingId, long orgId);
         PackegingLineWiseDashboardDataDTO GetPackegingDashBoard(long packegingId, long orgId);
         Task<IEnumerable<TempQRCodeTrace>> GetTempQRCodeTracesByIMEIAsync(List<string> imei, long orgId);
+        bool IsExistIMEIWithStatusAndPackagingLine(long lineId, string imei, string status, long orgId);
     }
 }

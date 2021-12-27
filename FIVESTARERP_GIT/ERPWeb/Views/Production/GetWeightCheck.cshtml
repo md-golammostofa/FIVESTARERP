@@ -45,20 +45,26 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row" style="margin-top:-15px">
+                                            <div class="col-md-3" style="border-right:2px solid #f6eaaa">
+                                                <label for="ddlPackagingLine" class="control-label font-weight-bold">Packaging Line</label>
+                                                @Html.DropDownList("ddlPackagingLine", (IEnumerable<SelectListItem>)ViewBag.ddlPackagingLine, "--Select Packaging Line--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                                                <span class="error hide req-line">Line is Required!</span>
+                                            </div>
+                                            @*<div class="col-md-3"></div>*@
                                             @*<div class="col-md-6">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label for="ddlAssemblyLine" class="control-label font-weight-bold">Assembly Line</label>
-                                                            @Html.DropDownList("ddlAssemblyLine", (IEnumerable<SelectListItem>)ViewBag.ddlAssemblyLine, "--SelectAssembly--", new { @class = "form-control form-control-sm select2 select2-danger" })
-                                                            <span class="error hide req-assembly">Assembly is Required!</span>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="ddlItemName" class="control-label font-weight-bold">Model Name</label>
-                                                            @Html.DropDownList("ddlItemName", (IEnumerable<SelectListItem>)ViewBag.ddlItemName, "--SelectModel--", new { @class = "form-control form-control-sm select2 select2-danger" })
-                                                            <span class="error hide req-model">Model is Required!</span>
-                                                        </div>
-                                                    </div>
-                                                </div>*@
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="ddlAssemblyLine" class="control-label font-weight-bold">Assembly Line</label>
+                    @Html.DropDownList("ddlAssemblyLine", (IEnumerable<SelectListItem>)ViewBag.ddlAssemblyLine, "--SelectAssembly--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                    <span class="error hide req-assembly">Assembly is Required!</span>
+                </div>
+                <div class="col-md-6">
+                    <label for="ddlItemName" class="control-label font-weight-bold">Model Name</label>
+                    @Html.DropDownList("ddlItemName", (IEnumerable<SelectListItem>)ViewBag.ddlItemName, "--SelectModel--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                    <span class="error hide req-model">Model is Required!</span>
+                </div>
+            </div>
+        </div>*@
                                             <div class="col-md-6">
                                                 <h5 style="border-bottom:2px solid #70cf44">
                                                     SCANING
@@ -161,6 +167,7 @@
         var ddlAssemblyLine = $("#ddlAssemblyLine");
         var dptFromDate = $("#dptFromDate");
         var dptToDate = $("#dptToDate");
+        var ddlPackagingLine = $("#ddlPackagingLine");
 
         $(document).ready(function () {
             //Initialize Select2 Elements
@@ -194,22 +201,17 @@
         function validateWeightCheckInput() {
             $(".error").addClass("hide");
             var isValid = true;
-            //if (TryParseInt(ddlItemName.val(), 0) <= 0) {
-            //    $(".req-model").removeClass('hide');
-            //    isValid = false;
-            //}
-            //if (TryParseInt(ddlAssemblyLine.val(), 0) <= 0) {
-            //    $(".req-assembly").removeClass('hide');
-            //    isValid = false;
-            //}
-            if ($.trim(IMEIScanningForWeightCheck.val()).length != 15) {
+            if (ddlPackagingLine.val() == "") {
+                $(".req-line").removeClass('hide');
                 isValid = false;
             }
             return isValid;
         }
 
         function validateIMEI() {
-            return ajaxBooleanChecker(JSON.stringify({ imei: $.trim(IMEIScanningForWeightCheck.val()) }), '/Common/IsExistsBetteryWrite', getToken()) == true;
+            var packaging = ddlPackagingLine.val().split("#");
+            var data = JSON.stringify({ lineId: packaging[0], imei: $.trim(IMEIScanningForWeightCheck.val()) });
+            return ajaxBooleanChecker(data, '/Common/IsExistsBetteryWriteWithPackagingLine', getToken()) == true;
         }
         function validateModelForWeightCheck() {
             return ajaxBooleanChecker(JSON.stringify({ itemId: TryParseInt(ddlItemName.val(), 0), assemblyId: TryParseInt(ddlAssemblyLine.val(), 0) }), '/Common/IsExistsItemAndAssemblyWithQCpass', getToken()) == true;
@@ -218,8 +220,9 @@
             return ajaxBooleanChecker(JSON.stringify({ itemId: TryParseInt(ddlItemName.val(), 0), imei: $.trim(IMEIScanningForWeightCheck.val())}), '/Common/IsExistsIMEIInModel', getToken()) == true;
         }
         IMEIScanningForWeightCheck.change(function () {
-            if ($.trim(IMEIScanningForWeightCheck.val()).length == 15) {
-                //if (validateModelForWeightCheck()) {
+            if (validateWeightCheckInput()) {
+                if ($.trim(IMEIScanningForWeightCheck.val()).length == 15) {
+                    //if (validateModelForWeightCheck()) {
                     if (validateIMEI()) {
                         var data = JSON.stringify({ imei: $.trim(IMEIScanningForWeightCheck.val())/*, itemId: TryParseInt(ddlItemName.val(), 0), assemblyId: TryParseInt(ddlAssemblyLine.val(), 0)*/ });
                         $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveIMEIStatusForWeightCheck', data, getToken())).then(function (res, status) {
@@ -244,15 +247,21 @@
                         IMEIScanningForWeightCheck.val('');
                         IMEIScanningForWeightCheck.focus();
                     }
-                //}
-                //else {
-                //    toastrErrorAlert("Assembly With Model is not Valid");
-                //    IMEIScanningForWeightCheck.val('');
-                //    IMEIScanningForWeightCheck.focus();
-                //}
+                    //}
+                    //else {
+                    //    toastrErrorAlert("Assembly With Model is not Valid");
+                    //    IMEIScanningForWeightCheck.val('');
+                    //    IMEIScanningForWeightCheck.focus();
+                    //}
+                }
+                else {
+                    toastrErrorAlert("IMEI is not Valid");
+                    IMEIScanningForWeightCheck.val('');
+                    IMEIScanningForWeightCheck.focus();
+                }
             }
             else {
-                toastrErrorAlert("IMEI is not Valid");
+                //toastrErrorAlert("IMEI is not Valid");
                 IMEIScanningForWeightCheck.val('');
                 IMEIScanningForWeightCheck.focus();
             }
