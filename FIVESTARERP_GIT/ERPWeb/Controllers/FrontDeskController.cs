@@ -1527,6 +1527,18 @@ namespace ERPWeb.Controllers
                 JobOrderType=jobOrder.JobOrderType
                 
             };
+            if (joborderId > 0)
+            {
+                var preJobInfo = _jobOrderBusiness.GetPreviousJobIMEI(jobOrder.IMEI, User.OrgId);
+                if (preJobInfo.Count() > 0)
+                {
+                    var dto = _jobOrderBusiness.GetPreviousJobIMEI(jobOrder.IMEI, User.OrgId).LastOrDefault();
+                    JobOrderViewModel jobModel = new JobOrderViewModel();
+                    AutoMapper.Mapper.Map(dto, jobModel);
+                    ViewBag.PreviousJobOrderInfo = jobModel;
+                }
+            }
+
             IEnumerable<JobOrderProblemDTO> prblm = _jobOrderProblemBusiness.GetJobOrderProblemByJobOrderId(joborderId.Value, User.OrgId).Select(p => new JobOrderProblemDTO
             {
                 JobOrderProblemId = p.JobOrderProblemId,
@@ -1568,16 +1580,6 @@ namespace ERPWeb.Controllers
                 };
             }
             ViewBag.jobrepair = jobrepair;
-
-            //IEnumerable<JobOrderRepairDTO> repair = _jobOrderRepairBusiness.GetJobOrderRepairByJobOrderId(joborderId.Value, User.OrgId).Select(r => new JobOrderRepairDTO
-            //{
-            //    JobOrderRepairId = r.JobOrderRepairId,
-            //    RepairId = r.RepairId,
-            //    RepairName = (_repairBusiness.GetRepairOneByOrgId(r.RepairId, User.OrgId).RepairName),
-            //}).ToList();
-            //List<JobOrderRepairViewModel> repairViewModels = new List<JobOrderRepairViewModel>();
-            //AutoMapper.Mapper.Map(repair, repairViewModels);
-            //ViewBag.repair = repairViewModels;
 
             IEnumerable<MobilePartStockInfoDTO> wareStock = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoById(User.OrgId, User.BranchId).Select(stock => new MobilePartStockInfoDTO
             {
@@ -2350,6 +2352,21 @@ namespace ERPWeb.Controllers
                 return PartialView("_ServicesSummary", viewModels);
             }
         }
+        public ActionResult GetAllBranchSellsReport(string flag,long? branchId)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                ViewBag.ddlBranchName = _branchBusiness.GetBranchByOrgId(User.OrgId).Where(b => b.BranchId != User.BranchId).Select(b => new SelectListItem { Text = b.BranchName, Value = b.BranchId.ToString()}).ToList();
+                return View();
+            }
+            else
+            {
+                var dto = _invoiceInfoBusiness.GetAllBranchSellsReport(User.OrgId, branchId);
+                List<InvoiceInfoViewModel> viewModels = new List<InvoiceInfoViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetAllBranchSellsReport", viewModels);
+            }
+        }
         #endregion
         //
         #region Call Center
@@ -2565,7 +2582,7 @@ namespace ERPWeb.Controllers
             }
             else
             {
-                var dto = _jobOrderBusiness.GetJobOrderFor3DaysOverProbDate(mobileNo.Trim(), modelId, status.Trim(), jobOrderId, jobCode, iMEI.Trim(), iMEI2.Trim(), User.OrgId, User.BranchId, fromDate, toDate, customerType, jobType, repairStatus, customer, courierNumber, recId, pdStatus);
+                var dto = _jobOrderBusiness.GetJobOrderFor5DaysOverProbDate(mobileNo.Trim(), modelId, status.Trim(), jobOrderId, jobCode, iMEI.Trim(), iMEI2.Trim(), User.OrgId, User.BranchId, fromDate, toDate, customerType, jobType, repairStatus, customer, courierNumber, recId, pdStatus);
 
                 IEnumerable<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
                 //ViewBag.PagerData = GetPagerData(dto.Count(), 5, page);

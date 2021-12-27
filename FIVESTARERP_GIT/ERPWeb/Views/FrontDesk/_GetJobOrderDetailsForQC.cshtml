@@ -102,7 +102,7 @@
         {
             <button type="button" class="btn btn-sm btn-success btnDeliveryDone">Delivery</button>
         }*@
-            @if (Model.StateStatus == ERPBLL.Common.JobOrderStatus.QCAssigned && Model.TsRepairStatus == "QC" && Model.QCTransferStatus == "Received")
+            @if (Model.StateStatus == ERPBLL.Common.JobOrderStatus.QCAssigned && (Model.TsRepairStatus == "QC" || Model.TsRepairStatus== "RETURN HANDSET") && Model.QCTransferStatus == "Received")
             {
                 <button type="button" title="Click For Approval" class="btn btn-outline-success btnQcStatus"><i class="fas fa-sticky-note"></i></button>
             }

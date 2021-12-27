@@ -98,7 +98,9 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<JobOrderDTO> GetDashBoardPendingDeliveryJob(long orgId, long branchId);
         IEnumerable<JobOrderDTO> TodayQCPassFail(long orgId, long branchId);
         IEnumerable<ServicesSummaryDTO> ServicesSummary(long orgId, string fromDate, string toDate);
-        IEnumerable<JobOrderDTO> GetJobOrderFor3DaysOverProbDate(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus);
+        IEnumerable<JobOrderDTO> GetJobOrderFor5DaysOverProbDate(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus);
         IEnumerable<JobOrderDTO> GetJobOrderFor10DaysOverProbDate(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus);
+
+        IEnumerable<JobOrderDTO> GetPreviousJobIMEI(string imei,long orgId);
     }
 }

@@ -43,6 +43,97 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="col-md-12">
+                                            <div class="row text-sm">
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">Job Code</label>
+                                                    <input type="text" id="txtJobCode" class="form-control form-control-sm" placeholder="Search By JobCode" name="jobCode" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">Model</label>
+                                                    @Html.DropDownList("ddlModelName", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "Search By Model", new { @class = "form-control form-control-sm ctrl-changed select2 select2-danger ctrl-changed" })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">IMEI1</label>
+                                                    <input type="text" id="txtIMEINo" class="form-control form-control-sm" placeholder="Search By IMEI1" name="iMEI" />
+                                                </div>
+                                                <div class="col-md-2 hide">
+                                                    <label class="col-form-label">IMEI2</label>
+                                                    <input type="text" id="txtIMEI2No" class="form-control form-control-sm" placeholder="Search By IMEI2" name="iMEI2" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">Mobile No</label>
+                                                    <input type="text" id="txtMobileNo" class="form-control form-control-sm" placeholder="Search By Mobile" name="mobile" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">Job Type</label>
+                                                    @Html.DropDownList("ddlJobType", (IEnumerable<SelectListItem>)ViewBag.ddlJobType, "--Search By Job Type--", new { @class = "form-control form-control-sm ctrl-changed select2 select2-danger ctrl-changed " })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">PDStatus</label>
+                                                    <select name="pdStatus" id="ddlPdStatus" class="form-control form-control-sm">
+                                                        <option value="" selected>Search By One</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Delivery">Delivery</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row text-sm">
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">Customer Type</label>
+                                                    @Html.DropDownList("ddlCustomerType", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, "--Search By CustomerType--", new { @class = "form-control form-control-sm ctrl-changed " })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">Dealer</label>
+                                                    @Html.DropDownList("txtCustomerName", (IEnumerable<SelectListItem>)ViewBag.txtCustomerName, "--Search By Dealer--", new { @class = "form-control form-control-sm ctrl-changed select select2" })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">Job Status</label>
+                                                    @Html.DropDownList("ddlStateStatus", (IEnumerable<SelectListItem>)ViewBag.ddlStateStatus, "--Search By Status--", new { @class = "form-control form-control-sm ctrl-changed " })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">Receive Id</label>
+                                                    <input type="text" id="txtReceiveId" class="form-control form-control-sm" placeholder="Search By Receive Id" name="recId" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">From Date</label>
+                                                    <div class="input-group input-group-sm ">
+                                                        <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptFromDate" name="fromDate" />
+                                                        <div class="input-group-prepend cursor-pointer remove-date dptFromDate" style="cursor:pointer">
+                                                            <span class="input-group-text">&#10008;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="col-form-label">To Date</label>
+                                                    <div class="input-group input-group-sm ">
+                                                        <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptToDate" name="toDate" />
+                                                        <div class="input-group-prepend remove-date dptToDate" style="cursor:pointer">
+                                                            <span class="input-group-text">&#10008;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1 hide" id="divReportType">
+                                                    <label class="col-form-label" for="rptType">Type</label>
+                                                    <select name="rptType" id="rptType" class="form-control form-control-sm">
+                                                        <option value="PDF">PDF</option>
+                                                        <option value="EXCEL">EXCEL</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-1 hide" id="divbtnReport">
+                                                    <label class="col-form-label" for="Download" style="visibility:hidden">Download</label>
+                                                    <button type="submit" title="Download Dealer Receipt" class="btn btn-sm btn-outline-danger"><i class="fas fa-file-pdf"> </i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12" style="margin-top:-15px">
                                 <div class="card shadow card-navy">
                                     <div class="card-body text-sm">
@@ -80,6 +171,76 @@
                             <div class="col-md-12" style="margin-top:-10px">
                                 <div class="card shadow card-navy">
                                     <div class="card-body text-sm">
+                                        <div class="row text-sm">
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">Job Code</label>
+                                                <input type="text" id="txtJobCode2" class="form-control form-control-sm" placeholder="Search By JobCode" name="jobCode" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">Model</label>
+                                                @Html.DropDownList("ddlModelName2", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "Search By Model", new { @class = "form-control form-control-sm ctrl-changed select2 select2-danger ctrl-changed" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">IMEI1</label>
+                                                <input type="text" id="txtIMEINo2" class="form-control form-control-sm" placeholder="Search By IMEI1" name="iMEI" />
+                                            </div>
+                                            <div class="col-md-2 hide">
+                                                <label class="col-form-label">IMEI2</label>
+                                                <input type="text" id="txtIMEI2No2" class="form-control form-control-sm" placeholder="Search By IMEI2" name="iMEI2" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">Mobile No</label>
+                                                <input type="text" id="txtMobileNo2" class="form-control form-control-sm" placeholder="Search By Mobile" name="mobile" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">Job Type</label>
+                                                @Html.DropDownList("ddlJobType2", (IEnumerable<SelectListItem>)ViewBag.ddlJobType, "--Search By Job Type--", new { @class = "form-control form-control-sm ctrl-changed select2 select2-danger ctrl-changed " })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">PDStatus</label>
+                                                <select name="pdStatus" id="ddlPdStatus2" class="form-control form-control-sm">
+                                                    <option value="" selected>Search By One</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Delivery">Delivery</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row text-sm">
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">Customer Type</label>
+                                                @Html.DropDownList("ddlCustomerType2", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, "--Search By CustomerType--", new { @class = "form-control form-control-sm ctrl-changed " })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">Dealer</label>
+                                                @Html.DropDownList("txtCustomerName2", (IEnumerable<SelectListItem>)ViewBag.txtCustomerName, "--Search By Dealer--", new { @class = "form-control form-control-sm ctrl-changed select select2" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">Job Status</label>
+                                                @Html.DropDownList("ddlStateStatus2", (IEnumerable<SelectListItem>)ViewBag.ddlStateStatus, "--Search By Status--", new { @class = "form-control form-control-sm ctrl-changed " })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">Receive Id</label>
+                                                <input type="text" id="txtReceiveId2" class="form-control form-control-sm" placeholder="Search By Receive Id" name="recId" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">From Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptFromDate2" name="fromDate" />
+                                                    <div class="input-group-prepend cursor-pointer remove-date dptFromDate2" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="col-form-label">To Date</label>
+                                                <div class="input-group input-group-sm ">
+                                                    <input type="text" class="form-control form-control-sm date-datePicker ctrl-changed" id="dptToDate2" name="toDate" />
+                                                    <div class="input-group-prepend remove-date dptToDate2" style="cursor:pointer">
+                                                        <span class="input-group-text">&#10008;</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -118,8 +279,214 @@
 </div>
 @section scripts{
     <script type="text/javascript">
-
+        var pageNo = 1;
+        var ddlModelName = $("#ddlModelName");
+        var txtMobileNo = $("#txtMobileNo");
+        var ddlStateStatus = $("#ddlStateStatus");
+        var txtJobCode = $("#txtJobCode");
         var hdfJobOrderId = $("#hdfJobOrderId");
+        var txtIMEINo = $("#txtIMEINo");
+        var txtIMEI2No = $("#txtIMEI2No");
+        var txtReceiveId = $("#txtReceiveId");
+        var ddlCustomerType = $("#ddlCustomerType");
+        var ddlJobType = $("#ddlJobType");
+        var txtCustomerName = $("#txtCustomerName");
+        var ddlPdStatus = $("#ddlPdStatus");
+        var dptFromDate = $("#dptFromDate");
+        var dptToDate = $("#dptToDate");
+        //
+        var ddlModelName2 = $("#ddlModelName2");
+        var txtMobileNo2 = $("#txtMobileNo2");
+        var ddlStateStatus2 = $("#ddlStateStatus2");
+        var txtJobCode2 = $("#txtJobCode2");
+        var hdfJobOrderId2 = $("#hdfJobOrderId2");
+        var txtIMEINo2 = $("#txtIMEINo2");
+        var txtIMEI2No2 = $("#txtIMEI2No2");
+        var txtReceiveId2 = $("#txtReceiveId2");
+        var ddlCustomerType2 = $("#ddlCustomerType2");
+        var ddlJobType2 = $("#ddlJobType2");
+        var txtCustomerName2 = $("#txtCustomerName2");
+        var ddlPdStatus2 = $("#ddlPdStatus2");
+        var dptFromDate2 = $("#dptFromDate2");
+        var dptToDate2 = $("#dptToDate2");
+
+        $(document).ready(function () {
+            dptFromDate.prop('readonly', true);
+            dptToDate.prop('readonly', true);
+            dptFromDate2.prop('readonly', true);
+            dptToDate2.prop('readonly', true);
+            dptFromDate.css("background-color", "#fff");
+            dptToDate.css("background-color", "#fff");
+            dptFromDate2.css("background-color", "#fff");
+            dptToDate2.css("background-color", "#fff");
+            $('#dptFromDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true,
+                showOn: "button",
+                buttonImageOnly: true,
+            });
+            $('#dptToDate').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+            $('#dptFromDate2').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true,
+                showOn: "button",
+                buttonImageOnly: true,
+            });
+            $('#dptToDate2').datepicker({
+                format: "dd MM yyyy",
+                orientation: "bottom auto",
+                todayHighlight: true,
+                autoclose: true
+            });
+        })
+
+        $(document).on('click', 'div.remove-date', function () {
+            if ($(this).hasClass("dptToDate")) {
+                if (dptToDate.val() !== '') {
+                    dptToDate.val('');
+                    LoadDataTable();
+                }
+            }
+            if ($(this).hasClass("dptFromDate")) {
+                if (dptFromDate.val() !== '') {
+                    dptFromDate.val('');
+                    LoadDataTable();
+                }
+            }
+            if ($(this).hasClass("dptToDate2")) {
+                if (dptToDate2.val() !== '') {
+                    dptToDate2.val('');
+                    LoadDataTable2();
+                }
+            }
+            if ($(this).hasClass("dptFromDate2")) {
+                if (dptFromDate2.val() !== '') {
+                    dptFromDate2.val('');
+                    LoadDataTable2();
+                }
+            }
+
+        })
+
+        dptFromDate.change(function () {
+            LoadDataTable();
+        })
+        dptToDate.change(function () {
+            LoadDataTable();
+        })
+        $(document).ready(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        })
+
+        txtMobileNo.keyup(function () {
+            LoadDataTable();
+        })
+        txtJobCode.keyup(function () {
+            LoadDataTable();
+        })
+        txtIMEINo.keyup(function () {
+            LoadDataTable();
+        })
+        txtIMEI2No.keyup(function () {
+            LoadDataTable();
+        })
+        txtCustomerName.change(function () {
+            LoadDataTable();
+        })
+        txtReceiveId.keyup(function () {
+            LoadDataTable();
+        })
+        ddlPdStatus.change(function () {
+            LoadDataTable();
+        })
+
+        $(document).on('change', '.ctrl-changed', function () {
+            LoadDataTable();
+        })
+
+        function LoadDataTable() {
+            var data = { flag: "search", modelId: TryParseInt(ddlModelName.val(), 0), jobOrderId: 0, mobileNo: $.trim(txtMobileNo.val()), status: ddlStateStatus.val(), jobCode: txtJobCode.val(), iMEI: txtIMEINo.val(), iMEI2: txtIMEI2No.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), customerType: ddlCustomerType.val(), jobType: ddlJobType.val(), customer: txtCustomerName.val().trim(), recId: txtReceiveId.val(), pdStatus: ddlPdStatus.val(), page: pageNo };
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/FrontDesk/GetDaysOverProbDate', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+        //2 No
+
+        dptFromDate2.change(function () {
+            LoadDataTable2();
+        })
+        dptToDate2.change(function () {
+            LoadDataTable2();
+        })
+
+        txtMobileNo2.keyup(function () {
+            LoadDataTable2();
+        })
+        txtJobCode2.keyup(function () {
+            LoadDataTable2();
+        })
+        txtIMEINo2.keyup(function () {
+            LoadDataTable2();
+        })
+        txtIMEI2No2.keyup(function () {
+            LoadDataTable2();
+        })
+        txtCustomerName2.change(function () {
+            LoadDataTable2();
+        })
+        txtReceiveId2.keyup(function () {
+            LoadDataTable2();
+        })
+        ddlPdStatus2.change(function () {
+            LoadDataTable2();
+        })
+
+        $(document).on('change', '.ctrl-changed', function () {
+            LoadDataTable2();
+        })
+
+        function LoadDataTable2() {
+            var data = { flag: "search", modelId: TryParseInt(ddlModelName2.val(), 0), jobOrderId: 0, mobileNo: $.trim(txtMobileNo2.val()), status: ddlStateStatus2.val(), jobCode: txtJobCode2.val(), iMEI: txtIMEINo2.val(), iMEI2: txtIMEI2No2.val(), fromDate: dptFromDate2.val(), toDate: dptToDate2.val(), customerType: ddlCustomerType2.val(), jobType: ddlJobType2.val(), customer: txtCustomerName2.val().trim(), recId: txtReceiveId2.val(), pdStatus: ddlPdStatus2.val(), page: pageNo };
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/FrontDesk/Get10DaysOverProbDate', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer3").fadeOut('500', function () {
+                        $("#dataContainer3").empty();
+                        $("#dataContainer3").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+
         $(document).on('click', 'a.data-item-details', function (e) {
             e.preventDefault();
             var id = $(this).attr("data-item-details");

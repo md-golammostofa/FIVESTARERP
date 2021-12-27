@@ -68,7 +68,7 @@ namespace ERPBLL.FrontDesk
             if (jobOrder != null)
             {
                 jobOrder.TsRepairStatus = jobOrderRepairStatus; // Repair Code text //
-                if (jobOrderRepairStatus == "QC")
+                if (jobOrderRepairStatus == "QC" || jobOrderRepairStatus == "RETURN HANDSET")
                 {
                     jobOrder.QCTransferStatus = "Pending";
                 }

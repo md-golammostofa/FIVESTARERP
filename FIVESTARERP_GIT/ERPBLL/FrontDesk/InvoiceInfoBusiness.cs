@@ -526,5 +526,14 @@ left join [ControlPanel].dbo.tblApplicationUsers au on inv.EUserId=au.UserId
 where 1=1{0} and InvoiceType='Sells' order by inv.EntryDate desc", Utility.ParamChecker(param));
             return query;
         }
+
+        public IEnumerable<InvoiceInfoDTO> GetAllBranchSellsReport(long orgId, long? branchId)
+        {
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<InvoiceInfoDTO>(string.Format(@"select InvoiceInfoId,InvoiceCode,JobOrderCode,CustomerName,TotalSPAmount,InvoiceType,
+LabourCharge,VAT,Tax,Discount,NetAmount,EntryDate,
+OrganizationId,BranchId,(select top 1 sum(NetAmount)'Total' from tblInvoiceInfo)'Total' 
+from tblInvoiceInfo
+where OrganizationId={0} and BranchId={1} order by EntryDate desc", orgId, branchId)).ToList();
+        }
     }
 }

@@ -1175,7 +1175,7 @@ Group By parts.MobilePartId,parts.MobilePartName) tbl", orgId, branchId, jobOrde
             {
                 jobOrder.JodOrderId = jobOrderId;
 
-                if (jobOrder.TsRepairStatus == "QC")
+                if (jobOrder.TsRepairStatus == "QC" || jobOrder.TsRepairStatus == "RETURN HANDSET")
                 {
                     jobOrder.StateStatus = JobOrderStatus.QCAssigned;
                     jobOrder.QCAssignDate = DateTime.Now;
@@ -1837,7 +1837,7 @@ Where OrganizationId={0} and BranchId={1} and TsRepairStatus='CALL CENTER' and (
             }
             if (branchId > 0)
             {
-                param += string.Format(@"and ((jo.TsRepairStatus='QC' and jo.IsTransfer is null and jo.BranchId={0}) or (jo.TsRepairStatus='QC' and jo.IsTransfer='True' and jo.TransferBranchId={0}))", branchId);
+                param += string.Format(@"and (((jo.TsRepairStatus='QC' or jo.TsRepairStatus='RETURN HANDSET') and jo.IsTransfer is null and jo.BranchId={0}) or ((jo.TsRepairStatus='QC' or jo.TsRepairStatus='RETURN HANDSET') and jo.IsTransfer='True' and jo.TransferBranchId={0}))", branchId);
             }
             if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
@@ -1921,16 +1921,33 @@ Where 1 = 1{0} and jo.StateStatus='QC-Assigned') tbl Order By JobOrderCode desc
             {
                 if (jobOrderInDb != null)
                 {
-                    jobOrderInDb.QCStatus = approval;
-                    jobOrderInDb.QCRemarks = remarks;
-                    jobOrderInDb.StateStatus = JobOrderStatus.RepairDone;
-                    jobOrderInDb.TsRepairStatus = "REPAIR AND RETURN";
-                    jobOrderInDb.UpdateDate = DateTime.Now;
-                    jobOrderInDb.QCPassFailDate = DateTime.Now;
-                    jobOrderInDb.QCName = userId;
-                    jobOrderInDb.UpUserId = userId;
-                    _jobOrderRepository.Update(jobOrderInDb);
-                    isSuccess = _jobOrderRepository.Save();
+                    if(jobOrderInDb.TsRepairStatus== "RETURN HANDSET")
+                    {
+                        jobOrderInDb.QCStatus = approval;
+                        jobOrderInDb.QCRemarks = remarks;
+                        jobOrderInDb.StateStatus = JobOrderStatus.RepairDone;
+                        jobOrderInDb.TsRepairStatus = "RETURN HANDSET";
+                        jobOrderInDb.UpdateDate = DateTime.Now;
+                        jobOrderInDb.QCPassFailDate = DateTime.Now;
+                        jobOrderInDb.QCName = userId;
+                        jobOrderInDb.UpUserId = userId;
+                        _jobOrderRepository.Update(jobOrderInDb);
+                        isSuccess = _jobOrderRepository.Save();
+                    }
+                    else
+                    {
+                        jobOrderInDb.QCStatus = approval;
+                        jobOrderInDb.QCRemarks = remarks;
+                        jobOrderInDb.StateStatus = JobOrderStatus.RepairDone;
+                        jobOrderInDb.TsRepairStatus = "REPAIR AND RETURN";
+                        jobOrderInDb.UpdateDate = DateTime.Now;
+                        jobOrderInDb.QCPassFailDate = DateTime.Now;
+                        jobOrderInDb.QCName = userId;
+                        jobOrderInDb.UpUserId = userId;
+                        _jobOrderRepository.Update(jobOrderInDb);
+                        isSuccess = _jobOrderRepository.Save();
+                    }
+                    
                 }
             }
             else
@@ -2101,7 +2118,7 @@ Inner Join [Configuration].dbo.tblModelSS de on jo.DescriptionId = de.ModelId
 Inner Join [ControlPanel].dbo.tblApplicationUsers ap on jo.EUserId = ap.UserId
 Left Join [ControlPanel].dbo.tblBranch bb on jo.JobLocation=bb.BranchId
 
-Where 1 = 1{0} and jo.CustomerType='Dealer' and ((jo.TsRepairStatus='REPAIR AND RETURN' and jo.StateStatus='Repair-Done' and jo.JobOrderType='Warrenty') or (jo.TsRepairStatus='REPAIR AND RETURN' and jo.StateStatus='Repair-Done' and jo.JobOrderType='Billing' and jo.InvoiceInfoId !=0) or (jo.TsRepairStatus='RETURN FOR ENGINEER HEAD' and jo.StateStatus='Job-Initiated') or jo.StateStatus='HandSetChange')) tbl Order By JobOrderCode desc
+Where 1 = 1{0} and jo.CustomerType='Dealer' and ((jo.TsRepairStatus='REPAIR AND RETURN' and jo.StateStatus='Repair-Done' and jo.JobOrderType='Warrenty') or (jo.TsRepairStatus='REPAIR AND RETURN' and jo.StateStatus='Repair-Done' and jo.JobOrderType='Billing' and jo.InvoiceInfoId !=0) or (jo.TsRepairStatus='RETURN HANDSET' and jo.StateStatus='Repair-Done' and jo.JobOrderType='Billing') or (jo.TsRepairStatus='RETURN FOR ENGINEER HEAD' and jo.StateStatus='Job-Initiated') or jo.StateStatus='HandSetChange')) tbl Order By JobOrderCode desc
 ", Utility.ParamChecker(param));
             return query;
         }
@@ -2710,11 +2727,11 @@ Where OrganizationId={0} and (BranchId={1} or (TransferBranchId={1} and IsTransf
             return _frontDeskUnitOfWork.Db.Database.SqlQuery<ServicesSummaryDTO>(query).ToList();
         }
 
-        public IEnumerable<JobOrderDTO> GetJobOrderFor3DaysOverProbDate(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus)
+        public IEnumerable<JobOrderDTO> GetJobOrderFor5DaysOverProbDate(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus)
         {
-            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(QueryForFor3DaysOverProbDate(mobileNo, modelId, status, jobOrderId, jobCode, iMEI, iMEI2, orgId, branchId, fromDate, toDate, customerType, jobType, repairStatus, customer, courierNumber, recId, pdStatus)).ToList();
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(QueryForFor5DaysOverProbDate(mobileNo, modelId, status, jobOrderId, jobCode, iMEI, iMEI2, orgId, branchId, fromDate, toDate, customerType, jobType, repairStatus, customer, courierNumber, recId, pdStatus)).ToList();
         }
-        private string QueryForFor3DaysOverProbDate(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus)
+        private string QueryForFor5DaysOverProbDate(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId, string pdStatus)
         {
             string query = string.Empty;
             string param = string.Empty;
@@ -2795,17 +2812,17 @@ OR
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(jo.EntryDate as date) between '{0}' and '{1}'", fDate, tDate);
+                param += string.Format(@" and Cast(jo.ProbablyDate as date) between '{0}' and '{1}'", fDate, tDate);
             }
             else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(jo.EntryDate as date)='{0}'", fDate);
+                param += string.Format(@" and Cast(jo.ProbablyDate as date)='{0}'", fDate);
             }
             else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(jo.EntryDate as date)='{0}'", tDate);
+                param += string.Format(@" and Cast(jo.ProbablyDate as date)='{0}'", tDate);
             }
 
             query = string.Format(@"Select JodOrderId,TsRepairStatus,JobOrderCode,CustomerName,MobileNo,CSModelName,CSColorName,CSIMEI1,CSIMEI2,CustomerSupportStatus,[Address],ModelName,BrandName,IsWarrantyAvailable,IsWarrantyPaperEnclosed,IsHandset,StateStatus,JobOrderType,EntryDate,EntryUser,MultipleJobOrderCode,MultipleDeliveryCode,TotalPOrDStatus,QC,QCStatus,QCRemarks,
@@ -2953,17 +2970,17 @@ OR
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(jo.EntryDate as date) between '{0}' and '{1}'", fDate, tDate);
+                param += string.Format(@" and Cast(jo.ProbablyDate as date) between '{0}' and '{1}'", fDate, tDate);
             }
             else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(jo.EntryDate as date)='{0}'", fDate);
+                param += string.Format(@" and Cast(jo.ProbablyDate as date)='{0}'", fDate);
             }
             else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(jo.EntryDate as date)='{0}'", tDate);
+                param += string.Format(@" and Cast(jo.ProbablyDate as date)='{0}'", tDate);
             }
 
             query = string.Format(@"Select JodOrderId,TsRepairStatus,JobOrderCode,CustomerName,MobileNo,CSModelName,CSColorName,CSIMEI1,CSIMEI2,CustomerSupportStatus,[Address],ModelName,BrandName,IsWarrantyAvailable,IsWarrantyPaperEnclosed,IsHandset,StateStatus,JobOrderType,EntryDate,EntryUser,MultipleJobOrderCode,MultipleDeliveryCode,TotalPOrDStatus,QC,QCStatus,QCRemarks,
@@ -3025,6 +3042,67 @@ Left Join [ControlPanel].dbo.tblApplicationUsers usr on jo.QCName=usr.UserId
 Where 1 = 1{0} and TotalPOrDStatus='Pending' and DATEDIFF(DAY,Cast(jo.ProbablyDate as Date),Cast(GETDATE() as Date)) >10) tbl Order By JobOrderCode desc
 ", Utility.ParamChecker(param));
             return query;
+        }
+
+        public IEnumerable<JobOrderDTO> GetPreviousJobIMEI(string imei, long orgId)
+        {
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(string.Format(@"Select JodOrderId,TsRepairStatus,JobOrderCode,CustomerName,MobileNo,CSModelName,CSColorName,CSIMEI1,CSIMEI2,CustomerSupportStatus,[Address],ModelName,BrandName,IsWarrantyAvailable,IsWarrantyPaperEnclosed,IsHandset,StateStatus,JobOrderType,EntryDate,EntryUser,MultipleJobOrderCode,MultipleDeliveryCode,TotalPOrDStatus,QC,QCStatus,QCRemarks,
+CloseDate,TSRemarks,
+SUBSTRING(FaultName,1,LEN(FaultName)-1) 'FaultName',SUBSTRING(ServiceName,1,LEN(ServiceName)-1) 'ServiceName',
+SUBSTRING(AccessoriesNames,1,LEN(AccessoriesNames)-1) 'AccessoriesNames',SUBSTRING(PartsName,1,LEN(PartsName)-1) 'PartsName',
+SUBSTRING(Problems,1,LEN(Problems)-1) 'Problems',TSId,TSName,RepairDate,
+IMEI,[Type],ModelColor,WarrantyDate,Remarks,ReferenceNumber,IMEI2,CloseUser,InvoiceCode,InvoiceInfoId,CustomerType,CourierNumber,CourierName,ApproxBill,IsTransfer,JobLocationB,IsReturn,CustomerApproval,CallCenterRemarks,ProbablyDate,TransferBranchId
+From (Select jo.JodOrderId,jo.CustomerName,jo.MobileNo,jo.[Address],de.ModelName,bn.BrandName,jo.IsWarrantyAvailable,jo.InvoiceInfoId,jo.IsWarrantyPaperEnclosed,jo.IsHandset,jo.JobOrderType,jo.StateStatus,jo.EntryDate,ap.UserName'EntryUser',jo.CloseDate,jo.InvoiceCode,jo.CustomerType,jo.CourierNumber,jo.CourierName,jo.ApproxBill,jo.IsTransfer,jo.IsReturn,bb.BranchName'JobLocationB',jo.CustomerApproval,jo.CallCenterRemarks,mo.ModelName'CSModelName',co.ColorName'CSColorName',jo.CSIMEI1,jo.CSIMEI2,jo.CustomerSupportStatus,jo.MultipleJobOrderCode,jo.ProbablyDate,jo.TransferBranchId,jo.MultipleDeliveryCode,jo.TotalPOrDStatus,usr.UserName'QC',jo.QCStatus,jo.QCRemarks,
+
+Cast((Select FaultName+',' From [Configuration].dbo.tblFault fa
+Inner Join tblJobOrderFault jof on fa.FaultId = jof.FaultId
+Where jof.JobOrderId = jo.JodOrderId
+Order BY FaultName For XML PATH('')) as nvarchar(MAX))  'FaultName',
+
+Cast((Select ServiceName+',' From [Configuration].dbo.tblServices ser
+Inner Join tblJobOrderServices jos on ser.ServiceId = jos.ServiceId
+Where jos.JobOrderId = jo.JodOrderId
+Order BY ServiceName For XML PATH('')) as nvarchar(MAX))  'ServiceName',
+
+Cast((Select AccessoriesName+',' From [Configuration].dbo.tblAccessories ass
+Inner Join tblJobOrderAccessories joa on ass.AccessoriesId = joa.AccessoriesId
+Where joa.JobOrderId = jo.JodOrderId
+Order BY AccessoriesName For XML PATH('')) as nvarchar(MAX))  'AccessoriesNames',
+
+Cast((Select  (parts.MobilePartName+' (Qty-' + Cast(tstock.UsedQty as nvarchar(20)))+')'+',' from [FrontDesk].dbo.tblTechnicalServicesStock tstock
+inner join [Configuration].dbo.tblMobileParts parts
+on tstock.PartsId=parts.MobilePartId
+Where tstock.UsedQty>0 and tstock.JobOrderId = jo.JodOrderId
+Order BY (parts.MobilePartName+'#' + Cast(tstock.UsedQty as nvarchar(20))) For XML PATH('')) as nvarchar(MAX)) 'PartsName',
+
+Cast((Select ProblemName+',' From [Configuration].dbo.tblClientProblems prob
+Inner Join tblJobOrderProblems jop on prob.ProblemId = jop.ProblemId
+Where jop.JobOrderId = jo.JodOrderId 
+Order BY ProblemName For XML PATH(''))as nvarchar(MAX)) 'Problems',jo.JobOrderCode,jo.TSId,jo.TSRemarks,
+--ts.Name ,
+jo.IMEI,jo.[Type],jo.ModelColor,jo.WarrantyDate,jo.Remarks,jo.ReferenceNumber,jo.IMEI2,jo.TsRepairStatus,
+(Select UserName  from tblJobOrders job
+Inner Join [ControlPanel].dbo.tblApplicationUsers app on job.CUserId = app.UserId where job.JodOrderId=jo.JodOrderId) 'CloseUser',
+
+(Select Top 1 UserName 'TSName' from tblJobOrderTS jts
+Inner Join [ControlPanel].dbo.tblApplicationUsers app on jts.TSId = app.UserId
+Where jts.JodOrderId = jo.JodOrderId 
+Order By JTSId desc) 'TSName',
+
+(Select top 1 SignOutDate from tblJobOrderTS jt
+Inner Join tblJobOrders j on jt.JodOrderId = j.JodOrderId
+Where jt.JodOrderId = jo.JodOrderId and (j.TsRepairStatus='REPAIR AND RETURN' or(j.TsRepairStatus='MODULE SWAP' and j.StateStatus='HandSetChange')) Order by jt.JTSId desc) 'RepairDate'
+
+from tblJobOrders jo
+Inner Join [Configuration].dbo.tblModelSS de on jo.DescriptionId = de.ModelId
+Inner Join [ControlPanel].dbo.tblApplicationUsers ap on jo.EUserId = ap.UserId
+Left Join [ControlPanel].dbo.tblBranch bb on jo.JobLocation=bb.BranchId
+Left Join [Configuration].dbo.tblBrandSS bn on de.BrandId=bn.BrandId
+Left Join [Configuration].dbo.tblModelSS mo on jo.CSModel=mo.ModelId
+Left Join [Configuration].dbo.tblColorSS co on jo.CSColor=co.ColorId
+Left Join [ControlPanel].dbo.tblApplicationUsers usr on jo.QCName=usr.UserId
+
+Where jo.StateStatus='Delivery-Done' and jo.IMEI='{0}' and jo.OrganizationId={1}) tbl", imei, orgId)).ToList();
         }
     }
 }

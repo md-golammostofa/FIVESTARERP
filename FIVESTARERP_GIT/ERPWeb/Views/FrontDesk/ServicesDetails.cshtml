@@ -1,13 +1,5 @@
 ﻿@using ERPBO.Configuration.ViewModels;
 @{
-    /**/
-
-    /**/
-
-    /**/
-
-    /**/
-
     ViewBag.Title = "Engineer Services Details";
     int sl = 0;
     int sl2 = 0;
@@ -20,6 +12,8 @@
     IEnumerable<ERPBO.Configuration.ViewModels.MobilePartStockInfoViewModel> WareStock = (IEnumerable<ERPBO.Configuration.ViewModels.MobilePartStockInfoViewModel>)ViewBag.warehouseStock;
     IEnumerable<ERPBO.FrontDesk.ViewModels.SparePartsAvailableAndReqQtyViewModel> availableQty = (IEnumerable<ERPBO.FrontDesk.ViewModels.SparePartsAvailableAndReqQtyViewModel>)ViewBag.SparePartsAvailableAndReqQty;
     IEnumerable<ERPBO.FrontDesk.ViewModels.TechnicalServicesStockViewModel> tsStock = (IEnumerable<ERPBO.FrontDesk.ViewModels.TechnicalServicesStockViewModel>)ViewBag.TechnicalServicesStock;
+
+    var previousJob = (ERPBO.FrontDesk.ViewModels.JobOrderViewModel)ViewBag.PreviousJobOrderInfo;
     string faulty = string.Empty;
     string service = string.Empty;
     // string repair = string.Empty;
@@ -348,26 +342,26 @@
                                         @foreach (var stock in tsStock)
                                         {
                                             sl2 = sl2 + 1;
-                                        <tr>
-                                            <td class="text-center text-bold" width="10%">@sl2</td>
-                                            <td class="hide">@stock.TsStockId</td>
-                                            <td class="hide">@stock.SWarehouseId</td>
-                                            <td class="hide">@stock.SWarehouseName</td>
-                                            <td class="hide">@stock.RequsitionInfoForJobOrderId</td>
-                                            <td>@stock.RequsitionCode</td>
-                                            <td class="hide">@stock.PartsId</td>
-                                            <td>@stock.PartsName</td>
-                                            <td>@stock.MobilePartCode</td>
-                                            <td class="text-center">@stock.Quantity</td>
-                                            @if (jobOrder.QCStatus == "QC-Fail")
-                                            {
-                                            <td class="text-center hide">@stock.UsedQty</td>
-                                            <td class="text-center hide">@stock.ReturnQty</td>
-                                            }
-                                            
-                                            <td class="text-center hide">@stock.TotalQty</td>
-                                            <td class="text-center hide">@stock.Remarks</td>
-                                        </tr>
+                                            <tr>
+                                                <td class="text-center text-bold" width="10%">@sl2</td>
+                                                <td class="hide">@stock.TsStockId</td>
+                                                <td class="hide">@stock.SWarehouseId</td>
+                                                <td class="hide">@stock.SWarehouseName</td>
+                                                <td class="hide">@stock.RequsitionInfoForJobOrderId</td>
+                                                <td>@stock.RequsitionCode</td>
+                                                <td class="hide">@stock.PartsId</td>
+                                                <td>@stock.PartsName</td>
+                                                <td>@stock.MobilePartCode</td>
+                                                <td class="text-center">@stock.Quantity</td>
+                                                @if (jobOrder.QCStatus == "QC-Fail")
+                                                {
+                                                    <td class="text-center hide">@stock.UsedQty</td>
+                                                    <td class="text-center hide">@stock.ReturnQty</td>
+                                                }
+
+                                                <td class="text-center hide">@stock.TotalQty</td>
+                                                <td class="text-center hide">@stock.Remarks</td>
+                                            </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -380,10 +374,10 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <b>CC:</b><span id="qcStatusForHide">@jobOrder.CustomerApproval</span> 
+                                                <b>CC:</b><span id="qcStatusForHide">@jobOrder.CustomerApproval</span>
                                             </td>
                                             <td>
-                                               @jobOrder.CallCenterRemarks
+                                                @jobOrder.CallCenterRemarks
                                             </td>
                                         </tr>
                                     </tbody>
@@ -396,7 +390,7 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <b>QC:</b> <span >@jobOrder.QCStatus</span>
+                                                <b>QC:</b> <span>@jobOrder.QCStatus</span>
                                             </td>
                                             <td>
                                                 @jobOrder.QCRemarks
@@ -421,7 +415,7 @@
                                 <input type="text" class="form-control form-control-sm" id="txtIMEI2" placeholder="Input IMEI2" />
                                 <span class="error hide require-IMEI2 font-weight-bold">Mobile IMEI2 is required !</span>
                                 <span class="error hide require-len-IMEI2 font-weight-bold">Must Input 15 digit IMEI !</span>
-                                
+
                                 <span class="error hide duplicate-IMEI2 font-weight-bold">Already Exist IMEI2 !</span>
                             </div>
                         </div>
@@ -443,9 +437,41 @@
                                 <button type="button" id="btnHandsetChangeSave" class="btn btn-sm btn-primary" title="">Update</button>
                             </div>
                         </div>
-
+                        @if (previousJob != null)
+                        {
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered table-striped table-sm table-responsive-lg" style="background-color:lightgray">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <td colspan="4"><b style="color:red">Previous Job Repair Info</b></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="color:blue">Problem</td>
+                                                <td>@previousJob.Problems</td>
+                                                <td style="color:blue">Repair</td>
+                                                <td>@previousJob.TsRepairStatus</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color:blue">Services</td>
+                                                <td>@previousJob.ServiceName</td>
+                                                <td style="color:blue">Fault</td>
+                                                <td>@previousJob.FaultName</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color:blue">Pars</td>
+                                                <td>@previousJob.PartsName</td>
+                                                <td style="color:blue">TS Name</td>
+                                                <td>@previousJob.TSName</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
                     </div>
-                    
 
                     <div class="col-md-1">
                         <input class="btn btn-success btn-sm float-lg-right" value="Save" type="button" id="btnSave" onclick="window.close()" />
@@ -1613,7 +1639,7 @@ $('.toastrDefaultError').trigger('click');
                                 console.log("fnJobOrderSignOut");
                                 console.log(info);
                                 console.log(stocks);
-            if (info.TsRepairStatus === "QC") {
+            if (info.TsRepairStatus === "QC" || info.TsRepairStatus === "RETURN HANDSET") {
                 // If Stocks avaiable // used qty
                 if (stocks.length > 0) {
                     fnBindTsStockmodalForSignOut(stocks);
@@ -1789,7 +1815,7 @@ $('.toastrDefaultError').trigger('click');
                     $("#btnjobsign").hide();
                 }
             }
-            else if ($("#repairName").text() == "RETURN FOR ENGINEER HEAD") {
+            else if ($("#repairName").text() == "RETURN FOR ENGINEER HEAD" || $("#repairName").text() == "RETURN HANDSET") {
                 $("#btnjobsign").show();
                 // $("#btnHandsetchange").hide();
                 $("#changeIMEI1").hide();

@@ -984,6 +984,8 @@
     <Content Include="Views\Configuration\RepairedPartsEntryByTS.cshtml" />
     <Content Include="Views\Configuration\_RepairedPartsEntryDetails.cshtml" />
     <Content Include="Views\Configuration\_GetFaultyRepairedDetailsTS.cshtml" />
+    <Content Include="Views\FrontDesk\_GetAllBranchSellsReport.cshtml" />
+    <Content Include="Views\FrontDesk\GetAllBranchSellsReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

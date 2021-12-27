@@ -209,7 +209,7 @@ order by EntryDate desc
             {
                 foreach (var item in reqInfos)
                 {
-                    if(tsRepairStatus == "RETURN FOR ENGINEER HEAD")
+                    if(tsRepairStatus == "RETURN FOR ENGINEER HEAD" || tsRepairStatus == "RETURN HANDSET")
                     {
                         status = RequisitionStatus.Void;
                     }
