@@ -213,6 +213,9 @@
             var data = JSON.stringify({ lineId: packaging[0], imei: $.trim(IMEIScanningForWeightCheck.val()) });
             return ajaxBooleanChecker(data, '/Common/IsExistsBetteryWriteWithPackagingLine', getToken()) == true;
         }
+        function validateIMEIStock() {
+            return ajaxBooleanChecker(JSON.stringify({ imei: $.trim(IMEIScanningForWeightCheck.val()) }), '/Common/IsPackagingLineStockAvailableForItemPreparetion', getToken()) == true;
+        }
         function validateModelForWeightCheck() {
             return ajaxBooleanChecker(JSON.stringify({ itemId: TryParseInt(ddlItemName.val(), 0), assemblyId: TryParseInt(ddlAssemblyLine.val(), 0) }), '/Common/IsExistsItemAndAssemblyWithQCpass', getToken()) == true;
         }
@@ -224,23 +227,30 @@
                 if ($.trim(IMEIScanningForWeightCheck.val()).length == 15) {
                     //if (validateModelForWeightCheck()) {
                     if (validateIMEI()) {
-                        var data = JSON.stringify({ imei: $.trim(IMEIScanningForWeightCheck.val())/*, itemId: TryParseInt(ddlItemName.val(), 0), assemblyId: TryParseInt(ddlAssemblyLine.val(), 0)*/ });
-                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveIMEIStatusForWeightCheck', data, getToken())).then(function (res, status) {
-                            if (status === "success" && res === true) {
-                                toastrSuccessAlert(execuStatus.successSave);
-                                IMEIScanningForWeightCheck.val('');
-                                IMEIScanningForWeightCheck.focus();
-                                LoadDataTableForWeightCheckList();
-                            }
-                            else {
-                                toastrErrorAlert(execuStatus.fail);
-                                IMEIScanningForWeightCheck.val('');
-                                IMEIScanningForWeightCheck.focus();
-                            }
+                        if (validateIMEIStock()) {
+                            var data = JSON.stringify({ imei: $.trim(IMEIScanningForWeightCheck.val())/*, itemId: TryParseInt(ddlItemName.val(), 0), assemblyId: TryParseInt(ddlAssemblyLine.val(), 0)*/ });
+                            $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveIMEIStatusForWeightCheck', data, getToken())).then(function (res, status) {
+                                if (status === "success" && res === true) {
+                                    toastrSuccessAlert(execuStatus.successSave);
+                                    IMEIScanningForWeightCheck.val('');
+                                    IMEIScanningForWeightCheck.focus();
+                                    LoadDataTableForWeightCheckList();
+                                }
+                                else {
+                                    toastrErrorAlert(execuStatus.fail);
+                                    IMEIScanningForWeightCheck.val('');
+                                    IMEIScanningForWeightCheck.focus();
+                                }
 
-                        }).fail(function (err) {
-                            console.log(err);
-                        })
+                            }).fail(function (err) {
+                                console.log(err);
+                            })
+                        }
+                        else {
+                            IMEIScanningForWeightCheck.val('');
+                            IMEIScanningForWeightCheck.focus();
+                            toastrErrorAlert("Stock Not Available!");
+                        }
                     }
                     else {
                         toastrErrorAlert("IMEI Not Found");
