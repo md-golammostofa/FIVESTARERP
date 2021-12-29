@@ -2715,7 +2715,10 @@ Where OrganizationId={0} and BranchId={1} and TsRepairStatus='RETURN FOR ENGINEE
 Where OrganizationId={0} and (BranchId={1} or (TransferBranchId={1} and IsTransfer='True')) and TotalPOrDStatus='Pending' And  DATEDIFF(DAY,Cast(ProbablyDate as Date),Cast(GETDATE() as Date)) >10)'DaysOver10',
 
 (Select Count(JobOrderCode) From tblJobOrders
-Where OrganizationId={0} and (BranchId={1} or (TransferBranchId={1} and IsTransfer='True')) and TotalPOrDStatus='Pending' And  DATEDIFF(DAY,Cast(ProbablyDate as Date),Cast(GETDATE() as Date)) >5)'DaysOver5'
+Where OrganizationId={0} and (BranchId={1} or (TransferBranchId={1} and IsTransfer='True')) and TotalPOrDStatus='Pending' And  DATEDIFF(DAY,Cast(ProbablyDate as Date),Cast(GETDATE() as Date)) >5)'DaysOver5',
+
+(select ISNULL(Sum(NetAmount),0)'AllOverSales' from tblInvoiceInfo
+Where OrganizationId={0})'AllOverSales'
 
 ", orgId, branchId)).ToList();
         }

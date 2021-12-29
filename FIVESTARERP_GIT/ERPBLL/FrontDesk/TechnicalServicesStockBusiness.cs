@@ -246,11 +246,11 @@ where ts.UsedQty>0 and 1=1{0}  order by rq.EntryDate desc
 
         public bool SaveTechnicalServicesStockIn(List<TechnicalServicesStockDTO> servicesStockDTOs, long userId, long orgId, long branchId,long modelId)
         {
-
+            bool IsSuccess = false;
             List<TechnicalServicesStock> servicesStocks = new List<TechnicalServicesStock>();
             foreach (var item in servicesStockDTOs)
             {
-                var servicesInfo = GetAllTechnicalServicesStock(item.JobOrderId.Value, orgId, branchId).Where(o => o.SWarehouseId == item.SWarehouseId && o.PartsId == item.PartsId && o.JobOrderId == item.JobOrderId && o.RequsitionInfoForJobOrderId == item.RequsitionInfoForJobOrderId).FirstOrDefault();
+                var servicesInfo = GetAllTechnicalServicesStock(item.JobOrderId.Value, orgId, branchId).Where(o => o.SWarehouseId == item.SWarehouseId && o.PartsId == item.PartsId && o.ModelId==item.ModelId && o.JobOrderId == item.JobOrderId && o.RequsitionInfoForJobOrderId==item.RequsitionInfoForJobOrderId).FirstOrDefault();
                 if (servicesInfo != null)
                 {
                     servicesInfo.Quantity += item.Quantity;
@@ -275,11 +275,14 @@ where ts.UsedQty>0 and 1=1{0}  order by rq.EntryDate desc
                     stockServices.Remarks = "NotUsed";
                     stockServices.ModelId = modelId;
                     stockServices.EntryDate = DateTime.Now;
-                    servicesStocks.Add(stockServices);
+                    //servicesStocks.Add(stockServices);
+                    technicalServicesStockRepository.Insert(stockServices);
+                    technicalServicesStockRepository.Save();
+                    IsSuccess = true;
                 }
             }
-            technicalServicesStockRepository.InsertAll(servicesStocks);
-            return technicalServicesStockRepository.Save();
+            //technicalServicesStockRepository.InsertAll(servicesStocks);
+            return IsSuccess;
         }
 
         public bool SaveTechnicalServicesStockOut(List<TechnicalServicesStockDTO> servicesStockDTOs, long jobOrderId, long userId, long orgId, long branchId)

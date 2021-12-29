@@ -130,5 +130,6 @@ namespace ERPBO.FrontDesk.DTOModels
         public int TransferToTI { get; set; }
         public int DaysOver10 {get;set;}
         public int DaysOver5 { get; set; }
+        public double AllOverSales { get; set; }
     }
 }

@@ -632,6 +632,25 @@
     </div>
 
     <div class="row">
+        <div class="col-md-3">
+            <div class="col-sm-12 col-6">
+                <div class="small-box bg-gradient-info">
+                    <div class="inner" style="height:95px">
+                        <p><b><i>Total Sells(All Over)</i></b></p>
+                        <h3>
+                            @foreach (var p in (IEnumerable<JobOrderViewModel>)ViewBag.TodayQCPassFail)
+                            {
+                                <span class="info-box-number"><a class="link-black"><b><i>@p.AllOverSales</i></b></a></span>
+                            }
+                        </h3>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <a href="#" class="small-box-footer"></a>
+                </div>
+            </div>
+        </div>
         <div class="col-md-9" style="height:auto">
             <div class="card shadow" style="background-image:url(../../Content/Images/pic15.jpg)">
                 <div class="card-header" style="background-image:url(../../Content/Images/pic16.jpg)">
