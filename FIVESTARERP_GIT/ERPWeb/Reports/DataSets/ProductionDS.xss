@@ -9,8 +9,8 @@
     <Shape ID="DesignTable:ProductionRequisition" ZOrder="5" X="27" Y="11" Height="333" Width="196" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="329" />
     <Shape ID="DesignTable:QRCodesByRef" ZOrder="4" X="227" Y="11" Height="334" Width="152" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="330" />
     <Shape ID="DesignTable:ReportHead" ZOrder="3" X="384" Y="11" Height="334" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="330" />
-    <Shape ID="DesignTable:dsLotInBarcode" ZOrder="2" X="696" Y="14" Height="90" Width="158" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="86" />
-    <Shape ID="DesignTable:QRCodeProblem" ZOrder="1" X="537" Y="13" Height="143" Width="162" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="139" />
+    <Shape ID="DesignTable:dsLotInBarcode" ZOrder="1" X="696" Y="14" Height="90" Width="156" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="86" />
+    <Shape ID="DesignTable:QRCodeProblem" ZOrder="2" X="537" Y="13" Height="143" Width="162" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="139" />
   </Shapes>
   <Connectors />
 </DiagramLayout>

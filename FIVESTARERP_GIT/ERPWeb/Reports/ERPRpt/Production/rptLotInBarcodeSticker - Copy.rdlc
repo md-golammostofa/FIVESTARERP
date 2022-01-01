@@ -6,47 +6,12 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.11979in</Width>
+              <Width>1.08438in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.06467in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="ItemName">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!ItemName.Value</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>ItemName</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingBottom>1pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.2128in</Height>
+              <Height>0.28293in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -59,6 +24,7 @@
                         <Border>
                           <Style>None</Style>
                         </Border>
+                        <PaddingTop>5pt</PaddingTop>
                       </Style>
                     </Image>
                   </CellContents>
@@ -66,7 +32,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.06076in</Height>
+              <Height>0.08218in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -78,9 +44,7 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!CodeNo.Value</Value>
-                              <Style>
-                                <FontSize>8pt</FontSize>
-                              </Style>
+                              <Style />
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -114,14 +78,14 @@
               <TablixMembers>
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsLotInBarcode</DataSetName>
-        <Height>0.33823in</Height>
-        <Width>1.11979in</Width>
+        <Left>0.01562in</Left>
+        <Height>0.36511in</Height>
+        <Width>1.08438in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -129,14 +93,14 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>0.33823in</Height>
+    <Height>0.36511in</Height>
     <Style>
       <Border>
         <Style>None</Style>
       </Border>
     </Style>
   </Body>
-  <Width>1.11979in</Width>
+  <Width>1.1in</Width>
   <Page>
     <PageHeight>0.5in</PageHeight>
     <PageWidth>1.18in</PageWidth>
@@ -144,18 +108,18 @@
   </Page>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="ProductionDS">
+    <DataSource Name="dsLotInBarcode">
       <ConnectionProperties>
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>2f3cf9a2-9937-4406-98be-0103d479ff6e</rd:DataSourceID>
+      <rd:DataSourceID>227d6c7c-478f-4b2c-ac2e-58819aa39367</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="dsLotInBarcode">
       <Query>
-        <DataSourceName>ProductionDS</DataSourceName>
+        <DataSourceName>dsLotInBarcode</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
@@ -167,14 +131,10 @@
           <DataField>BarcodeLotInNumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ItemName">
-          <DataField>ItemName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>ProductionDS</rd:DataSetName>
-        <rd:SchemaPath>D:\5STARERPNEW\FIVESTARERP\FIVESTARERP_GIT\ERPWeb\Reports\DataSets\ProductionDS.xsd</rd:SchemaPath>
+        <rd:DataSetName>dsLotInBarcode</rd:DataSetName>
+        <rd:SchemaPath>D:\Project\MYCELL-ERP\ERPWeb\Reports\DataSets\dsLotInBarcode.xsd</rd:SchemaPath>
         <rd:TableName>dsLotInBarcode</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

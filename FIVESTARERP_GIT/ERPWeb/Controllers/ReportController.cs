@@ -185,6 +185,7 @@ namespace ERPWeb.Controllers
             foreach (var item in reportData)
             {
                 QRCodesByRef qR = new QRCodesByRef();
+                qR.ItemName = item.ItemName;
                 qR.CodeNo = item.CodeNo;
                 qR.BarcodeLotInNumber = GenerateCode128(item.CodeNo);
                 LotInBarcodeList.Add(qR);

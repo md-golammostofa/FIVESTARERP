@@ -1143,6 +1143,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Reports\ERPRpt\Production\rptDailyProductionSummery.rdlc" />
+    <Content Include="Reports\ERPRpt\Production\rptLotInBarcodeSticker - Copy.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Reports\ERPRpt\Production\rptQRCodeProblemList.rdlc" />
     <Content Include="Reports\ERPRpt\Production\rptRequsitionDetails.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

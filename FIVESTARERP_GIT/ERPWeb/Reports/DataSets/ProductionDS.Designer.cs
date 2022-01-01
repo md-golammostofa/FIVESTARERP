@@ -1629,6 +1629,8 @@ namespace ERPWeb.Reports.DataSets {
             
             private global::System.Data.DataColumn columnBarcodeLotInNumber;
             
+            private global::System.Data.DataColumn columnItemName;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public dsLotInBarcodeDataTable() {
@@ -1680,6 +1682,14 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ItemNameColumn {
+                get {
+                    return this.columnItemName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1715,11 +1725,12 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public dsLotInBarcodeRow AdddsLotInBarcodeRow(string CodeNo, string BarcodeLotInNumber) {
+            public dsLotInBarcodeRow AdddsLotInBarcodeRow(string CodeNo, string BarcodeLotInNumber, string ItemName) {
                 dsLotInBarcodeRow rowdsLotInBarcodeRow = ((dsLotInBarcodeRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         CodeNo,
-                        BarcodeLotInNumber};
+                        BarcodeLotInNumber,
+                        ItemName};
                 rowdsLotInBarcodeRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdsLotInBarcodeRow);
                 return rowdsLotInBarcodeRow;
@@ -1744,6 +1755,7 @@ namespace ERPWeb.Reports.DataSets {
             internal void InitVars() {
                 this.columnCodeNo = base.Columns["CodeNo"];
                 this.columnBarcodeLotInNumber = base.Columns["BarcodeLotInNumber"];
+                this.columnItemName = base.Columns["ItemName"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1753,6 +1765,8 @@ namespace ERPWeb.Reports.DataSets {
                 base.Columns.Add(this.columnCodeNo);
                 this.columnBarcodeLotInNumber = new global::System.Data.DataColumn("BarcodeLotInNumber", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBarcodeLotInNumber);
+                this.columnItemName = new global::System.Data.DataColumn("ItemName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnItemName);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3272,6 +3286,22 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ItemName {
+                get {
+                    try {
+                        return ((string)(this[this.tabledsLotInBarcode.ItemNameColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ItemName\' in table \'dsLotInBarcode\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledsLotInBarcode.ItemNameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsCodeNoNull() {
                 return this.IsNull(this.tabledsLotInBarcode.CodeNoColumn);
             }
@@ -3292,6 +3322,18 @@ namespace ERPWeb.Reports.DataSets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetBarcodeLotInNumberNull() {
                 this[this.tabledsLotInBarcode.BarcodeLotInNumberColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsItemNameNull() {
+                return this.IsNull(this.tabledsLotInBarcode.ItemNameColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetItemNameNull() {
+                this[this.tabledsLotInBarcode.ItemNameColumn] = global::System.Convert.DBNull;
             }
         }
         
