@@ -8,8 +8,10 @@
             <thead class="btn-dark text-center">
                 <tr>
                     <th>#SL</th>
+                    <th class="hide">CaseId</th>
                     <th>Problem Description</th>
                     <th>Problem Code</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -18,8 +20,12 @@
                     sl = sl + 1;
                     <tr>
                         <td class="text-center text-bold">@sl</td>
+                        <td class="hide">@item.CaseId</td>
                         <td>@item.ProblemDescription</td>
                         <td class="text-center">@item.QRCode</td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-warning btn-sm data-faultyCase-edit" data-faultyCase-edit="@item.CaseId" title="Edit"><i class="fa fa-pen"></i> Edit</a>
+                        </td>
                     </tr>
                 }
             </tbody>

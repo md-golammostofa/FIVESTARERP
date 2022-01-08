@@ -1,6 +1,7 @@
 ﻿using ERPBLL.Common;
 using ERPBLL.Inventory.Interface;
 using ERPBLL.Production.Interface;
+using ERPBLL.Report.Interface;
 using ERPBO.Common;
 using ERPBO.Inventory.DTOModel;
 using ERPBO.Inventory.ViewModels;
@@ -27,6 +28,7 @@ namespace ERPWeb.Controllers
     {
         // GET: Production
         #region Production Business Classes
+        private readonly IProductionReportBusiness _productionReportBusiness;
         private readonly IWeightCheckedIMEILogBusiness _weightCheckedIMEILogBusiness;
         private readonly IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness _miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness;
         private readonly IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness _miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness;
@@ -140,9 +142,10 @@ namespace ERPWeb.Controllers
         private readonly IColorBusiness _colorBusiness;
         #endregion
 
-        public ProductionController(IRequsitionInfoBusiness requsitionInfoBusiness, IWarehouseBusiness warehouseBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IProductionLineBusiness productionLineBusiness, IItemBusiness itemBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IProductionStockDetailBusiness productionStockDetailBusiness, IProductionStockInfoBusiness productionStockInfoBusiness, IItemReturnInfoBusiness itemReturnInfoBusiness, IItemReturnDetailBusiness itemReturnDetailBusiness, IDescriptionBusiness descriptionBusiness, IFinishGoodsInfoBusiness finishGoodsInfoBusiness, IFinishGoodsRowMaterialBusiness finishGoodsRowMaterialBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness, IFinishGoodsSendToWarehouseInfoBusiness finishGoodsSendToWarehouseInfoBusiness, IFinishGoodsSendToWarehouseDetailBusiness finishGoodsSendToWarehouseDetailBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IAssemblyLineBusiness assemblyLineBusiness, ITransferStockToAssemblyInfoBusiness transferStockToAssemblyInfoBusiness, ITransferStockToAssemblyDetailBusiness transferStockToAssemblyDetailBusiness, IAssemblyLineStockInfoBusiness assemblyLineStockInfoBusiness, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IQualityControlBusiness qualityControlBusiness, ITransferStockToQCInfoBusiness transferStockToQCInfoBusiness, ITransferStockToQCDetailBusiness transferStockToQCDetailBusiness, IQCLineStockInfoBusiness qCLineStockInfoBusiness, IQCLineStockDetailBusiness qCLineStockDetailBusiness, IRepairLineBusiness repairLineBusiness, IPackagingLineBusiness packagingLineBusiness, ITransferFromQCInfoBusiness transferFromQCInfoBusiness, ITransferFromQCDetailBusiness transferFromQCDetailBusiness, IPackagingLineStockInfoBusiness packagingLineStockInfoBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, ITransferStockToPackagingLine2InfoBusiness transferStockToPackagingLine2InfoBusiness, ITransferStockToPackagingLine2DetailBusiness transferStockToPackagingLine2DetailBusiness, IRepairLineStockInfoBusiness repairLineStockInfoBusiness, IRepairLineStockDetailBusiness repairLineStockDetailBusiness, ITransferRepairItemToQcInfoBusiness transferRepairItemToQcInfoBusiness, ITransferRepairItemToQcDetailBusiness transferRepairItemToQcDetailBusiness, IQCItemStockInfoBusiness qCItemStockInfoBusiness, IQCItemStockDetailBusiness qCItemStockDetailBusiness, IRepairItemStockInfoBusiness repairItemStockInfoBusiness, IRepairItemStockDetailBusiness repairItemStockDetailBusiness, IPackagingItemStockInfoBusiness packagingItemStockInfoBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IFaultyItemStockInfoBusiness faultyItemStockInfoBusiness, IFaultyCaseBusiness faultyCaseBusiness, IRepairItemBusiness repairItemBusiness, IRepairSectionFaultyItemTransferInfoBusiness repairSectionFaultyItemTransferInfoBusiness, IRepairSectionRequisitionInfoBusiness repairSectionRequisitionInfoBusiness, IRepairSectionRequisitionDetailBusiness repairSectionRequisitionDetailBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IProductionFaultyStockDetailBusiness productionFaultyStockDetailBusiness, IProductionFaultyStockInfoBusiness productionFaultyStockInfoBusiness, IRepairSectionFaultyItemTransferDetailBusiness repairSectionFaultyItemTransferDetailBusiness, IQCPassTransferInformationBusiness qCPassTransferInformationBusiness, IProductionAssembleStockDetailBusiness productionAssembleStockDetailBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness, IProductionToPackagingStockTransferInfoBusiness productionToPackagingStockTransferInfoBusiness, IProductionToPackagingStockTransferDetailBusiness productionToPackagingStockTransferDetailBusiness, IQRCodeTransferToRepairInfoBusiness qRCodeTransferToRepairInfoBusiness, IQRCodeProblemBusiness qRCodeProblemBusiness, IRequisitionItemInfoBusiness requisitionItemInfoBusiness, IRequisitionItemDetailBusiness requisitionItemDetailBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IQCPassTransferDetailBusiness qCPassTransferDetailBusiness, IMiniStockTransferInfoBusiness miniStockTransferInfoBusiness, IMiniStockTransferDetailBusiness miniStockTransferDetailBusiness, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, ITransferToPackagingRepairInfoBusiness transferToPackagingRepairInfoBusiness, ITransferToPackagingRepairDetailBusiness transferToPackagingRepairDetailBusiness, IPackagingRepairRawStockInfoBusiness packagingRepairRawStockInfoBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness, IPackagingRepairItemStockInfoBusiness packagingRepairItemStockInfoBusiness, IPackagingRepairItemStockDetailBusiness packagingRepairItemStockDetailBusiness, IIMEITransferToRepairDetailBusiness iMEITransferToRepairDetailBusiness, ITransferPackagingRepairItemToQcInfoBusiness transferPackagingRepairItemToQcInfoBusiness, ITransferPackagingRepairItemToQcDetailBusiness transferPackagingRepairItemToQcDetailBusiness, IPackagingFaultyStockInfoBusiness packagingFaultyStockInfoBusiness, IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness, IIMEIGenerator iMEIGenerator, IGeneratedIMEIBusiness generatedIMEIBusiness, IStockItemReturnInfoBusiness stockItemReturnInfoBusiness, IStockItemReturnDetailBusiness stockItemReturnDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, ILotInLogBusiness lotInLogBusiness, IRepairSectionSemiFinishTransferInfoBusiness repairSectionSemiFinishTransferInfoBusiness, IRepairSectionSemiFinishTransferDetailsBusiness repairSectionSemiFinishTransferDetailsBusiness, IRepairSectionSemiFinishStockInfoBusiness repairSectionSemiFinishStockInfoBusiness, ISubQCBusiness subQCBusiness, IHalfDoneStockTransferToWarehouseInfoBusiness halfDoneStockTransferToWarehouseInfoBusiness, IHalfDoneStockTransferToWarehouseDetailBusiness halfDoneStockTransferToWarehouseDetailsBusiness, IMiniStockTransferToSemiFinishGoodsWarehouseBusiness miniStockTransferToSemiFinishGoodsWarehouseBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness, IWeightCheckedIMEILogBusiness weightCheckedIMEILogBusiness, IColorBusiness colorBusiness)
+        public ProductionController(IRequsitionInfoBusiness requsitionInfoBusiness, IWarehouseBusiness warehouseBusiness, IRequsitionDetailBusiness requsitionDetailBusiness, IProductionLineBusiness productionLineBusiness, IItemBusiness itemBusiness, IItemTypeBusiness itemTypeBusiness, IUnitBusiness unitBusiness, IProductionStockDetailBusiness productionStockDetailBusiness, IProductionStockInfoBusiness productionStockInfoBusiness, IItemReturnInfoBusiness itemReturnInfoBusiness, IItemReturnDetailBusiness itemReturnDetailBusiness, IDescriptionBusiness descriptionBusiness, IFinishGoodsInfoBusiness finishGoodsInfoBusiness, IFinishGoodsRowMaterialBusiness finishGoodsRowMaterialBusiness, IFinishGoodsStockInfoBusiness finishGoodsStockInfoBusiness, IFinishGoodsStockDetailBusiness finishGoodsStockDetailBusiness, IFinishGoodsSendToWarehouseInfoBusiness finishGoodsSendToWarehouseInfoBusiness, IFinishGoodsSendToWarehouseDetailBusiness finishGoodsSendToWarehouseDetailBusiness, IItemPreparationDetailBusiness itemPreparationDetailBusiness, IItemPreparationInfoBusiness itemPreparationInfoBusiness, IAssemblyLineBusiness assemblyLineBusiness, ITransferStockToAssemblyInfoBusiness transferStockToAssemblyInfoBusiness, ITransferStockToAssemblyDetailBusiness transferStockToAssemblyDetailBusiness, IAssemblyLineStockInfoBusiness assemblyLineStockInfoBusiness, IAssemblyLineStockDetailBusiness assemblyLineStockDetailBusiness, IQualityControlBusiness qualityControlBusiness, ITransferStockToQCInfoBusiness transferStockToQCInfoBusiness, ITransferStockToQCDetailBusiness transferStockToQCDetailBusiness, IQCLineStockInfoBusiness qCLineStockInfoBusiness, IQCLineStockDetailBusiness qCLineStockDetailBusiness, IRepairLineBusiness repairLineBusiness, IPackagingLineBusiness packagingLineBusiness, ITransferFromQCInfoBusiness transferFromQCInfoBusiness, ITransferFromQCDetailBusiness transferFromQCDetailBusiness, IPackagingLineStockInfoBusiness packagingLineStockInfoBusiness, IPackagingLineStockDetailBusiness packagingLineStockDetailBusiness, ITransferStockToPackagingLine2InfoBusiness transferStockToPackagingLine2InfoBusiness, ITransferStockToPackagingLine2DetailBusiness transferStockToPackagingLine2DetailBusiness, IRepairLineStockInfoBusiness repairLineStockInfoBusiness, IRepairLineStockDetailBusiness repairLineStockDetailBusiness, ITransferRepairItemToQcInfoBusiness transferRepairItemToQcInfoBusiness, ITransferRepairItemToQcDetailBusiness transferRepairItemToQcDetailBusiness, IQCItemStockInfoBusiness qCItemStockInfoBusiness, IQCItemStockDetailBusiness qCItemStockDetailBusiness, IRepairItemStockInfoBusiness repairItemStockInfoBusiness, IRepairItemStockDetailBusiness repairItemStockDetailBusiness, IPackagingItemStockInfoBusiness packagingItemStockInfoBusiness, IPackagingItemStockDetailBusiness packagingItemStockDetailBusiness, IFaultyItemStockDetailBusiness faultyItemStockDetailBusiness, IFaultyItemStockInfoBusiness faultyItemStockInfoBusiness, IFaultyCaseBusiness faultyCaseBusiness, IRepairItemBusiness repairItemBusiness, IRepairSectionFaultyItemTransferInfoBusiness repairSectionFaultyItemTransferInfoBusiness, IRepairSectionRequisitionInfoBusiness repairSectionRequisitionInfoBusiness, IRepairSectionRequisitionDetailBusiness repairSectionRequisitionDetailBusiness, IQRCodeTraceBusiness qRCodeTraceBusiness, IProductionFaultyStockDetailBusiness productionFaultyStockDetailBusiness, IProductionFaultyStockInfoBusiness productionFaultyStockInfoBusiness, IRepairSectionFaultyItemTransferDetailBusiness repairSectionFaultyItemTransferDetailBusiness, IQCPassTransferInformationBusiness qCPassTransferInformationBusiness, IProductionAssembleStockDetailBusiness productionAssembleStockDetailBusiness, IProductionAssembleStockInfoBusiness productionAssembleStockInfoBusiness, IProductionToPackagingStockTransferInfoBusiness productionToPackagingStockTransferInfoBusiness, IProductionToPackagingStockTransferDetailBusiness productionToPackagingStockTransferDetailBusiness, IQRCodeTransferToRepairInfoBusiness qRCodeTransferToRepairInfoBusiness, IQRCodeProblemBusiness qRCodeProblemBusiness, IRequisitionItemInfoBusiness requisitionItemInfoBusiness, IRequisitionItemDetailBusiness requisitionItemDetailBusiness, ITempQRCodeTraceBusiness tempQRCodeTraceBusiness, IQCPassTransferDetailBusiness qCPassTransferDetailBusiness, IMiniStockTransferInfoBusiness miniStockTransferInfoBusiness, IMiniStockTransferDetailBusiness miniStockTransferDetailBusiness, IIMEITransferToRepairInfoBusiness iMEITransferToRepairInfoBusiness, ITransferToPackagingRepairInfoBusiness transferToPackagingRepairInfoBusiness, ITransferToPackagingRepairDetailBusiness transferToPackagingRepairDetailBusiness, IPackagingRepairRawStockInfoBusiness packagingRepairRawStockInfoBusiness, IPackagingRepairRawStockDetailBusiness packagingRepairRawStockDetailBusiness, IPackagingRepairItemStockInfoBusiness packagingRepairItemStockInfoBusiness, IPackagingRepairItemStockDetailBusiness packagingRepairItemStockDetailBusiness, IIMEITransferToRepairDetailBusiness iMEITransferToRepairDetailBusiness, ITransferPackagingRepairItemToQcInfoBusiness transferPackagingRepairItemToQcInfoBusiness, ITransferPackagingRepairItemToQcDetailBusiness transferPackagingRepairItemToQcDetailBusiness, IPackagingFaultyStockInfoBusiness packagingFaultyStockInfoBusiness, IPackagingFaultyStockDetailBusiness packagingFaultyStockDetailBusiness, IIMEIGenerator iMEIGenerator, IGeneratedIMEIBusiness generatedIMEIBusiness, IStockItemReturnInfoBusiness stockItemReturnInfoBusiness, IStockItemReturnDetailBusiness stockItemReturnDetailBusiness, IWarehouseStockDetailBusiness warehouseStockDetailBusiness, ILotInLogBusiness lotInLogBusiness, IRepairSectionSemiFinishTransferInfoBusiness repairSectionSemiFinishTransferInfoBusiness, IRepairSectionSemiFinishTransferDetailsBusiness repairSectionSemiFinishTransferDetailsBusiness, IRepairSectionSemiFinishStockInfoBusiness repairSectionSemiFinishStockInfoBusiness, ISubQCBusiness subQCBusiness, IHalfDoneStockTransferToWarehouseInfoBusiness halfDoneStockTransferToWarehouseInfoBusiness, IHalfDoneStockTransferToWarehouseDetailBusiness halfDoneStockTransferToWarehouseDetailsBusiness, IMiniStockTransferToSemiFinishGoodsWarehouseBusiness miniStockTransferToSemiFinishGoodsWarehouseBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness, IMiniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness, IWeightCheckedIMEILogBusiness weightCheckedIMEILogBusiness, IColorBusiness colorBusiness, IProductionReportBusiness productionReportBusiness)
         {
             #region Production
+            this._productionReportBusiness = productionReportBusiness;
             this._weightCheckedIMEILogBusiness = weightCheckedIMEILogBusiness;
             this._miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness = miniStockRequisitionToSemiFinishGoodsWarehouseDetailBusiness;
             this._miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness = miniStockRequisitionToSemiFinishGoodsWarehouseInfoBusiness;
@@ -4468,7 +4471,17 @@ namespace ERPWeb.Controllers
             }
             return Json(new { IsSuccess = IsSuccess, Msg = msg });
         }
-
+        public ActionResult SaveFaultyCase(FaultyCaseViewModel model)
+        {
+            bool IsSuccess = false;
+            if (ModelState.IsValid)
+            {
+                FaultyCaseDTO dto = new FaultyCaseDTO();
+                AutoMapper.Mapper.Map(model, dto);
+                IsSuccess = _faultyCaseBusiness.SaveFaultyCase(dto, User.UserId, User.OrgId);
+            }
+            return Json(IsSuccess);
+        }
         #endregion
 
         #region Repair an item By Scaning QRCode
@@ -6433,6 +6446,19 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region Reports UI
+
+        public ActionResult GetProductAndProcessFaulty()
+        {
+            ViewBag.ddlModel = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(s => new SelectListItem { Text = s.DescriptionName, Value = s.DescriptionId.ToString() });
+            ViewBag.ddlAssembly = _assemblyLineBusiness.GetAssemblyLines(User.OrgId).Select(s => new SelectListItem { Text = s.AssemblyLineName, Value = s.AssemblyLineId.ToString() });
+            return View();
+        }
+        public ActionResult GetDailyQCChecking()
+        {
+            ViewBag.ddlModel = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(s => new SelectListItem { Text = s.DescriptionName, Value = s.DescriptionId.ToString() });
+            ViewBag.ddlAssembly = _assemblyLineBusiness.GetAssemblyLines(User.OrgId).Select(s => new SelectListItem { Text = s.AssemblyLineName, Value = s.AssemblyLineId.ToString() });
+            return View();
+        }
         public ActionResult GetDailyProductionSummery()
         {
             ViewBag.ddlModel = _descriptionBusiness.GetDescriptionByOrgId(User.OrgId).Select(s => new SelectListItem { Text = s.DescriptionName, Value = s.DescriptionId.ToString() });
@@ -6443,6 +6469,92 @@ namespace ERPWeb.Controllers
 
         #region Reports
 
+        public ActionResult GetProductAndProcessFaultyReport(long assemblyId, long modelId, string fromDate, string toDate, string rptType)
+        {
+            List<DateWiseProdusctionReport> dateWiseSales = new List<DateWiseProdusctionReport>();
+            DateWiseProdusctionReport dateWise = new DateWiseProdusctionReport()
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+            };
+            dateWiseSales.Add(dateWise);
+
+            var data = _productionReportBusiness.GetDailyProductAndProcessFaultyData(assemblyId, modelId, fromDate, toDate, User.OrgId).ToList();
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptDailyProductAndProcessFaultyReport.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+            }
+
+            ReportDataSource dataSource1 = new ReportDataSource("dsDailyProductAndProcessFaultyReport", data);
+            localReport.DataSources.Add(dataSource1);
+
+            ReportDataSource reportDataSource2 = new ReportDataSource("dsDateWiseProduction", dateWiseSales);
+            localReport.DataSources.Add(reportDataSource2);
+
+            string reportType = rptType;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            Warning[] warnings;
+            string[] streams;
+
+            var renderedBytes = localReport.Render(
+                reportType,
+                "",
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings
+                );
+            return File(renderedBytes, mimeType);
+        }
+        public ActionResult GetDailyQCCheckingReport(long assemblyId, long modelId, string fromDate, string toDate, string rptType)
+        {
+            List<DateWiseProdusctionReport> dateWiseSales = new List<DateWiseProdusctionReport>();
+            DateWiseProdusctionReport dateWise = new DateWiseProdusctionReport()
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+            };
+            dateWiseSales.Add(dateWise);
+
+            var data = _productionReportBusiness.GetDailyQCCheckingData(assemblyId, modelId, fromDate, toDate, User.OrgId).ToList();
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ERPRpt/Production/rptDailyQCCheckingReport.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+            }
+
+            ReportDataSource dataSource1 = new ReportDataSource("dsDailyQCCheckingReport", data);
+            localReport.DataSources.Add(dataSource1);
+
+            ReportDataSource reportDataSource2 = new ReportDataSource("dsDateWiseProduction", dateWiseSales);
+            localReport.DataSources.Add(reportDataSource2);
+
+            string reportType = rptType;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            Warning[] warnings;
+            string[] streams;
+
+            var renderedBytes = localReport.Render(
+                reportType,
+                "",
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings
+                );
+            return File(renderedBytes, mimeType);
+        }
         public ActionResult GetDailyProductionSummeryReport(long assemblyId, long modelId, string fromDate, string toDate, string rptType)
         {
             List<DateWiseProdusctionReport> dateWiseSales = new List<DateWiseProdusctionReport>();

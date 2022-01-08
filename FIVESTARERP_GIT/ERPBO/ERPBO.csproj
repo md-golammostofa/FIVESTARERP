@@ -663,6 +663,8 @@
     <Compile Include="Production\DTOModel\T_StockDTO.cs" />
     <Compile Include="Production\DTOModel\WeightCheckedIMEILogDTO.cs" />
     <Compile Include="Production\ReportModels\BarChatTimeWiseData.cs" />
+    <Compile Include="Production\ReportModels\DailyProductAndProcessFaultyDataReport.cs" />
+    <Compile Include="Production\ReportModels\DailyQCCheckingDataReport.cs" />
     <Compile Include="Production\ReportModels\DateWiseProdusctionReport.cs" />
     <Compile Include="Production\ReportModels\ProductionRequisitionReport.cs" />
     <Compile Include="Production\ReportModels\QRCodeProblemCountWithProblem.cs" />

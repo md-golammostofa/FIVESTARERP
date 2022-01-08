@@ -325,6 +325,7 @@
                                                 </h5>
                                             </div>
                                             <div class="col-md-3">
+                                                <button class="btn btn-sm btn-outline-primary float-right" id="btnAddNewProblem"><i class="fas fa-plus"></i> ADD NEW</button>
                                             </div>
                                         </div>
                                     </div>
@@ -346,6 +347,60 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalProblems" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary">
+                <h4 class="modal-title" id="modalHeading"><span id="spanModalHeading">Add Problem</span></h4>
+                <button class="close" type="button" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmProblem">
+                    <input id="hdfProblemId" type="hidden" name="Id"/>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtProblemName" class="control-label font-weight-bold">
+                                Name
+                                <div class="checkbox d-inline icheck-emerland">
+                                    <input type="checkbox" name="chkProblemStatus" id="chkProblemStatus" />
+                                    <label for="chkProblemStatus" class="text-success">Active</label>
+                                </div>
+                            </label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-list-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="text" id="txtProblemName" name="txtProblemName" class="form-control form-control-sm" />
+                            </div>
+                            <span class="error hide font-weight-bold req-Problem">Problem Required!</span>
+                            <span class="error hide dup-ProblemName font-weight-bold">Already Problem Exist!</span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtProblemCode" class="control-label font-weight-bold">Code</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-comment"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="txtProblemCode" value="" id="txtProblemCode" class="form-control form-control-sm" />
+                            </div>
+                            <span class="error hide font-weight-bold req-code">Code Required!</span>
+                            <span class="error hide dup-code font-weight-bold">Already Code Exist!</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer btn-light">
+                <button type="button" class="btn btn-danger btn-flat float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"> Cancel</i></button>
+                <button type="submit" class="btn btn-success btn-flat float-right" id="btnSaveProblem"><i class="fas fa-save"><span id="spanSaveTextProblem"> Save</span></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
     <script type="text/javascript">
         // QCPass
@@ -362,6 +417,12 @@
         var qrCodeDataObj = {};
         var ddlSubQC = $("#ddlSubQC");
 
+        // Problem Add
+        var hdfProblemId = $("#hdfProblemId");
+        var txtProblemName = $("#txtProblemName");
+        var txtProblemCode = $("#txtProblemCode");
+        var chkProblemStatus = $("#chkProblemStatus");
+
         $(document).ready(function () {
             //Initialize Select2 Elements
             $('.select2').select2();
@@ -373,6 +434,102 @@
             txtItemQRCode.focus();
             fnProblemsData();
         })
+
+        //#region Problem
+        $("#btnAddNewProblem").click(function (e) {
+            e.preventDefault();
+            $("#modalProblems").modal("show");
+            $(".error").addClass("hide");
+            clearProblemCtrl();
+        })
+        function clearProblemCtrl() {
+            hdfProblemId.val("0");
+            txtProblemName.val('');
+            txtProblemCode.val('');
+            chkProblemStatus.prop("checked", true);
+        }
+        function validateProblem() {
+            var isValid = true;
+            $(".error").addClass("hide");
+            if ($.trim(txtProblemName.val()) == '') {
+                $(".req-Problem").removeClass("hide");
+                isValid = false;
+            }
+            else {
+                var id = TryParseInt(hdfProblemId.val(), 0);
+                if (ajaxBooleanChecker(JSON.stringify({ id: id, problemName: txtProblemName.val().trim() }), '/Common/IsDuplicateFaultyCaseName', getToken()) == true) {
+                    $(".dup-ProblemName").removeClass("hide");
+                    isValid = false;
+                }
+            }
+            if ($.trim(txtProblemCode.val()) == '') {
+                $(".req-code").removeClass("hide");
+                isValid = false;
+            }
+            else {
+                var id = TryParseInt(hdfProblemId.val(), 0);
+                if (ajaxBooleanChecker(JSON.stringify({ id: id, problemCode: txtProblemCode.val().trim() }), '/Common/IsDuplicateFaultyCaseCode', getToken()) == true) {
+                    $(".dup-code").removeClass("hide");
+                    isValid = false;
+                }
+            }
+            return isValid;
+        }
+        $("#btnSaveProblem").click(function (e) {
+            e.preventDefault();
+            if (validateProblem()) {
+
+                var data = JSON.stringify({
+                    CaseId: TryParseInt(hdfProblemId.val(), 0),
+                    ProblemDescription: $.trim(txtProblemName.val()),
+                    QRCode: $.trim(txtProblemCode.val()),
+                    IsActive: chkProblemStatus.is(":checked")
+                })
+
+                disable("#btnSaveProblem");
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Production/SaveFaultyCase', data, getToken())).then(function (res, status) {
+                    if (res === true && status === "success") {
+                        toastrSuccessAlert(execuStatus.successSave);
+                        $("#modalProblems").modal("toggle");
+                        clearProblemCtrl();
+                        LoadFaultyCaseTableData();
+                    }
+                    else {
+                        toastrErrorAlert(execuStatus.fail);
+                    }
+                    enable("#btnSaveProblem");
+                }).fail(function (error) {
+                    consoleLog(error);
+                    enable("#btnSaveProblem");
+                })
+            }
+        })
+        function LoadFaultyCaseTableData() {
+            var data = { flag: "Problems" };
+            $.when(getReqWithData(dataType.html, type.get, '/Production/GetQRCodeScanningInQC', data)).then(function (res, status) {
+                if (status === "success") {
+                    $("#dataContainer3").empty();
+                    $("#dataContainer3").append(res);
+                }
+            }).fail(function (err) { console.log(err) })
+        }
+        $(document).on('click', '.data-faultyCase-edit', function () {
+            var tds = $(this).parent().parents('tr').children('td');
+            var td1 = tds.eq(1).html();
+            var td2 = tds.eq(2).html();
+            var td3 = tds.eq(3).html();
+
+            $("#spanModalHeading").text('Update Problem');
+            $("#spanSaveTextProblem").text('Update');
+            $("#modalProblems").modal("show");
+            $(".error").addClass("hide");
+            clearProblemCtrl();
+            hdfProblemId.val(td1);
+            txtProblemName.val(td2);
+            txtProblemCode.val(td3);
+        })
+
+        //#endregion
 
         //#region QCPass
 

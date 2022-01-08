@@ -69,5 +69,13 @@ Where 1=1 {0}", Utility.ParamChecker(param))).ToList();
         where bh.OrganizationId={0} and bh.BranchId={1}", orgId, branchId);
             return this._controlPanelDb.Db.Database.SqlQuery<ReportHead>(query).ToList();
         }
+        public IEnumerable<DailyQCCheckingDataReport> GetDailyQCCheckingData(long assemblyId, long modelId, string fromDate, string toDate, long orgId)
+        {
+            return _productionDb.Db.Database.SqlQuery<DailyQCCheckingDataReport>(string.Format(@"Exec [spDailyQCFailProblem] '{0}','{1}',{2},{3},{4}", fromDate, toDate, assemblyId, modelId, orgId)).ToList();
+        }
+        public IEnumerable<DailyProductAndProcessFaultyDataReport> GetDailyProductAndProcessFaultyData(long assemblyId, long modelId, string fromDate, string toDate, long orgId)
+        {
+            return _productionDb.Db.Database.SqlQuery<DailyProductAndProcessFaultyDataReport>(string.Format(@"Exec [spDailyProductAndProcessFaultyReport] '{0}','{1}',{2},{3},{4}", fromDate, toDate, assemblyId, modelId, orgId)).ToList();
+        }
     }
 }

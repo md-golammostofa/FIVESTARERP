@@ -352,6 +352,17 @@
     <Content Include="Reports\DataSets\dsCartoonInfo.xss">
       <DependentUpon>dsCartoonInfo.xsd</DependentUpon>
     </Content>
+    <Content Include="Reports\DataSets\dsDailyProductAndProcessFaultyReport.xsc">
+      <DependentUpon>dsDailyProductAndProcessFaultyReport.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\DataSets\dsDailyProductAndProcessFaultyReport.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsDailyProductAndProcessFaultyReport.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reports\DataSets\dsDailyProductAndProcessFaultyReport.xss">
+      <DependentUpon>dsDailyProductAndProcessFaultyReport.xsd</DependentUpon>
+    </Content>
     <None Include="Reports\DataSets\dsDailyProductionSummery.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsDailyProductionSummery.Designer.cs</LastGenOutput>
@@ -359,6 +370,17 @@
     </None>
     <Content Include="Reports\DataSets\dsDailyProductionSummery.xss">
       <DependentUpon>dsDailyProductionSummery.xsd</DependentUpon>
+    </Content>
+    <Content Include="Reports\DataSets\dsDailyQCCheckingReport.xsc">
+      <DependentUpon>dsDailyQCCheckingReport.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\DataSets\dsDailyQCCheckingReport.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsDailyQCCheckingReport.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reports\DataSets\dsDailyQCCheckingReport.xss">
+      <DependentUpon>dsDailyQCCheckingReport.xsd</DependentUpon>
     </Content>
     <None Include="Reports\DataSets\InventoryDS.xsd">
       <SubType>Designer</SubType>
@@ -476,10 +498,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsCartoonInfo.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reports\DataSets\dsDailyProductAndProcessFaultyReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsDailyProductAndProcessFaultyReport.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Reports\DataSets\dsDailyProductionSummery.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsDailyProductionSummery.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSets\dsDailyQCCheckingReport.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsDailyQCCheckingReport.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reports\DataSets\InventoryDS.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1013,6 +1045,8 @@
     <Content Include="Views\Production\CreatePackegingFaultyStockReturn.cshtml" />
     <Content Include="Views\Production\GetPackegingFaultyStockItemsForReturn.cshtml" />
     <Content Include="Views\Production\_GetPackegingRepairFaultyStockReturnList.cshtml" />
+    <Content Include="Views\Production\GetDailyQCChecking.cshtml" />
+    <Content Include="Views\Production\GetProductAndProcessFaulty.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1142,8 +1176,14 @@
     <Content Include="Reports\ERPRpt\Production\rptBarcodeForCartonSticker50PCs.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Reports\ERPRpt\Production\rptDailyProductAndProcessFaultyReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Reports\ERPRpt\Production\rptDailyProductionSummery.rdlc" />
     <Content Include="Reports\ERPRpt\Production\rptLotInBarcodeSticker - Copy.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ERPRpt\Production\rptDailyQCCheckingReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Reports\ERPRpt\Production\rptQRCodeProblemList.rdlc" />

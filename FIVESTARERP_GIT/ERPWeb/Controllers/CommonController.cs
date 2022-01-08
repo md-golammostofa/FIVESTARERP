@@ -795,6 +795,18 @@ namespace ERPWeb.Controllers
         }
         #endregion
 
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateFaultyCaseName(string problemName, long id)
+        {
+            bool isExist = _faultyCaseBusiness.IsDuplicateFaultyCaseName(problemName, id, User.OrgId);
+            return Json(isExist);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateFaultyCaseCode(string problemCode, long id)
+        {
+            bool isExist = _faultyCaseBusiness.IsDuplicateFaultyCaseCode(problemCode, id, User.OrgId);
+            return Json(isExist);
+        }
         [HttpPost]
         public async Task<ActionResult> IStockAvailableForCartonSticker(long itemId, long lineId, long packagingId, long modelId, int qty)
         {

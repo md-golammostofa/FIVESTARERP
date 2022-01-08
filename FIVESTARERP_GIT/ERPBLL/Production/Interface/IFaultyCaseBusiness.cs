@@ -14,5 +14,7 @@ namespace ERPBLL.Production.Interface
         FaultyCase GetFaultyById(long faultyId, long orgId);
         bool SaveFaultyCase(FaultyCaseDTO faulty, long userId,long orgId);
         Task<IEnumerable<FaultyCase>> GetFaultyCasesAsync(long orgId);
+        bool IsDuplicateFaultyCaseName(string problemName, long id, long orgId);
+        bool IsDuplicateFaultyCaseCode(string problemCode, long id, long orgId);
     }
 }

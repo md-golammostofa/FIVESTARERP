@@ -12,6 +12,7 @@ namespace ERPBLL.Report.Interface
         IEnumerable<ProductionRequisitionReport> GetProductionRequisitionReport(long reqInfoId);
         IEnumerable<QRCodesByRef> GetQRCodesByRefId(long? itemId, long referenceId,long orgId);
         IEnumerable<ReportHead> GetReportHead(long branchId, long orgId);
-       
+        IEnumerable<DailyQCCheckingDataReport> GetDailyQCCheckingData(long assemblyId, long modelId, string fromDate, string toDate, long orgId);
+        IEnumerable<DailyProductAndProcessFaultyDataReport> GetDailyProductAndProcessFaultyData(long assemblyId, long modelId, string fromDate, string toDate, long orgId);
     }
 }

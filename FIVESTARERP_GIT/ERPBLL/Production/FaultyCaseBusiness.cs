@@ -47,7 +47,8 @@ namespace ERPBLL.Production
                     OrganizationId = orgId,
                     EUserId = userId,
                     EntryDate = DateTime.Now,
-                    Remarks =faulty.Remarks
+                    Remarks =faulty.Remarks,
+                    QRCode = faulty.QRCode,
                 };
                 _faultyCaseRepository.Insert(newfaulty);
             }
@@ -58,12 +59,21 @@ namespace ERPBLL.Production
                 {
                     faultyInDb.DescriptionId = faulty.DescriptionId;
                     faultyInDb.ProblemDescription = faulty.ProblemDescription;
+                    faultyInDb.QRCode = faulty.QRCode;
                     faultyInDb.UpdateDate = DateTime.Now;
                     faultyInDb.UpUserId = userId;
                     _faultyCaseRepository.Update(faultyInDb);
                 }
             }
             return _faultyCaseRepository.Save();
+        }
+        public bool IsDuplicateFaultyCaseName(string problemName, long id, long orgId)
+        {
+            return _faultyCaseRepository.GetOneByOrg(s => s.ProblemDescription == problemName && s.CaseId != id && s.OrganizationId == orgId) != null ? true : false;
+        }
+        public bool IsDuplicateFaultyCaseCode(string problemCode, long id, long orgId)
+        {
+            return _faultyCaseRepository.GetOneByOrg(s => s.QRCode == problemCode && s.CaseId != id && s.OrganizationId == orgId) != null ? true : false;
         }
     }
 }
