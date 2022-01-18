@@ -287,6 +287,12 @@ namespace ERPWeb.Controllers
             return Json(isExist);
         }
         [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateHandsetStockIMEI2(string imei, long id)
+        {
+            bool isExist = _handSetStockBusiness.IsDuplicateHandsetStockIMEI2(imei, id, User.OrgId);
+            return Json(isExist);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult IsDuplicateAccessoriesName(string accessoriesName, long id)
         {
             bool isExist = _accessoriesBusiness.IsDuplicateAccessoriesName(accessoriesName, id, User.OrgId);

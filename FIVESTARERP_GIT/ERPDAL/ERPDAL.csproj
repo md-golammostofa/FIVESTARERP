@@ -308,6 +308,14 @@
     <Compile Include="ConfigurationContextMigrations\202112201109597_Configuration_FaultyStockRepaired.Designer.cs">
       <DependentUpon>202112201109597_Configuration_FaultyStockRepaired.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigurationContextMigrations\202201081113151_Configuration_GoodTransferToFaulty.cs" />
+    <Compile Include="ConfigurationContextMigrations\202201081113151_Configuration_GoodTransferToFaulty.Designer.cs">
+      <DependentUpon>202201081113151_Configuration_GoodTransferToFaulty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202201090520427_Configuration_GoodFaultyChangeDataType.cs" />
+    <Compile Include="ConfigurationContextMigrations\202201090520427_Configuration_GoodFaultyChangeDataType.Designer.cs">
+      <DependentUpon>202201090520427_Configuration_GoodFaultyChangeDataType.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigurationContextMigrations\Configuration.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationBaseRepository.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationDbContext.cs" />
@@ -1238,6 +1246,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigurationContextMigrations\202112201109597_Configuration_FaultyStockRepaired.resx">
       <DependentUpon>202112201109597_Configuration_FaultyStockRepaired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202201081113151_Configuration_GoodTransferToFaulty.resx">
+      <DependentUpon>202201081113151_Configuration_GoodTransferToFaulty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202201090520427_Configuration_GoodFaultyChangeDataType.resx">
+      <DependentUpon>202201090520427_Configuration_GoodFaultyChangeDataType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ControlPanelContextMigrations\202006151000333_ControlPanel_AllEntities_16-May-2020.resx">
       <DependentUpon>202006151000333_ControlPanel_AllEntities_16-May-2020.cs</DependentUpon>

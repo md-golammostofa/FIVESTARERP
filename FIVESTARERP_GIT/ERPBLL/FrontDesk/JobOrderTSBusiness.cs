@@ -33,6 +33,20 @@ namespace ERPBLL.FrontDesk
                 string.Format(@"Select (select COUNT(*) From tblJobOrderTS Where Cast(AssignDate as date)=Cast(GETDATE()  as date) and OrganizationId={0} and BranchId={1}) 'TotalSignInToday' ,
 (select COUNT(*) From tblJobOrderTS Where Cast(SignOutDate as date)=Cast(GETDATE()  as date) and OrganizationId={0} and BranchId={1}) 'TotalSignOutToday'", orgId, branchId)).ToList();
         }
+        public IEnumerable<DashboardDailySingInAndOutDTO> DashboardDailySingInAndOutByEng(long orgId, long branchId,long userId)
+        {
+            return this._frontDeskUnitOfWork.Db.Database.SqlQuery<DashboardDailySingInAndOutDTO>(
+                string.Format(@"Select (select COUNT(*) From tblJobOrderTS Where Cast(AssignDate as date)=Cast(GETDATE()  as date) and OrganizationId={0} and BranchId={1} and TSId={2}) 'TotalSignInToday' ,
+(select COUNT(*) From tblJobOrderTS Where Cast(SignOutDate as date)=Cast(GETDATE()  as date) and OrganizationId={0} and BranchId={1} and TSId={2}) 'TotalSignOutToday',
+(select COUNT(*) From tblJobOrderTS Where StateStatus='Sign-In' and OrganizationId={0} and BranchId={1} and TSId={2}) 'PendingEng',
+(Select COUNT(TsRepairStatus)'TodayCallCenterEng' From tblJobOrders
+Where Cast(CallCenterAssignDate as Date)=Cast(GETDATE() as date) and OrganizationId={0} and BranchId={1} and TSId={2} and TsRepairStatus='CALL CENTER')'TodayCallCenterEng',
+(Select COUNT(TsRepairStatus) From tblJobOrders
+Where OrganizationId={0} and BranchId={1} and TSId={2} and TsRepairStatus='RETURN FOR ENGINEER HEAD')'TransferToTIEng',
+(Select COUNT(TsRepairStatus)'TotalCallCenterEng' From tblJobOrders
+Where OrganizationId={0} and BranchId={1} and TSId={2} and TsRepairStatus='CALL CENTER')'TotalCallCenterEng'
+", orgId, branchId,userId)).ToList();
+        }
 
         public JobOrderTS GetJobOrderActiveTsByJobOrderId(long joborderId, long orgId, long branchId)
         {

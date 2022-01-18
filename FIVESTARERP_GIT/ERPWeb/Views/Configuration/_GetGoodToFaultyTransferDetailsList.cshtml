@@ -1,0 +1,30 @@
+﻿@model IEnumerable<ERPBO.Configuration.ViewModels.GoodToFaultyTransferDetailsViewModel>
+@{ 
+    int sl = 0;
+}
+<div class="row">
+    <table class="table table-bordered table-responsive-lg table-sm ">
+        <thead class="btn-dark">
+            <tr class="text-center">
+                <th>#SL</th>
+                <th>Model</th>
+                <th>Parts Name</th>
+                <th>Parts Code</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                sl = sl + 1;
+                <tr>
+                    <td class="text-center">@sl</td>
+                    <td>@item.ModelName</td>
+                    <td>@item.PartsName</td>
+                    <td>@item.PartsCode</td>
+                    <td class="text-center">@item.Quantity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

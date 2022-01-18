@@ -190,6 +190,8 @@ namespace ERPWeb
 
             // Configuration Database
             #region Configuration
+            container.RegisterType<IGoodToFaultyTransferDetailsBusiness, GoodToFaultyTransferDetailsBusiness>();
+            container.RegisterType<IGoodToFaultyTransferInfoBusiness, GoodToFaultyTransferInfoBusiness>();
             container.RegisterType<IFaultyStockRepairedDetailsBusiness, FaultyStockRepairedDetailsBusiness>();
             container.RegisterType<IFaultyStockRepairedInfoBusiness, FaultyStockRepairedInfoBusiness>();
             container.RegisterType<IWarehouseToFactoryReturnDetailsBusiness, WarehouseToFactoryReturnDetailsBusiness>();

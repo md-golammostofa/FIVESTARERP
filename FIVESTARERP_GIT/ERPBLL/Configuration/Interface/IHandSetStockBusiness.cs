@@ -23,5 +23,8 @@ namespace ERPBLL.Configuration.Interface
         bool UpdateHandsetStockByReceiptHandset(string imei, long branchId, long orgId, long userId);
         bool IsHandsetStockIMEICheck(string imei, long orgId);
         bool IsHandsetCustomerPrndingIMEI(string imei, string status, long orgId);
+        bool IsDuplicateHandsetStockIMEI2(string imei, long id, long orgId);
+        HandSetStock GetIMEI1Check(string imei1, long orgId, long branchId);
+        HandSetStock GetIMEI2Check(string imei2, long orgId, long branchId);
     }
 }

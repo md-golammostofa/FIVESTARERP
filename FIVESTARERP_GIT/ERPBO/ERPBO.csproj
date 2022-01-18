@@ -117,6 +117,8 @@
     <Compile Include="Configuration\DomainModels\FaultyStockRepairedInfo.cs" />
     <Compile Include="Configuration\DomainModels\FaultyStockTransferDetails.cs" />
     <Compile Include="Configuration\DomainModels\FaultyStockTransferInfo.cs" />
+    <Compile Include="Configuration\DomainModels\GoodToFaultyTransferDetails.cs" />
+    <Compile Include="Configuration\DomainModels\GoodToFaultyTransferInfo.cs" />
     <Compile Include="Configuration\DomainModels\HandSetStock.cs" />
     <Compile Include="Configuration\DomainModels\MissingStock.cs" />
     <Compile Include="Configuration\DomainModels\MobilePart.cs" />
@@ -151,6 +153,8 @@
     <Compile Include="Configuration\DTOModels\FaultyStockRepairedInfoDTO.cs" />
     <Compile Include="Configuration\DTOModels\FaultyStockTransferDetailsDTO.cs" />
     <Compile Include="Configuration\DTOModels\FaultyStockTransferInfoDTO.cs" />
+    <Compile Include="Configuration\DTOModels\GoodToFaultyTransferDetailsDTO.cs" />
+    <Compile Include="Configuration\DTOModels\GoodToFaultyTransferInfoDTO.cs" />
     <Compile Include="Configuration\DTOModels\HandSetStockDTO.cs" />
     <Compile Include="Configuration\DTOModels\MissingStockDTO.cs" />
     <Compile Include="Configuration\DTOModels\MobilePartDTO.cs" />
@@ -188,6 +192,8 @@
     <Compile Include="Configuration\ViewModels\FaultyStockRepairedInfoViewModel.cs" />
     <Compile Include="Configuration\ViewModels\FaultyStockTransferDetailsViewModel.cs" />
     <Compile Include="Configuration\ViewModels\FaultyStockTransferInfoViewModel.cs" />
+    <Compile Include="Configuration\ViewModels\GoodToFaultyTransferDetailsViewModel.cs" />
+    <Compile Include="Configuration\ViewModels\GoodToFaultyTransferInfoViewModel.cs" />
     <Compile Include="Configuration\ViewModels\HandSetStockViewModel.cs" />
     <Compile Include="Configuration\ViewModels\MissingStockViewModel.cs" />
     <Compile Include="Configuration\ViewModels\MobilePartStockDetailViewModel.cs" />

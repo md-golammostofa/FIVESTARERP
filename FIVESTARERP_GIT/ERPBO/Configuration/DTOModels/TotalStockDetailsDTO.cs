@@ -24,6 +24,8 @@ namespace ERPBO.Configuration.DTOModels
         public int ReceiveAModel { get; set; }
         public int ParsesStock { get; set; }
         public int Sales { get; set; }
+        public int GoodToFaultyTransfer { get; set; }
+        public int StockReturnPending { get; set; }
 
     }
 }

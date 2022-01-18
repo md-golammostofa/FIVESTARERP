@@ -1363,10 +1363,14 @@ namespace ERPWeb.Controllers
             return new EmptyResult();
         }
 
-        public ActionResult ServicesSummaryReport(string fromDate,string toDate, string rptType = "EXCEL")
+
+        #endregion
+
+        #region ServicesSummary
+        public ActionResult ServicesSummaryReport(string fromDate, string toDate, string rptType = "EXCEL")
         {
             string file = string.Empty;
-            IEnumerable<ServicesSummaryDTO> dataDetails = _jobOrderBusiness.ServicesSummary(User.OrgId,fromDate,toDate);
+            IEnumerable<ServicesSummaryDTO> dataDetails = _jobOrderBusiness.ServicesSummary(User.OrgId, fromDate, toDate);
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);

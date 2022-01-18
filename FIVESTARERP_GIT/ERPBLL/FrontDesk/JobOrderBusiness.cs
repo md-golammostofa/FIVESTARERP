@@ -119,6 +119,11 @@ namespace ERPBLL.FrontDesk
                 {
                     param += string.Format(@"and jo.TotalPOrDStatus Like '%{0}%'", pdStatus);
                 }
+                else
+                {
+                    //string pdStatus = "Pending";
+                    param += string.Format(@"and jo.TotalPOrDStatus Like '%{0}%'", "Pending");
+                }
             }
             if (orgId > 0)
             {

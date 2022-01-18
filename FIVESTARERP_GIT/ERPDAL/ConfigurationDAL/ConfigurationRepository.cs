@@ -176,4 +176,12 @@ namespace ERPDAL.ConfigurationDAL
     {
         public FaultyStockRepairedDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
     }
+    public class GoodToFaultyTransferInfoRepository : ConfigurationBaseRepository<GoodToFaultyTransferInfo>
+    {
+        public GoodToFaultyTransferInfoRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
+    public class GoodToFaultyTransferDetailsRepository : ConfigurationBaseRepository<GoodToFaultyTransferDetails>
+    {
+        public GoodToFaultyTransferDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
 }

@@ -26,5 +26,7 @@ namespace ERPBLL.Configuration.Interface
         bool UpdateReqStatusAndWarehouseStockOutAndTsStockIn(RequsitionInfoForJobOrderDTO dto, long orgId, long branchId, long userId);
         bool SaveMobilePartStockInByRepaired(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId);
         IEnumerable<MobilePartStockDetailDTO> GetAllStockDetails(long? descriptionId, long? mobilePartId, long orgId, long branchId, string stockStatus, string fromDate, string toDate);
+
+        bool SaveMobilePartStockOutByGoodToFaulty(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long orgId, long branchId, long userId);
     }
 }

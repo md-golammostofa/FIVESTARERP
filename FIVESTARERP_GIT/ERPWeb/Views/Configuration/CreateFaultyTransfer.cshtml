@@ -45,10 +45,11 @@
                         @Html.DropDownList("ddlMobileParts", (IEnumerable<SelectListItem>)ViewBag.ddlMobileParts, "--Select MobileParts--", new { @class = "form-control form-control-sm select2" })
                         <span class="error hide require-parts font-weight-bold">Parts is required !</span>
                         <span class="error hide duplicate-parts font-weight-bold">This parts is already exist !</span>
+                        <span class="error hide duplicate-faultyparts font-weight-bold">Stock Not Available !</span>
                     </div>
 
                     <div class="col-md-2">
-                        <label for="txtStockInQty" class="control-label font-weight-bold">Qty.<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup>@*<span id="stockQty" class="font-weight-bold mt-2" style="color:red"></span>*@</label>
+                        <label for="txtStockInQty" class="control-label font-weight-bold">Qty.<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup><span id="stockQty" class="font-weight-bold mt-2" style="color:red"></span></label>
                         <div class="input-group">
                             <div class="col-sm-8">
                                 <input type="number" placeholder="Qty" name="quantity" id="txtStockInQty" class="form-control form-control-sm" />
@@ -128,6 +129,22 @@
             $("#tblFaultyTransfer tbody").empty();
             txtStockInQty.val('0');
         })
+        //Get Faulty Available Qty
+        ddlMobileParts.change(function () {
+            $("#stockQty").text('');
+            if (ddlMobileParts.val() != "",ddlModels.val() != "") {
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common2/GetFaultyStockAvailableQty', JSON.stringify({partsId: ddlMobileParts.val(),modelId: TryParseInt(ddlModels.val()) }), getToken())).then(function (res, status) {
+                    console.log(res);
+                    console.log(status);
+                    if (status == "success") {
+                        $("#stockQty").text('(' + res + ')');
+                    }
+                }).fail(function (error) {
+                    consoleLog(error);
+                })
+            }
+
+        })
 
         function validateInput() {
             $('.error').addClass('hide');
@@ -147,6 +164,12 @@
             if (txtStockInQty.val() == "" || TryParseInt(txtStockInQty.val(), 0) <= 0) {
                 isValid = false;
                 $(".required-qty").removeClass("hide");
+            }
+            if (txtStockInQty.val() > 0) {
+                if (ajaxBooleanChecker(JSON.stringify({ modelId: TryParseInt(ddlModels.val(), 0), partsId: TryParseInt(ddlMobileParts.val(), 0), qty: TryParseInt(txtStockInQty.val(), 0) }), '/Common2/FaultyPartsAvailable', getToken()) == true) {
+                    isValid = false;
+                    $(".duplicate-faultyparts").removeClass("hide");
+                }
             }
             return isValid;
         }

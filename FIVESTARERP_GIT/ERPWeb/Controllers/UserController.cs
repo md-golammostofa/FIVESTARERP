@@ -223,6 +223,13 @@ namespace ERPWeb.Controllers
                 AutoMapper.Mapper.Map(singInAndOutDTO, inAndOutViewModels);
                 ViewBag.DashboardDailySingInOutViewModel = inAndOutViewModels;
 
+                // Daily singIn Out/DashboardDailySingInAndOutByEng
+                IEnumerable<DashboardDailySingInAndOutDTO> singInAndOutengDTO = _jobOrderTSBusiness.DashboardDailySingInAndOutByEng(User.OrgId, User.BranchId,User.UserId);
+                IEnumerable<DashboardDailySingInAndOutViewModel> inAndOutengViewModels = new List<DashboardDailySingInAndOutViewModel>();
+                AutoMapper.Mapper.Map(singInAndOutengDTO, inAndOutengViewModels);
+                ViewBag.DashboardDailySingInOutengViewModel = inAndOutengViewModels;
+
+
                 // Daily Spare Parts Request
                 IEnumerable<DashboardRequestSparePartsDTO> sparePartsDTO = _requsitionInfoForJobOrderBusiness.DashboardRequestSpareParts(User.OrgId, User.BranchId);
                 IEnumerable<DashboardRequestSparePartsViewModel> sparePartsViewModels = new List<DashboardRequestSparePartsViewModel>();

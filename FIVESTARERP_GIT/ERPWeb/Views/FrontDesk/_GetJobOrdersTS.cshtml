@@ -14,22 +14,21 @@
                     <th class="hide"></th>
                     <th style="vertical-align:middle">#SL</th>
                     <th style="vertical-align:middle">Job Code</th>
+                    <th style="vertical-align:middle">Actions</th>
+                    <th style="vertical-align:middle">Engineer Work</th>
                     <th style="vertical-align:middle">Eng. Name</th>
+                    <th style="vertical-align:middle">Receive Id</th>
+                    <th style="vertical-align:middle">Model</th>
+                    <th style="vertical-align:middle">IMEI1</th>
                     <th style="vertical-align:middle">Customer Name</th>
                     <th style="vertical-align:middle">Mobile No</th>
                     <th style="vertical-align:middle">Address</th>
-                    <th style="vertical-align:middle">IMEI1</th>
-                    <th style="vertical-align:middle">Model</th>
                     <th style="vertical-align:middle">Symptom</th>
                     <th style="vertical-align:middle">Accessories</th>
-                    <th style="vertical-align:middle">Receive Id</th>
-                    @*<th style="vertical-align:middle">Warrenty Available</th>
-        <th style="vertical-align:middle">Warrenty Paper Enclosed</th>*@
                     <th style="vertical-align:middle">Job Status</th>
                     <th style="vertical-align:middle">Received by</th>
                     <th style="vertical-align:middle">Create Date</th>
-                    <th style="vertical-align:middle">Engineer Work</th>
-                    <th style="vertical-align:middle">Actions</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -43,34 +42,31 @@
                     <td class="hide">@item.JodOrderId</td>
                     <td class="text-center text-bold">@sl</td>
                     <td class="text-center text-bold">@item.JobOrderCode</td>
-                    <td class="text-center text-bold">@item.TSName</td>
-                    <td>@item.CustomerName</td>
-                    <td>@item.MobileNo</td>
-                    <td>@item.Address</td>
-                    <td>@item.IMEI</td>
-                    <td>@item.ModelName</td>
-                    <td>@item.Problems</td>
-                    <td>@item.AccessoriesNames</td>
-                    <td>@item.MultipleJobOrderCode</td>
-                    @*<td class="text-center">@isWarrantyAvailable</td>
-        <td class="text-center">@isWarrantyPaperEnclosed</td>*@
-                    <td class="text-center" data-val="@item.StateStatus">
-                        <span class="@badge">@item.StateStatus</span>
-                    </td>
-                    <td class="text-center text-bold">@item.EntryUser</td>
-                    <td>@item.EntryDate.Value.ToString("dd-MMM-yyyy")</td>
-                    <td>
-                        <a href="#" class="data-item-tsWork" data-item-tsWork="@item.JodOrderId" title="View TS Work">
-                            Works
-                        </a>
-                    </td>
                     <td>
                         @if (item.StateStatus == ERPBLL.Common.JobOrderStatus.AssignToTS)
                         {
                             <a href="@Url.Action("ServicesDetails","FrontDesk",new {@joborderId=item.JodOrderId })" class="btn btn-sm btn-outline-success" title="Service Details" target="_blank">Services</a>
                         }
                     </td>
-
+                    <td>
+                        <a href="#" class="data-item-tsWork" data-item-tsWork="@item.JodOrderId" title="View TS Work">
+                            Works
+                        </a>
+                    </td>
+                    <td class="text-center text-bold">@item.TSName</td>
+                    <td>@item.MultipleJobOrderCode</td>
+                    <td>@item.ModelName</td>
+                    <td>@item.IMEI</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.MobileNo</td>
+                    <td>@item.Address</td>
+                    <td>@item.Problems</td>
+                    <td>@item.AccessoriesNames</td>
+                    <td class="text-center" data-val="@item.StateStatus">
+                        <span class="@badge">@item.StateStatus</span>
+                    </td>
+                    <td class="text-center text-bold">@item.EntryUser</td>
+                    <td>@item.EntryDate.Value.ToString("dd-MMM-yyyy")</td>
                 </tr>
                 }
                 @if (Model.Count() == 0)

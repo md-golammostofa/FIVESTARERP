@@ -130,6 +130,8 @@
     <Compile Include="Configuration\FaultyStockRepairedInfoBusiness.cs" />
     <Compile Include="Configuration\FaultyStockTransferDetailsBusiness.cs" />
     <Compile Include="Configuration\FaultyStockTransferInfoBusiness.cs" />
+    <Compile Include="Configuration\GoodToFaultyTransferDetailsBusiness.cs" />
+    <Compile Include="Configuration\GoodToFaultyTransferInfoBusiness.cs" />
     <Compile Include="Configuration\HandSetStockBusiness.cs" />
     <Compile Include="Configuration\Interface\IAccessoriesBusiness.cs" />
     <Compile Include="Configuration\Interface\IBranchBusiness2.cs" />
@@ -148,6 +150,8 @@
     <Compile Include="Configuration\Interface\IFaultyStockRepairedInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\IFaultyStockTransferDetailsBusiness.cs" />
     <Compile Include="Configuration\Interface\IFaultyStockTransferInfoBusiness.cs" />
+    <Compile Include="Configuration\Interface\IGoodToFaultyTransferDetailsBusiness.cs" />
+    <Compile Include="Configuration\Interface\IGoodToFaultyTransferInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\IHandSetStockBusiness.cs" />
     <Compile Include="Configuration\Interface\IMissingStockBusiness.cs" />
     <Compile Include="Configuration\Interface\IMobilePartBusiness.cs" />

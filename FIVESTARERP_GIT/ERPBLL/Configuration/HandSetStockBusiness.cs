@@ -36,6 +36,8 @@ namespace ERPBLL.Configuration
         {
             if (dto.HandSetStockId == 0)
             {
+                //var imei1 = GetIMEI1Check(dto.IMEI1, orgId, branchId);
+                //var imei2 = GetIMEI2Check(dto.IMEI, orgId, branchId);
                 HandSetStock handSet = new HandSetStock()
                 {
                     DescriptionId = dto.DescriptionId,
@@ -93,7 +95,11 @@ Where 1=1 and (stock.StateStatus='Stock-In' or stock.StateStatus='Customer-Pendi
         }
         public bool IsDuplicateHandsetStockIMEI(string imei, long id, long orgId)
         {
-            return _handSetStockRepository.GetOneByOrg(s => s.IMEI == imei && s.OrganizationId == orgId && s.HandSetStockId != id) != null ? true : false;
+            return _handSetStockRepository.GetOneByOrg(s => (s.IMEI1 == imei || s.IMEI==imei) && s.OrganizationId == orgId && s.HandSetStockId != id) != null ? true : false;
+        }
+        public bool IsDuplicateHandsetStockIMEI2(string imei, long id, long orgId)
+        {
+            return _handSetStockRepository.GetOneByOrg(s => (s.IMEI1 == imei || s.IMEI == imei) && s.OrganizationId == orgId && s.HandSetStockId != id) != null ? true : false;
         }
         public bool IsExistsHandsetStockIMEI(string imei,long orgId, string status)
         {
@@ -148,6 +154,16 @@ where hst.OrganizationId={0}", orgId)).ToList();
         public bool IsHandsetCustomerPrndingIMEI(string imei, string status, long orgId)
         {
             return _handSetStockRepository.GetOneByOrg(s => s.IMEI1 == imei && s.StateStatus== status && s.OrganizationId == orgId) != null ? true : false;
+        }
+
+        public HandSetStock GetIMEI1Check(string imei1, long orgId, long branchId)
+        {
+            return _handSetStockRepository.GetOneByOrg(i => i.IMEI1 == imei1 && i.OrganizationId == orgId && i.BranchId == branchId);
+        }
+
+        public HandSetStock GetIMEI2Check(string imei2, long orgId, long branchId)
+        {
+            return _handSetStockRepository.GetOneByOrg(i => i.IMEI == imei2 && i.OrganizationId == orgId && i.BranchId == branchId);
         }
     }
 }

@@ -36,7 +36,7 @@
                     <div class="col-md-2">
                         <label for="ddlModels" class="control-label font-weight-bold">Model</label>
                         @Html.DropDownList("ddlModels", (IEnumerable<SelectListItem>)ViewBag.ddlModels,"--Select Model--", new { @class = "form-control form-control-sm select2" })
-                        <span class="error hide require-warehouse font-weight-bold">S.Warehouse is required !</span>
+                        <span class="error hide require-model font-weight-bold">Model is required !</span>
                     </div>
                     <div class="form-group col-md-2">
                         <label for="ddlMobilePart" class="control-label font-weight-bold">Parts Name<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
@@ -44,7 +44,6 @@
                         <span class="error hide require-parts font-weight-bold">Parts is required !</span>
                         <span class="error hide duplicate-parts font-weight-bold">This parts is already exist !</span>
                     </div>
-                    
                     <div class="col-md-2">
                         <label for="txtStockInQty" class="control-label font-weight-bold">Stock-In Qty.<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
                         <div class="input-group">
@@ -131,6 +130,10 @@
             if (TryParseInt(ddlMobilePart.val(), 0) <= 0) {
                 isValid = false;
                 $(".require-parts").removeClass("hide");
+            }
+            if (TryParseInt(ddlModels.val(), 0) <= 0) {
+                isValid = false;
+                $(".require-model").removeClass("hide");
             }
             if (txtStockInQty.val() == "" || TryParseInt(txtStockInQty.val(), 0) <= 0) {
                 isValid = false;

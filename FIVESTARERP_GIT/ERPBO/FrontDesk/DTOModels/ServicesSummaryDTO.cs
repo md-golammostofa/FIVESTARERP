@@ -31,5 +31,8 @@ namespace ERPBO.FrontDesk.DTOModels
         public int EngPending { get; set; }
         public int QCPending { get; set; }
         public int CallCenterPending { get; set; }
+        public int RequsitionIssue { get; set; }
+        public int FaultyAssignQty { get; set; }
+        public int FaultyRepairedQty { get; set; }
     }
 }

@@ -6,54 +6,60 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.44287in</Width>
+              <Width>0.38098in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.13037in</Width>
+              <Width>1.0164in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.16162in</Width>
+              <Width>1.18307in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.59912in</Width>
+              <Width>0.52682in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.63842in</Width>
+              <Width>0.57653in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.71133in</Width>
+              <Width>0.75361in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.70329in</Width>
+              <Width>0.50599in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.73454in</Width>
+              <Width>0.5789in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72412in</Width>
+              <Width>0.59973in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.76579in</Width>
+              <Width>0.61015in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.7009in</Width>
+              <Width>0.57651in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72281in</Width>
+              <Width>0.62967in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.73217in</Width>
+              <Width>0.65987in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77383in</Width>
+              <Width>0.70153in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.64883in</Width>
+              <Width>0.56611in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.7402in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.58395in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.42708in</Height>
+              <Height>0.5625in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -595,6 +601,78 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox8">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Good To Faulty Transfer</Value>
+                              <Style>
+                                <FontFamily>times New Roman</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox8</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox16">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Stock Return Pending</Value>
+                              <Style>
+                                <FontFamily>times New Roman</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox16</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -1090,12 +1168,80 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="GoodToFaultyTransfer">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!GoodToFaultyTransfer.Value</Value>
+                              <Style>
+                                <FontFamily>times New Roman</FontFamily>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>GoodToFaultyTransfer</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="StockReturnPending">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!StockReturnPending.Value</Value>
+                              <Style>
+                                <FontFamily>times New Roman</FontFamily>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>StockReturnPending</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
           <TablixMembers>
+            <TablixMember />
+            <TablixMember />
             <TablixMember />
             <TablixMember />
             <TablixMember />
@@ -1125,7 +1271,7 @@
         </TablixRowHierarchy>
         <DataSetName>TotalStock</DataSetName>
         <Top>0.35708in</Top>
-        <Height>0.67708in</Height>
+        <Height>0.8125in</Height>
         <Width>11.19in</Width>
         <Style>
           <Border>
@@ -1169,10 +1315,10 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>1.0625in</Height>
+    <Height>1.20833in</Height>
     <Style />
   </Body>
-  <Width>11.19in</Width>
+  <Width>11.19001in</Width>
   <Page>
     <PageHeight>8.27in</PageHeight>
     <PageWidth>11.69in</PageWidth>
@@ -1253,6 +1399,14 @@
         </Field>
         <Field Name="Sales">
           <DataField>Sales</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="GoodToFaultyTransfer">
+          <DataField>GoodToFaultyTransfer</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="StockReturnPending">
+          <DataField>StockReturnPending</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

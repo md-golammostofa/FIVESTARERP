@@ -1366,7 +1366,7 @@
                             <div class="inner" style="height:95px">
                                 <table>
                                     <tbody>
-                                        @foreach (var Bill in (IEnumerable<DashboardDailySingInAndOutViewModel>)ViewBag.DashboardDailySingInOutViewModel)
+                                        @foreach (var Bill in (IEnumerable<DashboardDailySingInAndOutViewModel>)ViewBag.DashboardDailySingInOutengViewModel)
                                         {
                                             <tr>
                                                 <td><b><i>Sign-In : </i></b></td>
@@ -1391,29 +1391,19 @@
                         </div>
                     </div>
                     <div class="col-sm-3 col-6">
-                        <div class="small-box bg-gradient-indigo text-white">
-                            <div class="inner" style="height:95px">
-                                <p><b><i>Today Repair</i></b></p>
-                                <h3>
-                                    @foreach (var p in (IEnumerable<JobOrderViewModel>)ViewBag.TodayQCPassFail)
-                                    {
-                                        <span class="info-box-number"><a class="link-black"><b><i>@p.TodayRepair</i></b></a></span>
-                                    }
-                                </h3>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-truck"></i>
-                            </div>
-                            <a href="#" class="small-box-footer"></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-6">
-                        <div class="small-box bg-gradient-olive text-white">
+                        <div class="small-box bg-gradient-gray text-white">
                             <div class="inner" style="height:95px">
                                 <p><b><i>Total Pending(Eng)</i></b></p>
-                                <h3>
-                                    <span class="info-box-number"><a>@(((DashboardRequisitionSummeryViewModel)ViewBag.JobOrdeAssignToTS).TotalCount)</a></span>
-                                </h3>
+                                <table>
+                                    <tbody>
+                                        @foreach (var Bill in (IEnumerable<DashboardDailySingInAndOutViewModel>)ViewBag.DashboardDailySingInOutengViewModel)
+                                        {
+                                            <tr class="text-cyan">
+                                                <td style="font-size:xx-large;"><b><i><span><a href="/FrontDesk/GetJobOrdersTS">@Bill.PendingEng</a></span></i></b></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-warehouse"></i>
@@ -1422,18 +1412,43 @@
                         </div>
                     </div>
                     <div class="col-sm-3 col-6">
-                        <div class="small-box bg-gradient-gray">
+                        <div class="small-box bg-gradient-olive">
                             <div class="inner" style="height:95px">
                                 <p><b><i>Today Call Center</i></b></p>
-                                <h3>
-                                    @foreach (var p in (IEnumerable<JobOrderViewModel>)ViewBag.TodayQCPassFail)
-                                    {
-                                        <span class="info-box-number"><a class="link-black"><b><i>@p.TodayCCAssigned</i></b></a></span>
-                                    }
-                                </h3>
+                                <table>
+                                    <tbody>
+                                        @foreach (var Bill in (IEnumerable<DashboardDailySingInAndOutViewModel>)ViewBag.DashboardDailySingInOutengViewModel)
+                                        {
+                                            <tr>
+                                                <td style="font-size:xx-large"><b><i>@Bill.TodayCallCenterEng</i></b></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-user-alt"></i>
+                            </div>
+                            <a href="#" class="small-box-footer"></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-6">
+                        <div class="small-box bg-gradient-red">
+                            <div class="inner" style="height:95px">
+                                <p><b><i>Total Call Center</i></b></p>
+                                <table>
+                                    <tbody>
+                                        @foreach (var Bill in (IEnumerable<DashboardDailySingInAndOutViewModel>)ViewBag.DashboardDailySingInOutengViewModel)
+                                        {
+                                            <tr>
+                                                <td style="font-size:xx-large"><b><i>@Bill.TotalCallCenterEng</i></b></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-user-astronaut"></i>
                             </div>
                             <a href="#" class="small-box-footer"></a>
                         </div>
@@ -1445,18 +1460,39 @@
     </div>
     <div class="row">
         <div class="col-sm-3 col-6">
-            <div class="small-box bg-gradient-red">
+            <div class="small-box bg-gradient-lime text-white">
                 <div class="inner" style="height:95px">
-                    <p><b><i>Total Call Center</i></b></p>
+                    <p><b><i>Transfer To TI</i></b></p>
+                    <table>
+                        <tbody>
+                            @foreach (var Bill in (IEnumerable<DashboardDailySingInAndOutViewModel>)ViewBag.DashboardDailySingInOutengViewModel)
+                            {
+                                <tr>
+                                    <td style="font-size:xx-large"><b><i>@Bill.TransferToTIEng</i></b></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <a href="#" class="small-box-footer"></a>
+            </div>
+        </div>
+        <div class="col-sm-3 col-6">
+            <div class="small-box bg-gradient-indigo text-white">
+                <div class="inner" style="height:95px">
+                    <p><b><i>Today Repair</i></b></p>
                     <h3>
                         @foreach (var p in (IEnumerable<JobOrderViewModel>)ViewBag.TodayQCPassFail)
                         {
-                            <span class="info-box-number"><a class="link-black"><b><i>@p.TotalCallCenter</i></b></a></span>
+                            <span class="info-box-number"><a class="link-black"><b><i>@p.TodayRepair</i></b></a></span>
                         }
                     </h3>
                 </div>
                 <div class="icon">
-                    <i class="fas fa-user-astronaut"></i>
+                    <i class="fas fa-truck"></i>
                 </div>
                 <a href="#" class="small-box-footer"></a>
             </div>
@@ -1474,23 +1510,6 @@
                 </div>
                 <div class="icon">
                     <i class="fas fa-flag-checkered"></i>
-                </div>
-                <a href="#" class="small-box-footer"></a>
-            </div>
-        </div>
-        <div class="col-sm-3 col-6">
-            <div class="small-box bg-gradient-lime text-white">
-                <div class="inner" style="height:95px">
-                    <p><b><i>Transfer To TI</i></b></p>
-                    <h3>
-                        @foreach (var p in (IEnumerable<JobOrderViewModel>)ViewBag.TodayQCPassFail)
-                        {
-                            <span class="info-box-number"><a class="link-black"><b><i>@p.TransferToTI</i></b></a></span>
-                        }
-                    </h3>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-exclamation-circle"></i>
                 </div>
                 <a href="#" class="small-box-footer"></a>
             </div>

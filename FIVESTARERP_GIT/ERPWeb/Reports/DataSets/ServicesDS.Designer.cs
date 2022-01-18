@@ -11640,6 +11640,10 @@ namespace ERPWeb.Reports.DataSets {
             
             private global::System.Data.DataColumn columnSales;
             
+            private global::System.Data.DataColumn columnGoodToFaultyTransfer;
+            
+            private global::System.Data.DataColumn columnStockReturnPending;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public TotalStockDataTable() {
@@ -11787,6 +11791,22 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn GoodToFaultyTransferColumn {
+                get {
+                    return this.columnGoodToFaultyTransfer;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn StockReturnPendingColumn {
+                get {
+                    return this.columnStockReturnPending;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -11822,7 +11842,23 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public TotalStockRow AddTotalStockRow(string ModelName, string PartsName, string PartsCode, string Stock, string GoodStock, string FaultyStock, string ScrapStock, string CareTransfer, string DustStock, string EngPending, string TransferAModel, string ReceiveAModel, string ParsesStock, string Sales) {
+            public TotalStockRow AddTotalStockRow(
+                        string ModelName, 
+                        string PartsName, 
+                        string PartsCode, 
+                        string Stock, 
+                        string GoodStock, 
+                        string FaultyStock, 
+                        string ScrapStock, 
+                        string CareTransfer, 
+                        string DustStock, 
+                        string EngPending, 
+                        string TransferAModel, 
+                        string ReceiveAModel, 
+                        string ParsesStock, 
+                        string Sales, 
+                        string GoodToFaultyTransfer, 
+                        string StockReturnPending) {
                 TotalStockRow rowTotalStockRow = ((TotalStockRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ModelName,
@@ -11838,7 +11874,9 @@ namespace ERPWeb.Reports.DataSets {
                         TransferAModel,
                         ReceiveAModel,
                         ParsesStock,
-                        Sales};
+                        Sales,
+                        GoodToFaultyTransfer,
+                        StockReturnPending};
                 rowTotalStockRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowTotalStockRow);
                 return rowTotalStockRow;
@@ -11875,6 +11913,8 @@ namespace ERPWeb.Reports.DataSets {
                 this.columnReceiveAModel = base.Columns["ReceiveAModel"];
                 this.columnParsesStock = base.Columns["ParsesStock"];
                 this.columnSales = base.Columns["Sales"];
+                this.columnGoodToFaultyTransfer = base.Columns["GoodToFaultyTransfer"];
+                this.columnStockReturnPending = base.Columns["StockReturnPending"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -11908,6 +11948,10 @@ namespace ERPWeb.Reports.DataSets {
                 base.Columns.Add(this.columnParsesStock);
                 this.columnSales = new global::System.Data.DataColumn("Sales", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSales);
+                this.columnGoodToFaultyTransfer = new global::System.Data.DataColumn("GoodToFaultyTransfer", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnGoodToFaultyTransfer);
+                this.columnStockReturnPending = new global::System.Data.DataColumn("StockReturnPending", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnStockReturnPending);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -12721,6 +12765,12 @@ namespace ERPWeb.Reports.DataSets {
             
             private global::System.Data.DataColumn columnCallCenterPending;
             
+            private global::System.Data.DataColumn columnRequsitionIssue;
+            
+            private global::System.Data.DataColumn columnFaultyAssignQty;
+            
+            private global::System.Data.DataColumn columnFaultyRepairedQty;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public ServicesSummaryDataTable() {
@@ -12940,6 +12990,30 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn RequsitionIssueColumn {
+                get {
+                    return this.columnRequsitionIssue;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn FaultyAssignQtyColumn {
+                get {
+                    return this.columnFaultyAssignQty;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn FaultyRepairedQtyColumn {
+                get {
+                    return this.columnFaultyRepairedQty;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -12998,7 +13072,10 @@ namespace ERPWeb.Reports.DataSets {
                         string Requsition, 
                         string EngPending, 
                         string QCPending, 
-                        string CallCenterPending) {
+                        string CallCenterPending, 
+                        string RequsitionIssue, 
+                        string FaultyAssignQty, 
+                        string FaultyRepairedQty) {
                 ServicesSummaryRow rowServicesSummaryRow = ((ServicesSummaryRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         UserId,
@@ -13023,7 +13100,10 @@ namespace ERPWeb.Reports.DataSets {
                         Requsition,
                         EngPending,
                         QCPending,
-                        CallCenterPending};
+                        CallCenterPending,
+                        RequsitionIssue,
+                        FaultyAssignQty,
+                        FaultyRepairedQty};
                 rowServicesSummaryRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowServicesSummaryRow);
                 return rowServicesSummaryRow;
@@ -13069,6 +13149,9 @@ namespace ERPWeb.Reports.DataSets {
                 this.columnEngPending = base.Columns["EngPending"];
                 this.columnQCPending = base.Columns["QCPending"];
                 this.columnCallCenterPending = base.Columns["CallCenterPending"];
+                this.columnRequsitionIssue = base.Columns["RequsitionIssue"];
+                this.columnFaultyAssignQty = base.Columns["FaultyAssignQty"];
+                this.columnFaultyRepairedQty = base.Columns["FaultyRepairedQty"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -13120,6 +13203,12 @@ namespace ERPWeb.Reports.DataSets {
                 base.Columns.Add(this.columnQCPending);
                 this.columnCallCenterPending = new global::System.Data.DataColumn("CallCenterPending", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCallCenterPending);
+                this.columnRequsitionIssue = new global::System.Data.DataColumn("RequsitionIssue", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRequsitionIssue);
+                this.columnFaultyAssignQty = new global::System.Data.DataColumn("FaultyAssignQty", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFaultyAssignQty);
+                this.columnFaultyRepairedQty = new global::System.Data.DataColumn("FaultyRepairedQty", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFaultyRepairedQty);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -23603,6 +23692,38 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string GoodToFaultyTransfer {
+                get {
+                    try {
+                        return ((string)(this[this.tableTotalStock.GoodToFaultyTransferColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'GoodToFaultyTransfer\' in table \'TotalStock\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTotalStock.GoodToFaultyTransferColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string StockReturnPending {
+                get {
+                    try {
+                        return ((string)(this[this.tableTotalStock.StockReturnPendingColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'StockReturnPending\' in table \'TotalStock\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableTotalStock.StockReturnPendingColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsModelNameNull() {
                 return this.IsNull(this.tableTotalStock.ModelNameColumn);
             }
@@ -23767,6 +23888,30 @@ namespace ERPWeb.Reports.DataSets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetSalesNull() {
                 this[this.tableTotalStock.SalesColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsGoodToFaultyTransferNull() {
+                return this.IsNull(this.tableTotalStock.GoodToFaultyTransferColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetGoodToFaultyTransferNull() {
+                this[this.tableTotalStock.GoodToFaultyTransferColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsStockReturnPendingNull() {
+                return this.IsNull(this.tableTotalStock.StockReturnPendingColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetStockReturnPendingNull() {
+                this[this.tableTotalStock.StockReturnPendingColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -24520,6 +24665,54 @@ namespace ERPWeb.Reports.DataSets {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string RequsitionIssue {
+                get {
+                    try {
+                        return ((string)(this[this.tableServicesSummary.RequsitionIssueColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'RequsitionIssue\' in table \'ServicesSummary\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableServicesSummary.RequsitionIssueColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string FaultyAssignQty {
+                get {
+                    try {
+                        return ((string)(this[this.tableServicesSummary.FaultyAssignQtyColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'FaultyAssignQty\' in table \'ServicesSummary\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableServicesSummary.FaultyAssignQtyColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string FaultyRepairedQty {
+                get {
+                    try {
+                        return ((string)(this[this.tableServicesSummary.FaultyRepairedQtyColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'FaultyRepairedQty\' in table \'ServicesSummary\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableServicesSummary.FaultyRepairedQtyColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public bool IsUserIdNull() {
                 return this.IsNull(this.tableServicesSummary.UserIdColumn);
             }
@@ -24792,6 +24985,42 @@ namespace ERPWeb.Reports.DataSets {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public void SetCallCenterPendingNull() {
                 this[this.tableServicesSummary.CallCenterPendingColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsRequsitionIssueNull() {
+                return this.IsNull(this.tableServicesSummary.RequsitionIssueColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetRequsitionIssueNull() {
+                this[this.tableServicesSummary.RequsitionIssueColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsFaultyAssignQtyNull() {
+                return this.IsNull(this.tableServicesSummary.FaultyAssignQtyColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetFaultyAssignQtyNull() {
+                this[this.tableServicesSummary.FaultyAssignQtyColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsFaultyRepairedQtyNull() {
+                return this.IsNull(this.tableServicesSummary.FaultyRepairedQtyColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetFaultyRepairedQtyNull() {
+                this[this.tableServicesSummary.FaultyRepairedQtyColumn] = global::System.Convert.DBNull;
             }
         }
         

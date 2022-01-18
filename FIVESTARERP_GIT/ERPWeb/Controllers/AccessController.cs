@@ -56,6 +56,7 @@ namespace ERPWeb.Controllers
                             var submenus = _subMenuBusiness.GetAllSubMenu().Where(sub => sub.ParentSubMenuId == 0).ToList();
                             //SubMenuViewModel subMenuViewModel = new SubMenuViewModel();
                             //AutoMapper.Mapper.Map(submenus, subMenuViewModel);
+                            //string ip = Request.UserHostAddress;
                             Session["AllSubmenus"] = submenus;
 
                             CustomPrincipalSerializeModel serializeModel = new CustomPrincipalSerializeModel();

@@ -835,7 +835,8 @@
             e.preventDefault();
             $(".error").addClass("hide");
             bootbox.confirm("Are you sure you want to save?", function (result) {
-                var data = JSON.stringify ({ jobId: TryParseInt(hdfJobOrderId.val(), 0), approval: ddlCallCenterApproval.val(), remarks: txtCallCenterRemarks.val()
+                if (result) {
+                    var data = JSON.stringify ({ jobId: TryParseInt(hdfJobOrderId.val(), 0), approval: ddlCallCenterApproval.val(), remarks: txtCallCenterRemarks.val()
                     });
                     console.log(data);
                     //return console.log(data)
@@ -855,6 +856,7 @@
                     }).fail(function (error) {
                         consoleLog(error)
                     })
+                }
             })
         });
 

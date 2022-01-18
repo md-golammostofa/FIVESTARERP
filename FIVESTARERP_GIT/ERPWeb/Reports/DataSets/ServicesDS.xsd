@@ -515,6 +515,8 @@
               <xs:element name="ReceiveAModel" msprop:Generator_ColumnVarNameInTable="columnReceiveAModel" msprop:Generator_ColumnPropNameInRow="ReceiveAModel" msprop:Generator_ColumnPropNameInTable="ReceiveAModelColumn" msprop:Generator_UserColumnName="ReceiveAModel" type="xs:string" minOccurs="0" />
               <xs:element name="ParsesStock" msprop:Generator_ColumnVarNameInTable="columnParsesStock" msprop:Generator_ColumnPropNameInRow="ParsesStock" msprop:Generator_ColumnPropNameInTable="ParsesStockColumn" msprop:Generator_UserColumnName="ParsesStock" type="xs:string" minOccurs="0" />
               <xs:element name="Sales" msprop:Generator_ColumnVarNameInTable="columnSales" msprop:Generator_ColumnPropNameInRow="Sales" msprop:Generator_ColumnPropNameInTable="SalesColumn" msprop:Generator_UserColumnName="Sales" type="xs:string" minOccurs="0" />
+              <xs:element name="GoodToFaultyTransfer" msprop:Generator_ColumnVarNameInTable="columnGoodToFaultyTransfer" msprop:Generator_ColumnPropNameInRow="GoodToFaultyTransfer" msprop:Generator_ColumnPropNameInTable="GoodToFaultyTransferColumn" msprop:Generator_UserColumnName="GoodToFaultyTransfer" type="xs:string" minOccurs="0" />
+              <xs:element name="StockReturnPending" msprop:Generator_ColumnVarNameInTable="columnStockReturnPending" msprop:Generator_ColumnPropNameInRow="StockReturnPending" msprop:Generator_ColumnPropNameInTable="StockReturnPendingColumn" msprop:Generator_UserColumnName="StockReturnPending" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -568,6 +570,9 @@
               <xs:element name="EngPending" msprop:Generator_ColumnVarNameInTable="columnEngPending" msprop:Generator_ColumnPropNameInRow="EngPending" msprop:Generator_ColumnPropNameInTable="EngPendingColumn" msprop:Generator_UserColumnName="EngPending" type="xs:string" minOccurs="0" />
               <xs:element name="QCPending" msprop:Generator_ColumnVarNameInTable="columnQCPending" msprop:Generator_ColumnPropNameInRow="QCPending" msprop:Generator_ColumnPropNameInTable="QCPendingColumn" msprop:Generator_UserColumnName="QCPending" type="xs:string" minOccurs="0" />
               <xs:element name="CallCenterPending" msprop:Generator_ColumnVarNameInTable="columnCallCenterPending" msprop:Generator_ColumnPropNameInRow="CallCenterPending" msprop:Generator_ColumnPropNameInTable="CallCenterPendingColumn" msprop:Generator_UserColumnName="CallCenterPending" type="xs:string" minOccurs="0" />
+              <xs:element name="RequsitionIssue" msprop:Generator_ColumnVarNameInTable="columnRequsitionIssue" msprop:Generator_ColumnPropNameInRow="RequsitionIssue" msprop:Generator_ColumnPropNameInTable="RequsitionIssueColumn" msprop:Generator_UserColumnName="RequsitionIssue" type="xs:string" minOccurs="0" />
+              <xs:element name="FaultyAssignQty" msprop:Generator_ColumnVarNameInTable="columnFaultyAssignQty" msprop:Generator_ColumnPropNameInRow="FaultyAssignQty" msprop:Generator_ColumnPropNameInTable="FaultyAssignQtyColumn" msprop:Generator_UserColumnName="FaultyAssignQty" type="xs:string" minOccurs="0" />
+              <xs:element name="FaultyRepairedQty" msprop:Generator_ColumnVarNameInTable="columnFaultyRepairedQty" msprop:Generator_ColumnPropNameInRow="FaultyRepairedQty" msprop:Generator_ColumnPropNameInTable="FaultyRepairedQtyColumn" msprop:Generator_UserColumnName="FaultyRepairedQty" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

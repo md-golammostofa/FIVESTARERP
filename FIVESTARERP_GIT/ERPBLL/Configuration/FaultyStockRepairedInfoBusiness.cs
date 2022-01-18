@@ -43,7 +43,7 @@ namespace ERPBLL.Configuration
             var data = this._configurationDb.Db.Database.SqlQuery<FaultyStockRepairedInfoDTO>(string.Format(@"Select fs.FSRInfoId,fs.Code,fs.StateStatus,u.UserName'TSName',fs.AssignDate,fs.RepairedDate 
 From tblFaultyStockRepairedInfo fs
 Left Join [ControlPanel].dbo.tblApplicationUsers u on fs.TSId=u.UserId
-Where fs.OrganizationId={0} and fs.BranchId={1}", orgId, branchId)).ToList();
+Where fs.OrganizationId={0} and fs.BranchId={1} Order By fs.EntryDate desc", orgId, branchId)).ToList();
             return data;
         }
 
@@ -52,7 +52,7 @@ Where fs.OrganizationId={0} and fs.BranchId={1}", orgId, branchId)).ToList();
             var data = this._configurationDb.Db.Database.SqlQuery<FaultyStockRepairedInfoDTO>(string.Format(@"Select fs.FSRInfoId,fs.TSId,fs.Code,fs.StateStatus,u.UserName'TSName',fs.AssignDate,fs.RepairedDate 
 From tblFaultyStockRepairedInfo fs
 Left Join [ControlPanel].dbo.tblApplicationUsers u on fs.TSId=u.UserId
-Where fs.TSId={0} and fs.OrganizationId={1} and fs.BranchId={2}",tsId, orgId, branchId)).ToList();
+Where fs.TSId={0} and fs.OrganizationId={1} and fs.BranchId={2} Order By fs.EntryDate desc",tsId, orgId, branchId)).ToList();
             return data;
         }
 

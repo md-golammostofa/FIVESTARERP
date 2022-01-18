@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ERPBO.Configuration.ViewModels.GoodToFaultyTransferInfoViewModel>
+@{ 
+    int sl = 0;
+    Layout = null;
+}
+<div class="row">
+    <table class="table table-bordered table-responsive-lg table-sm tblGoodToFaultyTransferInfo" id="tblGoodToFaultyTransferInfo">
+        <thead class="btn-dark">
+            <tr class="text-center">
+                <th class="text-center">#SL</th>
+                <th class="hide"></th>
+                <th class="hide">Action</th>
+                <th>Transfer Code</th>
+                <th>Status</th>
+                <th>Entry User</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                sl = sl + 1;
+                <tr>
+                    <td class="text-center">@sl</td>
+                    <td class="hide">@item.GTFTInfoId</td>
+                    <td class="text-center hide">
+                        <a href="#" class="btn btn-sm btn-outline-success" title="Data Details View"><i class="fas fa-eye"></i></a>
+                    </td>
+                    <td>@item.TransferCode</td>
+                    <td>@item.TransferStatus</td>
+                    <td>@item.UserName</td>
+                    <td>@item.EntryDate.Value.ToString("dd-MMM-yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

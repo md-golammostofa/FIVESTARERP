@@ -10,5 +10,9 @@ namespace ERPBO.FrontDesk.DTOModels
     {
         public int TotalSignInToday { get; set; }
         public int TotalSignOutToday { get; set; }
+        public int PendingEng { get; set; }
+        public int TodayCallCenterEng { get; set; }
+        public int TransferToTIEng { get; set; }
+        public int TotalCallCenterEng { get; set; }
     }
 }
