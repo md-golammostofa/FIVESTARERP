@@ -136,53 +136,61 @@ where 1=1{0} order by EntryDate desc", Utility.ParamChecker(param));
         public bool SaveInvoiceForJobOrder(InvoiceInfoDTO infodto, List<InvoiceDetailDTO> detailsdto, long userId, long orgId, long branchId)
         {
             bool IsSuccess = false;
+            Random random = new Random();
+            var ran = random.Next().ToString();
+            ran = ran.Substring(0, 4);
             double netamount = 0;
             netamount = ((infodto.TotalSPAmount + infodto.LabourCharge + infodto.VAT + infodto.Tax) - infodto.Discount);
             var jobOrder = _jobOrderBusiness.GetJobOrderById(infodto.JobOrderId,orgId);
+            var repInvoice = GetAllInvoice(jobOrder.JodOrderId, orgId, branchId);
             InvoiceInfo invoiceInfo = new InvoiceInfo();
-            if (infodto.InvoiceInfoId == 0)
+            if (repInvoice == null)
             {
-                invoiceInfo.InvoiceCode = ("INV-" + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
-                invoiceInfo.JobOrderId = infodto.JobOrderId;
-                invoiceInfo.JobOrderCode = jobOrder.JobOrderCode;
-                invoiceInfo.CustomerName = jobOrder.CustomerName;
-                invoiceInfo.CustomerPhone = jobOrder.MobileNo;
-                invoiceInfo.InvoiceType = InvoiceTypeStatus.JobOrder;
-                invoiceInfo.LabourCharge = infodto.LabourCharge;
-                invoiceInfo.VAT = infodto.VAT;
-                invoiceInfo.Tax = infodto.Tax;
-                invoiceInfo.Discount = infodto.Discount;
-                invoiceInfo.TotalSPAmount = infodto.TotalSPAmount;
-                invoiceInfo.NetAmount = netamount;
-                invoiceInfo.Remarks = infodto.Remarks;
-                invoiceInfo.EntryDate = DateTime.Now;
-                invoiceInfo.EUserId = userId;
-                invoiceInfo.OrganizationId = orgId;
-                invoiceInfo.BranchId = branchId;
-                List<InvoiceDetail> invoiceDetails = new List<InvoiceDetail>();
+                if (infodto.InvoiceInfoId == 0)
+                {
+                    invoiceInfo.InvoiceCode = ("INV-"+ran + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
+                    invoiceInfo.JobOrderId = infodto.JobOrderId;
+                    invoiceInfo.JobOrderCode = jobOrder.JobOrderCode;
+                    invoiceInfo.CustomerName = jobOrder.CustomerName;
+                    invoiceInfo.CustomerPhone = jobOrder.MobileNo;
+                    invoiceInfo.InvoiceType = InvoiceTypeStatus.JobOrder;
+                    invoiceInfo.LabourCharge = infodto.LabourCharge;
+                    invoiceInfo.VAT = infodto.VAT;
+                    invoiceInfo.Tax = infodto.Tax;
+                    invoiceInfo.Discount = infodto.Discount;
+                    invoiceInfo.TotalSPAmount = infodto.TotalSPAmount;
+                    invoiceInfo.NetAmount = netamount;
+                    invoiceInfo.Remarks = infodto.Remarks;
+                    invoiceInfo.EntryDate = DateTime.Now;
+                    invoiceInfo.EUserId = userId;
+                    invoiceInfo.OrganizationId = orgId;
+                    invoiceInfo.BranchId = branchId;
+                    List<InvoiceDetail> invoiceDetails = new List<InvoiceDetail>();
 
-                foreach (var item in detailsdto)
-                {
-                    InvoiceDetail Detail = new InvoiceDetail();
-                    Detail.PartsId = item.PartsId;
-                    Detail.PartsName = item.PartsName;
-                    Detail.Quantity = item.Quantity;
-                    Detail.SellPrice = item.SellPrice;
-                    Detail.Total = item.Total;
-                    Detail.EUserId = userId;
-                    Detail.EntryDate = DateTime.Now;
-                    Detail.OrganizationId = orgId;
-                    Detail.BranchId = branchId;
-                    invoiceDetails.Add(Detail);
-                }
-                invoiceInfo.InvoiceDetails = invoiceDetails;
-                _invoiceInfoRepository.Insert(invoiceInfo);
-                IsSuccess = _invoiceInfoRepository.Save();
-                if (IsSuccess == true)
-                {
-                    UpdateJobOrderInvoice(infodto.JobOrderId, userId, orgId, branchId);
+                    foreach (var item in detailsdto)
+                    {
+                        InvoiceDetail Detail = new InvoiceDetail();
+                        Detail.PartsId = item.PartsId;
+                        Detail.PartsName = item.PartsName;
+                        Detail.Quantity = item.Quantity;
+                        Detail.SellPrice = item.SellPrice;
+                        Detail.Total = item.Total;
+                        Detail.EUserId = userId;
+                        Detail.EntryDate = DateTime.Now;
+                        Detail.OrganizationId = orgId;
+                        Detail.BranchId = branchId;
+                        invoiceDetails.Add(Detail);
+                    }
+                    invoiceInfo.InvoiceDetails = invoiceDetails;
+                    _invoiceInfoRepository.Insert(invoiceInfo);
+                    IsSuccess = _invoiceInfoRepository.Save();
+                    if (IsSuccess == true)
+                    {
+                        UpdateJobOrderInvoice(infodto.JobOrderId, userId, orgId, branchId);
+                    }
                 }
             }
+            
             return IsSuccess;
         }
 
@@ -211,6 +219,9 @@ where 1=1{0} order by EntryDate desc", Utility.ParamChecker(param));
         public bool SaveInvoiceForAccessoriesSells(InvoiceInfoDTO infodto, List<InvoiceDetailDTO> detailsdto, long userId, long orgId, long branchId)
         {
             bool IsSuccess = false;
+            Random random = new Random();
+            var ran = random.Next().ToString();
+            ran = ran.Substring(0, 4);
             double netamount = 0;
             double spamount = 0;
             spamount = detailsdto.Select(t => t.Total).Sum();
@@ -222,7 +233,7 @@ where 1=1{0} order by EntryDate desc", Utility.ParamChecker(param));
             InvoiceInfo invoiceInfo = new InvoiceInfo();
             if (infodto.InvoiceInfoId == 0)
             {
-                invoiceInfo.InvoiceCode = ("INV-" + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
+                invoiceInfo.InvoiceCode = ("INV-"+ ran + DateTime.Now.ToString("dd") + DateTime.Now.ToString("hh") + DateTime.Now.ToString("mm") + DateTime.Now.ToString("ss"));
                 invoiceInfo.JobOrderId = 0;
                 invoiceInfo.JobOrderCode = null;
                 invoiceInfo.InvoiceType = InvoiceTypeStatus.Sells;
@@ -534,6 +545,17 @@ LabourCharge,VAT,Tax,Discount,NetAmount,EntryDate,
 OrganizationId,BranchId,(select top 1 sum(NetAmount)'Total' from tblInvoiceInfo)'Total' 
 from tblInvoiceInfo
 where OrganizationId={0} and BranchId={1} order by EntryDate desc", orgId, branchId)).ToList();
+        }
+
+        public IEnumerable<InvoiceInfoDTO> GetInvoiceInfoReport(long infoId, long orgId, long branchId)
+        {
+            var data = _frontDeskUnitOfWork.Db.Database.SqlQuery<InvoiceInfoDTO>(string.Format(@"Select inv.InvoiceCode,inv.JobOrderCode,inv.CustomerName,inv.CustomerPhone
+,inv.TotalSPAmount,inv.LabourCharge,inv.VAT,inv.Tax,inv.Discount
+,inv.NetAmount,inv.EntryDate,jo.IMEI,m.ModelName From tblInvoiceInfo inv
+Left Join tblJobOrders jo on inv.JobOrderId=jo.JodOrderId
+Left Join [Configuration].dbo.tblModelSS m on jo.DescriptionId=m.ModelId
+Where inv.InvoiceInfoId={0} and inv.OrganizationId={1} and inv.BranchId={2}", infoId, orgId, branchId)).ToList();
+            return data;
         }
     }
 }

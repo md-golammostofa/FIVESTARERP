@@ -161,6 +161,7 @@
     <Compile Include="Configuration\DTOModels\MobilePartStockDetailDTO.cs" />
     <Compile Include="Configuration\DTOModels\MobilePartStockInfoDTO.cs" />
     <Compile Include="Configuration\DTOModels\ModelSSDTO.cs" />
+    <Compile Include="Configuration\DTOModels\ModelWiseProblemDTO.cs" />
     <Compile Include="Configuration\DTOModels\RepairDTO.cs" />
     <Compile Include="Configuration\DTOModels\ScrapStockDetailDTO.cs" />
     <Compile Include="Configuration\DTOModels\ScrapStockInfoDTO.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Configuration\ViewModels\MobilePartStockInfoViewModel.cs" />
     <Compile Include="Configuration\ViewModels\MobilePartViewModel.cs" />
     <Compile Include="Configuration\ViewModels\ModelSSViewModel.cs" />
+    <Compile Include="Configuration\ViewModels\ModelWiseProblemViewModel.cs" />
     <Compile Include="Configuration\ViewModels\RepairViewModel.cs" />
     <Compile Include="Configuration\ViewModels\ScrapStockDetailViewModel.cs" />
     <Compile Include="Configuration\ViewModels\ScrapStockInfoViewModel.cs" />
@@ -307,6 +309,7 @@
     <Compile Include="FrontDesk\DTOModels\JobOrderTransferDetailDTO.cs" />
     <Compile Include="FrontDesk\DTOModels\JobOrderTSDTO.cs" />
     <Compile Include="FrontDesk\DTOModels\RequsitionDetailForJobOrderDTO.cs" />
+    <Compile Include="FrontDesk\DTOModels\RequsitionDetailsReportDTO.cs" />
     <Compile Include="FrontDesk\DTOModels\RequsitionInfoForJobOrderDTO.cs" />
     <Compile Include="FrontDesk\DTOModels\ServicesSummaryDTO.cs" />
     <Compile Include="FrontDesk\DTOModels\SparePartsAvailableAndReqQtyDTO.cs" />
@@ -341,6 +344,7 @@
     <Compile Include="FrontDesk\ViewModels\JobOrderTransferDetailViewModel.cs" />
     <Compile Include="FrontDesk\ViewModels\JobOrderTSViewModel.cs" />
     <Compile Include="FrontDesk\ViewModels\RequsitionDetailForJobOrderViewModel.cs" />
+    <Compile Include="FrontDesk\ViewModels\RequsitionDetailsReportViewModel.cs" />
     <Compile Include="FrontDesk\ViewModels\RequsitionInfoForJobOrderViewModel.cs" />
     <Compile Include="FrontDesk\ViewModels\ServicesSummaryViewModel.cs" />
     <Compile Include="FrontDesk\ViewModels\SparePartsAvailableAndReqQtyViewModel.cs" />

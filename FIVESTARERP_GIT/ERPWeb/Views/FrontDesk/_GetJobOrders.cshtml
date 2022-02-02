@@ -62,7 +62,7 @@
 
                         <td class="hide">@item.JodOrderId</td>
                         <td class="text-center text-bold">@sl</td>
-                        @if (User.RoleName == "FrontDesk")
+                        @if (User.RoleName == "Front Desk")
                         {
                             <td>
                                 <a href="@Url.Action("GetJobOrderReceipt", "ReportSS", new { @jobOrderId = item.JodOrderId })" target="_blank" class="btn text-bold" style="color:blue" title="Download Receipt">@item.JobOrderCode</a>

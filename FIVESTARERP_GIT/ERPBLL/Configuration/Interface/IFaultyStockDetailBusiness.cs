@@ -19,5 +19,6 @@ namespace ERPBLL.Configuration.Interface
         bool SaveFaultyStockOutByTSRepaired(List<FaultyStockDetailDTO> faultyStocksDto, long userId, long orgId, long branchId);
         bool GoodStockOutAndFaultyStockIn(MobilePartStockDetailDTO dto, long userId, long orgId, long branchId);
         bool SaveFaultyStockInByGoodToFaulty(List<ERPBO.Configuration.DTOModels.FaultyStockDetailDTO> faultyStocksDto, long userId, long orgId, long branchId);
+        bool SaveFaultyStockOutForTransfer(List<FaultyStockDetailDTO> faultyStocksDto, long userId, long orgId, long branchId);
     }
 }

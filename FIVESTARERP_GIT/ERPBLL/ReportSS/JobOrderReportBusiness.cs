@@ -1,6 +1,7 @@
 ﻿using ERPBLL.Common;
 using ERPBLL.FrontDesk.Interface;
 using ERPBLL.ReportSS.Interface;
+using ERPBO.Configuration.DTOModels;
 using ERPBO.FrontDesk.DomainModels;
 using ERPBO.FrontDesk.DTOModels;
 using ERPBO.FrontDesk.ReportModels;
@@ -216,6 +217,20 @@ Inner Join [Configuration].dbo.tblBrandSS bn on de.BrandId=bn.BrandId
 
 Where jo.JodOrderId={0} and  jo.OrganizationId={1}) tbl Order By EntryDate desc", jobOrderId, orgId)).FirstOrDefault();
             return data;
+        }
+
+        public IEnumerable<ModelWiseProblemDTO> ModelWiseProblemReport(long orgId, long branchId, string fromDate, string toDate)
+        {
+            if(!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
+            {
+                fromDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+            }
+            if(!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                toDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+            }
+            var query = string.Format(@"Exec [dbo].[spModelWiseProblem] '{0}','{1}',{2},{3}", fromDate, toDate, orgId, branchId);
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<ModelWiseProblemDTO>(query).ToList();
         }
     }
 }

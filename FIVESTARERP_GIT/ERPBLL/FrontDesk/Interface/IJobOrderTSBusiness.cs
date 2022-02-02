@@ -17,5 +17,6 @@ namespace ERPBLL.FrontDesk.Interface
         bool UpdateJobOrderTsForQcFail(long joborderId, long userId, long orgId, long branchId);
         JobOrderTS GetJobOrderTsByJobOrderId(long joborderId, long orgId, long branchId);
         IEnumerable<DashboardDailySingInAndOutDTO> DashboardDailySingInAndOutByEng(long orgId, long branchId, long userId);
+        IEnumerable<JobOrderTSDTO> GetDailyJobSignOut(long orgId, long branchId, long userId);
     }
 }

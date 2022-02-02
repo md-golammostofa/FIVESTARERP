@@ -14,7 +14,7 @@
                     <th>Organization Name</th>
                     <th>Entry User</th>
                     <th>Update User</th>
-                    <th>Action</th>
+                    @*<th>Action</th>*@
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +29,7 @@
                         <td>@role.OrganizationName</td>
                         <td class="text-center text-sm">@role.EntryUser</td>
                         <td class="text-center text-sm">@role.UpdateUser</td>
-                        <td class="text-center">
+                        @*<td class="text-center">
                             @if (ViewBag.OPFor == "System")
                             {
                                 <a href="@Url.Action("CreateAppRole","ControlPanel", new { id=role.RoleId})" class="btn btn-sm btn-warning btn-flat"><i class="fas fa-pen"></i> Edit</a>
@@ -38,7 +38,7 @@
                             {
                                 <a href="@Url.Action("CreateUserRole","ControlPanel", new { id=role.RoleId})" class="btn btn-sm btn-warning btn-flat"><i class="fas fa-pen"></i> Edit</a>
                             }
-                        </td>
+                        </td>*@
                     </tr>
                 }
                 @if (Model.Count() == 0)

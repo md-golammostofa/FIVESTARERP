@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ERPBO.FrontDesk.ViewModels.JobOrderViewModel>
+@{ 
+    int sl = 0;
+}
+<div class="row">
+    <table class="table table-responsive-lg table-bordered table-sm tblBounceReport" id="tblBounceReport">
+        <thead class="btn-dark">
+            <tr class="text-center">
+                <th style="vertical-align:middle">SL</th>
+                <th style="vertical-align:middle">JobCode</th>
+                <th style="vertical-align:middle">Model</th>
+                <th style="vertical-align:middle">IMEI</th>
+                <th style="vertical-align:middle">Customer Name</th>
+                <th style="vertical-align:middle">Problems</th>
+                <th style="vertical-align:middle">Eng. Problems</th>
+                <th style="vertical-align:middle">Parts Used</th>
+                <th style="vertical-align:middle">StateStatus</th>
+                <th style="vertical-align:middle">Eng Name</th>
+                <th style="vertical-align:middle">QC Name</th>
+                <th style="vertical-align:middle">Receive Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                sl = sl + 1;
+                <tr>
+                    <td>@sl</td>
+                    <td>@item.JobOrderCode</td>
+                    <td>@item.ModelName</td>
+                    <td>@item.IMEI</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.Problems</td>
+                    <td>@item.EngProblems</td>
+                    <td>@item.PartsName</td>
+                    <td>@item.StateStatus</td>
+                    <td>@item.TSName</td>
+                    <td>@item.QCName1</td>
+                    <td>@item.EntryDate.Value.ToString("dd-MMM-yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -3,6 +3,7 @@ using ERPBLL.Configuration.Interface;
 using ERPBLL.FrontDesk.Interface;
 using ERPBLL.ReportSS.Interface;
 using ERPBO.Configuration.DTOModels;
+using ERPBO.FrontDesk.DomainModels;
 using ERPBO.FrontDesk.DTOModels;
 using ERPBO.FrontDesk.ReportModels;
 using ERPBO.FrontDesk.ViewModels;
@@ -39,8 +40,9 @@ namespace ERPWeb.Controllers
         private readonly ITransferDetailBusiness _transferDetailBusiness;
         private readonly IFiveStarSMSDetailsBusiness _fiveStarSMSDetailsBusiness;
         private readonly IModelSSBusiness _modelSSBusiness;
+        private readonly IRequsitionDetailForJobOrderBusiness _requsitionDetailForJobOrderBusiness;
         // GET: ReportSS
-        public ReportSSController(IJobOrderReportBusiness jobOrderReportBusiness, IJobOrderBusiness jobOrderBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartBusiness mobilePartBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IJobOrderReturnDetailBusiness jobOrderReturnDetailBusiness, IJobOrderTransferDetailBusiness jobOrderTransferDetailBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, ITransferInfoBusiness transferInfoBusiness, ITransferDetailBusiness transferDetailBusiness, IFiveStarSMSDetailsBusiness fiveStarSMSDetailsBusiness, IModelSSBusiness modelSSBusiness)
+        public ReportSSController(IJobOrderReportBusiness jobOrderReportBusiness, IJobOrderBusiness jobOrderBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartBusiness mobilePartBusiness, ITsStockReturnDetailsBusiness tsStockReturnDetailsBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IJobOrderReturnDetailBusiness jobOrderReturnDetailBusiness, IJobOrderTransferDetailBusiness jobOrderTransferDetailBusiness, IJobOrderTSBusiness jobOrderTSBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, ITransferInfoBusiness transferInfoBusiness, ITransferDetailBusiness transferDetailBusiness, IFiveStarSMSDetailsBusiness fiveStarSMSDetailsBusiness, IModelSSBusiness modelSSBusiness, IRequsitionDetailForJobOrderBusiness requsitionDetailForJobOrderBusiness)
         {
             this._jobOrderReportBusiness = jobOrderReportBusiness;
             this._jobOrderBusiness = jobOrderBusiness;
@@ -61,6 +63,7 @@ namespace ERPWeb.Controllers
             this._transferDetailBusiness = transferDetailBusiness;
             this._fiveStarSMSDetailsBusiness = fiveStarSMSDetailsBusiness;
             this._modelSSBusiness = modelSSBusiness;
+            this._requsitionDetailForJobOrderBusiness = requsitionDetailForJobOrderBusiness;
         }
 
         #region JobOrderList
@@ -255,7 +258,7 @@ namespace ERPWeb.Controllers
         #region InvoiceReceipt
         public ActionResult InvoiceReport(long infoId)
         {
-            var infodata = _invoiceInfoBusiness.InvoiceInfoReport(infoId, User.OrgId, User.BranchId);
+            var infodata = _invoiceInfoBusiness.GetInvoiceInfoReport(infoId, User.OrgId, User.BranchId);
 
             // var detailsdata = _invoiceDetailBusiness.InvoiceDetailsReport(infoId,User.OrgId, User.BranchId);
             IEnumerable<InvoiceDetailDTO> detailsdata = _invoiceDetailBusiness.InvoiceDetailsReport(infoId, User.OrgId, User.BranchId);
@@ -1323,7 +1326,7 @@ namespace ERPWeb.Controllers
         {
             string file = string.Empty;
             IEnumerable<JobOrderDTO> jobOrderDetails = _jobOrderReturnDetailBusiness.GetReturnDeliveryChalan(transferCode, User.OrgId);
-
+            IEnumerable<JobOrderReturnDetail> returnDetails = _jobOrderReturnDetailBusiness.GetTransferInfoByCode(transferCode, User.OrgId);
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
             List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
@@ -1336,9 +1339,11 @@ namespace ERPWeb.Controllers
                 localReport.ReportPath = reportPath;
                 ReportDataSource dataSource1 = new ReportDataSource("JobReturn", jobOrderDetails);
                 ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                ReportDataSource dataSource3 = new ReportDataSource("JobReturnChallan", returnDetails);
                 localReport.DataSources.Clear();
                 localReport.DataSources.Add(dataSource1);
                 localReport.DataSources.Add(dataSource2);
+                localReport.DataSources.Add(dataSource3);
                 localReport.Refresh();
                 localReport.DisplayName = "Receipt";
 
@@ -1408,6 +1413,239 @@ namespace ERPWeb.Controllers
                 return File(renderedBytes, mimeType);
             }
 
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region RequsitionDeatils Reports
+        public ActionResult RequsitionDetailsReport(long? modelId,string rptType)
+        {
+            string file = string.Empty;
+            IEnumerable<RequsitionDetailsReportDTO> requDetails = _requsitionDetailForJobOrderBusiness.GetRequsitionDetailsReport(User.OrgId, User.BranchId,modelId);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptRequsitionDetailsReports.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("ReqDetailsReport", requDetails);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "ReqDetails";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension;
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    rptType,
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+
+            return new EmptyResult();
+        }
+
+        #endregion
+
+        #region JobBounceReport
+        public ActionResult JobBounceReport(string imei, string rptType)
+        {
+            string file = string.Empty;
+            IEnumerable<JobOrderDTO> dto = _jobOrderBusiness.GetBounceReport(User.OrgId,User.BranchId, imei);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptJobBounceReports.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("BounceReport", dto);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "ReqDetails";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension;
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    rptType,
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region DailyQCPassFailReport
+        //[HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult DailyQCPassFailReport(string jobCode, long? ddlModelName, string ddlStatus, string fromDate, string toDate, string rptType)
+        {
+            bool IsSuccess = false;
+
+            IEnumerable<JobOrderDTO> dto = _jobOrderBusiness.DailyQCPassFailReports(jobCode, ddlModelName, ddlStatus, User.OrgId, User.BranchId, fromDate, toDate,User.UserId);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptDailyQCPassFailReport.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("DailyQCPassFail", dto);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "Parts";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension;
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    rptType,
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region DailyQCPassFailReport
+        //[HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult GetJobOrderAllBranchReport(long? ddlModelName,long? ddlBranchName, string fromDate, string toDate, string rptType)
+        {
+            bool IsSuccess = false;
+
+            IEnumerable<JobOrderDTO> dto = _jobOrderBusiness.GetJobOrderAllBranch(User.OrgId,ddlBranchName,ddlModelName,fromDate,toDate);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptJobOrderAllBranchReport.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("JobOrderAllBranch", dto);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "Parts";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension;
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    rptType,
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+            return new EmptyResult();
+        }
+        #endregion
+
+        #region ModelWiseProblem
+        //[HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult ModelWiseProblemReport(string fromDate, string toDate, string rptType="EXCEL")
+        {
+            bool IsSuccess = false;
+
+            IEnumerable<ModelWiseProblemDTO> dto = _jobOrderReportBusiness.ModelWiseProblemReport(User.OrgId,User.BranchId,fromDate,toDate);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptModelWiseProblemReport.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("ModelWiseProblem", dto);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "ModelWiseProblem";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension = ".xlsx";
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    "EXCEL",
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
             return new EmptyResult();
         }
         #endregion

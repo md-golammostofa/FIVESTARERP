@@ -246,8 +246,7 @@ namespace ERPBLL.Configuration
                         JobOrderId = item.JobOrderId,
                         DescriptionId = item.DescriptionId,
                         PartsId = item.PartsId,
-                        StockInQty = item.Quantity,
-                        StockOutQty = 0,
+                        StockOutQty = item.Quantity,
                         Remarks = "",
                     };
                     _faultyStockInfoRepository.Insert(faultyInfo);
@@ -423,6 +422,48 @@ namespace ERPBLL.Configuration
                     {
                         faultyStock.FaultyStockInfoId = faultyInfo.FaultyStockInfoId;
                     }
+                }
+                faultyStockDetails.Add(faultyStock);
+            }
+
+            _faultyStockDetailRepository.InsertAll(faultyStockDetails);
+            return _faultyStockDetailRepository.Save();
+        }
+        //
+        public bool SaveFaultyStockOutForTransfer(List<FaultyStockDetailDTO> faultyStocksDto, long userId, long orgId, long branchId)
+        {
+            List<FaultyStockDetails> faultyStockDetails = new List<FaultyStockDetails>();
+            FaultyStockDetails faultyStock = new FaultyStockDetails();
+            FaultyStockInfo faultyInfo = new FaultyStockInfo();
+            foreach (var item in faultyStocksDto)
+            {
+                faultyStock = new FaultyStockDetails()
+                {
+                    BranchId = branchId,
+                    CostPrice = item.CostPrice,
+                    SellPrice = item.SellPrice,
+                    StateStatus = StockStatus.StockIn,
+                    SWarehouseId = item.SWarehouseId,
+                    EUserId = userId,
+                    OrganizationId = orgId,
+                    EntryDate = DateTime.Now,
+                    JobOrderId = item.JobOrderId,
+                    DescriptionId = item.DescriptionId,
+                    PartsId = item.PartsId,
+                    Quantity = item.Quantity,
+                    Remarks = "Faulty By Branch Transfer",
+                    TSId = item.TSId,
+
+                };
+                var faultyStockInfo = _faultyStockInfoBusiness.GetAllFaultyStockInfoByModelAndPartsIdAndCostPrice(item.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
+                if (faultyStockInfo != null)
+                {
+                    faultyStockInfo.StockOutQty += item.Quantity;
+                    faultyStockInfo.UpUserId = userId;
+                    faultyStockInfo.UpdateDate = DateTime.Now;
+                    _faultyStockInfoRepository.Update(faultyStockInfo);
+                    //FaultyStockInfoId//
+                    faultyStock.FaultyStockInfoId = faultyStockInfo.FaultyStockInfoId;
                 }
                 faultyStockDetails.Add(faultyStock);
             }

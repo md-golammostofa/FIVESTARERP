@@ -131,5 +131,8 @@ namespace ERPBO.FrontDesk.DTOModels
         public int DaysOver10 {get;set;}
         public int DaysOver5 { get; set; }
         public double AllOverSales { get; set; }
+        //
+        public string EngProblems { get; set; }
+        public string QCName1 { get; set; }
     }
 }

@@ -1043,6 +1043,21 @@ namespace ERPWeb.Controllers
             }
             return View();
         }
+
+        public ActionResult GetDailyJobSignOutList(string flag)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderTSBusiness.GetDailyJobSignOut(User.OrgId, User.BranchId, User.UserId);
+                List<JobOrderTSViewModel> viewModels = new List<JobOrderTSViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetDailyJobSignOutList", viewModels);
+            }
+        }
         #endregion
 
         #region JobOrderPush
@@ -2020,33 +2035,7 @@ namespace ERPWeb.Controllers
             }
             else
             {
-                //IEnumerable<TsStockReturnDetailDTO> dto = _tsStockReturnDetailsBusiness.GetAllTsStockReturn(User.OrgId, User.BranchId).Select(ret => new TsStockReturnDetailDTO
-                //{
-                //    RequsitionCode = ret.RequsitionCode,
-                //    PartsId = ret.PartsId,
-                //    PartsName = (_mobilePartBusiness.GetMobilePartOneByOrgId(ret.PartsId, User.OrgId).MobilePartName),
-                //    PartsCode = (_mobilePartBusiness.GetMobilePartOneByOrgId(ret.PartsId, User.OrgId).MobilePartCode),
-                //    Quantity = ret.Quantity,
-                //    EntryDate = ret.EntryDate,
-                //    EUserId=ret.EUserId,
-                //   EntryUser= UserForEachRecord(ret.EUserId.Value).UserName,
-                //}).AsEnumerable();
-                //dto = dto.Where(f => 1 == 1 && (mobilePartId == null || mobilePartId <= 0 || f.PartsId == mobilePartId) && (tsId == null || tsId <= 0 || f.EUserId == tsId) &&
-                //             (
-                //                 (fromDate == null && toDate == null)
-                //                 ||
-                //                  (fromDate == "" && toDate == "")
-                //                 ||
-                //                 (fromDate.Trim() != "" && toDate.Trim() != "" &&
-
-                //                     f.EntryDate.Value.Date >= Convert.ToDateTime(fromDate).Date &&
-                //                     f.EntryDate.Value.Date <= Convert.ToDateTime(toDate).Date)
-                //                 ||
-                //                 (fromDate.Trim() != "" && f.EntryDate.Value.Date == Convert.ToDateTime(fromDate).Date)
-                //                 ||
-                //                 (toDate.Trim() != "" && f.EntryDate.Value.Date == Convert.ToDateTime(toDate).Date)
-                //             )
-                //         );
+                
                 var dto = _tsStockReturnDetailsBusiness.GetReturnParts(User.OrgId, User.BranchId, tsId, mobilePartId, jobCode, fromDate, toDate);
                 List<TsStockReturnDetailViewModel> viewModel = new List<TsStockReturnDetailViewModel>();
                 // Pagination //
@@ -2365,6 +2354,90 @@ namespace ERPWeb.Controllers
                 List<InvoiceInfoViewModel> viewModels = new List<InvoiceInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetAllBranchSellsReport", viewModels);
+            }
+        }
+        public ActionResult RequsitionDetailsReport(string flag,long? modelId)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _requsitionDetailForJobOrderBusiness.GetRequsitionDetailsReport(User.OrgId, User.BranchId, modelId);
+                List<RequsitionDetailsReportViewModel> viewModels = new List<RequsitionDetailsReportViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_RequsitionDetailsReport", viewModels);
+            }
+        }
+        public ActionResult GetBounceReport(string flag,string imei)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderBusiness.GetBounceReport(User.OrgId, User.BranchId,imei);
+                List<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetBounceReport", viewModels);
+            }
+        }
+        public ActionResult DailyQCPassFailReport(string flag, string jobCode, long? modelId, string status, string fromDate, string toDate)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                ViewBag.ddlModelName = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderBusiness.DailyQCPassFailReports(jobCode, modelId, status, User.OrgId, User.BranchId, fromDate, toDate,User.UserId);
+                List<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_DailyQCPassFailReport", viewModels);
+            }
+        }
+
+        public ActionResult GetJobOrderListAllBranch(string flag,long? branchId, long? modelId, string fromDate, string toDate,int page=1)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                ViewBag.ddlModelName = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
+
+                ViewBag.ddlBranchName = _branchBusiness.GetBranchByOrgId(User.OrgId).Select(b => new SelectListItem { Text = b.BranchName, Value = b.BranchId.ToString() }).ToList();
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderBusiness.GetJobOrderAllBranch(User.OrgId, branchId, modelId, fromDate, toDate);
+                List<JobOrderViewModel> viewModels = new List<JobOrderViewModel>();
+                // Pagination //
+                ViewBag.PagerData = GetPagerData(dto.Count(), 50, page);
+                dto = dto.Skip((page - 1) * 50).Take(50).ToList();
+                //-----------------//
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_GetJobOrderListAllBranch", viewModels);
+            }
+        }
+
+        public ActionResult ModelWiseProblem(string flag,string fromDate="", string toDate="", int page = 1)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _jobOrderReportBusiness.ModelWiseProblemReport(User.OrgId,User.BranchId,fromDate,toDate);
+                List<ModelWiseProblemViewModel> viewModels = new List<ModelWiseProblemViewModel>();
+                // Pagination //
+                //ViewBag.PagerData = GetPagerData(dto.Count(), 50, page);
+                //dto = dto.Skip((page - 1) * 50).Take(50).ToList();
+                //-----------------//
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_ModelWiseProblem", viewModels);
             }
         }
         #endregion

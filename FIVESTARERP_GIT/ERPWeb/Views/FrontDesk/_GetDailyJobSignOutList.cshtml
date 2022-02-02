@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ERPBO.FrontDesk.ViewModels.JobOrderTSViewModel>
+@{ 
+    int sl = 0;
+    Layout = null;
+}
+<div class="row">
+    <table class="table table-bordered table-responsive-lg table-sm">
+        <thead class="btn-dark">
+            <tr class="text-center">
+                <th>#SL</th>
+                <th class="hide">JobOrderId</th>
+                <th>Action</th>
+                <th>Job Code</th>
+                <th>Model</th>
+                <th>IMEI</th>
+                <th>Status</th>
+                <th>Sign-In Date</th>
+                <th>Sign-Out Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                sl = sl + 1;
+                <tr>
+                    <td class="text-center">@sl</td>
+                    <td class="hide">@item.JodOrderId</td>
+                    <td class="text-center">
+                        <a href="#" class="btn btn-outline-success btn-sm data-item-tsWork" data-item-tsWork="@item.JodOrderId" title="Eng Work Details"><i class="fas fa-eye"></i></a>
+                    </td>
+                    <td>@item.JobOrderCode</td>
+                    <td>@item.ModelName</td>
+                    <td>@item.IMEI</td>
+                    <td>@item.StateStatus</td>
+                    <td>@item.AssignDate.Value.ToString("dd-MMM-yyy hh:mm:ss tt")</td>
+                    <td>@item.SignOutDate.Value.ToString("dd-MMM-yyy hh:mm:ss tt")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

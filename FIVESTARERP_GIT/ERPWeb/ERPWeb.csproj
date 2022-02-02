@@ -1014,6 +1014,18 @@
     <Content Include="Views\Configuration\GoodToFaultyTransferList.cshtml" />
     <Content Include="Views\Configuration\_GetGoodToFaultyTransferDetailsList.cshtml" />
     <Content Include="Views\Configuration\GetGoodToFaultyTransferDetailsList.cshtml" />
+    <Content Include="Views\FrontDesk\_GetDailyJobSignOutList.cshtml" />
+    <Content Include="Views\FrontDesk\GetDailyJobSignOutList.cshtml" />
+    <Content Include="Views\FrontDesk\_RequsitionDetailsReport.cshtml" />
+    <Content Include="Views\FrontDesk\RequsitionDetailsReport.cshtml" />
+    <Content Include="Views\FrontDesk\_GetBounceReport.cshtml" />
+    <Content Include="Views\FrontDesk\GetBounceReport.cshtml" />
+    <Content Include="Views\FrontDesk\DailyQCPassFailReport.cshtml" />
+    <Content Include="Views\FrontDesk\_DailyQCPassFailReport.cshtml" />
+    <Content Include="Views\FrontDesk\_GetJobOrderListAllBranch.cshtml" />
+    <Content Include="Views\FrontDesk\GetJobOrderListAllBranch.cshtml" />
+    <Content Include="Views\FrontDesk\_ModelWiseProblem.cshtml" />
+    <Content Include="Views\FrontDesk\ModelWiseProblem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1161,6 +1173,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\ServiceRpt\FrontDesk\rptServicesSummary.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ServiceRpt\FrontDesk\rptJobBounceReports.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ServiceRpt\FrontDesk\rptRequsitionDetailsReports.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ServiceRpt\FrontDesk\rptDailyQCPassFailReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ServiceRpt\FrontDesk\rptJobOrderAllBranchReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ServiceRpt\FrontDesk\rptModelWiseProblemReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

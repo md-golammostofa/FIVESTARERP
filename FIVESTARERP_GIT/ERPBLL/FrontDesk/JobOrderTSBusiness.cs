@@ -132,5 +132,37 @@ Where OrganizationId={0} and BranchId={1} and TSId={2} and TsRepairStatus='CALL 
         {
             return _jobOrderTSRepository.GetOneByOrg(ts => ts.JodOrderId == joborderId && ts.OrganizationId == orgId && ts.BranchId == branchId);
         }
+
+        public IEnumerable<JobOrderTSDTO> GetDailyJobSignOut(long orgId, long branchId, long userId)
+        {
+            return this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderTSDTO>(QueryForDailyJobSignOut(orgId, branchId, userId)).ToList();
+        }
+        private string QueryForDailyJobSignOut(long orgId,long branchId,long userId)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+
+            if (orgId > 0)
+            {
+                param += string.Format(@" and jt.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@"and jt.BranchId={0}", branchId);
+            }
+            if (userId > 0)
+            {
+                param += string.Format(@"and jt.TSId={0}", userId);
+            }
+
+            query = string.Format(@"Select jt.JodOrderId,jo.JobOrderCode,m.ModelName,jo.DescriptionId,jo.IMEI,
+jt.StateStatus,jt.AssignDate,jt.SignOutDate,jt.TSId 
+From tblJobOrderTS jt
+Left Join tblJobOrders jo on jt.JodOrderId=jo.JodOrderId
+Left Join [Configuration].dbo.tblModelSS m on jo.DescriptionId=m.ModelId
+Where 1=1{0} and jt.StateStatus='Sign-Out' and ((Cast(jt.SignOutDate as Date)=Cast(GetDate() as Date))) order By jt.SignOutDate desc", Utility.ParamChecker(param));
+
+            return query;
+        }
     }
 }

@@ -21,5 +21,6 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<InvoiceInfoDTO> GetSellsAccessories(long orgId, long branchId, string fromDate, string toDate,string invoice,string mobileNo);
         bool StockOutAccessoriesSells(long invoiceId, long orgId, long branchId, long userId);
         IEnumerable<InvoiceInfoDTO> GetAllBranchSellsReport(long orgId, long? branchId);
+        IEnumerable<InvoiceInfoDTO> GetInvoiceInfoReport(long infoId, long orgId, long branchId);
     }
 }

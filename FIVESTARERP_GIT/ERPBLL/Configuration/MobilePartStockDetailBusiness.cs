@@ -533,7 +533,7 @@ Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st
 Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ScrapStock',
 
 (Select ISNULL(SUM(StockInQty),0) From tblDustStockInfo
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'DustStock',
+Where ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'DustStock',
 
 (Select ISNULL(SUM(IssueQty),0) From tblTransferDetails
 Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo=st.BranchId)'CareTransfer',

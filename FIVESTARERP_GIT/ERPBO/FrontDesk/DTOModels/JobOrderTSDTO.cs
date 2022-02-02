@@ -33,5 +33,8 @@ namespace ERPBO.FrontDesk.DTOModels
         public string EntryUser { get; set; }
         public string UpdateUser { get; set; }
         public string JobOrderStateStatus { get; set; }
+        //
+        public string ModelName { get; set; }
+        public string IMEI { get; set; }
     }
 }

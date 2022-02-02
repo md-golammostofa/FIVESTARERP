@@ -1,4 +1,5 @@
-﻿using ERPBLL.FrontDesk.Interface;
+﻿using ERPBLL.Common;
+using ERPBLL.FrontDesk.Interface;
 using ERPBO.FrontDesk.DomainModels;
 using ERPBO.FrontDesk.DTOModels;
 using ERPDAL.FrontDeskDAL;
@@ -49,8 +50,6 @@ group by rd.RequsitionDetailForJobOrderId,rd.PartsId,rd.Quantity,parts.MobilePar
         {
             return requsitionDetailForJobOrderRepository.GetOneByOrg(d => d.RequsitionDetailForJobOrderId == detailId && d.OrganizationId == orgId && d.BranchId == branchId);
         }
-
-        //Nishad//
         public IEnumerable<RequsitionDetailForJobOrderDTO> GetModelWiseAvailableQtyByRequsition(long reqInfoId, long orgId, long branchId, long modelId)
         {
             var data = this._frontDeskUnitOfWork.Db.Database.SqlQuery<RequsitionDetailForJobOrderDTO>(
@@ -92,6 +91,53 @@ Left Join [Configuration].dbo.tblMobileParts p on rd.PartsId=p.MobilePartId
 Where rd.RequsitionInfoForJobOrderId={0} and rd.OrganizationId={1} and rd.BranchId={2}
 ", reqInfoId, orgId, branchId)).ToList();
             return data;
+        }
+
+        public IEnumerable<RequsitionDetailsReportDTO> GetRequsitionDetailsReport(long orgId, long branchId, long? modelId)
+        {
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<RequsitionDetailsReportDTO>(QueryForRequsitionDetailsReport(orgId, branchId, modelId)).ToList();
+        }
+        private string QueryForRequsitionDetailsReport(long orgId, long branchId, long? modelId)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+            if (orgId > 0)
+            {
+                param += string.Format(@"and ri.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@" and ri.BranchId={0}", branchId);
+            }
+            if(modelId != null && modelId > 0)
+            {
+                param += string.Format(@"and jo.DescriptionId={0}", modelId);
+            }
+            query = string.Format(@"Select ri.RequsitionCode,jo.JobOrderCode,jo.DescriptionId,m.ModelName,jo.IMEI,jo.CustomerName,
+
+Cast((Select ProblemName+',' From [Configuration].dbo.tblClientProblems prob
+Inner Join tblJobOrderProblems jop on prob.ProblemId = jop.ProblemId
+Where jop.JobOrderId = ri.JobOrderId 
+Order BY ProblemName For XML PATH(''))as nvarchar(MAX)) 'Problems',
+
+Cast((Select FaultName+',' From [Configuration].dbo.tblFault fa
+Inner Join tblJobOrderFault jof on fa.FaultId = jof.FaultId
+Where jof.JobOrderId = ri.JobOrderId
+Order BY FaultName For XML PATH('')) as nvarchar(MAX))  'EngProblems',
+
+Cast((Select  (parts.MobilePartName+' (Qty-' + Cast(rd.Quantity as nvarchar(20)))+')'+',' from [FrontDesk].dbo.tblRequsitionDetailForJobOrders rd
+inner join [Configuration].dbo.tblMobileParts parts on rd.PartsId=parts.MobilePartId
+Left Join [FrontDesk].dbo.tblRequsitionInfoForJobOrders rin on rd.RequsitionInfoForJobOrderId=rin.RequsitionInfoForJobOrderId
+Where rd.Quantity>0 and rd.JobOrderId = ri.JobOrderId and rin.StateStatus='Pending'
+Order BY (parts.MobilePartName+'#' + Cast(rd.Quantity as nvarchar(20))) For XML PATH('')) as nvarchar(MAX)) 'PartsName',
+jo.EntryDate'ReceiveDate',ri.EntryDate'RequsionDate',us.UserName,ri.Remarks
+
+From [FrontDesk].dbo.tblRequsitionInfoForJobOrders ri
+Left Join [FrontDesk].dbo.tblJobOrders jo on ri.JobOrderId=jo.JodOrderId
+Left Join [Configuration].dbo.tblModelSS m on jo.DescriptionId=m.ModelId
+Left Join [ControlPanel].dbo.tblApplicationUsers us on ri.EUserId=us.UserId
+Where 1=1{0} and ri.StateStatus='Pending'", Utility.ParamChecker(param));
+            return query;
         }
     }
 }

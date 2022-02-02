@@ -221,7 +221,7 @@
             <TextRuns>
               <TextRun>
                 <Label>Invoice</Label>
-                <Value>PrintDate:</Value>
+                <Value>Print Date:</Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
                   <FontSize>9pt</FontSize>
@@ -297,7 +297,7 @@
           </Line>
           <Line Name="Line4">
             <Left>4.69678in</Left>
-            <Height>0.91667in</Height>
+            <Height>0.92362in</Height>
             <Width>0in</Width>
             <ZIndex>3</ZIndex>
             <Style>
@@ -403,10 +403,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox8</rd:DefaultName>
-            <Top>0.61806in</Top>
-            <Left>1.30029in</Left>
+            <Top>0.63751in</Top>
+            <Left>1.27862in</Left>
             <Height>0.25in</Height>
-            <Width>1.91115in</Width>
+            <Width>1.12797in</Width>
             <ZIndex>7</ZIndex>
             <Style>
               <Border>
@@ -425,7 +425,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>JobOrder</Value>
+                    <Value>Job Code</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                     </Style>
@@ -457,7 +457,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>CustomerName</Value>
+                    <Value>Customer Name</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                     </Style>
@@ -489,7 +489,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>CustomerPhone</Value>
+                    <Value>Customer Phone</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                     </Style>
@@ -499,7 +499,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox8</rd:DefaultName>
-            <Top>0.61945in</Top>
+            <Top>0.63195in</Top>
             <Left>0.05448in</Left>
             <Height>0.25in</Height>
             <Width>1.14721in</Width>
@@ -666,10 +666,10 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox8</rd:DefaultName>
-            <Top>0.61945in</Top>
-            <Left>3.30866in</Left>
+            <Top>0.63612in</Top>
+            <Left>4.73554in</Left>
             <Height>0.25in</Height>
-            <Width>1.38812in</Width>
+            <Width>0.79923in</Width>
             <ZIndex>15</ZIndex>
             <Style>
               <Border>
@@ -689,7 +689,7 @@
                 <TextRuns>
                   <TextRun>
                     <Label>ModelName</Label>
-                    <Value>=First(Fields!ModelName.Value, "InvoiceDetails")</Value>
+                    <Value>=First(Fields!ModelName.Value, "InvoiceInfo")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                       <Format>dd MMM yyyy</Format>
@@ -702,11 +702,113 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox8</rd:DefaultName>
-            <Top>0.62501in</Top>
-            <Left>4.73844in</Left>
+            <Top>0.63027in</Top>
+            <Left>5.582in</Left>
             <Height>0.25in</Height>
-            <Width>2.16223in</Width>
+            <Width>1.31067in</Width>
             <ZIndex>16</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Line Name="Line12">
+            <Top>0.60834in</Top>
+            <Left>2.43715in</Left>
+            <Height>0.30833in</Height>
+            <Width>0in</Width>
+            <ZIndex>17</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Line Name="Line14">
+            <Top>0.61597in</Top>
+            <Left>3.46378in</Left>
+            <Height>0in</Height>
+            <Width>0in</Width>
+            <ZIndex>18</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Line Name="Line15">
+            <Top>0.60834in</Top>
+            <Left>5.56672in</Left>
+            <Height>0.31528in</Height>
+            <Width>0in</Width>
+            <ZIndex>19</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Textbox Name="Textbox38">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Label>CustomerPhone</Label>
+                    <Value>IMEI</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox8</rd:DefaultName>
+            <Top>0.63333in</Top>
+            <Left>2.50659in</Left>
+            <Height>0.25in</Height>
+            <Width>0.68332in</Width>
+            <ZIndex>20</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox39">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Label>IMEI</Label>
+                    <Value>=First(Fields!IMEI.Value, "InvoiceInfo")</Value>
+                    <Style>
+                      <FontFamily>times New Roman</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox8</rd:DefaultName>
+            <Top>0.63334in</Top>
+            <Left>3.31259in</Left>
+            <Height>0.25in</Height>
+            <Width>1.2299in</Width>
+            <ZIndex>21</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -721,7 +823,7 @@
         <KeepTogether>true</KeepTogether>
         <Top>1.23833in</Top>
         <Left>0.17583in</Left>
-        <Height>0.91667in</Height>
+        <Height>0.92362in</Height>
         <Width>6.92757in</Width>
         <ZIndex>7</ZIndex>
         <Style>
@@ -1241,7 +1343,7 @@
                 <TextRuns>
                   <TextRun>
                     <Label>LabourCharge</Label>
-                    <Value>LabourCharge</Value>
+                    <Value>Labour Charge</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                     </Style>
@@ -1790,10 +1892,18 @@
           <DataField>EntryDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
+        <Field Name="ModelName">
+          <DataField>ModelName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="IMEI">
+          <DataField>IMEI</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>ServicesDS</rd:DataSetName>
-        <rd:SchemaPath>E:\ERP\30_05_2020\Yeasin-Ahmed\FIVESTAR-ERP\FIVESTARERP_GIT\ERPWeb\Reports\DataSets\ServicesDS.xsd</rd:SchemaPath>
+        <rd:SchemaPath>E:\GITHUBALLPROJECT\FIVESTARERP\FIVESTARERP_GIT\ERPWeb\Reports\DataSets\ServicesDS.xsd</rd:SchemaPath>
         <rd:TableName>InvoiceInfo</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

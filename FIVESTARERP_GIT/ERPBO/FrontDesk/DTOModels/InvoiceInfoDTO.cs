@@ -36,5 +36,6 @@ namespace ERPBO.FrontDesk.DTOModels
         //
         public long? ModelId { get; set; }
         public string ModelName { get; set; }
+        public string IMEI { get; set; }
     }
 }

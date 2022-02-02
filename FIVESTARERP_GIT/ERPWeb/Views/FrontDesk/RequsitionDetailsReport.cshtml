@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Requsition Report";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header">
+                <h4>Eng. Requsition Pending List</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                @Html.AntiForgeryToken()
+                @using (Html.BeginForm("RequsitionDetailsReport", "ReportSS", FormMethod.Get, new { @target = "_blank" }))
+                {
+                    <div class="col-md-12">
+                        <form method="get">
+                            <div class="row mb-2">
+                                <div class="col-md-1">
+                                    <label for="rptType">Type</label>
+                                    <select name="rptType" id="rptType" class="form-control form-control-sm">
+                                        <option value="PDF">PDF</option>
+                                        <option value="EXCEL">EXCEL</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <label for="Download" style="visibility:hidden">Download</label>
+                                    <button type="submit" title="Download Report" class="btn btn-sm btn-outline-success"><i class="fas fa-download"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-md-12" id="dataContainer" style="overflow-y:scroll">
+                        @{Html.RenderAction("RequsitionDetailsReport", new { @flag = "view" });}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

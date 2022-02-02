@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ERPBO.FrontDesk.ViewModels.RequsitionDetailsReportViewModel>
+@{ 
+    Layout = null;
+    int sl = 0;
+}
+<div class="row text-sm">
+    <table class="table table-responsive-lg table-bordered table-sm tblRequsitionDetailsReport" id="tblRequsitionDetailsReport">
+        <thead class="btn-dark">
+            <tr class="text-center">
+                <th style="vertical-align:middle">#SL</th>
+                <th style="vertical-align:middle">Job Code</th>
+                <th style="vertical-align:middle">Req. Code</th>
+                <th style="vertical-align:middle">Model</th>
+                <th style="vertical-align:middle">IMEI</th>
+                <th style="vertical-align:middle">Customer Name</th>
+                <th style="vertical-align:middle">Problems</th>
+                <th style="vertical-align:middle">Eng. Problems</th>
+                <th style="vertical-align:middle">Receive Date</th>
+                <th style="vertical-align:middle">Requsition Date</th>
+                <th style="vertical-align:middle">Need Parts</th>
+                <th style="vertical-align:middle">Remarks</th>
+                <th style="vertical-align:middle">TS Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                sl = sl + 1;
+                <tr>
+                    <td class="text-center">@sl</td>
+                    <td>@item.JobOrderCode</td>
+                    <td>@item.RequsitionCode</td>
+                    <td>@item.ModelName</td>
+                    <td>@item.IMEI</td>
+                    <td>@item.CustomerName</td>
+                    <td>@item.Problems</td>
+                    <td>@item.EngProblems</td>
+                    <td>@item.ReceiveDate.ToString("dd-MMM-yyyy")</td>
+                    <td>@item.RequsionDate.ToString("dd-MMM-yyy hh:mm tt")</td>
+                    <td>@item.PartsName</td>
+                    <td>@item.Remarks</td>
+                    <td>@item.UserName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

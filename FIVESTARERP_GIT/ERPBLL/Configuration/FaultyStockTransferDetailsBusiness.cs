@@ -111,7 +111,7 @@ namespace ERPBLL.Configuration
             _faultyStockTransferInfoRepository.Insert(info);
             if (_faultyStockTransferInfoRepository.Save())
             {
-                IsSuccess = _faultyStockDetailBusiness.SaveFaultyStockOut(faultyStock, userId, orgId, branchId);
+                IsSuccess = _faultyStockDetailBusiness.SaveFaultyStockOutForTransfer(faultyStock, userId, orgId, branchId);
             }
             return IsSuccess;
         }

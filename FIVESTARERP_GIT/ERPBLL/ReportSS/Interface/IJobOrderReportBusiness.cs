@@ -1,4 +1,5 @@
-﻿using ERPBO.FrontDesk.DomainModels;
+﻿using ERPBO.Configuration.DTOModels;
+using ERPBO.FrontDesk.DomainModels;
 using ERPBO.FrontDesk.DTOModels;
 using ERPBO.FrontDesk.ReportModels;
 using System;
@@ -14,5 +15,6 @@ namespace ERPBLL.ReportSS.Interface
         IEnumerable<JobOrderDTO> GetJobOrdersReport(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate);
         ServicesReportHead GetBranchInformation(long orgId, long branchId);
         JobOrderDTO GetReceiptForJobOrder(long jobOrderId, long orgId);
+        IEnumerable<ModelWiseProblemDTO> ModelWiseProblemReport(long orgId, long branchId, string fromDate, string toDate);
     }
 }

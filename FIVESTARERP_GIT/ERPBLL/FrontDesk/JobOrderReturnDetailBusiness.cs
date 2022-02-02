@@ -354,5 +354,10 @@ Where jod.OrganizationId={0} and jod.BranchId={1} Order By jod.EntryDate desc", 
         {
             return _jobOrderReturnDetailRepository.GetOneByOrg(r => r.JobOrderId == jobId && r.OrganizationId == orgId && r.BranchId == branchId);
         }
+
+        public IEnumerable<JobOrderReturnDetail> GetTransferInfoByCode(string transferCode, long orgId)
+        {
+            return _jobOrderReturnDetailRepository.GetAll(r => r.TransferCode == transferCode && r.OrganizationId == orgId).ToList();
+        }
     }
 }

@@ -90,10 +90,6 @@
                                                             <label class="col-form-label">Customer Type</label>
                                                             @Html.DropDownList("ddlCustomerType", (IEnumerable<SelectListItem>)ViewBag.ddlCustomerType, "--Search By CustomerType--", new { @class = "form-control form-control-sm ctrl-changed " })
                                                         </div>
-                                                        @*<div class="col-md-2" id="divCustomerName">
-                                                            <label class="col-form-label">Dealer Name</label>
-                                                            <input type="text" id="txtCustomerName" class="form-control form-control-sm" placeholder="Search By Dealer" name="customer" />
-                                                        </div>*@
                                                         <div class="col-md-2">
                                                             <label class="col-form-label">Dealer</label>
                                                             @Html.DropDownList("txtCustomerName", (IEnumerable<SelectListItem>)ViewBag.txtCustomerName, "--Search By Dealer--", new { @class = "form-control form-control-sm ctrl-changed select select2" })
@@ -134,6 +130,12 @@
                                                         <div class="col-md-1 hide" id="divbtnReport">
                                                             <label class="col-form-label" for="Download" style="visibility:hidden">Download</label>
                                                             <button type="submit" title="Download Dealer Receipt" class="btn btn-sm btn-outline-danger"><i class="fas fa-file-pdf"> </i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row text-sm">
+                                                        <div class="col-md-2">
+                                                            <label class="col-form-label">CN Number</label>
+                                                            <input type="text" id="txtCourierNumber" class="form-control form-control-sm" placeholder="Search By CN Number" name="cnNumber" />
                                                         </div>
                                                     </div>
                                                 </form>
@@ -411,6 +413,7 @@
         var txtIMEINo = $("#txtIMEINo");
         var txtIMEI2No = $("#txtIMEI2No");
         var txtReceiveId = $("#txtReceiveId");
+        var txtCourierNumber = $("#txtCourierNumber");
         //JobOrderInvoice
         var txtLabourCharge = $("#txtLabourCharge");
         var txtVat = $("#txtVat");
@@ -550,13 +553,16 @@
         ddlPdStatus.change(function () {
             LoadDataTable();
         })
+        txtCourierNumber.keyup(function () {
+            LoadDataTable();
+        })
 
         $(document).on('change', '.ctrl-changed', function () {
             LoadDataTable();
         })
         
         function LoadDataTable() {
-            var data = { flag: "search", modelId: TryParseInt(ddlModelName.val(), 0), jobOrderId: 0, mobileNo: $.trim(txtMobileNo.val()), status: ddlStateStatus.val(), jobCode: txtJobCode.val(), iMEI: txtIMEINo.val(), iMEI2: txtIMEI2No.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), customerType: ddlCustomerType.val(), jobType: ddlJobType.val(), customer: txtCustomerName.val().trim(), recId: txtReceiveId.val(), pdStatus: ddlPdStatus.val(), page: pageNo };
+            var data = { flag: "search", modelId: TryParseInt(ddlModelName.val(), 0), jobOrderId: 0, mobileNo: $.trim(txtMobileNo.val()), status: ddlStateStatus.val(), jobCode: txtJobCode.val(), iMEI: txtIMEINo.val(), iMEI2: txtIMEI2No.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), customerType: ddlCustomerType.val(), jobType: ddlJobType.val(), customer: txtCustomerName.val().trim(), recId: txtReceiveId.val(), pdStatus: ddlPdStatus.val(), courierNumber: txtCourierNumber.val(), page: pageNo };
 
             console.log(data);
             $.when(getReqWithData('html', 'GET', '/FrontDesk/GetJobOrders', data)).then(function (res, status) {

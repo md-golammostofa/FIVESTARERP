@@ -2435,45 +2435,68 @@ and jo.MultipleJobOrderCode='{0}' and jo.OrganizationId={1} and jo.BranchId={2}
 
             if (orgId > 0)
             {
-                param += string.Format(@"and job.OrganizationId={0}", orgId);
+                param += string.Format(@"and j.OrganizationId={0}", orgId);
             }
             if (branchId > 0)
             {
-                param += string.Format(@"and job.BranchId={0}", branchId);
+                param += string.Format(@"and j.BranchId={0}", branchId);
             }
             if (modelId != null && modelId > 0)
             {
-                param += string.Format(@"and job.DescriptionId ={0}", modelId);
+                param += string.Format(@"and j.DescriptionId ={0}", modelId);
             }
             if (!string.IsNullOrEmpty(status))
             {
-                param += string.Format(@"and job.QCStatus ='{0}'", status);
+                param += string.Format(@"and j.QCStatus ='{0}'", status);
             }
             if (!string.IsNullOrEmpty(jobCode))
             {
-                param += string.Format(@"and job.JobOrderCode Like '%{0}%'", jobCode);
+                param += string.Format(@"and j.JobOrderCode Like '%{0}%'", jobCode);
             }
 
             if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(job.QCPassFailDate as date) between '{0}' and '{1}'", fDate, tDate);
+                param += string.Format(@" and Cast(j.QCPassFailDate as date) between '{0}' and '{1}'", fDate, tDate);
             }
             else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(job.QCPassFailDate as date)='{0}'", fDate);
+                param += string.Format(@" and Cast(j.QCPassFailDate as date)='{0}'", fDate);
             }
             else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(job.QCPassFailDate as date)='{0}'", tDate);
+                param += string.Format(@" and Cast(j.QCPassFailDate as date)='{0}'", tDate);
             }
 
-            query = string.Format(@"Select job.JobOrderCode,m.ModelName,job.DescriptionId,job.QCStatus,job.QCRemarks From [FrontDesk].dbo.tblJobOrders job
-Left Join [Configuration].dbo.tblModelSS m on job.DescriptionId=m.ModelId
-Where 1=1{0} and (job.QCStatus='QC-Pass' OR job.QCStatus='QC-Fail')", Utility.ParamChecker(param));
+            query = string.Format(@"Select JobOrderCode,ModelName,IMEI,CustomerName,SUBSTRING(Problems,1,LEN(Problems)-1) 'Problems',SUBSTRING(EngProblems,1,LEN(EngProblems)-1) 'EngProblems'
+,SUBSTRING(PartsName,1,LEN(PartsName)-1) 'PartsName',QCStatus,StateStatus,TSName,QCName1,EntryDate,QCAssignDate,QCPassFailDate
+From(SELECT j.JobOrderCode,m.ModelName, j.IMEI,j.CustomerName,
+
+Cast((Select ProblemName+',' From [Configuration].dbo.tblClientProblems prob
+Inner Join tblJobOrderProblems jop on prob.ProblemId = jop.ProblemId
+Where jop.JobOrderId = j.JodOrderId 
+Order BY ProblemName For XML PATH(''))as nvarchar(MAX)) 'Problems',
+
+Cast((Select FaultName+',' From [Configuration].dbo.tblFault fa
+Inner Join tblJobOrderFault jof on fa.FaultId = jof.FaultId
+Where jof.JobOrderId = j.JodOrderId
+Order BY FaultName For XML PATH('')) as nvarchar(MAX))  'EngProblems',
+
+Cast((Select  (parts.MobilePartName+' (Qty-' + Cast(tstock.UsedQty as nvarchar(20)))+')'+',' from [FrontDesk].dbo.tblTechnicalServicesStock tstock
+inner join [Configuration].dbo.tblMobileParts parts
+on tstock.PartsId=parts.MobilePartId
+Where tstock.UsedQty>0 and tstock.JobOrderId = j.JodOrderId
+Order BY (parts.MobilePartName+'#' + Cast(tstock.UsedQty as nvarchar(20))) For XML PATH('')) as nvarchar(MAX)) 'PartsName',j.QCStatus,j.StateStatus,ut.UserName'TSName',uq.UserName'QCName1',j.EntryDate,j.QCAssignDate,j.QCPassFailDate
+
+FROM tblJobOrders j
+
+Left Join [Configuration].dbo.tblModelSS m on j.DescriptionId=m.ModelId
+Left Join [ControlPanel].dbo.tblApplicationUsers ut on j.TSId=ut.UserId
+Left Join [ControlPanel].dbo.tblApplicationUsers uq on j.QCName=uq.UserId
+Where 1=1{0} and (QCStatus='QC-Pass' OR QCStatus='QC-Fail')) tbl Order By QCPassFailDate desc", Utility.ParamChecker(param));
             return query;
         }
 
@@ -3111,6 +3134,184 @@ Left Join [Configuration].dbo.tblColorSS co on jo.CSColor=co.ColorId
 Left Join [ControlPanel].dbo.tblApplicationUsers usr on jo.QCName=usr.UserId
 
 Where jo.StateStatus='Delivery-Done' and jo.IMEI='{0}' and jo.OrganizationId={1}) tbl", imei, orgId)).ToList();
+        }
+
+        public IEnumerable<JobOrderDTO> GetBounceReport(long orgId, long branchId,string imei)
+        {
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(QueryForBounceReport(orgId, branchId, imei)).ToList();
+        }
+        private string QueryForBounceReport(long orgId, long branchId,string imei)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+            if (orgId > 0)
+            {
+                param += string.Format(@"and j.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@"and j.BranchId={0}", branchId);
+            }
+            if (!string.IsNullOrEmpty(imei))
+            {
+                param += string.Format(@"and j.IMEI Like '%{0}%'", imei);
+            }
+
+            query = string.Format(@"Select JobOrderCode,ModelName,IMEI,CustomerName,SUBSTRING(Problems,1,LEN(Problems)-1) 'Problems',SUBSTRING(EngProblems,1,LEN(EngProblems)-1) 'EngProblems'
+,SUBSTRING(PartsName,1,LEN(PartsName)-1) 'PartsName',StateStatus,TSName,QCName1,EntryDate 
+From(SELECT j.JobOrderCode,m.ModelName, j.IMEI,j.CustomerName,
+
+Cast((Select ProblemName+',' From [Configuration].dbo.tblClientProblems prob
+Inner Join tblJobOrderProblems jop on prob.ProblemId = jop.ProblemId
+Where jop.JobOrderId = j.JodOrderId 
+Order BY ProblemName For XML PATH(''))as nvarchar(MAX)) 'Problems',
+
+Cast((Select FaultName+',' From [Configuration].dbo.tblFault fa
+Inner Join tblJobOrderFault jof on fa.FaultId = jof.FaultId
+Where jof.JobOrderId = j.JodOrderId
+Order BY FaultName For XML PATH('')) as nvarchar(MAX))  'EngProblems',
+
+Cast((Select  (parts.MobilePartName+' (Qty-' + Cast(tstock.UsedQty as nvarchar(20)))+')'+',' from [FrontDesk].dbo.tblTechnicalServicesStock tstock
+inner join [Configuration].dbo.tblMobileParts parts
+on tstock.PartsId=parts.MobilePartId
+Where tstock.UsedQty>0 and tstock.JobOrderId = j.JodOrderId
+Order BY (parts.MobilePartName+'#' + Cast(tstock.UsedQty as nvarchar(20))) For XML PATH('')) as nvarchar(MAX)) 'PartsName',j.StateStatus,ut.UserName'TSName',uq.UserName'QCName1',j.EntryDate
+
+FROM tblJobOrders j
+JOIN ( SELECT IMEI,BranchId FROM tblJobOrders s GROUP BY s.IMEI,s.BranchId HAVING COUNT(IMEI) > 1) d
+ON d.IMEI = j.IMEI and d.BranchId=j.BranchId
+
+Left Join [Configuration].dbo.tblModelSS m on j.DescriptionId=m.ModelId
+Left Join [ControlPanel].dbo.tblApplicationUsers ut on j.TSId=ut.UserId
+Left Join [ControlPanel].dbo.tblApplicationUsers uq on j.QCName=uq.UserId
+Where 1=1{0}) tbl Order By IMEI desc", Utility.ParamChecker(param));
+
+            return query;
+        }
+
+        public IEnumerable<JobOrderDTO> DailyQCPassFailReports(string jobCode, long? modelId, string status, long orgId, long branchId, string fromDate, string toDate, long userId)
+        {
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(QueryForDailyQCPassFailReports(jobCode, modelId, status, orgId, branchId, fromDate, toDate, userId)).ToList();
+        }
+        private string QueryForDailyQCPassFailReports(string jobCode, long? modelId, string status, long orgId, long branchId, string fromDate, string toDate, long userId)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+
+            if (orgId > 0)
+            {
+                param += string.Format(@"and j.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@"and j.BranchId={0}", branchId);
+            }
+            if (userId > 0)
+            {
+                param += string.Format(@"and j.QCName={0}", userId);
+            }
+            if (modelId != null && modelId > 0)
+            {
+                param += string.Format(@"and j.DescriptionId ={0}", modelId);
+            }
+            if (!string.IsNullOrEmpty(status))
+            {
+                param += string.Format(@"and j.QCStatus ='{0}'", status);
+            }
+            if (!string.IsNullOrEmpty(jobCode))
+            {
+                param += string.Format(@"and j.JobOrderCode Like '%{0}%'", jobCode);
+            }
+
+            if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(j.QCPassFailDate as date) between '{0}' and '{1}'", fDate, tDate);
+            }
+            else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(j.QCPassFailDate as date)='{0}'", fDate);
+            }
+            else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(j.QCPassFailDate as date)='{0}'", tDate);
+            }
+
+            query = string.Format(@"Select JobOrderCode,ModelName,IMEI,CustomerName,SUBSTRING(Problems,1,LEN(Problems)-1) 'Problems',SUBSTRING(EngProblems,1,LEN(EngProblems)-1) 'EngProblems'
+,SUBSTRING(PartsName,1,LEN(PartsName)-1) 'PartsName',QCStatus,StateStatus,TSName,QCName1,EntryDate,QCAssignDate,QCPassFailDate,QCRemarks,QCName
+From(SELECT j.JobOrderCode,m.ModelName, j.IMEI,j.CustomerName,
+
+Cast((Select ProblemName+',' From [Configuration].dbo.tblClientProblems prob
+Inner Join tblJobOrderProblems jop on prob.ProblemId = jop.ProblemId
+Where jop.JobOrderId = j.JodOrderId 
+Order BY ProblemName For XML PATH(''))as nvarchar(MAX)) 'Problems',
+
+Cast((Select FaultName+',' From [Configuration].dbo.tblFault fa
+Inner Join tblJobOrderFault jof on fa.FaultId = jof.FaultId
+Where jof.JobOrderId = j.JodOrderId
+Order BY FaultName For XML PATH('')) as nvarchar(MAX))  'EngProblems',
+
+Cast((Select  (parts.MobilePartName+' (Qty-' + Cast(tstock.UsedQty as nvarchar(20)))+')'+',' from [FrontDesk].dbo.tblTechnicalServicesStock tstock
+inner join [Configuration].dbo.tblMobileParts parts
+on tstock.PartsId=parts.MobilePartId
+Where tstock.UsedQty>0 and tstock.JobOrderId = j.JodOrderId
+Order BY (parts.MobilePartName+'#' + Cast(tstock.UsedQty as nvarchar(20))) For XML PATH('')) as nvarchar(MAX)) 'PartsName',j.QCStatus,j.StateStatus,ut.UserName'TSName',uq.UserName'QCName1',j.EntryDate,
+j.QCAssignDate,j.QCPassFailDate,j.QCRemarks,j.QCName
+
+FROM tblJobOrders j
+
+Left Join [Configuration].dbo.tblModelSS m on j.DescriptionId=m.ModelId
+Left Join [ControlPanel].dbo.tblApplicationUsers ut on j.TSId=ut.UserId
+Left Join [ControlPanel].dbo.tblApplicationUsers uq on j.QCName=uq.UserId
+Where 1=1{0} and (QCStatus='QC-Pass' OR QCStatus='QC-Fail') and Cast(j.QCPassFailDate as Date)=Cast(GETDATE() as Date)) tbl Order By QCPassFailDate desc", Utility.ParamChecker(param));
+            return query;
+        }
+
+        public IEnumerable<JobOrderDTO> GetJobOrderAllBranch(long orgId, long? branchId, long? modelId, string fromDate, string toDate)
+        {
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderDTO>(QueryForJobOrderAllBranch(orgId, branchId, modelId, fromDate, toDate)).ToList();
+        }
+        private string QueryForJobOrderAllBranch(long orgId, long? branchId, long? modelId, string fromDate, string toDate)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+            if (orgId > 0)
+            {
+                param += string.Format(@"and jo.OrganizationId={0}", orgId);
+            }
+            if (branchId != null && branchId > 0) 
+            {
+                param += string.Format(@"and jo.BranchId={0}", branchId);
+            }
+            if (modelId != null && modelId > 0) 
+            {
+                param += string.Format(@"and jo.DescriptionId={0}", modelId);
+            }
+            if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(jo.EntryDate as date) between '{0}' and '{1}'", fDate, tDate);
+            }
+            else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(jo.EntryDate as date)='{0}'", fDate);
+            }
+            else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(jo.EntryDate as date)='{0}'", tDate);
+            }
+
+            query = string.Format(@"Select jo.JodOrderId,jo.JobOrderCode,jo.CustomerName,jo.DescriptionId,m.ModelName,jo.IMEI
+,jo.StateStatus,jo.JobOrderType,jo.Type,jo.TsRepairStatus,jo.EntryDate,jo.CustomerType From tblJobOrders jo
+Left Join [Configuration].dbo.tblModelSS m on jo.DescriptionId=m.ModelId
+Where 1=1{0} Order By jo.EntryDate desc", Utility.ParamChecker(param));
+            return query;
         }
     }
 }
