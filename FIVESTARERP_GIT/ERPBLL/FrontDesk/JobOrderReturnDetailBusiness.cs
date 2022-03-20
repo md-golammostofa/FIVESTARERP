@@ -342,12 +342,48 @@ where JobStatus='Repair-Done' and 1=1 {0}", Utility.ParamChecker(param));
             return query;
         }
 
-        public IEnumerable<JobOrderReturnDetailDTO> JobReturnList(long orgId, long branchId)
+        public IEnumerable<JobOrderReturnDetailDTO> JobReturnList(long orgId, long branchId, string imei, string jobCode, long? branch,long? modelId)
         {
-            var data = this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderReturnDetailDTO>(string.Format(@"Select TransferCode,JobOrderCode,TransferStatus,BranchName From tblJobOrderReturnDetails jod
-Left Join [ControlPanel].dbo.tblBranch b on jod.ToBranch=b.BranchId
-Where jod.OrganizationId={0} and jod.BranchId={1} Order By jod.EntryDate desc", orgId, branchId)).ToList();
+            var data = this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderReturnDetailDTO>(QueryForJobReturnList(orgId,branchId,imei,jobCode,branch,modelId)).ToList();
             return data;
+        }
+        private string QueryForJobReturnList(long orgId,long branchId,string imei,string jobCode,long? branch,long? modelId)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+            if (orgId > 0)
+            {
+                param += string.Format(@"and jod.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@"and jod.BranchId={0}", branchId);
+            }
+            if (!string.IsNullOrEmpty(imei))
+            {
+                param += string.Format(@"and j.IMEI Like '%{0}%'", imei);
+            }
+            if (!string.IsNullOrEmpty(jobCode))
+            {
+                param += string.Format(@"and jod.JobOrderCode Like '%{0}%'", jobCode);
+            }
+            if(branch !=null && branch > 0)
+            {
+                param += string.Format(@"and jod.ToBranch={0}",branch);
+            }
+            if (modelId != null && modelId > 0)
+            {
+                param += string.Format(@"and j.DescriptionId={0}", modelId);
+            }
+
+            query = string.Format(@"Select jod.TransferCode,jod.JobOrderCode,jod.TransferStatus,jod.ToBranch,
+BranchName,j.IMEI,j.DescriptionId,m.ModelName
+From tblJobOrderReturnDetails jod
+Left Join [ControlPanel].dbo.tblBranch b on jod.ToBranch=b.BranchId
+Left Join tblJobOrders j on jod.JobOrderId=j.JodOrderId
+Left Join [Configuration].dbo.tblModelSS m on j.DescriptionId=m.ModelId
+Where 1=1{0} Order By jod.EntryDate desc", Utility.ParamChecker(param));
+            return query;
         }
 
         public JobOrderReturnDetail GetJobByJobId(long jobId, long orgId, long branchId)

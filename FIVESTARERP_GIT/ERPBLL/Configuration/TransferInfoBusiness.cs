@@ -32,7 +32,7 @@ namespace ERPBLL.Configuration
 
         public IEnumerable<TransferInfoDTO> GetAllReceiveList(long? branch, string status, long orgId, long branchId, string fromDate, string toDate)
         {
-            return _configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(QueryForAllReceiveList(branch,status,orgId,branchId,fromDate,toDate)).ToList();
+            return _configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(QueryForAllReceiveList(branch, status, orgId, branchId, fromDate, toDate)).ToList();
         }
         private string QueryForAllReceiveList(long? branch, string status, long orgId, long branchId, string fromDate, string toDate)
         {
@@ -89,7 +89,7 @@ Left Join [ControlPanel].dbo.tblBranch b on ti.BranchId=b.BranchId Where 1=1{0} 
 
         public IEnumerable<TransferInfoDTO> GetStockTransferForReport(long infoId, long orgId, long branchId)
         {
-            var data= this._configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(string.Format(@"Select ti.TransferInfoId,ti.TransferCode,ti.StateStatus,b.BranchName'RequestBranch',bh.BranchName'IssueBranch',
+            var data = this._configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(string.Format(@"Select ti.TransferInfoId,ti.TransferCode,ti.StateStatus,b.BranchName'RequestBranch',bh.BranchName'IssueBranch',
 u.UserName'RequestBy',ti.EntryDate,ti.IssueDate,ti.ReceivedDate From tblTransferInfo ti
 Left Join [ControlPanel].dbo.tblBranch b on ti.BranchId=b.BranchId
 Left join [ControlPanel].dbo.tblBranch bh on ti.BranchTo=bh.BranchId
@@ -113,22 +113,22 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1} and ti.BranchTo={2} ", inf
             return this._configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(string.Format(@"Select ti.DescriptionId,ti.BranchId,ti.TransferInfoId,ti.TransferCode,ti.StateStatus,m.ModelName,b.BranchName From tblTransferInfo ti
 Left Join tblModelSS m on ti.DescriptionId=m.ModelId
 Left Join [ControlPanel].dbo.tblBranch b on ti.BranchId=b.BranchId
-Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefault();
+Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id, orgId)).FirstOrDefault();
         }
 
         public bool ReceiveStockAndUpdateStatus(List<TransferDetailDTO> details, long userId, long orgId, long branchId)
         {
             bool IsSuccess = false;
             List<MobilePartStockDetailDTO> receiveStockInItems = new List<MobilePartStockDetailDTO>();
-            var reqInfo = GetStockTransferInfoById(details.FirstOrDefault().TransferInfoId, orgId,branchId);
-            if(reqInfo != null)
+            var reqInfo = GetStockTransferInfoById(details.FirstOrDefault().TransferInfoId, orgId, branchId);
+            if (reqInfo != null)
             {
                 reqInfo.StateStatus = "Accepted";
                 reqInfo.ReceivedDate = DateTime.Now;
                 reqInfo.UpUserId = userId;
             }
             transferInfoRepository.Update(reqInfo);
-            foreach(var item in details)
+            foreach (var item in details)
             {
                 var reqDetails = _transferDetailBusiness.GetOneByOneDetailId(item.TransferDetailId, orgId, branchId);
                 MobilePartStockDetailDTO stockInItem = new MobilePartStockDetailDTO
@@ -156,7 +156,7 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
             return IsSuccess;
         }
 
-        public bool SaveTransferInfoStateStatus(long transferId,long swarehouse, string status, long userId, long orgId, long branchId)
+        public bool SaveTransferInfoStateStatus(long transferId, long swarehouse, string status, long userId, long orgId, long branchId)
         {
             bool IsSuccess = false;
             var info = GetStockTransferInfoById(transferId, orgId);
@@ -169,7 +169,7 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
                 transferInfoRepository.Update(info);
                 if (transferInfoRepository.Save())
                 {
-                    var details = _transferDetailBusiness.GetAllTransferDetailByInfoId(transferId,orgId);
+                    var details = _transferDetailBusiness.GetAllTransferDetailByInfoId(transferId, orgId);
                     if (details.Count() > 0)
                     {
                         List<MobilePartStockDetailDTO> stockDetails = new List<MobilePartStockDetailDTO>();
@@ -184,13 +184,13 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
                                 MobilePartId = item.PartsId,
                                 StockStatus = StockStatus.StockIn,
                                 Quantity = item.Quantity,
-                                CostPrice=item.CostPrice,
-                                SellPrice=item.SellPrice,
+                                CostPrice = item.CostPrice,
+                                SellPrice = item.SellPrice,
                                 EUserId = userId,
                                 EntryDate = DateTime.Now,
                                 OrganizationId = orgId,
                                 ReferrenceNumber = info.TransferCode,
-                                Remarks = "Stock In By Another Branch ("+info.TransferCode+")",
+                                Remarks = "Stock In By Another Branch (" + info.TransferCode + ")",
                             };
                             stockDetails.Add(detailItem);
                         }
@@ -231,8 +231,8 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
                     //SellPrice=item.SellPrice,
                     Quantity = item.Quantity,
                     Remarks = item.Remarks,
-                    BranchTo=info.BranchTo,
-                    BranchId= branchId,
+                    BranchTo = info.BranchTo,
+                    BranchId = branchId,
                     OrganizationId = orgId,
                     EUserId = userId,
                     EntryDate = DateTime.Now,
@@ -275,17 +275,17 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
             List<TransferDetail> detailslist = new List<TransferDetail>();
             List<MobilePartStockDetailDTO> TransferStockOutItems = new List<MobilePartStockDetailDTO>();
             var reqInfo = GetStockTransferInfoById(dto.TransferInfoId, orgId);
-            if(reqInfo != null)
+            if (reqInfo != null)
             {
                 reqInfo.StateStatus = dto.StateStatus;
                 reqInfo.IssueDate = DateTime.Now;
                 reqInfo.UpUserId = userId;
                 transferInfoRepository.Update(reqInfo);
-                
+
             }
-            foreach(var item in dto.TransferDetails)
+            foreach (var item in dto.TransferDetails)
             {
-                if(item.IssueQty != 0)
+                if (item.IssueQty != 0)
                 {
                     var partsPrice = _mobilePartStockInfoBusiness.GetPriceByModel(item.DescriptionId.Value, item.PartsId.Value, orgId, branchId);
                     var reqDetails = _transferDetailBusiness.GetOneByDetailId(item.TransferDetailId, orgId, branchId);
@@ -324,11 +324,11 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
             return IsSuccess;
         }
 
-        public IEnumerable<TransferInfoDTO> BranchRequsitionDaysOver(long orgId, long branchId,string fromDate,string toDate)
+        public IEnumerable<TransferInfoDTO> BranchRequsitionDaysOver(long orgId, long branchId, string fromDate, string toDate)
         {
-            return _configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(QueryForBranchRequsitinDaysOver(orgId, branchId,fromDate,toDate)).ToList();
+            return _configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(QueryForBranchRequsitinDaysOver(orgId, branchId, fromDate, toDate)).ToList();
         }
-        private string QueryForBranchRequsitinDaysOver(long orgId,long branchId,string fromDate,string toDate)
+        private string QueryForBranchRequsitinDaysOver(long orgId, long branchId, string fromDate, string toDate)
         {
             string query = string.Empty;
             string param = string.Empty;
@@ -360,6 +360,12 @@ Where ti.TransferInfoId={0} and ti.OrganizationId={1}", id,orgId)).FirstOrDefaul
 ti.EntryDate,ti.IssueDate,ti.ReceivedDate From tblTransferInfo ti
 Left Join [ControlPanel].dbo.tblBranch b on ti.BranchId=b.BranchId Where 1=1{0} and ti.StateStatus='Pending' and DATEDIFF(DAY,Cast(ti.EntryDate as Date),Cast(GETDATE() as Date)) >3 Order By ti.EntryDate desc", Utility.ParamChecker(param));
             return query;
+        }
+
+        public IEnumerable<TransferInfoDTO> GetPartsRequsitionInfoData(long orgId, long branchId)
+        {
+            return this._configurationDb.Db.Database.SqlQuery<TransferInfoDTO>(string.Format(@"Select * From tblTransferInfo
+Where OrganizationId={0} and BranchId={1}", orgId, branchId)).ToList();
         }
     }
 }

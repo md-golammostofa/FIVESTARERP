@@ -53,11 +53,11 @@ Where OrganizationId={0} and BranchId={1} and TSId={2} and TsRepairStatus='CALL 
             return _jobOrderTSRepository.GetOneByOrg(ts => ts.JodOrderId == joborderId && ts.OrganizationId == orgId && ts.BranchId == branchId && ts.IsActive == true);
         }
 
-        public IEnumerable<JobOrderTSDTO> JobSignInAndOut(long? tsId, string jobCode, long orgId, long branchId, string fromDate, string toDate)
+        public IEnumerable<JobOrderTSDTO> JobSignInAndOut(long? tsId, string jobCode, long orgId, long branchId, string fromDate, string toDate, long? modelId, string imei)
         {
-            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderTSDTO>(QueryForJobSignInAndOut(tsId,jobCode,orgId,branchId,fromDate,toDate)).ToList();
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderTSDTO>(QueryForJobSignInAndOut(tsId,jobCode,orgId,branchId,fromDate,toDate,modelId,imei)).ToList();
         }
-        private string QueryForJobSignInAndOut(long? tsId, string jobCode, long orgId, long branchId, string fromDate, string toDate)
+        private string QueryForJobSignInAndOut(long? tsId, string jobCode, long orgId, long branchId, string fromDate, string toDate,long? modelId,string imei)
         {
             string query = string.Empty;
             string param = string.Empty;
@@ -77,6 +77,14 @@ Where OrganizationId={0} and BranchId={1} and TSId={2} and TsRepairStatus='CALL 
             {
                 param += string.Format(@"and ts.JobOrderCode Like '%{0}%'", jobCode);
             }
+            if (modelId != null && modelId > 0)
+            {
+                param += string.Format(@"and jo.DescriptionId ={0}", modelId);
+            }
+            if (!string.IsNullOrEmpty(imei))
+            {
+                param += string.Format(@"and jo.IMEI Like '%{0}%'", imei);
+            }
             if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
@@ -94,10 +102,13 @@ Where OrganizationId={0} and BranchId={1} and TSId={2} and TsRepairStatus='CALL 
                 param += string.Format(@" and Cast(ts.EntryDate as date)='{0}'", tDate);
             }
 
-            query = string.Format(@"select JobOrderCode,TSId,StateStatus,Remarks,apu.UserName'TSName',ts.EntryDate,ts.AssignDate,ts.SignOutDate 
-                from tblJobOrderTS ts
-                left join [ControlPanel].dbo.tblApplicationUsers apu on ts.TSId=apu.UserId
-                where 1=1{0} order by ts.EntryDate desc", Utility.ParamChecker(param));
+            query = string.Format(@"select ts.JobOrderCode,ts.TSId,ts.StateStatus,ts.Remarks,jo.DescriptionId,m.ModelName,
+jo.IMEI,apu.UserName'TSName',ts.EntryDate,ts.AssignDate,ts.SignOutDate 
+from tblJobOrderTS ts
+left join [ControlPanel].dbo.tblApplicationUsers apu on ts.TSId=apu.UserId
+Left Join tblJobOrders jo on ts.JodOrderId=jo.JodOrderId
+Left Join [Configuration].dbo.tblModelSS m on jo.DescriptionId=m.ModelId
+where 1=1{0} order by ts.EntryDate desc", Utility.ParamChecker(param));
             return query;
         }
 

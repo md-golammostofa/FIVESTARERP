@@ -141,7 +141,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>PrintDate: </Value>
+                <Value>Print Date: </Value>
                 <Style>
                   <FontFamily>times New Roman</FontFamily>
                 </Style>
@@ -1164,7 +1164,7 @@
                   </TextRun>
                   <TextRun>
                     <Label>Date</Label>
-                    <Value>=Globals!ExecutionTime</Value>
+                    <Value>=First(Fields!EntryDate.Value, "DealerReceipt")</Value>
                     <Style>
                       <FontFamily>times New Roman</FontFamily>
                       <Format>dd MMM yyyy</Format>

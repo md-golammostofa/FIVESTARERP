@@ -35,6 +35,14 @@ namespace ERPBLL.ControlPanel
             return roleRepository.GetOneByOrg(role => role.RoleId == id);
         }
 
+        public IEnumerable<TechnicalServiceByRoleDTO> GetRoleByQCId(string roleName, long orgId, long BranchId)
+        {
+            return _controlPanelUnitOfWork.Db.Database.SqlQuery<TechnicalServiceByRoleDTO>(string.Format(@"Select us.UserId,us.UserName,rl.RoleId,rl.RoleName,us.BranchId From [ControlPanel].dbo.tblApplicationUsers us
+        Inner Join [ControlPanel].dbo.tblRoles rl on us.OrganizationId = rl.OrganizationId and us.RoleId = rl.RoleId
+        Where 1=1 and us.OrganizationId= {0} and us.BranchId={1}
+        and rl.RoleName='QC'", orgId, BranchId)).ToList();
+        }
+
         public IEnumerable<TechnicalServiceByRoleDTO> GetRoleByTechnicalServicesId(string roleName, long orgId, long BranchId)
         {
             return _controlPanelUnitOfWork.Db.Database.SqlQuery<TechnicalServiceByRoleDTO>(string.Format(@"Select us.UserId,us.UserName,rl.RoleId,rl.RoleName,us.BranchId From [ControlPanel].dbo.tblApplicationUsers us

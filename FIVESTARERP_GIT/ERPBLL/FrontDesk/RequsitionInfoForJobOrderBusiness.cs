@@ -65,11 +65,11 @@ Where Cast(GETDATE() as date) = Cast(EntryDate as date) and  OrganizationId={0} 
             return requsitionInfoForJobOrderRepository.GetOneByOrg(info => info.RequsitionInfoForJobOrderId == ReqId && info.OrganizationId == orgId && info.BranchId == branchId);
         }
 
-        public IEnumerable<RequsitionInfoForJobOrderDTO> GetRequsitionInfoData(string reqCode, long? warehouseId, long? tsId, string status, string fromDate, string toDate, long orgId, long branchId,string jobCode)
+        public IEnumerable<RequsitionInfoForJobOrderDTO> GetRequsitionInfoData(string reqCode, long? warehouseId, long? tsId, string status, string fromDate, string toDate, long orgId, long branchId,string jobCode, string imei, long? modelId)
         {
-            return _frontDeskUnitOfWork.Db.Database.SqlQuery<RequsitionInfoForJobOrderDTO>(QueryForRequsitionInfoData( reqCode,   warehouseId,   tsId,  status,  fromDate,  toDate,  orgId,  branchId,jobCode)).ToList();
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<RequsitionInfoForJobOrderDTO>(QueryForRequsitionInfoData( reqCode,   warehouseId,   tsId,  status,  fromDate,  toDate,  orgId,  branchId,jobCode,imei,modelId)).ToList();
         }
-        private string QueryForRequsitionInfoData(string reqCode, long? warehouseId, long? tsId, string status, string fromDate, string toDate, long orgId, long branchId,string jobCode)
+        private string QueryForRequsitionInfoData(string reqCode, long? warehouseId, long? tsId, string status, string fromDate, string toDate, long orgId, long branchId,string jobCode,string imei,long? modelId)
         {
             string query = string.Empty;
             string param = string.Empty;
@@ -101,6 +101,14 @@ Where Cast(GETDATE() as date) = Cast(EntryDate as date) and  OrganizationId={0} 
             {
                 param += string.Format(@"and j.JobOrderCode Like '%{0}%'", jobCode);
             }
+            if (!string.IsNullOrEmpty(imei))
+            {
+                param += string.Format(@"and j.IMEI Like '%{0}%'", imei);
+            }
+            if (modelId != null && modelId > 0)
+            {
+                param += string.Format(@"and j.DescriptionId ={0}", modelId);
+            }
             if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
@@ -117,13 +125,14 @@ Where Cast(GETDATE() as date) = Cast(EntryDate as date) and  OrganizationId={0} 
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
                 param += string.Format(@" and Cast(q.EntryDate as date)='{0}'", tDate);
             }
-            query = string.Format(@"Select RequsitionInfoForJobOrderId,RequsitionCode,SWarehouseId,q.StateStatus,
+            query = string.Format(@"Select RequsitionInfoForJobOrderId,RequsitionCode,SWarehouseId,q.StateStatus,j.IMEI,j.DescriptionId,m.ModelName,
 JobOrderId,q.JobOrderCode,q.Remarks,q.BranchId,q.OrganizationId,q.EUserId,j.IsTransfer,j.JobOrderCode 'JobCode',
 app.UserName'Requestby',
 q.EntryDate,UserBranchId From tblRequsitionInfoForJobOrders q
 inner join tblJobOrders j on q.JobOrderId=j.JodOrderId 
+Left Join [Configuration].dbo.tblModelSS m on j.DescriptionId=m.ModelId
 inner join[ControlPanel].dbo.tblApplicationUsers app on q.OrganizationId = app.OrganizationId and q.EUserId= app.UserId 
-where 1=1 {0}
+where 1=1{0}
 order by EntryDate desc
 ", Utility.ParamChecker(param));
             return query;

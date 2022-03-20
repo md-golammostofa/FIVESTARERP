@@ -62,51 +62,60 @@ namespace ERPBLL.FrontDesk
             return _invoiceInfoRepository.GetOneByOrg(inv => inv.JobOrderId == jobOrderId && inv.OrganizationId == orgId && inv.BranchId == branchId);
         }
 
-        public IEnumerable<InvoiceInfoDTO> GetSellsReport(long orgId, long branchId, string fromDate, string toDate,string status,string invoice)
+        public IEnumerable<InvoiceInfoDTO> GetSellsReport(long orgId, long branchId, string fromDate, string toDate,string status,string invoice,string jobCode,string imei)
         {
-            return _frontDeskUnitOfWork.Db.Database.SqlQuery<InvoiceInfoDTO>(QueryForSells( orgId, branchId, fromDate, toDate,status,invoice)).ToList();
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<InvoiceInfoDTO>(QueryForSells( orgId, branchId, fromDate, toDate,status,invoice,jobCode,imei)).ToList();
         }
-        private string QueryForSells(long orgId, long branchId, string fromDate, string toDate,string status,string invoice)
+        private string QueryForSells(long orgId, long branchId, string fromDate, string toDate,string status,string invoice, string jobCode, string imei)
         {
             string query = string.Empty;
             string param = string.Empty;
             
             if (orgId > 0)
             {
-                param += string.Format(@"and OrganizationId={0}", orgId);
+                param += string.Format(@"and inv.OrganizationId={0}", orgId);
             }
             if (branchId > 0)
             {
-                param += string.Format(@"and BranchId={0}", branchId);
+                param += string.Format(@"and inv.BranchId={0}", branchId);
             }
             if (!string.IsNullOrEmpty(status))
             {
-                param += string.Format(@"and InvoiceType ='{0}'", status);
+                param += string.Format(@"and inv.InvoiceType ='{0}'", status);
             }
             if (!string.IsNullOrEmpty(invoice))
             {
-                param += string.Format(@"and InvoiceCode Like '%{0}%'", invoice);
+                param += string.Format(@"and inv.InvoiceCode Like '%{0}%'", invoice);
+            }
+            if (!string.IsNullOrEmpty(jobCode))
+            {
+                param += string.Format(@"and inv.JobOrderCode Like '%{0}%'", jobCode);
+            }
+            if (!string.IsNullOrEmpty(imei))
+            {
+                param += string.Format(@"and jo.IMEI Like '%{0}%'", imei);
             }
             if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(EntryDate as date) between '{0}' and '{1}'", fDate, tDate);
+                param += string.Format(@" and Cast(inv.EntryDate as date) between '{0}' and '{1}'", fDate, tDate);
             }
             else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(EntryDate as date)='{0}'", fDate);
+                param += string.Format(@" and Cast(inv.EntryDate as date)='{0}'", fDate);
             }
             else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
-                param += string.Format(@" and Cast(EntryDate as date)='{0}'", tDate);
+                param += string.Format(@" and Cast(inv.EntryDate as date)='{0}'", tDate);
             }
-            query = string.Format(@"select InvoiceInfoId,InvoiceCode,JobOrderCode,CustomerName,TotalSPAmount,InvoiceType,
-LabourCharge,VAT,Tax,Discount,NetAmount,EntryDate,
-OrganizationId,BranchId,(select top 1 sum(NetAmount)'Total' from tblInvoiceInfo)'Total' 
-from tblInvoiceInfo
+            query = string.Format(@"select inv.InvoiceInfoId,inv.InvoiceCode,inv.JobOrderCode,inv.CustomerName,inv.TotalSPAmount,inv.InvoiceType,
+inv.LabourCharge,inv.VAT,inv.Tax,inv.Discount,inv.NetAmount,inv.EntryDate,
+inv.OrganizationId,inv.BranchId,jo.IMEI,(select top 1 sum(NetAmount)'Total' from tblInvoiceInfo)'Total' 
+from tblInvoiceInfo inv
+Left Join tblJobOrders jo on inv.JobOrderId=jo.JodOrderId
 where 1=1{0} order by EntryDate desc", Utility.ParamChecker(param));
             return query;
         }
@@ -547,14 +556,14 @@ from tblInvoiceInfo
 where OrganizationId={0} and BranchId={1} order by EntryDate desc", orgId, branchId)).ToList();
         }
 
-        public IEnumerable<InvoiceInfoDTO> GetInvoiceInfoReport(long infoId, long orgId, long branchId)
+        public IEnumerable<InvoiceInfoDTO> GetInvoiceInfoReport(long infoId, long orgId)
         {
             var data = _frontDeskUnitOfWork.Db.Database.SqlQuery<InvoiceInfoDTO>(string.Format(@"Select inv.InvoiceCode,inv.JobOrderCode,inv.CustomerName,inv.CustomerPhone
 ,inv.TotalSPAmount,inv.LabourCharge,inv.VAT,inv.Tax,inv.Discount
 ,inv.NetAmount,inv.EntryDate,jo.IMEI,m.ModelName From tblInvoiceInfo inv
 Left Join tblJobOrders jo on inv.JobOrderId=jo.JodOrderId
 Left Join [Configuration].dbo.tblModelSS m on jo.DescriptionId=m.ModelId
-Where inv.InvoiceInfoId={0} and inv.OrganizationId={1} and inv.BranchId={2}", infoId, orgId, branchId)).ToList();
+Where inv.InvoiceInfoId={0} and inv.OrganizationId={1}", infoId, orgId)).ToList();
             return data;
         }
     }

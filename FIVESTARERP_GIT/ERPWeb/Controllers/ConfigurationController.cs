@@ -60,6 +60,10 @@ namespace ERPWeb.Controllers
         private readonly IFaultyStockRepairedDetailsBusiness _faultyStockRepairedDetailsBusiness;
         private readonly IGoodToFaultyTransferInfoBusiness _goodToFaultyTransferInfoBusiness;
         private readonly IGoodToFaultyTransferDetailsBusiness _goodToFaultyTransferDetalisBusiness;
+        private readonly IPartsTransferHToCInfoBusiness _partsTransferHToCInfoBusiness;
+        private readonly IPartsTransferHToCDetailsBusiness _partsTransferHToCDetailsBusiness;
+        private readonly ITransferFaultyToDustInfoBusiness _transferFaultyToDustInfoBusiness;
+        private readonly ITransferFaultyToDustDetailsBusiness _transferFaultyToDustDetailsBusiness;
 
         // Inventory //
         private readonly IDescriptionBusiness _descriptionBusiness;
@@ -71,7 +75,7 @@ namespace ERPWeb.Controllers
         //Front Desk
         private readonly IFaultyStockAssignTSBusiness _faultyStockAssignTSBusiness;
 
-        public ConfigurationController(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, ICustomerServiceBusiness customerServiceBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, IBranchBusiness2 branchBusiness, ITransferInfoBusiness transferInfoBusiness, ITransferDetailBusiness transferDetailBusiness, IBranchBusiness branchBusinesss, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IWorkShopBusiness workShopBusiness, IRepairBusiness repairBusiness, IDescriptionBusiness descriptionBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IColorBusiness colorBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IMissingStockBusiness missingStockBusiness, IStockTransferDetailModelToModelBusiness stockTransferDetailModelToModelBusiness, IStockTransferInfoModelToModelBusiness stockTransferInfoModelToModelBusiness, IRoleBusiness roleBusiness, IFaultyStockAssignTSBusiness faultyStockAssignTSBusiness, IScrapStockInfoBusiness scrapStockInfoBusiness, IDealerSSBusiness dealerSSBusiness, IColorSSBusiness colorSSBusiness, IBrandSSBusiness brandSSBusiness, IModelSSBusiness modelSSBusiness, IFaultyStockDetailBusiness faultyStockDetailBusiness, IScrapStockDetailBusiness scrapStockDetailBusiness, IFaultyStockTransferInfoBusiness faultyStockTransferInfoBusiness, IFaultyStockTransferDetailsBusiness faultyStockTransferDetailsBusiness, IDustStockDetailsBusiness dustStockDetailsBusiness, IDustStockInfoBusiness dustStockInfoBusiness, IWarehouseToFactoryReturnInfoBusiness warehouseToFactoryReturnInfoBusiness, IWarehouseToFactoryReturnDetailsBusiness warehouseToFactoryReturnDetailsBusiness, IFaultyStockRepairedInfoBusiness faultyStockRepairedInfoBusiness, IFaultyStockRepairedDetailsBusiness faultyStockRepairedDetailsBusiness, IGoodToFaultyTransferInfoBusiness goodToFaultyTransferInfoBusiness, IGoodToFaultyTransferDetailsBusiness goodToFaultyTransferDetalisBusiness)
+        public ConfigurationController(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, ICustomerServiceBusiness customerServiceBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IMobilePartStockDetailBusiness mobilePartStockDetailBusiness, IBranchBusiness2 branchBusiness, ITransferInfoBusiness transferInfoBusiness, ITransferDetailBusiness transferDetailBusiness, IBranchBusiness branchBusinesss, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IWorkShopBusiness workShopBusiness, IRepairBusiness repairBusiness, IDescriptionBusiness descriptionBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IColorBusiness colorBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IMissingStockBusiness missingStockBusiness, IStockTransferDetailModelToModelBusiness stockTransferDetailModelToModelBusiness, IStockTransferInfoModelToModelBusiness stockTransferInfoModelToModelBusiness, IRoleBusiness roleBusiness, IFaultyStockAssignTSBusiness faultyStockAssignTSBusiness, IScrapStockInfoBusiness scrapStockInfoBusiness, IDealerSSBusiness dealerSSBusiness, IColorSSBusiness colorSSBusiness, IBrandSSBusiness brandSSBusiness, IModelSSBusiness modelSSBusiness, IFaultyStockDetailBusiness faultyStockDetailBusiness, IScrapStockDetailBusiness scrapStockDetailBusiness, IFaultyStockTransferInfoBusiness faultyStockTransferInfoBusiness, IFaultyStockTransferDetailsBusiness faultyStockTransferDetailsBusiness, IDustStockDetailsBusiness dustStockDetailsBusiness, IDustStockInfoBusiness dustStockInfoBusiness, IWarehouseToFactoryReturnInfoBusiness warehouseToFactoryReturnInfoBusiness, IWarehouseToFactoryReturnDetailsBusiness warehouseToFactoryReturnDetailsBusiness, IFaultyStockRepairedInfoBusiness faultyStockRepairedInfoBusiness, IFaultyStockRepairedDetailsBusiness faultyStockRepairedDetailsBusiness, IGoodToFaultyTransferInfoBusiness goodToFaultyTransferInfoBusiness, IGoodToFaultyTransferDetailsBusiness goodToFaultyTransferDetalisBusiness, IPartsTransferHToCInfoBusiness partsTransferHToCInfoBusiness, IPartsTransferHToCDetailsBusiness partsTransferHToCDetailsBusiness, ITransferFaultyToDustInfoBusiness transferFaultyToDustInfoBusiness, ITransferFaultyToDustDetailsBusiness transferFaultyToDustDetailsBusiness)
         {
             this._accessoriesBusiness = accessoriesBusiness;
             this._clientProblemBusiness = clientProblemBusiness;
@@ -115,6 +119,10 @@ namespace ERPWeb.Controllers
             this._faultyStockRepairedDetailsBusiness = faultyStockRepairedDetailsBusiness;
             this._goodToFaultyTransferInfoBusiness = goodToFaultyTransferInfoBusiness;
             this._goodToFaultyTransferDetalisBusiness = goodToFaultyTransferDetalisBusiness;
+            this._partsTransferHToCInfoBusiness = partsTransferHToCInfoBusiness;
+            this._partsTransferHToCDetailsBusiness = partsTransferHToCDetailsBusiness;
+            this._transferFaultyToDustInfoBusiness = transferFaultyToDustInfoBusiness;
+            this._transferFaultyToDustDetailsBusiness = transferFaultyToDustDetailsBusiness;
 
 
             #region Inventory
@@ -1344,20 +1352,21 @@ namespace ERPWeb.Controllers
             }
             else if(!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "StockTranferB-B")
             {
-                IEnumerable<TransferInfoDTO> transferInfoDTO = _transferInfoBusiness.GetAllStockTransferByOrgIdAndBranch(User.OrgId, User.BranchId).Select(trans => new TransferInfoDTO
-                {
-                    TransferInfoId = trans.TransferInfoId,
-                    TransferCode = trans.TransferCode,
-                    BranchTo = trans.BranchTo.Value,
-                    BranchId = trans.BranchId,
-                    BranchName = (_branchBusinesss.GetBranchOneByOrgId(trans.BranchId.Value, User.OrgId).BranchName),
-                    SWarehouseId = trans.WarehouseId,
-                    SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(trans.WarehouseId.Value, User.OrgId, User.BranchId).ServicesWarehouseName),
-                    ModelName = _modelSSBusiness.GetModelById(trans.DescriptionId.Value, User.OrgId).ModelName,
-                    Remarks = trans.Remarks,
-                    OrganizationId = trans.OrganizationId,
-                    StateStatus = trans.StateStatus
-                }).AsEnumerable();
+                var transferInfoDTO = _transferInfoBusiness.GetPartsRequsitionInfoData(User.OrgId, User.BranchId);
+                //IEnumerable<TransferInfoDTO> transferInfoDTO = _transferInfoBusiness.GetAllStockTransferByOrgIdAndBranch(User.OrgId, User.BranchId).Select(trans => new TransferInfoDTO
+                //{
+                //    TransferInfoId = trans.TransferInfoId,
+                //    TransferCode = trans.TransferCode,
+                //    BranchTo = trans.BranchTo.Value,
+                //    BranchId = trans.BranchId,
+                //    BranchName = (_branchBusinesss.GetBranchOneByOrgId(trans.BranchId.Value, User.OrgId).BranchName),
+                //    SWarehouseId = trans.WarehouseId,
+                //    SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(trans.WarehouseId.Value, User.OrgId, User.BranchId).ServicesWarehouseName),
+                //    ModelName = _modelSSBusiness.GetModelById(trans.DescriptionId.Value, User.OrgId).ModelName,
+                //    Remarks = trans.Remarks,
+                //    OrganizationId = trans.OrganizationId,
+                //    StateStatus = trans.StateStatus
+                //}).AsEnumerable();
                 List<TransferInfoViewModel> transferInfoViewModels = new List<TransferInfoViewModel>();
                 AutoMapper.Mapper.Map(transferInfoDTO, transferInfoViewModels);
 
@@ -1365,25 +1374,27 @@ namespace ERPWeb.Controllers
             }
             else if (!string.IsNullOrEmpty(flag) && flag.Trim() != "" && flag == "StockTranferM-M")
             {
-                IEnumerable<StockTransferInfoModelToModelDTO> stockTransferInfoDTO = _stockTransferInfoModelToModelBusiness.GetAllStockTransferInfoModelToModelByOrgIdAndBranch(User.OrgId, User.BranchId).Select(trans => new StockTransferInfoModelToModelDTO
-                {
-                    TransferInfoModelToModelId = trans.TransferInfoModelToModelId,
-                    TransferCode = trans.TransferCode,
-                    BranchId = trans.BranchId,
-                    BranchName = (_branchBusinesss.GetBranchOneByOrgId(trans.BranchId.Value, User.OrgId).BranchName),
-                    WarehouseId = trans.WarehouseId,
-                    SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(trans.WarehouseId.Value, User.OrgId, User.BranchId).ServicesWarehouseName),
-                    Remarks = trans.Remarks,
-                    OrganizationId = trans.OrganizationId,
-                    StateStatus = trans.StateStatus,
-                    DescriptionId = trans.DescriptionId,
-                    ToDescriptionId = trans.ToDescriptionId,
-                    FromModelName = _modelSSBusiness.GetModelById(trans.DescriptionId.Value, User.OrgId).ModelName,
-                    ToModelName = _modelSSBusiness.GetModelById(trans.ToDescriptionId.Value, User.OrgId).ModelName,
-                    EntryDate = trans.EntryDate
-                }).AsEnumerable().OrderByDescending(d => d.EntryDate);
+                var stockTransferInfoDTO = _stockTransferInfoModelToModelBusiness.GetModelToModelTransferAllData(User.OrgId, User.BranchId);
+                //GetModelToModelTransferAllData
+                //IEnumerable<StockTransferInfoModelToModelDTO> stockTransferInfoDTO = _stockTransferInfoModelToModelBusiness.GetAllStockTransferInfoModelToModelByOrgIdAndBranch(User.OrgId, User.BranchId).Select(trans => new StockTransferInfoModelToModelDTO
+                //{
+                //    TransferInfoModelToModelId = trans.TransferInfoModelToModelId,
+                //    TransferCode = trans.TransferCode,
+                //    BranchId = trans.BranchId,
+                //    BranchName = (_branchBusinesss.GetBranchOneByOrgId(trans.BranchId.Value, User.OrgId).BranchName),
+                //    WarehouseId = trans.WarehouseId,
+                //    SWarehouseName = (_servicesWarehouseBusiness.GetServiceWarehouseOneByOrgId(trans.WarehouseId.Value, User.OrgId, User.BranchId).ServicesWarehouseName),
+                //    Remarks = trans.Remarks,
+                //    OrganizationId = trans.OrganizationId,
+                //    StateStatus = trans.StateStatus,
+                //    DescriptionId = trans.DescriptionId,
+                //    ToDescriptionId = trans.ToDescriptionId,
+                //    FromModelName = _modelSSBusiness.GetModelById(trans.DescriptionId.Value, User.OrgId).ModelName,
+                //    ToModelName = _modelSSBusiness.GetModelById(trans.ToDescriptionId.Value, User.OrgId).ModelName,
+                //    EntryDate = trans.EntryDate
+                //}).AsEnumerable().OrderByDescending(d => d.EntryDate);
 
-                stockTransferInfoDTO = stockTransferInfoDTO.Where(s => (sWerehouseId == null || sWerehouseId == 0 || s.WarehouseId == sWerehouseId)).ToList();
+                //stockTransferInfoDTO = stockTransferInfoDTO.Where(s => (sWerehouseId == null || sWerehouseId == 0 || s.WarehouseId == sWerehouseId)).ToList();
 
                 List<StockTransferInfoModelToModelViewModel> ViewModels = new List<StockTransferInfoModelToModelViewModel>();
                 AutoMapper.Mapper.Map(stockTransferInfoDTO, ViewModels);
@@ -1972,21 +1983,23 @@ namespace ERPWeb.Controllers
                 PartsName = (_mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartName),
                 PartsCode = (_mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartCode),
                 Quantity =d.Quantity,
+                ReceiveQty=d.ReceiveQty,
             }).ToList();
             List<FaultyStockTransferDetailsViewModel> viewModels = new List<FaultyStockTransferDetailsViewModel>();
             AutoMapper.Mapper.Map(dto, viewModels);
             return PartialView("_TransferFaultyStockDetails", viewModels);
         }
         //2nd Part
-        public ActionResult GetFaultyStockReceiveList(string flag)
+        public ActionResult GetFaultyStockReceiveList(string flag,long? branch,string fromDate,string toDate)
         {
             if (string.IsNullOrEmpty(flag))
             {
+                ViewBag.ddlBranchName = _branchBusinesss.GetBranchByOrgId(User.OrgId).Where(b => b.BranchId != User.BranchId).Select(br => new SelectListItem { Text = br.BranchName, Value = br.BranchId.ToString() }).ToList();
                 return View();
             }
             else
             {
-                var dto = _faultyStockTransferInfoBusiness.GetAllFaultyStockReceiveList(User.OrgId, User.BranchId);
+                var dto = _faultyStockTransferInfoBusiness.GetAllFaultyStockReceiveList(User.OrgId, User.BranchId,branch,fromDate,toDate);
                 List<FaultyStockTransferInfoViewModel> viewModels = new List<FaultyStockTransferInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetFaultyStockReceiveList",viewModels);
@@ -2004,19 +2017,47 @@ namespace ERPWeb.Controllers
                 PartsName = (_mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartName),
                 PartsCode = (_mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartCode),
                 Quantity = d.Quantity,
+                ReceiveQty=d.ReceiveQty,
             }).ToList();
             List<FaultyStockTransferDetailsViewModel> viewModels = new List<FaultyStockTransferDetailsViewModel>();
             AutoMapper.Mapper.Map(dto, viewModels);
             return PartialView("_GetFaultyStockReceive", viewModels);
         }
-        public ActionResult SaveFaultyStockReceive(long transferId)
+        public ActionResult SaveFaultyStockReceive(FaultyStockTransferInfoViewModel model)
         {
             bool IsSuccess = false;
-            if (transferId > 0)
+            if (model.FSTInfoId > 0 && model.faultyStockTransferDetails.Count() > 0 )
             {
-                IsSuccess = _faultyStockTransferDetailsBusiness.SaveFaultyStockReceive(transferId, User.UserId, User.OrgId, User.BranchId);
+                FaultyStockTransferInfoDTO dto = new FaultyStockTransferInfoDTO();
+                AutoMapper.Mapper.Map(model, dto);
+                IsSuccess = _faultyStockTransferDetailsBusiness.SaveFaultyStockReceive(dto, User.UserId, User.OrgId, User.BranchId);
             }
             return Json(IsSuccess);
+        }
+        //3rd Part
+        public ActionResult ReceivePendingFaultyParts(long infoId)
+        {
+            var transferInfo = _faultyStockTransferInfoBusiness.GetOneByOneInfoByStatus(infoId, User.OrgId);
+            if(transferInfo != null)
+            {
+                var infoData = _faultyStockTransferInfoBusiness.GetTransferInfoData(infoId, User.OrgId);
+                FaultyStockTransferInfoViewModel viewModel = new FaultyStockTransferInfoViewModel();
+                AutoMapper.Mapper.Map(infoData, viewModel);
+                return View(viewModel);
+            }
+            return RedirectToAction("GetFaultyStockReceiveList");
+        }
+        public ActionResult ReceivePendingFaultyDetails(long infoId)
+        {
+            var transferInfo = _faultyStockTransferInfoBusiness.GetOneByOneInfoByStatus(infoId, User.OrgId);
+            if (infoId > 0)
+            {
+                var transferDetails = _faultyStockTransferDetailsBusiness.GetAllDetailsDataByInfoId(infoId, User.OrgId);
+                List<FaultyStockTransferDetailsViewModel> viewModels = new List<FaultyStockTransferDetailsViewModel>();
+                AutoMapper.Mapper.Map(transferDetails,viewModels);
+                return PartialView("_ReceivePendingFaultyDetails",viewModels);
+            }
+            return RedirectToAction("GetFaultyStockReceiveList");
         }
         #endregion
 
@@ -2125,15 +2166,16 @@ namespace ERPWeb.Controllers
 
         #region FaultyStock Repaired
         //1st Part
-        public ActionResult GetFaultyStockListForRepaired(string flag)
+        public ActionResult GetFaultyStockListForRepaired(string flag,long? tsId,string fromDate,string toDate)
         {
             if (string.IsNullOrEmpty(flag))
             {
+                ViewBag.ddlTechnicalServicesName = _roleBusiness.GetRoleByTechnicalServicesId(string.Empty, User.OrgId, User.BranchId).Select(d => new SelectListItem { Text = d.UserName, Value = d.UserId.ToString() }).ToList();
                 return View();
             }
             else
             {
-                var dto = _faultyStockRepairedInfoBusiness.GetAllRepairedList(User.OrgId, User.BranchId);
+                var dto = _faultyStockRepairedInfoBusiness.GetAllRepairedList(User.OrgId, User.BranchId,tsId,fromDate,toDate);
                 List<FaultyStockRepairedInfoViewModel> viewModels = new List<FaultyStockRepairedInfoViewModel>();
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetFaultyStockListForRepaired", viewModels);
@@ -2290,6 +2332,126 @@ namespace ERPWeb.Controllers
                 AutoMapper.Mapper.Map(dto, viewModels);
                 return PartialView("_GetGoodToFaultyTransferDetailsList", viewModels);
             }
+        }
+        #endregion
+
+        #region PartsTransferHeadToCare
+        public ActionResult PartsTransferHeadToCareInfoList(string flag)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _partsTransferHToCInfoBusiness.GetAllPartsTransferData(User.OrgId, User.BranchId);
+                List<PartsTransferHToCInfoViewModel> viewModels = new List<PartsTransferHToCInfoViewModel>();
+                AutoMapper.Mapper.Map(dto,viewModels);
+                return PartialView("_PartsTransferHeadToCareInfoList",viewModels);
+            }
+        }
+        public ActionResult CreatePartsTransferHeadToCare()
+        {
+            ViewBag.ddlBranchName = _branchBusinesss.GetBranchByOrgId(User.OrgId).Where(b => b.BranchId != User.BranchId).Select(branch => new SelectListItem { Text = branch.BranchName, Value = branch.BranchId.ToString() }).ToList();
+
+            ViewBag.ddlMobileParts = _mobilePartBusiness.GetAllMobilePartAndCode(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.MobilePartName, Value = mobile.MobilePartId.ToString() }).ToList();
+
+            ViewBag.ddlModels = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
+
+            return View();
+        }
+        public ActionResult SavePartsTransferHeadToCare(PartsTransferHToCInfoViewModel info)
+        {
+            bool IsSuccess = false;
+            if (info.partsTransferHToCDetails.Count > 0)
+            {
+                PartsTransferHToCInfoDTO dto = new PartsTransferHToCInfoDTO();
+                AutoMapper.Mapper.Map(info, dto);
+                IsSuccess = _partsTransferHToCInfoBusiness.SaveMobilePartStockOut(dto, User.OrgId, User.BranchId, User.UserId);
+            }
+            return Json(IsSuccess);
+        }
+        public ActionResult GetPartsItemDetails(long infoId)
+        {
+            IEnumerable<PartsTransferHToCDetailsDTO> dto = _partsTransferHToCDetailsBusiness.GetAllDetailsByInfoId(infoId, User.OrgId).Select(d => new PartsTransferHToCDetailsDTO
+            {
+                InfoId = d.InfoId,
+                DetailsId = d.DetailsId,
+                ModelId = d.ModelId,
+                ModelName = _modelSSBusiness.GetModelById(d.ModelId, User.OrgId).ModelName,
+                PartsId = d.PartsId,
+                PartsName = _mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartName,
+                CostPrice = d.CostPrice,
+                SellPrice = d.SellPrice,
+                Quantity = d.Quantity,
+            }).ToList();
+            List<PartsTransferHToCDetailsViewModel> viewModels = new List<PartsTransferHToCDetailsViewModel>();
+            AutoMapper.Mapper.Map(dto, viewModels);
+            return PartialView("_GetPartsItemDetails", viewModels);
+        }
+        //
+        public ActionResult PartsReceiveHeadToCareInfoList(string flag, string fromDate, string toDate)
+        {
+            if (string.IsNullOrEmpty(flag))
+            {
+                return View();
+            }
+            else
+            {
+                var dto = _partsTransferHToCInfoBusiness.GetAllPartsReceiveData(User.OrgId, User.BranchId,fromDate,toDate);
+                List<PartsTransferHToCInfoViewModel> viewModels = new List<PartsTransferHToCInfoViewModel>();
+                AutoMapper.Mapper.Map(dto, viewModels);
+                return PartialView("_PartsReceiveHeadToCareInfoList", viewModels);
+            }
+        }
+        public ActionResult GetTransferItemDetails(long infoId)
+        {
+            ViewBag.ddlStatus = _partsTransferHToCInfoBusiness.GetInfoByInfoId(infoId, User.OrgId).StateStatus;
+            IEnumerable<PartsTransferHToCDetailsDTO> dto = _partsTransferHToCDetailsBusiness.GetAllDetailsByInfoId(infoId, User.OrgId).Select(d => new PartsTransferHToCDetailsDTO
+            {
+                InfoId = d.InfoId,
+                DetailsId = d.DetailsId,
+                ModelId = d.ModelId,
+                ModelName = _modelSSBusiness.GetModelById(d.ModelId, User.OrgId).ModelName,
+                PartsId = d.PartsId,
+                PartsName = _mobilePartBusiness.GetMobilePartOneByOrgId(d.PartsId, User.OrgId).MobilePartName,
+                CostPrice = d.CostPrice,
+                SellPrice = d.SellPrice,
+                Quantity = d.Quantity,
+            }).ToList();
+            List<PartsTransferHToCDetailsViewModel> viewModels = new List<PartsTransferHToCDetailsViewModel>();
+            AutoMapper.Mapper.Map(dto, viewModels);
+            return PartialView("_GetTransferItemDetails", viewModels);
+        }
+        public ActionResult SaveTransferStockReceive(long infoId)
+        {
+            bool IsSuccess = false;
+            if (infoId > 0)
+            {
+                IsSuccess = _partsTransferHToCInfoBusiness.SaveTransferItemReceive(infoId, User.UserId, User.OrgId, User.BranchId);
+            }
+            return Json(IsSuccess);
+        }
+        #endregion
+
+        #region TransferFaultyToDust
+        public ActionResult CreateFaultyToDust()
+        {
+            ViewBag.ddlMobilePart = _mobilePartBusiness.GetAllMobilePartAndCode(User.OrgId).Select(mobile => new SelectListItem { Text = mobile.MobilePartName, Value = mobile.MobilePartId.ToString() }).ToList();
+
+            ViewBag.ddlModels = _modelSSBusiness.GetAllModel(User.OrgId).Select(m => new SelectListItem { Text = m.ModelName, Value = m.ModelId.ToString() }).ToList();
+            return View();
+        }
+        public ActionResult SaveTransferFaultyToDust(List<TransferFaultyToDustDetailsViewModel> details)
+        {
+            bool IsSuccess = false;
+            if (details.Count() > 0)
+            {
+                List<TransferFaultyToDustDetailsDTO> dto = new List<TransferFaultyToDustDetailsDTO>();
+                AutoMapper.Mapper.Map(details, dto);
+                IsSuccess = _transferFaultyToDustInfoBusiness.SaveTransferFaultyToDust(dto, User.UserId, User.BranchId, User.OrgId);
+            }
+            return Json(IsSuccess);
         }
         #endregion
     }

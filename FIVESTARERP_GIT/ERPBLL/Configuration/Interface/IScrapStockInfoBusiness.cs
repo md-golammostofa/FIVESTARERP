@@ -15,6 +15,7 @@ namespace ERPBLL.Configuration.Interface
 
         ScrapStockInfo GetOneScrapedByModel(long modelId, long partsId, long orgId, long branchId);
         IEnumerable<ScrapStockInfo> GetScrapStockOneByOrgId(long orgId, long branchId);
+        IEnumerable<ScrapStockInfo> GetAllScarpedStockByModelAndParts(long modelId, long partsId, long orgId, long branchId);
 
     }
 }

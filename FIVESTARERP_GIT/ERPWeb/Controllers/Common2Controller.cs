@@ -54,11 +54,13 @@ namespace ERPWeb.Controllers
         private readonly IDealerSSBusiness _dealerSSBusiness;
         private readonly IModelSSBusiness _modelSSBusiness;
         private readonly IRequsitionInfoForJobOrderBusiness _requsitionInfoForJobOrderBusiness;
-        //Nishad
+        private readonly ITechnicalServicesStockBusiness _technicalServicesStockBusiness;
+        private readonly IScrapStockInfoBusiness _scrapStockInfoBusiness;
+        //
         private readonly ERPBLL.Configuration.Interface.IHandSetStockBusiness _handSetStockBusiness;
         private readonly IFaultyStockInfoBusiness _faultyStockInfoBusiness;
 
-        public Common2Controller(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, ICustomerServiceBusiness customerServiceBusiness,IBranchBusiness2 branchBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IJobOrderBusiness jobOrderBusiness, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IJobOrderProblemBusiness jobOrderProblemBusiness, IJobOrderFaultBusiness jobOrderFaultBusiness, IJobOrderServiceBusiness jobOrderServiceBusiness, IDescriptionBusiness descriptionBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IRepairBusiness repairBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IJournalBusiness journalBusiness, ICustomersBusiness customersBusiness, ERPBLL.Accounts.Interface.ISupplierBusiness suppliersBusiness, IDealerSSBusiness dealerSSBusiness, IModelSSBusiness modelSSBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness)
+        public Common2Controller(IAccessoriesBusiness accessoriesBusiness, IClientProblemBusiness clientProblemBusiness, IMobilePartBusiness mobilePartBusiness, ICustomerBusiness customerBusiness, ITechnicalServiceBusiness technicalServiceBusiness, ICustomerServiceBusiness customerServiceBusiness,IBranchBusiness2 branchBusiness, IMobilePartStockInfoBusiness mobilePartStockInfoBusiness, IJobOrderBusiness jobOrderBusiness, IFaultBusiness faultBusiness, IServiceBusiness serviceBusiness, IJobOrderProblemBusiness jobOrderProblemBusiness, IJobOrderFaultBusiness jobOrderFaultBusiness, IJobOrderServiceBusiness jobOrderServiceBusiness, IDescriptionBusiness descriptionBusiness, IInvoiceInfoBusiness invoiceInfoBusiness, IInvoiceDetailBusiness invoiceDetailBusiness, IServicesWarehouseBusiness servicesWarehouseBusiness, IRepairBusiness repairBusiness, ERPBLL.Configuration.Interface.IHandSetStockBusiness handSetStockBusiness, IFaultyStockInfoBusiness faultyStockInfoBusiness, IHandsetChangeTraceBusiness handsetChangeTraceBusiness, IJournalBusiness journalBusiness, ICustomersBusiness customersBusiness, ERPBLL.Accounts.Interface.ISupplierBusiness suppliersBusiness, IDealerSSBusiness dealerSSBusiness, IModelSSBusiness modelSSBusiness, IRequsitionInfoForJobOrderBusiness requsitionInfoForJobOrderBusiness, ITechnicalServicesStockBusiness technicalServicesStockBusiness, IScrapStockInfoBusiness scrapStockInfoBusiness)
         {
             this._accessoriesBusiness = accessoriesBusiness;
             this._clientProblemBusiness = clientProblemBusiness;
@@ -88,6 +90,9 @@ namespace ERPWeb.Controllers
             this._dealerSSBusiness = dealerSSBusiness;
             this._modelSSBusiness = modelSSBusiness;
             this._requsitionInfoForJobOrderBusiness = requsitionInfoForJobOrderBusiness;
+            this._technicalServicesStockBusiness = technicalServicesStockBusiness;
+            this._scrapStockInfoBusiness = scrapStockInfoBusiness;
+
         }
 
         #region Configuration Module
@@ -242,6 +247,22 @@ namespace ERPWeb.Controllers
             return Json(IsSuccess);
         }
         [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult PartsAvailableQtyWithCostPrice(long modelId, long partsId, int qty,double costPrice)
+        {
+            bool IsSuccess = true;
+            int stQty = 0;
+            if (modelId > 0 && partsId > 0)
+            {
+                var stock = _mobilePartStockInfoBusiness.GetPriceByModelAndPartsWithCost(modelId, partsId,costPrice, User.OrgId, User.BranchId);
+                stQty = stock.Sum(s => (s.StockInQty.Value - s.StockOutQty.Value));
+                if (stQty > qty || stQty == qty)
+                {
+                    IsSuccess = false;
+                }
+            }
+            return Json(IsSuccess);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult FaultyPartsAvailable(long modelId, long partsId, int qty)
         {
             bool IsSuccess = true;
@@ -251,6 +272,36 @@ namespace ERPWeb.Controllers
                 var stock = _faultyStockInfoBusiness.GetAllFaultyByModelAndParts(modelId, partsId, User.OrgId, User.BranchId);
                 stQty = stock.Sum(s => (s.StockInQty - s.StockOutQty));
                 if (stQty > qty || stQty == qty)
+                {
+                    IsSuccess = false;
+                }
+            }
+            return Json(IsSuccess);
+        }
+        [HttpPost,ValidateJsonAntiForgeryToken]
+        public ActionResult ScrapedPartsAvailable(long modelId,long partsId,int qty)
+        {
+            bool IsSuccess = true;
+            int stQty = 0;
+            if(modelId>0 && partsId > 0)
+            {
+                var stock = _scrapStockInfoBusiness.GetAllScarpedStockByModelAndParts(modelId, partsId, User.OrgId, User.BranchId);
+                stQty = stock.Sum(s => (s.ScrapQuantity - s.ScrapOutQty));
+                if(stQty > qty || stQty == qty)
+                {
+                    IsSuccess = false;
+                }
+            }
+            return Json(IsSuccess);
+        }
+        [HttpPost,ValidateJsonAntiForgeryToken]
+        public ActionResult RequsitionDuplicateCheck(long reqId)
+        {
+            bool IsSuccess = true;
+            if (reqId > 0)
+            {
+                var stockcheck = _technicalServicesStockBusiness.CheckRequsionIdInTechnicalStock(reqId, User.OrgId, User.BranchId);
+                if(stockcheck == null)
                 {
                     IsSuccess = false;
                 }
@@ -534,9 +585,24 @@ namespace ERPWeb.Controllers
             //price.SellPrice = detailDTO.SellPrice;
             return Json(price.SellPrice);
         }
+        [HttpPost,ValidateJsonAntiForgeryToken]
+        public ActionResult GetLatestSellPriceByModelAndParts(long modelId,long partsId)
+        {
+            double price = 0;
+            var alllist = _mobilePartStockInfoBusiness.GetPriceByModelAndParts(modelId, partsId, User.OrgId, User.BranchId).LastOrDefault();
+            if(alllist != null)
+            {
+                price = alllist.SellPrice;
+            }
+            else
+            {
+                price = 0;
+            }
+            return Json(price);
+        }
         public async Task<ActionResult> GetWarrentyDateByIMEI(string imei)
         {
-            string apiUrl = "http://103.108.140.249:85";
+            string apiUrl = "http://192.168.10.116:85";
             JobOrderViewModel jobOd = new JobOrderViewModel();
             HttpClient client = new HttpClient();
             HttpResponseMessage response = client.GetAsync(apiUrl + string.Format("/fsm/activation.php?imei={0}", imei)).Result;

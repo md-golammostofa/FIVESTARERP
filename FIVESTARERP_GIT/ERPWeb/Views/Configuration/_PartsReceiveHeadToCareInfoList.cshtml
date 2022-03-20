@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ERPBO.Configuration.ViewModels.PartsTransferHToCInfoViewModel>
+@{
+                int sl = 0;
+                Layout = null;
+                string badge = string.Empty;
+}
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered table-sm table-striped" id="tblStockReturnInfo">
+            <thead class="btn-dark">
+                <tr class="text-center">
+                    <th>#SL</th>
+                    <th>Action</th>
+                    <th class="hide"></th>
+                    <th>Transfer Code</th>
+                    <th>StateStatus</th>
+                    <th>Branch From</th>
+                    <th>Entry Date</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    sl = sl + 1;
+                    string entryDate = item.EntryDate != null ? item.EntryDate.Value.ToString("dd-MMM-yyy") : "";
+                    badge = item.StateStatus == "Send" ? "badge bg-success" : "badge bg-danger";
+                    <tr>
+                        <td class="text-center" width="10%">@sl</td>
+                        <td class="text-center ">
+                            <a href="#" class="btn btn-outline-secondary btn-sm data-item-details" title="Details" data-item-details="@item.InfoId"><i class="fas fa-eye"></i> </a>
+                        </td>
+                        <td class="hide">@item.InfoId</td>
+                        <td>@item.TransferCode</td>
+                        <td class="text-center" data-val="@item.StateStatus">
+                            <span class="@badge">@item.StateStatus</span>
+                        </td>
+                        <td>@item.BranchFromName</td>
+                        <td>@entryDate</td>
+
+                    </tr>
+                }
+                @if (Model.Count() == 0)
+                {
+                    <tr class="text-center empty-row">
+                        <td colspan="5">
+                            No Rows Found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

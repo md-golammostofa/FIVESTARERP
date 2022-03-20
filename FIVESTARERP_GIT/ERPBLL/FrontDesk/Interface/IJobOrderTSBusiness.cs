@@ -13,7 +13,7 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<DashboardDailySingInAndOutDTO> DashboardDailySingInAndOuts(long orgId, long branchId);
         JobOrderTS GetJobOrderActiveTsByJobOrderId(long joborderId, long orgId, long branchId);
         bool UpdateJobOrderTsStatus(long joborderId, long userId, long orgId, long branchId);
-        IEnumerable<JobOrderTSDTO> JobSignInAndOut(long? tsId,string jobCode,long orgId, long branchId, string fromDate, string toDate);
+        IEnumerable<JobOrderTSDTO> JobSignInAndOut(long? tsId,string jobCode,long orgId, long branchId, string fromDate, string toDate,long? modelId,string imei);
         bool UpdateJobOrderTsForQcFail(long joborderId, long userId, long orgId, long branchId);
         JobOrderTS GetJobOrderTsByJobOrderId(long joborderId, long orgId, long branchId);
         IEnumerable<DashboardDailySingInAndOutDTO> DashboardDailySingInAndOutByEng(long orgId, long branchId, long userId);

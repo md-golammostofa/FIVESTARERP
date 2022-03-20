@@ -42,14 +42,14 @@ where tstock.UsedQty>0 and tstock.JobOrderId={0} ) tbl ", jobOrderId, orgId)).To
             return data;
         }
 
-        public IEnumerable<InvoiceDetailDTO> InvoiceDetailsReport(long infoId,long orgId, long branchId)
+        public IEnumerable<InvoiceDetailDTO> InvoiceDetailsReport(long infoId,long orgId)
         {
             var data = this._frontDeskUnitOfWork.Db.Database.SqlQuery<InvoiceDetailDTO>(
                 string.Format(@"select InvoiceInfoId,PartsId,d.ModelName,PartsName,Quantity,SellPrice,Total 
 from InvoiceDetails inv
 left join [Configuration].dbo.tblModelSS d on inv.ModelId=d.ModelId
 where InvoiceInfoId={0} and
- inv.OrganizationId={1} and inv.BranchId={2}", infoId, orgId, branchId)).ToList();
+ inv.OrganizationId={1}", infoId, orgId)).ToList();
             return data;
         }
     }

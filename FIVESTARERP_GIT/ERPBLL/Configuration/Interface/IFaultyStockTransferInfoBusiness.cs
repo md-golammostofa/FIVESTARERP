@@ -14,7 +14,8 @@ namespace ERPBLL.Configuration.Interface
         FaultyStockTransferInfo GetOneByOneInfo(long infoId, long orgId, long branchId);
         IEnumerable<FaultyStockTransferInfoDTO> GetAllStockInfoList(long orgId, long branchId);
         FaultyStockTransferInfo GetOneByOneInfoByModel(long modelId,long partsId, long orgId, long branchId);
-        IEnumerable<FaultyStockTransferInfoDTO> GetAllFaultyStockReceiveList(long orgId, long branchId);
+        IEnumerable<FaultyStockTransferInfoDTO> GetAllFaultyStockReceiveList(long orgId, long branchId, long? branch, string fromDate, string toDate);
         FaultyStockTransferInfo GetOneByOneInfoByStatus(long infoId, long orgId);
+        FaultyStockTransferInfoDTO GetTransferInfoData(long infoId, long orgId);
     }
 }

@@ -64,9 +64,20 @@
                                                             <input type="text" id="txtJobCode" class="form-control form-control-sm" placeholder="Search By JobCode" name="jobCode" />
                                                         </div>
                                                         <div class="col-md-2">
+                                                            <label class="control-label font-weight-bold">Model</label>
+                                                            @Html.DropDownList("ddlModelName", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "Search By Model", new { @class = "form-control form-control-sm ctrl-changed select2 select2-danger ctrl-changed" })
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label class="control-label font-weight-bold">IMEI</label>
+                                                            <input type="text" id="txtIMEI" name="imei" class="form-control form-control-sm" placeholder="Search By IMEI" />
+                                                        </div>
+                                                        <div class="col-md-2">
                                                             <label class="control-label font-weight-bold">Transfer Status</label>
                                                             @Html.DropDownList("ddlTransferStatus", (IEnumerable<SelectListItem>)ViewBag.ddlTransferStatus, "--Search By Status--", new { @class = "form-control form-control-sm ctrl-changed " })
                                                         </div>
+
+                                                    </div>
+                                                    <div class="row text-sm">
                                                         <div class="col-md-2">
                                                             <label class="control-label font-weight-bold">From Date</label>
                                                             <div class="input-group input-group-sm ">
@@ -86,8 +97,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row text-sm">
                                                         <div class="col-md-2">
                                                             <label for="rptType">Type</label>
                                                             <select name="rptType" id="rptType" class="form-control form-control-sm">
@@ -306,6 +315,8 @@
         var dptFromDate = $("#dptFromDate");
         var dptToDate = $("#dptToDate");
         var ddlTransferStatus = $("#ddlTransferStatus");
+        var ddlModelName = $("#ddlModelName");
+        var txtIMEI = $("#txtIMEI");
         var pageNo = 1;
         /////////
         var ddlBranchName2 = $("#ddlBranchName2");
@@ -404,8 +415,15 @@
         dptToDate.change(function () {
             LoadDataTable();
         })
+        ddlModelName.change(function () {
+            LoadDataTable();
+        })
+        txtIMEI.keyup(function () {
+            LoadDataTable();
+        })
+
         function LoadDataTable() {
-            var data = { flag: "search", branchName: TryParseInt(ddlBranchName.val(), 0), jobCode: txtJobCode.val(), transferCode: txtTransferCode.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), tstatus: ddlTransferStatus.val(), page: pageNo };
+            var data = { flag: "search", branchName: TryParseInt(ddlBranchName.val(), 0), jobCode: txtJobCode.val(), transferCode: txtTransferCode.val(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), tstatus: ddlTransferStatus.val(), modelId: TryParseInt(ddlModelName.val(), 0), imei: txtIMEI.val(), page: pageNo };
 
             console.log(data);
             $.when(getReqWithData('html', 'GET', '/FrontDesk/ReceiveJobOrderReport', data)).then(function (res, status) {

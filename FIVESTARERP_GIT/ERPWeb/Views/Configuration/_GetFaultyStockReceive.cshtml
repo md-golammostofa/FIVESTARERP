@@ -14,6 +14,7 @@
             <th>Parts Name</th>
             <th>Parts Code</th>
             <th>Qty.</th>
+            <th>Receive Qty</th>
         </tr>
     </thead>
     <tbody>
@@ -29,6 +30,7 @@
             <td>@details.PartsName</td>
             <td class="text-center">@details.PartsCode</td>
             <td class="text-center">@details.Quantity</td>
+            <td class="text-center">@details.ReceiveQty</td>
         </tr>
         }
         @if (Model.Count() == 0)
@@ -41,9 +43,9 @@
         }
     </tbody>
 </table>
-@if (status == "Send")
+@*@if (status == "Send")
 {
     <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-success btnReceived">Receive</button>
     </div>
-}
+}*@

@@ -53,5 +53,9 @@ namespace ERPDAL.ConfigurationDAL
         public DbSet<FaultyStockRepairedDetails> tblFaultyStockRepairedDetails { get; set; }
         public DbSet<GoodToFaultyTransferInfo> tblGoodToFaultyTransferInfo { get; set; }
         public DbSet<GoodToFaultyTransferDetails> tblGoodToFaultyTransferDetails { get; set; }
+        public DbSet<PartsTransferHToCInfo> tblGetPartsTransferHToCInfo { get; set; }
+        public DbSet<PartsTransferHToCDetails> tblPartsTransferHToCDetails { get; set; }
+        public DbSet<TransferFaultyToDustInfo> TransferFaultyToDustInfo { get; set; }
+        public DbSet<TransferFaultyToDustDetails> TransferFaultyToDustDetails { get; set; }
     }
 }

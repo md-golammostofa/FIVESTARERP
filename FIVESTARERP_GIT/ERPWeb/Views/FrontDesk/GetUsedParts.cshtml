@@ -58,6 +58,10 @@
                                                             <input type="text" id="txtJobCode" class="form-control form-control-sm" placeholder="Search By JobCode" name="jobCode" />
                                                         </div>
                                                         <div class="col-md-2">
+                                                            <label class="control-label font-weight-bold">Job Type</label>
+                                                            @Html.DropDownList("ddlJobType", (IEnumerable<SelectListItem>)ViewBag.ddlJobType, "--Search By Job Type--", new { @class = "form-control form-control-sm ctrl-changed select2 select2-danger ctrl-changed " })
+                                                        </div>
+                                                        <div class="col-md-2">
                                                             <label for="ddlTechnicalServicesName" class="control-label font-weight-bold">TS Name</label>
                                                             @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select TSName--", new { @class = "form-control form-control-sm" })
                                                         </div>
@@ -79,6 +83,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                    <div class="row">
                                                         <div class="col-md-1">
                                                             <label for="rptType">Type</label>
                                                             <select name="rptType" id="rptType" class="form-control form-control-sm">
@@ -282,6 +288,7 @@
         var dptToDate2 = $("#dptToDate2");
         var ddlTechnicalServicesName2 = $("#ddlTechnicalServicesName2");
         var txtJobCode2 = $("#txtJobCode2");
+        var 
 
         $(document).ready(function () {
             dptFromDate.prop('readonly', true);

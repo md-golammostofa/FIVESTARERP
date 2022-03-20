@@ -19,7 +19,7 @@ namespace ERPBLL.FrontDesk.Interface
         ExecutionStateWithText SaveJobOrderReturnWithReport(long transferId, long[] jobOrders, long userId, long orgId, long branchId,string cName,string cNumber);
         IEnumerable<JobOrderReturnDetailDTO> RepairOtherBranchJob(long branchId, long? branchName, long orgId, string fromDate, string toDate);
         IEnumerable<JobOrderReturnDetailDTO> RepairedJobOfOtherBranch(long branchId, long? branchName, long orgId, string fromDate, string toDate);
-        IEnumerable<JobOrderReturnDetailDTO> JobReturnList(long orgId, long branchId);
+        IEnumerable<JobOrderReturnDetailDTO> JobReturnList(long orgId, long branchId, string imei, string jobCode, long? branch,long? modelId);
         JobOrderReturnDetail GetJobByJobId(long jobId, long orgId, long branchId);
         IEnumerable<JobOrderReturnDetail> GetTransferInfoByCode(string transferCode, long orgId);
     }

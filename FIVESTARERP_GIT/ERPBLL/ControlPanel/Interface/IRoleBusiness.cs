@@ -19,5 +19,6 @@ namespace ERPBLL.ControlPanel.Interface
         IEnumerable<TechnicalServiceByRoleDTO> GetRoleByTechnicalServicesId(string roleName,long orgId,long BranchId);
         Role GetRoleById(long id);
         ExecutionStateWithText SaveAppRole(RoleDTO roleDTO, long userId, long orgId);
+        IEnumerable<TechnicalServiceByRoleDTO> GetRoleByQCId(string roleName, long orgId, long BranchId);
     }
 }

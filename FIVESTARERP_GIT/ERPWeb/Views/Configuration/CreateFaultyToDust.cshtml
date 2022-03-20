@@ -1,0 +1,220 @@
+﻿
+@{
+    ViewBag.Title = "CreateFaultyToDust";
+}
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-2 text-left ">
+                        <a href="/Configuration/MobilePartStockInfoList" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                    </div>
+                    <div class="col-8 text-center">
+                        <h4><b>Faulty Stock Transfer To Dust</b></h4>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-outline-danger btn-sm float-lg-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i> </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                @Html.AntiForgeryToken()
+                <div class="row text-sm">
+                    <div class="col-md-2">
+                        <label for="ddlModels" class="control-label font-weight-bold">Model</label>
+                        @Html.DropDownList("ddlModels", (IEnumerable<SelectListItem>)ViewBag.ddlModels, "--Select Model--", new { @class = "form-control form-control-sm select2" })
+                        <span class="error hide require-model font-weight-bold">Model Name is required !</span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="ddlMobilePart" class="control-label font-weight-bold">Parts Name<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                        @Html.DropDownList("ddlMobilePart", (IEnumerable<SelectListItem>)ViewBag.ddlMobilePart, "--Select Parts--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                        <span class="error hide require-parts font-weight-bold">Parts is required !</span>
+                        <span class="error hide duplicate-parts font-weight-bold">This parts is already exist !</span>
+                        <span class="error hide duplicate-partsStockOut font-weight-bold">Stock Not Available !</span>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="txtStockInQty" class="control-label font-weight-bold">Transfer Qty.<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
+                        <div class="input-group">
+                            <div class="col-sm-8">
+                                <input type="number" placeholder="Qty" name="quantity" id="txtStockInQty" class="form-control form-control-sm" />
+                            </div>
+                            <span id="unitName" class="font-weight-bold mt-3" style="color:darkblue"> </span>
+                        </div>
+                        <span class="error hide required-qty font-weight-bold">Quantity is required !</span>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="clearfix">
+                            <label for="txtRemarks" class="control-label font-weight-bold" style="visibility:hidden">Remarks444444444</label>
+                            <button type="submit" class="btn btn-sm btn-warning float-left mr-1" id="btnAddToList" title="Add To List"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row text-sm">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-sm table-striped table-responsive-lg" id="tblFaultyToDust">
+                            <thead>
+                                <tr>
+                                    <th colspan="10">
+                                        <button class="btn btn-success btn-sm float-lg-right" id="btnSubmit">SAVE <i class="fas fa-paper-plane"></i> </button>
+                                    </th>
+                                </tr>
+                                <tr class="btn-dark text-center">
+                                    <th>#SL</th>
+                                    <th class="hide"></th>
+                                    <th>Model Name</th>
+                                    <th class="hide"></th>
+                                    <th>Parts Name</th>
+                                    <th>Transfer Qty.</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var ddlModels = $("#ddlModels");
+        var ddlMobilePart = $("#ddlMobilePart");
+        var txtStockInQty = $("#txtStockInQty");
+        var txtRemarks = $("#txtRemarks");
+
+        $(document).ready(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        })
+
+        function validateInput() {
+            $('.error').addClass('hide');
+            var isValid = true;
+            if (TryParseInt(ddlModels.val(), 0) <= 0) {
+                isValid = false;
+                $(".require-model").removeClass("hide");
+            }
+            if (TryParseInt(ddlMobilePart.val(), 0) <= 0) {
+                isValid = false;
+                $(".require-parts").removeClass("hide");
+            }
+            if (txtStockInQty.val() == "" || TryParseInt(txtStockInQty.val(), 0) <= 0) {
+                isValid = false;
+                $(".required-qty").removeClass("hide");
+            }
+            if (txtStockInQty.val() > 0) {
+                if (ajaxBooleanChecker(JSON.stringify({ modelId: TryParseInt(ddlModels.val(), 0), partsId: TryParseInt(ddlMobilePart.val(), 0), qty: TryParseInt(txtStockInQty.val(), 0) }), '/Common2/FaultyPartsAvailable', getToken()) == true) {
+                    isValid = false;
+                    $(".duplicate-partsStockOut").removeClass("hide");
+                }
+            }
+            return isValid;
+        }
+
+        $("#btnAddToList").click(function (e) {
+            e.preventDefault();
+            if (validateInput() == true) {
+                var sl = $("#tblFaultyToDust tbody tr").length;
+                var td1 = "<td class='text-center text-bold'>" + (sl + 1) + "</td>"
+                var td2 = "<td class='hide'>" + ddlModels.val() + "</td>";
+                var td3 = "<td>" + $("#ddlModels option:selected").text() + "</td>";
+                var td4 = "<td class='hide'>" + ddlMobilePart.val() + "</td>";
+                var td5 = "<td>" + $("#ddlMobilePart option:selected").text() + "</td>";
+                var td6 = "<td class='text-center'>" + txtStockInQty.val() + "</td>";
+                var td7 = "<td class='text-center'><a href='#' class='btn btn-sm btn-danger data-onfly-del'><i class='far fa-trash-alt'></i> Delete</a></td>";
+
+                var tr = "<tr>" + td1 + td2 + td3 + td4 + td5 + td6 + td7 + "</tr>";
+                if ($("#tblFaultyToDust tbody tr").length == 0) {
+                    $("#tblFaultyToDust tbody").append(tr);
+                }
+                else {
+                    $("#tblFaultyToDust tbody tr").eq(0).before(tr);
+                }
+                clearCtrl();
+            }
+        });
+
+        function clearCtrl() {
+            ddlMobilePart.val('');
+            ddlMobilePart.trigger("change");
+            txtStockInQty.val('0');
+        }
+
+
+        $(document).on("click", "a.data-onfly-del", function (e) {
+            e.preventDefault();
+            var index = $(this).parent().parents('tbody tr').index();
+            if (bootbox.confirm("Are you sure you want to delete?", function (result) {
+                if (result === true) {
+                    removeTableRow("#tblFaultyToDust tbody", index);
+                    fnFixTheTbodyRowSerialInDecsOrder("#tblFaultyToDust", index);
+                };
+            }));
+        })
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            if ($("#tblFaultyToDust tbody tr").length > 0) {
+                bootbox.confirm("Are you sure you want to save?", function (result) {
+                    if (result === true) {
+                        var details = []; details.length = 0;
+                        $.each($("#tblFaultyToDust tbody tr"), function (index, item) {
+                            var td = $(this).children('td');
+                            details.push({
+                                ModelId: td.eq(1).html(),
+                                PartsId: td.eq(3).html(),
+                                Quantity: td.eq(5).html(),
+                            })
+                        });
+                        data = JSON.stringify({ details: details })
+                        console.log("Transfer Data");
+                        //return console.log(data);
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Configuration/SaveTransferFaultyToDust', data, getToken())).then(function (res, status) {
+                            if (res == true) {
+                                setTimeout(function () {
+                                    $('.toastrDefaultSuccess').trigger('click');
+                                    redirectPage('@Url.Action("MobilePartStockInfoList")');
+                                }, 1000);
+                            }
+                            else {
+                                $('.toastrDefaultError').trigger('click');
+                            }
+                        }).fail(function (error) {
+                            alert(execuStatus.fail);
+                        })
+                    }
+                });
+            }
+        });
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+
+    </script>
+    }

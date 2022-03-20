@@ -13,11 +13,11 @@ namespace ERPBLL.FrontDesk.Interface
     {
         JobOrderTransferDetail GetAllTransferJob(long transferId, long orgId, long branchId);
         bool SaveJobOrderTransfer(long transferId, long[] jobOrders, long userId, long orgId, long branchId);
-        IEnumerable<JobOrderTransferDetailDTO> GetReceiveJob(long orgId, long branchId, long? branchName, string jobCode, string transferCode, string fromDate, string toDate, string tstatus);
+        IEnumerable<JobOrderTransferDetailDTO> GetReceiveJob(long orgId, long branchId, long? branchName, string jobCode, string transferCode, string fromDate, string toDate, string tstatus, long? modelId, string imei);
         bool UpdateReceiveJobOrder(long transferId, long jobOrderId, long userId, long orgId, long branchId);
         IEnumerable<JobOrderDTO> GetTransferDeliveryChalan(string transferCode, long orgId);
         ExecutionStateWithText SaveJobOrderTransferWithReport(long transferId, long[] jobOrders, long userId, long orgId, long branchId,string cName,string cNumber);
-        IEnumerable<JobOrderTransferDetailDTO> JobOrderTransferList(long orgId, long branchId);
+        IEnumerable<JobOrderTransferDetailDTO> JobOrderTransferList(long orgId, long branchId, long? modelId, string imei, string jobCode);
         JobOrderTransferDetail GetJobOrderByJobId(long jobId, long orgId, long brabchId);
     }
 }

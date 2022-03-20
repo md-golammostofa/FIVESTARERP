@@ -85,5 +85,51 @@ namespace ERPBLL.Configuration
             }
             return IsSuccess;
         }
+
+        public bool SaveDustStockInFromFaulty(List<DustStockDetailsDTO> dto, long userId, long branchId, long orgId)
+        {
+            bool IsSuccess = false;
+            foreach (var item in dto)
+            {
+                DustStockDetails dust = new DustStockDetails
+                {
+                    ModelId = item.ModelId,
+                    PartsId = item.PartsId,
+                    Quantity = item.Quantity,
+                    StateStatus = "Stock-In",
+                    EUserId = userId,
+                    OrganizationId = orgId,
+                    BranchId = branchId,
+                    EntryDate = DateTime.Now,
+                    Remarks="Dust Stock In By Faulty"
+                };
+                _dustStockDetailsRepository.Insert(dust);
+                _dustStockDetailsRepository.Save();
+
+                var dustInfo = _dustStockInfoBusiness.GetPartsByModel(item.ModelId, item.PartsId, orgId, branchId);
+                if (dustInfo != null)
+                {
+                    dustInfo.StockInQty += item.Quantity;
+                    dustInfo.UpdateDate = DateTime.Now;
+                    dustInfo.UpUserId = userId;
+                    _dustStockInfoRepository.Update(dustInfo);
+                }
+                else
+                {
+                    DustStockInfo stockInfo = new DustStockInfo();
+                    stockInfo.ModelId = item.ModelId;
+                    stockInfo.PartsId = item.PartsId;
+                    stockInfo.StockInQty = item.Quantity;
+                    stockInfo.EUserId = userId;
+                    stockInfo.EntryDate = DateTime.Now;
+                    stockInfo.BranchId = branchId;
+                    stockInfo.OrganizationId = orgId;
+                    _dustStockInfoRepository.Insert(stockInfo);
+                    IsSuccess = true;
+                }
+                 _dustStockInfoRepository.Save();
+            }
+            return IsSuccess;
+        }
     }
 }

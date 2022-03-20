@@ -188,5 +188,16 @@ Where 1=1{0}
         {
             return mobilePartStockInfoRepository.GetAll(s => s.DescriptionId == modelId && s.MobilePartId == partsId && s.OrganizationId == orgId && s.BranchId == branchId).ToList();
         }
+
+        public MobilePartStockInfo GetMobilePartStockInfoByModelAndMobilePartsAndCostPriceAndSellPrice(long modelId, long mobilePartsId, double costprice, double sellprice, long orgId, long branchId)
+        {
+            var data = mobilePartStockInfoRepository.GetOneByOrg(info => info.OrganizationId == orgId && info.BranchId == branchId && info.DescriptionId == modelId && info.MobilePartId == mobilePartsId && info.CostPrice == costprice && info.SellPrice==sellprice);
+            return data;
+        }
+
+        public IEnumerable<MobilePartStockInfo> GetPriceByModelAndPartsWithCost(long modelId, long partsId, double costPrice, long orgId, long branchId)
+        {
+            return mobilePartStockInfoRepository.GetAll(s => s.DescriptionId == modelId && s.MobilePartId == partsId && s.CostPrice==costPrice && s.OrganizationId == orgId && s.BranchId == branchId).ToList();
+        }
     }
 }

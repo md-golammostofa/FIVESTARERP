@@ -41,5 +41,10 @@ where fsa.OrganizationId={0} and fsa.BranchId={1}", orgId, branchId)).ToList();
         {
             return _scrapStockInfoRepository.GetAll(s => s.OrganizationId == orgId && s.BranchId == branchId).ToList();
         }
+
+        public IEnumerable<ScrapStockInfo> GetAllScarpedStockByModelAndParts(long modelId, long partsId, long orgId, long branchId)
+        {
+            return this._scrapStockInfoRepository.GetAll(s => s.DescriptionId == modelId && s.PartsId == partsId && s.OrganizationId == orgId && s.BranchId == branchId).ToList();
+        }
     }
 }

@@ -158,6 +158,8 @@
     <Compile Include="Configuration\Interface\IMobilePartStockDetailBusiness.cs" />
     <Compile Include="Configuration\Interface\IMobilePartStockInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\IModelSSBusiness.cs" />
+    <Compile Include="Configuration\Interface\IPartsTransferHToCDetailsBusiness.cs" />
+    <Compile Include="Configuration\Interface\IPartsTransferHToCInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\IRepairBusiness.cs" />
     <Compile Include="Configuration\Interface\IScrapStockDetailBusiness.cs" />
     <Compile Include="Configuration\Interface\IScrapStockInfoBusiness.cs" />
@@ -167,6 +169,8 @@
     <Compile Include="Configuration\Interface\IStockTransferInfoModelToModelBusiness.cs" />
     <Compile Include="Configuration\Interface\ITechnicalServiceBusiness.cs" />
     <Compile Include="Configuration\Interface\ITransferDetailBusiness.cs" />
+    <Compile Include="Configuration\Interface\ITransferFaultyToDustDetailsBusiness.cs" />
+    <Compile Include="Configuration\Interface\ITransferFaultyToDustInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\ITransferInfoBusiness.cs" />
     <Compile Include="Configuration\Interface\IWarehouseToFactoryReturnDetailsBusiness.cs" />
     <Compile Include="Configuration\Interface\IWarehouseToFactoryReturnInfoBusiness.cs" />
@@ -176,6 +180,8 @@
     <Compile Include="Configuration\MobilePartStockDetailBusiness.cs" />
     <Compile Include="Configuration\MobilePartStockInfoBusiness.cs" />
     <Compile Include="Configuration\ModelSSBusiness.cs" />
+    <Compile Include="Configuration\PartsTransferHToCDetailsBusiness.cs" />
+    <Compile Include="Configuration\PartsTransferHToCInfoBusiness.cs" />
     <Compile Include="Configuration\RepairBusiness.cs" />
     <Compile Include="Configuration\ScrapStockDetailBusiness.cs" />
     <Compile Include="Configuration\ScrapStockInfoBusiness.cs" />
@@ -185,6 +191,8 @@
     <Compile Include="Configuration\StockTransferInfoModelToModelBusiness.cs" />
     <Compile Include="Configuration\TechnicalServiceBusiness.cs" />
     <Compile Include="Configuration\TransferDetailBusiness.cs" />
+    <Compile Include="Configuration\TransferFaultyToDustDetailsBusiness.cs" />
+    <Compile Include="Configuration\TransferFaultyToDustInfoBusiness.cs" />
     <Compile Include="Configuration\TransferInfoBusiness.cs" />
     <Compile Include="Configuration\WarehouseToFactoryReturnDetailsBusiness.cs" />
     <Compile Include="Configuration\WarehouseToFactoryReturnInfoBusiness.cs" />

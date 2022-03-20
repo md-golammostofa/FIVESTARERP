@@ -329,6 +329,20 @@
                             <div class="col-md-12" style="margin-top:-10px">
                                 <div class="card shadow card-navy">
                                     <div class="card-body text-sm">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">Job Code</label>
+                                                <input type="text" id="txtJobCode7" name="jobCode" class="form-control form-control-sm" placeholder="Search By Job Code" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">IMEI</label>
+                                                <input type="text" id="txtIMEI2" name="imei" class="form-control form-control-sm" placeholder="Search By IMEI" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlModelName2" class="control-label font-weight-bold">Model Name</label>
+                                                @Html.DropDownList("ddlModelName2", (IEnumerable<SelectListItem>)ViewBag.ddlModelName2, "--Search By Model--", new { @class = "form-control form-control-sm select select2" })
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -370,6 +384,24 @@
                             <div class="col-md-12" style="margin-top:-10px">
                                 <div class="card shadow card-navy">
                                     <div class="card-body text-sm">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">Job Code</label>
+                                                <input type="text" id="txtJobCode6" name="jobCode" class="form-control form-control-sm" placeholder="Search By Job Code" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">IMEI</label>
+                                                <input type="text" id="txtIMEI" name="imei" class="form-control form-control-sm" placeholder="Search By IMEI" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="ddlModelName" class="control-label font-weight-bold">Model Name</label>
+                                                @Html.DropDownList("ddlModelName", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Search By Model--", new { @class = "form-control form-control-sm select select2" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label font-weight-bold">Branch</label>
+                                                @Html.DropDownList("ddlBranchName5", (IEnumerable<SelectListItem>)ViewBag.ddlBranchName5, "--Search By Branch--", new { @class = "form-control form-control-sm ctrl-changed select2" })
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -377,7 +409,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-12 text-sm text-sm" id="dataContainer5" style="overflow-y:scroll">
+                                            <div class="col-md-12 text-sm text-sm" id="dataContainer6" style="overflow-y:scroll">
                                                 @{Html.RenderAction("JobReturnList", new { @flag = "view" });}
                                             </div>
                                         </div>
@@ -483,6 +515,14 @@
         var ddlTransferStatus4 = $("#ddlTransferStatus4");
         //
         var hdfJobOrderId = $("#hdfJobOrderId");
+        var txtJobCode6 = $("#txtJobCode6");
+        var txtIMEI = $("#txtIMEI");
+        var ddlModelName = $("#ddlModelName");
+        var ddlBranchName5 = $("#ddlBranchName5");
+        //
+        var txtJobCode7 = $("#txtJobCode7");
+        var txtIMEI2 = $("#txtIMEI2");
+        var ddlModelName2 = $("#ddlModelName2");
 
         $(document).ready(function () {
 
@@ -1070,6 +1110,61 @@
                     console.log(error);
                 });
             }
+        }
+        //2022-03-07
+        ddlBranchName5.change(function () {
+            LoadDataTableForReturnJobList();
+        })
+        ddlModelName.change(function () {
+            LoadDataTableForReturnJobList();
+        })
+        txtJobCode6.keyup(function () {
+            LoadDataTableForReturnJobList();
+        })
+        txtIMEI.keyup(function () {
+            LoadDataTableForReturnJobList();
+        })
+        function LoadDataTableForReturnJobList() {
+            var data = { flag: "search", branch: TryParseInt(ddlBranchName5.val(), 0), modelId: TryParseInt(ddlModelName.val(), 0), imei: txtIMEI.val(), jobCode: txtJobCode6.val() };
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/FrontDesk/JobReturnList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer6").fadeOut('500', function () {
+                        $("#dataContainer6").empty();
+                        $("#dataContainer6").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+        //09-08-2022
+        ddlModelName2.change(function () {
+            LoadDataTableForTransferJobList();
+        })
+        txtJobCode7.keyup(function () {
+            LoadDataTableForTransferJobList();
+        })
+        txtIMEI2.keyup(function () {
+            LoadDataTableForTransferJobList();
+        })
+        function LoadDataTableForTransferJobList() {
+            var data = { flag: "search", modelId: TryParseInt(ddlModelName2.val(), 0), imei: txtIMEI2.val(), jobCode: txtJobCode7.val() };
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/FrontDesk/JobTransferList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer5").fadeOut('500', function () {
+                        $("#dataContainer5").empty();
+                        $("#dataContainer5").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
         }
 
         function redirectPage(page) {

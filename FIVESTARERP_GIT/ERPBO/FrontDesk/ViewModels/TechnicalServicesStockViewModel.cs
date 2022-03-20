@@ -45,5 +45,8 @@ namespace ERPBO.FrontDesk.ViewModels
         public string UserName { get; set; }
         public string JobOrderCode { get; set; }
         public long ModelId { get; set; }
+        public string ModelName { get; set; }
+        public int TotalJob { get; set; }
+        public decimal Percent { get; set; }
     }
 }

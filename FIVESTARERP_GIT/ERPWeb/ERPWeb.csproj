@@ -1026,6 +1026,18 @@
     <Content Include="Views\FrontDesk\GetJobOrderListAllBranch.cshtml" />
     <Content Include="Views\FrontDesk\_ModelWiseProblem.cshtml" />
     <Content Include="Views\FrontDesk\ModelWiseProblem.cshtml" />
+    <Content Include="Views\Configuration\_PartsTransferHeadToCareInfoList.cshtml" />
+    <Content Include="Views\Configuration\PartsTransferHeadToCareInfoList.cshtml" />
+    <Content Include="Views\Configuration\CreatePartsTransferHeadToCare.cshtml" />
+    <Content Include="Views\Configuration\PartsReceiveHeadToCareInfoList.cshtml" />
+    <Content Include="Views\Configuration\_PartsReceiveHeadToCareInfoList.cshtml" />
+    <Content Include="Views\Configuration\_GetTransferItemDetails.cshtml" />
+    <Content Include="Views\Configuration\_GetPartsItemDetails.cshtml" />
+    <Content Include="Views\Configuration\ReceivePendingFaultyParts.cshtml" />
+    <Content Include="Views\Configuration\_ReceivePendingFaultyDetails.cshtml" />
+    <Content Include="Views\FrontDesk\TotalUsedParts.cshtml" />
+    <Content Include="Views\FrontDesk\_TotalUsedParts.cshtml" />
+    <Content Include="Views\Configuration\CreateFaultyToDust.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1188,6 +1200,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\ServiceRpt\FrontDesk\rptModelWiseProblemReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\ServiceRpt\FrontDesk\rptUsedPartsPercentReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -90,6 +90,8 @@ namespace ERPBO.FrontDesk.DomainModels
         public long? QCName { get; set; }
         public Nullable<DateTime> QCAssignDate { get; set; }
         public Nullable<DateTime> CallCenterAssignDate { get; set; }
+        //
+        public Nullable<DateTime> JobCreateDateTime { get; set; }
 
     }
 }

@@ -124,5 +124,16 @@ namespace ERPBLL.Configuration
         {
             return _stockTransferInfoModelToModelRepository.GetOneByOrg(t => t.TransferInfoModelToModelId == id && t.OrganizationId == orgId);
         }
+
+        public IEnumerable<StockTransferInfoModelToModelDTO> GetModelToModelTransferAllData(long orgId, long branchId)
+        {
+            return this._configDb.Db.Database.SqlQuery<StockTransferInfoModelToModelDTO>(string.Format(@"Select stm.TransferInfoModelToModelId,stm.TransferCode,stm.DescriptionId,m.ModelName'FromModelName',
+stm.ToDescriptionId,mt.ModelName'ToModelName',stm.StateStatus,stm.EntryDate
+From StockTransferInfoModelToModels stm
+Left Join tblModelSS m on stm.DescriptionId=m.ModelId
+Left Join tblModelSS mt on stm.ToDescriptionId=mt.ModelId
+Where stm.OrganizationId={0} and stm.BranchId={1}
+Order By stm.EntryDate desc", orgId, branchId)).ToList();
+        }
     }
 }

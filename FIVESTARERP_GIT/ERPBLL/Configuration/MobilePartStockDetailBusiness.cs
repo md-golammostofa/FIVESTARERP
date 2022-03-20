@@ -662,19 +662,21 @@ Where 1=1{0}) tbl1
                 var reqQty = item.IssueQty;
                 if (reqQty > 0)
                 {
-                    var reqDetails = _requsitionDetailForJobOrderBusiness.GetDetailsByDetailsId(item.RequsitionDetailForJobOrderId, orgId, branchId);
-                    if(reqDetails != null)
-                    {
-                        reqDetails.IssueQty = reqQty;
-                        reqDetails.UpUserId = userId;
-                        reqDetails.UpdateDate = DateTime.Now;
-                        requsitionDetailForJobOrderRepository.Update(reqDetails);
-                        requsitionDetailForJobOrderRepository.Save();
-                    }
-                    var partsInStock = _mobilePartStockInfoBusiness.GetAllMobilePartStockInfoByModelAndBranch(orgId, dto.DescriptionId, branchId).Where(i => i.MobilePartId == item.PartsId && (i.StockInQty - i.StockOutQty) > 0).OrderBy(i => i.MobilePartStockInfoId).ToList();
+                    var partsInStock = _mobilePartStockInfoBusiness.GetPriceByModelAndParts(dto.DescriptionId,item.PartsId.Value,orgId,branchId).Where(i =>(i.StockInQty - i.StockOutQty) > 0).OrderBy(i => i.MobilePartStockInfoId).ToList();
 
                     if (partsInStock.Count() > 0)
                     {
+                        //
+                        var reqDetails = _requsitionDetailForJobOrderBusiness.GetDetailsByDetailsId(item.RequsitionDetailForJobOrderId, orgId, branchId);
+                        if (reqDetails != null)
+                        {
+                            reqDetails.IssueQty = reqQty;
+                            reqDetails.UpUserId = userId;
+                            reqDetails.UpdateDate = DateTime.Now;
+                            requsitionDetailForJobOrderRepository.Update(reqDetails);
+                            requsitionDetailForJobOrderRepository.Save();
+                        }
+                        //
                         int remainQty = reqQty;
                         foreach (var stock in partsInStock)
                         {
@@ -922,6 +924,58 @@ Order By sd.EntryDate desc
                 }
             }
             mobilePartStockDetailRepository.InsertAll(stockDetails);
+            return mobilePartStockDetailRepository.Save();
+        }
+        public bool SaveMobilePartStockInByHTC(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId)
+        {
+            List<MobilePartStockDetail> mobilePartStockDetails = new List<MobilePartStockDetail>();
+            foreach (var item in mobilePartStockDetailDTO)
+            {
+                MobilePartStockDetail StockDetail = new MobilePartStockDetail();
+                StockDetail.MobilePartStockDetailId = item.MobilePartStockDetailId;
+                StockDetail.MobilePartId = item.MobilePartId;
+                StockDetail.SWarehouseId = item.SWarehouseId;
+                StockDetail.DescriptionId = item.DescriptionId;
+                StockDetail.CostPrice = item.CostPrice;
+                StockDetail.SellPrice = item.SellPrice;
+                StockDetail.Quantity = item.Quantity;
+                StockDetail.Remarks = item.Remarks;
+                StockDetail.OrganizationId = orgId;
+                StockDetail.BranchId = branchId;
+                StockDetail.EUserId = userId;
+                StockDetail.EntryDate = DateTime.Now;
+                StockDetail.StockStatus = StockStatus.StockIn;
+                StockDetail.BranchFrom = item.BranchFrom;
+                StockDetail.ReferrenceNumber = item.ReferrenceNumber;
+
+                var warehouseInfo = _mobilePartStockInfoBusiness.GetMobilePartStockInfoByModelAndMobilePartsAndCostPriceAndSellPrice(item.DescriptionId.Value, item.MobilePartId.Value, item.CostPrice,item.SellPrice, orgId, branchId);
+
+                if (warehouseInfo != null)
+                {
+                    warehouseInfo.StockInQty += item.Quantity;
+                    warehouseInfo.UpUserId = userId;
+                    warehouseInfo.UpdateDate = DateTime.Now;
+                    mobilePartStockInfoRepository.Update(warehouseInfo);
+                }
+                else
+                {
+                    MobilePartStockInfo mobilePartStockInfo = new MobilePartStockInfo();
+                    mobilePartStockInfo.SWarehouseId = item.SWarehouseId;
+                    mobilePartStockInfo.MobilePartId = item.MobilePartId;
+                    mobilePartStockInfo.DescriptionId = item.DescriptionId;
+                    mobilePartStockInfo.CostPrice = item.CostPrice;
+                    mobilePartStockInfo.SellPrice = item.SellPrice;
+                    mobilePartStockInfo.StockInQty = item.Quantity;
+                    mobilePartStockInfo.StockOutQty = 0;
+                    mobilePartStockInfo.OrganizationId = orgId;
+                    mobilePartStockInfo.BranchId = branchId;
+                    mobilePartStockInfo.EUserId = userId;
+                    mobilePartStockInfo.EntryDate = DateTime.Now;
+                    mobilePartStockInfoRepository.Insert(mobilePartStockInfo);
+                }
+                mobilePartStockDetails.Add(StockDetail);
+            }
+            mobilePartStockDetailRepository.InsertAll(mobilePartStockDetails);
             return mobilePartStockDetailRepository.Save();
         }
     }

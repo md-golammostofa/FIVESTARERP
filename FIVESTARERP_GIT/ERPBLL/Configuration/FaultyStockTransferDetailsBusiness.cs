@@ -85,6 +85,7 @@ namespace ERPBLL.Configuration
                         CostPrice = 0,
                         SellPrice = 0,
                         Quantity = item.Quantity,
+                        ReceiveQty=0,
                         EUserId = userId,
                         OrganizationId = orgId,
                         BranchId = branchId,
@@ -116,15 +117,15 @@ namespace ERPBLL.Configuration
             return IsSuccess;
         }
 
-        public bool SaveFaultyStockReceive(long transferId, long userId, long orgId, long branchId)
+        public bool SaveFaultyStockReceive(FaultyStockTransferInfoDTO dto, long userId, long orgId, long branchId)
         {
             bool IsSuccess = false;
-            if (transferId > 0)
+            if (dto.FSTInfoId > 0)
             {
-                var infoInDb = _faultyStockTransferInfoBusiness.GetOneByOneInfoByStatus(transferId, orgId);
+                var infoInDb = _faultyStockTransferInfoBusiness.GetOneByOneInfoByStatus(dto.FSTInfoId, orgId);
                 if(infoInDb != null)
                 {
-                    infoInDb.StateStatus = "Received";
+                    infoInDb.StateStatus = dto.StateStatus;
                     infoInDb.UpdateDate = DateTime.Now;
                     infoInDb.UpUserId = userId;
                     _faultyStockTransferInfoRepository.Update(infoInDb);
@@ -132,18 +133,27 @@ namespace ERPBLL.Configuration
                 if (_faultyStockTransferInfoRepository.Save())
                 {
                     List<FaultyStockDetailDTO> faultyStock = new List<FaultyStockDetailDTO>();
-                    var details = GetAllReceiveDetailsByInfoId(transferId, orgId);
-                    if (details.Count() > 0)
+                    //var details = GetAllReceiveDetailsByInfoId(dto.FSTInfoId, orgId);
+                    if (dto.faultyStockTransferDetails.Count() > 0)
                     {
-                        foreach(var item in details)
+                        foreach(var item in dto.faultyStockTransferDetails)
                         {
+                            var detaiIndb = GetOneDetailsByDetailsId(item.FSTDetailsId, orgId);
+                            if(detaiIndb != null)
+                            {
+                                detaiIndb.ReceiveQty = item.ReceiveQty;
+                                detaiIndb.UpdateDate = DateTime.Now;
+                                detaiIndb.UpUserId = userId;
+                                _faultyStockTransferDetailsRepository.Update(detaiIndb);
+                                _faultyStockTransferDetailsRepository.Save();
+                            }
                             FaultyStockDetailDTO faultydto = new FaultyStockDetailDTO
                             {
                                 DescriptionId = item.ModelId,
                                 PartsId = item.PartsId,
                                 CostPrice = item.CostPrice,
                                 SellPrice = item.SellPrice,
-                                Quantity = item.Quantity,
+                                Quantity = item.ReceiveQty,
                                 StateStatus = "Stock-In",
                                 EUserId = userId,
                                 OrganizationId = orgId,
@@ -157,6 +167,21 @@ namespace ERPBLL.Configuration
                 }
             }
             return IsSuccess;
+        }
+
+        public IEnumerable<FaultyStockTransferDetailsDTO> GetAllDetailsDataByInfoId(long infoId, long orgId)
+        {
+            return _configurationDb.Db.Database.SqlQuery<FaultyStockTransferDetailsDTO>(string.Format(@"Select fd.FSTInfoId,fd.FSTDetailsId,fd.ModelId,m.ModelName,fd.PartsId,
+p.MobilePartName'PartsName',p.MobilePartCode'PartsCode',fd.Quantity 
+From tblFaultyStockTransferDetails fd
+Left Join tblMobileParts p on fd.PartsId=p.MobilePartId
+Left Join tblModelSS m on fd.ModelId=m.ModelId
+Where fd.FSTInfoId={0} and fd.OrganizationId={1}", infoId, orgId));
+        }
+
+        public FaultyStockTransferDetails GetOneDetailsByDetailsId(long detailsId, long orgId)
+        {
+            return _faultyStockTransferDetailsRepository.GetOneByOrg(d => d.FSTDetailsId == detailsId && d.OrganizationId == orgId);
         }
     }
 }

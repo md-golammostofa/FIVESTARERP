@@ -1,4 +1,5 @@
-﻿using ERPBLL.Configuration.Interface;
+﻿using ERPBLL.Common;
+using ERPBLL.Configuration.Interface;
 using ERPBO.Configuration.DomainModels;
 using ERPBO.Configuration.DTOModels;
 using ERPDAL.ConfigurationDAL;
@@ -38,13 +39,48 @@ namespace ERPBLL.Configuration
 
         }
 
-        public IEnumerable<FaultyStockRepairedInfoDTO> GetAllRepairedList(long orgId, long branchId)
+        public IEnumerable<FaultyStockRepairedInfoDTO> GetAllRepairedList(long orgId, long branchId, long? tsId, string fromDate, string toDate)
         {
-            var data = this._configurationDb.Db.Database.SqlQuery<FaultyStockRepairedInfoDTO>(string.Format(@"Select fs.FSRInfoId,fs.Code,fs.StateStatus,u.UserName'TSName',fs.AssignDate,fs.RepairedDate 
+            var data = this._configurationDb.Db.Database.SqlQuery<FaultyStockRepairedInfoDTO>(QueryForAllReapired(orgId,branchId,tsId,fromDate,toDate)).ToList();
+            return data;
+        }
+        private string QueryForAllReapired(long orgId, long branchId,long? tsId,string fromDate,string toDate)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+            if (orgId > 0)
+            {
+                param += string.Format(@"and fs.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@"and fs.BranchId={0}", branchId);
+            }
+            if (tsId != null && tsId > 0)
+            {
+                param += string.Format(@"and fs.TSId ={0}", tsId);
+            }
+            if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(fs.EntryDate as date) between '{0}' and '{1}'", fDate, tDate);
+            }
+            else if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
+            {
+                string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(fs.EntryDate as date)='{0}'", fDate);
+            }
+            else if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+                param += string.Format(@" and Cast(fs.EntryDate as date)='{0}'", tDate);
+            }
+            query = string.Format(@"Select fs.FSRInfoId,fs.Code,fs.TSId,fs.StateStatus,u.UserName'TSName',fs.AssignDate,fs.RepairedDate 
 From tblFaultyStockRepairedInfo fs
 Left Join [ControlPanel].dbo.tblApplicationUsers u on fs.TSId=u.UserId
-Where fs.OrganizationId={0} and fs.BranchId={1} Order By fs.EntryDate desc", orgId, branchId)).ToList();
-            return data;
+Where 1=1{0} Order By fs.EntryDate desc", Utility.ParamChecker(param));
+            return query;
         }
 
         public IEnumerable<FaultyStockRepairedInfoDTO> GetAllRepairedListForTS(long tsId,long orgId, long branchId)

@@ -135,5 +135,8 @@ namespace ERPBO.FrontDesk.ViewModels
         //
         public string EngProblems { get; set; }
         public string QCName1 { get; set; }
+        //
+        public Nullable<DateTime> JobCreateDateTime { get; set; }
+        public string PendingPartsName { get; set; }
     }
 }

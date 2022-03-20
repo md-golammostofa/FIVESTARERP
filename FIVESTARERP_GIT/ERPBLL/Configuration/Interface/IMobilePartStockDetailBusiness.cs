@@ -28,5 +28,6 @@ namespace ERPBLL.Configuration.Interface
         IEnumerable<MobilePartStockDetailDTO> GetAllStockDetails(long? descriptionId, long? mobilePartId, long orgId, long branchId, string stockStatus, string fromDate, string toDate);
 
         bool SaveMobilePartStockOutByGoodToFaulty(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long orgId, long branchId, long userId);
+        bool SaveMobilePartStockInByHTC(List<MobilePartStockDetailDTO> mobilePartStockDetailDTO, long userId, long orgId, long branchId);
     }
 }

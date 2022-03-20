@@ -10,5 +10,6 @@ namespace ERPBLL.Configuration.Interface
     public interface IDustStockDetailsBusiness
     {
         bool SaveDustStock(List<DustStockDetailsDTO> dto, long userId, long branchId, long orgId);
+        bool SaveDustStockInFromFaulty(List<DustStockDetailsDTO> dto, long userId, long branchId, long orgId);
     }
 }

@@ -22,5 +22,6 @@ namespace ERPBLL.Configuration.Interface
         IEnumerable<TransferInfoDTO> GetStockTransferForReport(long infoId, long orgId, long branchId);
         IEnumerable<TransferInfoDTO> GetAllReceiveList(long? branch, string status, long orgId, long branchId, string fromDate, string toDate);
         IEnumerable<TransferInfoDTO> BranchRequsitionDaysOver(long orgId, long branchId,string fromDate,string toDate);
+        IEnumerable<TransferInfoDTO> GetPartsRequsitionInfoData(long orgId, long branchId);
     }
 }

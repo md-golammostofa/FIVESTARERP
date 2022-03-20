@@ -32,8 +32,16 @@
                                     <input type="text" name="jobCode" id="txtJobCode" class="form-control form-control-sm" placeholder="Search By JobCode" />
                                 </div>
                                 <div class="col-md-2">
+                                    <label class="control-label font-weight-bold">IMEI</label>
+                                    <input type="text" name="imei" id="txtIMEI" class="form-control form-control-sm" placeholder="Search By IMEI" />
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="ddlModelName" class="control-label font-weight-bold">Model Name</label>
+                                    @Html.DropDownList("ddlModelName", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "--Search By Model--", new { @class = "form-control form-control-sm select select2" })
+                                </div>
+                                <div class="col-md-2">
                                     <label for="ddlTechnicalServicesName" class="control-label font-weight-bold">TS Name</label>
-                                    @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select TSName--", new { @class = "form-control form-control-sm" })
+                                    @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select TSName--", new { @class = "form-control form-control-sm select select2" })
                                 </div>
                                 <div class="col-md-2">
                                     <label class="control-label font-weight-bold">From Date</label>
@@ -53,6 +61,9 @@
                                         </div>
                                     </div>
                                 </div>
+
+                            </div>
+                            <div class="row text-sm">
                                 <div class="col-md-2">
                                     <label for="rptType">Type</label>
                                     <select name="rptType" id="rptType" class="form-control form-control-sm">
@@ -82,6 +93,8 @@
         var ddlTechnicalServicesName = $("#ddlTechnicalServicesName");
         var dptFromDate = $("#dptFromDate");
         var dptToDate = $("#dptToDate");
+        var txtIMEI = $("#txtIMEI");
+        var ddlModelName = $("#ddlModelName");
         var pageNo = 1;
 
         $(document).ready(function () {
@@ -140,9 +153,15 @@
         ddlTechnicalServicesName.change(function () {
             LoadDataTable();
         })
+        ddlModelName.change(function () {
+            LoadDataTable();
+        })
+        txtIMEI.keyup(function () {
+            LoadDataTable();
+        })
 
         function LoadDataTable() {
-            var data = { flag: "search", jobCode: txtJobCode.val().trim(), tsId: TryParseInt(ddlTechnicalServicesName.val(), 0), fromDate: dptFromDate.val(), toDate: dptToDate.val(), page: pageNo };
+            var data = { flag: "search", jobCode: txtJobCode.val().trim(), tsId: TryParseInt(ddlTechnicalServicesName.val(), 0), fromDate: dptFromDate.val(), toDate: dptToDate.val(), modelId: TryParseInt(ddlModelName.val()), imei: txtIMEI.val(), page: pageNo };
 
             $.when(getReqWithData('html', 'GET', '/FrontDesk/JobSignInAndOut', data)).then(function (res, status) {
                 if (status === "success") {

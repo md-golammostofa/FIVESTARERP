@@ -88,7 +88,7 @@ namespace ERPBLL.FrontDesk.Interface
 
         IEnumerable<JobOrderDTO> GetMultipleJobReceipt(string multipleJobCode,long orgId, long branchId);
         IEnumerable<JobOrderDTO> GetRefeNumberCount(string imei, long branchId, long orgId);
-        IEnumerable<JobOrderDTO> GetQCPassFailData(string jobCode, long? modelId, string status, long orgId, long branchId, string fromDate, string toDate);
+        IEnumerable<JobOrderDTO> GetQCPassFailData(string jobCode, long? modelId, string status, long orgId, long branchId, string fromDate, string toDate,string imei,long? qcName);
         IEnumerable<JobOrderDTO> GetIMEICount(long branchId, long orgId);
 
         IEnumerable<JobOrderDTO> CallCentreApproval(string mobileNo, long? modelId, string status, long? jobOrderId, string jobCode, string iMEI, string iMEI2, long orgId, long branchId, string fromDate, string toDate, string customerType, string jobType, string repairStatus, string customer, string courierNumber, string recId);
@@ -105,5 +105,6 @@ namespace ERPBLL.FrontDesk.Interface
         IEnumerable<JobOrderDTO> GetBounceReport(long orgId,long branchId,string imei);
         IEnumerable<JobOrderDTO> DailyQCPassFailReports(string jobCode, long? modelId, string status, long orgId, long branchId, string fromDate, string toDate,long userId);
         IEnumerable<JobOrderDTO> GetJobOrderAllBranch(long orgId, long? branchId,long? modelId, string fromDate, string toDate);
+        JobOrder GetJobOrderByJobId(string jobOrder, long orgId);
     }
 }

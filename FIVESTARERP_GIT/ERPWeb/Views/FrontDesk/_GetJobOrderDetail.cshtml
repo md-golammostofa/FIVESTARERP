@@ -104,6 +104,14 @@
                 <td class="text-purple">Approx Bill</td>
                 <td>@Model.ApproxBill</td>
             </tr>
+            @if(Model.TsRepairStatus== "PENDING FOR SPARE PARTS")
+            {
+              <tr>
+                <td class="text-purple">PendingPartsName</td>
+                <td colspan="5">@Model.PendingPartsName</td>
+             </tr>
+            }
+            
             @if (Model.StateStatus == ERPBLL.Common.JobOrderStatus.PendingJobOrder)
             {
                 <tr>
@@ -178,13 +186,20 @@
     </div>
     <div class="col-md-12">
         <div class="modal-footer">
-            @if ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.TsRepairStatus == "RETURN FOR ENGINEER HEAD") || (Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.IsReturn == true) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.JobOrderType=="Warrenty") && (Model.IsReturn==true || Model.IsTransfer==null)) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.InvoiceCode !=null)) || (Model.StateStatus == "HandSetChange" && Model.TsRepairStatus == "MODULE SWAP") ||(Model.StateStatus==ERPBLL.Common.JobOrderStatus.RepairDone && Model.TsRepairStatus== "REPAIR AND RETURN" && User.BranchId == Model.TransferBranchId))
+            @if ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.TsRepairStatus == "RETURN FOR ENGINEER HEAD") || (Model.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && Model.IsReturn == true) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.JobOrderType == "Warrenty") && (Model.IsReturn == true || Model.IsTransfer == null)) || ((Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone) && (Model.InvoiceCode != null)) || (Model.StateStatus == "HandSetChange" && Model.TsRepairStatus == "MODULE SWAP") || (Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone && Model.TsRepairStatus == "REPAIR AND RETURN" && User.BranchId == Model.TransferBranchId))
             {
                 <button type="button" class="btn btn-sm btn-success btnDeliveryDone">Delivery</button>
             }
             @if (Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone && Model.JobOrderType == "Billing" && Model.InvoiceCode == null)
             {
-                <button type="button" class="btn btn-sm btn-primary btnInvoice">Invoice</button>
+                if (Model.ServiceName != "Return")
+                {
+                    <button type="button" class="btn btn-sm btn-primary btnInvoice">Invoice</button>
+                }
+            }
+            @if (Model.ServiceName == "Return" && Model.StateStatus == ERPBLL.Common.JobOrderStatus.RepairDone)
+            {
+                <button type="button" class="btn btn-sm btn-success btnDeliveryDone">Delivery</button>
             }
         </div>
     </div>

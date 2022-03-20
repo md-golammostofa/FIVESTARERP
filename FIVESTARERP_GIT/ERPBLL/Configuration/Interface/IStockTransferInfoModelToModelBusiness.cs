@@ -13,5 +13,6 @@ namespace ERPBLL.Configuration.Interface
         bool SaveStockTransferModelToModel(List<StockTransferDetailModelToModelDTO> dto, long userId, long branchId, long orgId);
         IEnumerable<StockTransferInfoModelToModel> GetAllStockTransferInfoModelToModelByOrgIdAndBranch(long orgId, long branchId);
         StockTransferInfoModelToModel GetStockTransferMMInfoById(long id, long orgId);
+        IEnumerable<StockTransferInfoModelToModelDTO> GetModelToModelTransferAllData(long orgId, long branchId);
     }
 }

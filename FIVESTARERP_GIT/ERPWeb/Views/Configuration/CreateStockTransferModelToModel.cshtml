@@ -56,6 +56,7 @@
                         @Html.DropDownList("ddlMobileParts", (IEnumerable<SelectListItem>)ViewBag.ddlMobileParts, "--Select MobileParts--", new { @class = "form-control form-control-sm select2" })
                         <span class="error hide require-parts font-weight-bold">Parts is required !</span>
                         <span class="error hide duplicate-parts font-weight-bold">This parts is already exist !</span>
+                        <span class="error hide duplicate-goodparts font-weight-bold">This parts is Not Available !</span>
                     </div>
                     <div class="col-md-2">
                         <label for="ddlCostPrice" class="control-label font-weight-bold">Cost Price<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
@@ -65,7 +66,7 @@
                     <div class="col-md-2">
                         <div class="form-group col-md-12">
                             <label for="txtSellPrice" class="control-label font-weight-bold">Sell Price<sup><i class="fas fa-asterisk fa-sm text-red" style="font-size:0.25rem;"></i></sup></label>
-                            <input type="text" name="txtSellPrice" value="" id="txtSellPrice" class="form-control form-control-sm" disabled/>
+                            <input type="text" name="txtSellPrice" value="" id="txtSellPrice" class="form-control form-control-sm"/>
                             <span class="error hide require-sellPrice font-weight-bold">SellPrice is required !</span>
                         </div>
                     </div>
@@ -187,8 +188,8 @@
         //Sell text
         ddlCostPrice.change(function () {
             $("#txtSellPrice").val('');
-            if (ddlServicesWarehouse.val() != "", ddlMobileParts.val() != ""/*, txtSellPrice.val() != ""*/) {
-                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common2/GetSellPriceByCostPrice', JSON.stringify({ warehouseId: ddlServicesWarehouse.val(), partsId: ddlMobileParts.val(), cprice: TryParseFloat(ddlCostPrice.val(),0) }), getToken())).then(function (res, status) {
+            if (ddlMobileParts.val() != "", ddlModelsTo.val() != "") {
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Common2/GetLatestSellPriceByModelAndParts', JSON.stringify({ partsId: ddlMobileParts.val(), modelId: TryParseInt(ddlModelsTo.val(),0) }), getToken())).then(function (res, status) {
                     //console.log(res);
                     //console.log(status);
                     if (status == "success") {
@@ -261,6 +262,12 @@
             if (TryParseInt(ddlModels.val(), 0) > 0 && TryParseInt(ddlModelsTo.val(), 0) > 0 && (TryParseInt(ddlModels.val(), 0) == TryParseInt(ddlModelsTo.val(), 0))) {
                  isValid = false;
                  $(".require-same-modelTo").removeClass("hide");
+            }
+            if (txtStockInQty.val() > 0) {
+                if (ajaxBooleanChecker(JSON.stringify({ modelId: TryParseInt(ddlModels.val(), 0), partsId: TryParseInt(ddlMobileParts.val(), 0), qty: TryParseInt(txtStockInQty.val(), 0), costPrice: TryParseInt(ddlCostPrice.val(),0) }), '/Common2/PartsAvailableQtyWithCostPrice', getToken()) == true) {
+                    isValid = false;
+                    $(".duplicate-goodparts").removeClass("hide");
+                }
             }
 
             return isValid;

@@ -184,4 +184,20 @@ namespace ERPDAL.ConfigurationDAL
     {
         public GoodToFaultyTransferDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
     }
+    public class PartsTransferHToCInfoRepository : ConfigurationBaseRepository<PartsTransferHToCInfo>
+    {
+        public PartsTransferHToCInfoRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
+    public class PartsTransferHToCDetailsRepository : ConfigurationBaseRepository<PartsTransferHToCDetails>
+    {
+        public PartsTransferHToCDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
+    public class TransferFaultyToDustInfoRepository : ConfigurationBaseRepository<TransferFaultyToDustInfo>
+    {
+        public TransferFaultyToDustInfoRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
+    public class TransferFaultyToDustDetailsRepository : ConfigurationBaseRepository<TransferFaultyToDustDetails>
+    {
+        public TransferFaultyToDustDetailsRepository(IConfigurationUnitOfWork configurationUnitOfWork) : base(configurationUnitOfWork) { }
+    }
 }

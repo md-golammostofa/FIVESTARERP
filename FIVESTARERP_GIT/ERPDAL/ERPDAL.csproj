@@ -316,6 +316,22 @@
     <Compile Include="ConfigurationContextMigrations\202201090520427_Configuration_GoodFaultyChangeDataType.Designer.cs">
       <DependentUpon>202201090520427_Configuration_GoodFaultyChangeDataType.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigurationContextMigrations\202202020518291_Configuration_PartsTransferHTCInfo&amp;Details.cs" />
+    <Compile Include="ConfigurationContextMigrations\202202020518291_Configuration_PartsTransferHTCInfo&amp;Details.Designer.cs">
+      <DependentUpon>202202020518291_Configuration_PartsTransferHTCInfo&amp;Details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202202030410554_Configuration_PartsTransferBranchAdd.cs" />
+    <Compile Include="ConfigurationContextMigrations\202202030410554_Configuration_PartsTransferBranchAdd.Designer.cs">
+      <DependentUpon>202202030410554_Configuration_PartsTransferBranchAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202202120819103_Configuration_FSTDetails_RecQty.cs" />
+    <Compile Include="ConfigurationContextMigrations\202202120819103_Configuration_FSTDetails_RecQty.Designer.cs">
+      <DependentUpon>202202120819103_Configuration_FSTDetails_RecQty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationContextMigrations\202203100351186_Configuration_TransferFaultyToDustStock.cs" />
+    <Compile Include="ConfigurationContextMigrations\202203100351186_Configuration_TransferFaultyToDustStock.Designer.cs">
+      <DependentUpon>202203100351186_Configuration_TransferFaultyToDustStock.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigurationContextMigrations\Configuration.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationBaseRepository.cs" />
     <Compile Include="ConfigurationDAL\ConfigurationDbContext.cs" />
@@ -591,6 +607,10 @@
     <Compile Include="FrontDeskContextMigrations\202112131654579_FrontDesk_ReqIssueUser.cs" />
     <Compile Include="FrontDeskContextMigrations\202112131654579_FrontDesk_ReqIssueUser.Designer.cs">
       <DependentUpon>202112131654579_FrontDesk_ReqIssueUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrontDeskContextMigrations\202202120820380_FrontDesk_JobOrder_JobCreateDateTime.cs" />
+    <Compile Include="FrontDeskContextMigrations\202202120820380_FrontDesk_JobOrder_JobCreateDateTime.Designer.cs">
+      <DependentUpon>202202120820380_FrontDesk_JobOrder_JobCreateDateTime.cs</DependentUpon>
     </Compile>
     <Compile Include="FrontDeskContextMigrations\Configuration.cs" />
     <Compile Include="FrontDeskDAL\FrontDeskDbContext.cs" />
@@ -1253,6 +1273,18 @@
     <EmbeddedResource Include="ConfigurationContextMigrations\202201090520427_Configuration_GoodFaultyChangeDataType.resx">
       <DependentUpon>202201090520427_Configuration_GoodFaultyChangeDataType.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202202020518291_Configuration_PartsTransferHTCInfo&amp;Details.resx">
+      <DependentUpon>202202020518291_Configuration_PartsTransferHTCInfo&amp;Details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202202030410554_Configuration_PartsTransferBranchAdd.resx">
+      <DependentUpon>202202030410554_Configuration_PartsTransferBranchAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202202120819103_Configuration_FSTDetails_RecQty.resx">
+      <DependentUpon>202202120819103_Configuration_FSTDetails_RecQty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigurationContextMigrations\202203100351186_Configuration_TransferFaultyToDustStock.resx">
+      <DependentUpon>202203100351186_Configuration_TransferFaultyToDustStock.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ControlPanelContextMigrations\202006151000333_ControlPanel_AllEntities_16-May-2020.resx">
       <DependentUpon>202006151000333_ControlPanel_AllEntities_16-May-2020.cs</DependentUpon>
     </EmbeddedResource>
@@ -1450,6 +1482,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrontDeskContextMigrations\202112131654579_FrontDesk_ReqIssueUser.resx">
       <DependentUpon>202112131654579_FrontDesk_ReqIssueUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202202120820380_FrontDesk_JobOrder_JobCreateDateTime.resx">
+      <DependentUpon>202202120820380_FrontDesk_JobOrder_JobCreateDateTime.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InventoryContextMigrations\202008121414323_Inventory_AllEntities_12-Aug-2020.resx">
       <DependentUpon>202008121414323_Inventory_AllEntities_12-Aug-2020.cs</DependentUpon>

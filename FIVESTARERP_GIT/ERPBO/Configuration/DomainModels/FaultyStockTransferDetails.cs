@@ -18,6 +18,7 @@ namespace ERPBO.Configuration.DomainModels
         public double CostPrice { get; set; }
         public double SellPrice { get; set; }
         public int Quantity { get; set; }
+        public int ReceiveQty { get; set; }
         public string Remarks { get; set; }
         public long BranchId { get; set; }
         public long OrganizationId { get; set; }

@@ -27,11 +27,11 @@ namespace ERPBLL.FrontDesk
             this._jobOrderBusiness = jobOrderBusiness;
         }
 
-        public IEnumerable<JobOrderTransferDetailDTO> GetReceiveJob(long orgId, long branchId, long? branchName, string jobCode, string transferCode, string fromDate, string toDate, string tstatus)
+        public IEnumerable<JobOrderTransferDetailDTO> GetReceiveJob(long orgId, long branchId, long? branchName, string jobCode, string transferCode, string fromDate, string toDate, string tstatus, long? modelId, string imei)
         {
-            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderTransferDetailDTO>(QueryForGetReceiveJob(orgId,branchId,branchName,jobCode,transferCode,fromDate,toDate,tstatus)).ToList();
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderTransferDetailDTO>(QueryForGetReceiveJob(orgId,branchId,branchName,jobCode,transferCode,fromDate,toDate,tstatus,modelId,imei)).ToList();
         }
-        private string QueryForGetReceiveJob(long orgId, long branchId, long? branchName, string jobCode, string transferCode, string fromDate, string toDate,string tstatus)
+        private string QueryForGetReceiveJob(long orgId, long branchId, long? branchName, string jobCode, string transferCode, string fromDate, string toDate,string tstatus,long? modelId,string imei)
         {
             string query = string.Empty;
             string param = string.Empty;
@@ -59,6 +59,14 @@ namespace ERPBLL.FrontDesk
             {
                 param += string.Format(@"and d.TransferStatus ='{0}'", tstatus);
             }
+            if (!string.IsNullOrEmpty(imei))
+            {
+                param += string.Format(@"and j.IMEI LIKE '%{0}%'", imei);
+            }
+            if (modelId != null && modelId > 0)
+            {
+                param += string.Format(@"and j.DescriptionId ={0}", modelId);
+            }
             if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
@@ -77,8 +85,8 @@ namespace ERPBLL.FrontDesk
             }
 
             query = string.Format(@"Select JobOrderTransferDetailId,BranchId,TransferCode,JobOrderId,JobOrderCode,JobStatus,IMEI,
-TransferStatus,FromBranchName,EntryDate,ModelColor,ModelName,SUBSTRING(AccessoriesNames,1,LEN(AccessoriesNames)-1) 'AccessoriesNames',UserName'ReceivedBy' From (Select d.JobOrderTransferDetailId,d.BranchId,d.TransferCode,d.JobOrderId,d.JobOrderCode,d.JobStatus,
-d.TransferStatus,b.BranchName'FromBranchName',d.EntryDate,j.ModelColor,de.ModelName,j.IMEI,
+TransferStatus,FromBranchName,EntryDate,ModelColor,DescriptionId,ModelName,SUBSTRING(AccessoriesNames,1,LEN(AccessoriesNames)-1) 'AccessoriesNames',UserName'ReceivedBy' From (Select d.JobOrderTransferDetailId,d.BranchId,d.TransferCode,d.JobOrderId,d.JobOrderCode,d.JobStatus,
+d.TransferStatus,b.BranchName'FromBranchName',d.EntryDate,j.ModelColor,de.ModelName,j.IMEI,j.DescriptionId,
 (Cast((Select AccessoriesName+',' From [Configuration].dbo.tblAccessories ass
 Inner Join tblJobOrderAccessories joa on ass.AccessoriesId = joa.AccessoriesId
 Where joa.JobOrderId = j.JodOrderId
@@ -260,12 +268,43 @@ Select JobOrderId From tblJobOrderTransferDetail Where TransferCode='{0}' and Or
             return data;
         }
 
-        public IEnumerable<JobOrderTransferDetailDTO> JobOrderTransferList(long orgId, long branchId)
+        public IEnumerable<JobOrderTransferDetailDTO> JobOrderTransferList(long orgId, long branchId, long? modelId, string imei, string jobCode)
         {
-            var data= this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderTransferDetailDTO>(string.Format(@"Select TransferCode,JobOrderCode,TransferStatus,BranchName From tblJobOrderTransferDetail tsd
-Left Join [ControlPanel].dbo.tblBranch br on tsd.ToBranch=br.BranchId
-Where tsd.OrganizationId={0} and tsd.BranchId={1} Order By tsd.EntryDate desc", orgId, branchId)).ToList();
+            var data= this._frontDeskUnitOfWork.Db.Database.SqlQuery<JobOrderTransferDetailDTO>(QueryForJobOrderTransferList(orgId,branchId,modelId,imei,jobCode)).ToList();
             return data;
+        }
+        private string QueryForJobOrderTransferList(long orgId,long branchId,long? modelId,string imei,string jobCode)
+        {
+            string query = string.Empty;
+            string param = string.Empty;
+            if (orgId > 0)
+            {
+                param += string.Format(@"and tsd.OrganizationId={0}", orgId);
+            }
+            if (branchId > 0)
+            {
+                param += string.Format(@"and tsd.BranchId={0}", branchId);
+            }
+            if (!string.IsNullOrEmpty(imei))
+            {
+                param += string.Format(@"and j.IMEI Like '%{0}%'", imei);
+            }
+            if (!string.IsNullOrEmpty(jobCode))
+            {
+                param += string.Format(@"and tsd.JobOrderCode Like '%{0}%'", jobCode);
+            }
+            if (modelId != null && modelId > 0)
+            {
+                param += string.Format(@"and j.DescriptionId={0}", modelId);
+            }
+
+            query = string.Format(@"Select TransferCode,tsd.JobOrderCode,TransferStatus,BranchName,
+j.IMEI,j.DescriptionId,m.ModelName From tblJobOrderTransferDetail tsd
+Left Join [ControlPanel].dbo.tblBranch br on tsd.ToBranch=br.BranchId
+Left Join tblJobOrders j on tsd.JobOrderId=j.JodOrderId
+Left Join [Configuration].dbo.tblModelSS m on j.DescriptionId=m.ModelId
+Where 1=1{0} Order By tsd.EntryDate desc", Utility.ParamChecker(param));
+            return query;
         }
 
         public JobOrderTransferDetail GetJobOrderByJobId(long jobId, long orgId, long brabchId)

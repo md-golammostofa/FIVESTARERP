@@ -53,11 +53,11 @@ namespace ERPBLL.FrontDesk
             return _frontDeskUnitOfWork.Db.Database.SqlQuery<TSStockByRequsitionDTO>(QueryForStock(jobOrderId,tsId,orgId,branchId,roleName)).ToList();
         }
 
-        public IEnumerable<TechnicalServicesStockDTO> GetUsedParts(long? partsId,long? tsId,long orgId, long branchId, string fromDate, string toDate, string jobCode)
+        public IEnumerable<TechnicalServicesStockDTO> GetUsedParts(long? partsId,long? tsId,long orgId, long branchId, string fromDate, string toDate, string jobCode,string jobType)
         {
-            return _frontDeskUnitOfWork.Db.Database.SqlQuery<TechnicalServicesStockDTO>(QueryForUsedParts(partsId,tsId,orgId, branchId, fromDate, toDate,jobCode)).ToList();
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<TechnicalServicesStockDTO>(QueryForUsedParts(partsId,tsId,orgId, branchId, fromDate, toDate,jobCode,jobType)).ToList();
         }
-        private string QueryForUsedParts(long? partsId,long? tsId, long orgId, long branchId, string fromDate, string toDate, string jobCode)
+        private string QueryForUsedParts(long? partsId,long? tsId, long orgId, long branchId, string fromDate, string toDate, string jobCode,string jobType)
         {
             string query = string.Empty;
             string param = string.Empty;
@@ -81,6 +81,10 @@ namespace ERPBLL.FrontDesk
             {
                 param += string.Format(@"and job.JobOrderCode Like '%{0}%'", jobCode);
             }
+            if (!string.IsNullOrEmpty(jobType))
+            {
+                param += string.Format(@"and job.JobOrderType Like '%{0}%'", jobType);
+            }
             if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "" && !string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
             {
                 string fDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
@@ -97,7 +101,7 @@ namespace ERPBLL.FrontDesk
                 string tDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
                 param += string.Format(@" and Cast(ts.EntryDate as date)='{0}'", tDate);
             }
-            query = string.Format(@"select ts.PartsId,rq.RequsitionCode,job.JobOrderCode,ps.MobilePartName 'PartsName',ps.MobilePartCode,ts.UsedQty,ts.EntryDate,app.UserName 'UserName',ts.UpUserId
+            query = string.Format(@"select ts.PartsId,rq.RequsitionCode,job.JobOrderCode,job.JobOrderType,ts.CostPrice,ts.SellPrice,ps.MobilePartName 'PartsName',ps.MobilePartCode,ts.UsedQty,ts.EntryDate,app.UserName 'UserName',ts.UpUserId
 from tblTechnicalServicesStock ts
 left join [Configuration].dbo.tblMobileParts ps on ts.PartsId=ps.MobilePartId
 left join tblRequsitionInfoForJobOrders rq on ts.RequsitionInfoForJobOrderId=rq.RequsitionInfoForJobOrderId
@@ -247,41 +251,61 @@ where ts.UsedQty>0 and 1=1{0}  order by rq.EntryDate desc
         public bool SaveTechnicalServicesStockIn(List<TechnicalServicesStockDTO> servicesStockDTOs, long userId, long orgId, long branchId,long modelId)
         {
             bool IsSuccess = false;
-            List<TechnicalServicesStock> servicesStocks = new List<TechnicalServicesStock>();
+            
             foreach (var item in servicesStockDTOs)
             {
-                var servicesInfo = GetAllTechnicalServicesStock(item.JobOrderId.Value, orgId, branchId).Where(o => o.SWarehouseId == item.SWarehouseId && o.PartsId == item.PartsId && o.ModelId==item.ModelId && o.JobOrderId == item.JobOrderId && o.RequsitionInfoForJobOrderId==item.RequsitionInfoForJobOrderId).FirstOrDefault();
-                if (servicesInfo != null)
+                var techStockChek = CheckStockTechnicalServices(item.JobOrderId.Value, item.RequsitionInfoForJobOrderId, modelId, item.PartsId.Value, orgId, branchId);
+                if(techStockChek == null)
                 {
-                    servicesInfo.Quantity += item.Quantity;
-                    technicalServicesStockRepository.Update(servicesInfo);
-                }
-                else
-                {
-                    TechnicalServicesStock stockServices = new TechnicalServicesStock();
-                    stockServices.JobOrderId = item.JobOrderId;
-                    stockServices.SWarehouseId = item.SWarehouseId;
-                    stockServices.RequsitionInfoForJobOrderId = item.RequsitionInfoForJobOrderId;
-                    stockServices.PartsId = item.PartsId;
-                    stockServices.StateStatus = "Stock-Open";
-                    stockServices.CostPrice = item.CostPrice;
-                    stockServices.SellPrice = item.SellPrice;
-                    stockServices.Quantity = item.Quantity;
-                    stockServices.UsedQty = 0;
-                    stockServices.ReturnQty = 0;
-                    stockServices.OrganizationId = orgId;
-                    stockServices.BranchId = branchId;
-                    stockServices.EUserId = userId;
-                    stockServices.Remarks = "NotUsed";
-                    stockServices.ModelId = modelId;
-                    stockServices.EntryDate = DateTime.Now;
-                    //servicesStocks.Add(stockServices);
-                    technicalServicesStockRepository.Insert(stockServices);
-                    technicalServicesStockRepository.Save();
+                    //TechnicalServicesStock stockServices = new TechnicalServicesStock()
+                    //{
+                    //    JobOrderId = item.JobOrderId,
+                    //    SWarehouseId = item.SWarehouseId,
+                    //    RequsitionInfoForJobOrderId = item.RequsitionInfoForJobOrderId,
+                    //    PartsId = item.PartsId,
+                    //    StateStatus = "Stock-Open",
+                    //    CostPrice = item.CostPrice,
+                    //    SellPrice = item.SellPrice,
+                    //    Quantity = item.Quantity,
+                    //    UsedQty = 0,
+                    //    ReturnQty = 0,
+                    //    OrganizationId = orgId,
+                    //    BranchId = branchId,
+                    //    EUserId = userId,
+                    //    Remarks = "NotUsed",
+                    //    ModelId = modelId,
+                    //    EntryDate = DateTime.Now,
+
+                    //};
+                    //technicalServicesStockRepository.Insert(stockServices);
+                    //technicalServicesStockRepository.Save();
+                    
+                    var sql = string.Format(@"Insert into tblTechnicalServicesStock (JobOrderId,SWarehouseId,RequsitionInfoForJobOrderId,PartsId,StateStatus,CostPrice,SellPrice,Quantity,UsedQty,ReturnQty,OrganizationId,BranchId,EUserId,Remarks,ModelId,EntryDate) Values ({0},{1},{2},{3},'{4}','{5}','{6}','{7}','{8}','{9}',{10},{11},{12},'{13}',{14},'{15}')", item.JobOrderId, item.SWarehouseId, item.RequsitionInfoForJobOrderId, item.PartsId, "Stock-Open", item.CostPrice, item.SellPrice, item.Quantity, 0, 0, orgId, branchId, userId, "NotUsed", modelId, DateTime.Now);
+                    var data = this._frontDeskUnitOfWork.Db.Database.ExecuteSqlCommand(sql);
+
+
                     IsSuccess = true;
+                    //stockServices.JobOrderId = item.JobOrderId;
+                    //stockServices.SWarehouseId = item.SWarehouseId;
+                    //stockServices.RequsitionInfoForJobOrderId = item.RequsitionInfoForJobOrderId;
+                    //stockServices.PartsId = item.PartsId;
+                    //stockServices.StateStatus = "Stock-Open";
+                    //stockServices.CostPrice = item.CostPrice;
+                    //stockServices.SellPrice = item.SellPrice;
+                    //stockServices.Quantity = item.Quantity;
+                    //stockServices.UsedQty = 0;
+                    //stockServices.ReturnQty = 0;
+                    //stockServices.OrganizationId = orgId;
+                    //stockServices.BranchId = branchId;
+                    //stockServices.EUserId = userId;
+                    //stockServices.Remarks = "NotUsed";
+                    //stockServices.ModelId = modelId;
+                    //stockServices.EntryDate = DateTime.Now;
+                    //technicalServicesStockRepository.Insert(stockServices);
+                    //technicalServicesStockRepository.Save();
+                    //IsSuccess = true;
                 }
             }
-            //technicalServicesStockRepository.InsertAll(servicesStocks);
             return IsSuccess;
         }
 
@@ -414,6 +438,34 @@ where ts.UsedQty>0 and 1=1{0}  order by rq.EntryDate desc
         inner join [Configuration].dbo.tblMobileParts parts on stock.PartsId=parts.MobilePartId
         where  rq.StateStatus='Approved'{0} and stock.Remarks='NotUsed' and stock.StateStatus='Stock-Open'{0}", Utility.ParamChecker(param));
             return query;
+        }
+
+        public IEnumerable<TechnicalServicesStockDTO> GetTotalUsedParts(long orgId, long branchId, long? modelId, string fromDate, string toDate)
+        {
+            if (modelId ==null)
+            {
+                modelId = 0;
+            }
+            if (!string.IsNullOrEmpty(fromDate) && fromDate.Trim() != "")
+            {
+                fromDate = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd");
+            }
+            if (!string.IsNullOrEmpty(toDate) && toDate.Trim() != "")
+            {
+                toDate = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd");
+            }
+            var query = string.Format(@"Exec [dbo].[spPartsUsed] {0},{1},{2},'{3}','{4}'", orgId, branchId,modelId,fromDate, toDate);
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<TechnicalServicesStockDTO>(query).ToList();
+        }
+
+        public TechnicalServicesStock CheckStockTechnicalServices(long jobId, long reqId, long modelId, long partsId, long branchId, long orgId)
+        {
+            return this.technicalServicesStockRepository.GetOneByOrg(t => t.JobOrderId == jobId && t.RequsitionInfoForJobOrderId == reqId && t.ModelId == modelId && t.PartsId == partsId && t.BranchId == branchId && t.OrganizationId == orgId);
+        }
+
+        public TechnicalServicesStock CheckRequsionIdInTechnicalStock(long reqId, long orgId, long branchId)
+        {
+            return this.technicalServicesStockRepository.GetOneByOrg(t =>t.RequsitionInfoForJobOrderId==reqId && t.BranchId == branchId && t.OrganizationId == orgId);
         }
     }
     

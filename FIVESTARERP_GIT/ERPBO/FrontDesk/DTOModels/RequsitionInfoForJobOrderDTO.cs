@@ -40,5 +40,7 @@ namespace ERPBO.FrontDesk.DTOModels
         public long DescriptionId { get; set; }
         public long? IssueUserId { get; set; }
         public Nullable<DateTime> IssueDateDate { get; set; }
+        //
+        public string IMEI { get; set; }
     }
 }

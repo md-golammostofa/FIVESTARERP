@@ -258,10 +258,10 @@ namespace ERPWeb.Controllers
         #region InvoiceReceipt
         public ActionResult InvoiceReport(long infoId)
         {
-            var infodata = _invoiceInfoBusiness.GetInvoiceInfoReport(infoId, User.OrgId, User.BranchId);
+            var infodata = _invoiceInfoBusiness.GetInvoiceInfoReport(infoId, User.OrgId);
 
             // var detailsdata = _invoiceDetailBusiness.InvoiceDetailsReport(infoId,User.OrgId, User.BranchId);
-            IEnumerable<InvoiceDetailDTO> detailsdata = _invoiceDetailBusiness.InvoiceDetailsReport(infoId, User.OrgId, User.BranchId);
+            IEnumerable<InvoiceDetailDTO> detailsdata = _invoiceDetailBusiness.InvoiceDetailsReport(infoId, User.OrgId);
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
@@ -453,11 +453,11 @@ namespace ERPWeb.Controllers
 
         #region SellsReport
         //[HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult SellsReport(string fromDate, string toDate, string rptType, string ddlInvoiceTypeStatus, string invoice)
+        public ActionResult SellsReport(string fromDate, string toDate, string rptType, string ddlInvoiceTypeStatus, string invoice, string jobCode, string imei)
         {
             bool IsSuccess = false;
 
-            IEnumerable<InvoiceInfoDTO> dto = _invoiceInfoBusiness.GetSellsReport(User.OrgId, User.BranchId, fromDate, toDate, ddlInvoiceTypeStatus, invoice);
+            IEnumerable<InvoiceInfoDTO> dto = _invoiceInfoBusiness.GetSellsReport(User.OrgId, User.BranchId, fromDate, toDate, ddlInvoiceTypeStatus, invoice,jobCode,imei);
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
@@ -504,10 +504,10 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region TSRequsitionReport
-        public ActionResult TSRequsitionReport(string reqCode, long? ddlWarehouseName, long? ddlTechnicalServicesName, string reqStatus, string fromDate, string toDate, string rptType, string jobCode = "")
+        public ActionResult TSRequsitionReport(string reqCode, long? ddlWarehouseName, long? ddlTechnicalServicesName, string reqStatus, string fromDate, string toDate, string rptType,string imei,long? ddlModelName, string jobCode = "")
         {
 
-            var dto = _requsitionInfoForJobOrderBusiness.GetRequsitionInfoData(reqCode, ddlWarehouseName, ddlTechnicalServicesName, reqStatus, fromDate, toDate, User.OrgId, User.BranchId, jobCode);
+            var dto = _requsitionInfoForJobOrderBusiness.GetRequsitionInfoData(reqCode, ddlWarehouseName, ddlTechnicalServicesName, reqStatus, fromDate, toDate, User.OrgId, User.BranchId, jobCode,imei, ddlModelName);
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
@@ -685,9 +685,9 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region JobOrderReceivedReport
-        public ActionResult ReceivedJobOrderReport(long? ddlBranchName, string fromDate, string ddlTransferStatus, string toDate, string rptType, string jobCode = "", string transferCode = "")
+        public ActionResult ReceivedJobOrderReport(long? ddlBranchName, string fromDate, string ddlTransferStatus, string toDate,long? modelId,string imei, string rptType, string jobCode = "", string transferCode = "")
         {
-            var dto = _jobOrderTransferDetailBusiness.GetReceiveJob(User.OrgId, User.BranchId, ddlBranchName, jobCode, transferCode, fromDate, toDate, ddlTransferStatus);
+            var dto = _jobOrderTransferDetailBusiness.GetReceiveJob(User.OrgId, User.BranchId, ddlBranchName, jobCode, transferCode, fromDate, toDate, ddlTransferStatus,modelId,imei);
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
@@ -773,9 +773,9 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region JobSignIn And Out 
-        public ActionResult JobSignInAndOut(long? ddlTechnicalServicesName, string fromDate, string toDate, string rptType, string jobCode = "")
+        public ActionResult JobSignInAndOut(long? ddlTechnicalServicesName, string fromDate, string toDate,long? ddlModelName,string imei, string rptType, string jobCode = "")
         {
-            var dto = _jobOrderTSBusiness.JobSignInAndOut(ddlTechnicalServicesName, jobCode, User.OrgId, User.BranchId, fromDate, toDate);
+            var dto = _jobOrderTSBusiness.JobSignInAndOut(ddlTechnicalServicesName, jobCode, User.OrgId, User.BranchId, fromDate, toDate,ddlModelName,imei);
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
@@ -1043,11 +1043,11 @@ namespace ERPWeb.Controllers
 
         #region QCPassFailReports
         //[HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult QCPassFailReport(string jobCode, long? ddlModelName, string ddlStatus, string fromDate, string toDate, string rptType)
+        public ActionResult QCPassFailReport(string jobCode, long? ddlModelName, string ddlStatus, string fromDate, string toDate,string imei,long? ddlQCName, string rptType)
         {
             bool IsSuccess = false;
 
-            IEnumerable<JobOrderDTO> dto = _jobOrderBusiness.GetQCPassFailData(jobCode, ddlModelName, ddlStatus, User.OrgId, User.BranchId, fromDate, toDate);
+            IEnumerable<JobOrderDTO> dto = _jobOrderBusiness.GetQCPassFailData(jobCode, ddlModelName, ddlStatus, User.OrgId, User.BranchId, fromDate, toDate,imei, ddlQCName);
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
@@ -1418,10 +1418,10 @@ namespace ERPWeb.Controllers
         #endregion
 
         #region RequsitionDeatils Reports
-        public ActionResult RequsitionDetailsReport(long? modelId,string rptType)
+        public ActionResult RequsitionDetailsReport(long? ddlModelName,string imei,string rptType)
         {
             string file = string.Empty;
-            IEnumerable<RequsitionDetailsReportDTO> requDetails = _requsitionDetailForJobOrderBusiness.GetRequsitionDetailsReport(User.OrgId, User.BranchId,modelId);
+            IEnumerable<RequsitionDetailsReportDTO> requDetails = _requsitionDetailForJobOrderBusiness.GetRequsitionDetailsReport(User.OrgId, User.BranchId, ddlModelName,imei);
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
@@ -1638,6 +1638,51 @@ namespace ERPWeb.Controllers
 
                 renderedBytes = localReport.Render(
                     "EXCEL",
+                    "",
+                    out mimeType,
+                    out encoding,
+                    out fileNameExtension,
+                    out streams,
+                    out warnings);
+                return File(renderedBytes, mimeType);
+            }
+            return new EmptyResult();
+        }
+        #endregion
+        #region ModelWiseUsedParts
+        public ActionResult ModelWiseUsedParts(long ddlModelName, string fromDate, string toDate, string rptType)
+        {
+            bool IsSuccess = false;
+
+            IEnumerable<TechnicalServicesStockDTO> dto = _technicalServicesStockBusiness.GetTotalUsedParts(User.OrgId, User.BranchId, ddlModelName, fromDate, toDate);
+
+            ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
+            reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);
+            List<ServicesReportHead> servicesReportHeads = new List<ServicesReportHead>();
+            servicesReportHeads.Add(reportHead);
+
+            LocalReport localReport = new LocalReport();
+            string reportPath = Server.MapPath("~/Reports/ServiceRpt/FrontDesk/rptUsedPartsPercentReport.rdlc");
+            if (System.IO.File.Exists(reportPath))
+            {
+                localReport.ReportPath = reportPath;
+                ReportDataSource dataSource1 = new ReportDataSource("UsedPartsPercent", dto);
+                ReportDataSource dataSource2 = new ReportDataSource("ServicesReportHead", servicesReportHeads);
+                localReport.DataSources.Clear();
+                localReport.DataSources.Add(dataSource1);
+                localReport.DataSources.Add(dataSource2);
+                localReport.Refresh();
+                localReport.DisplayName = "ModelWisePartsUsed";
+
+                string mimeType;
+                string encoding;
+                string fileNameExtension;
+                Warning[] warnings;
+                string[] streams;
+                byte[] renderedBytes;
+
+                renderedBytes = localReport.Render(
+                    rptType,
                     "",
                     out mimeType,
                     out encoding,

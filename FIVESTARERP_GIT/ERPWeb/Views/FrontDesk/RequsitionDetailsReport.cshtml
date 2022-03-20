@@ -22,7 +22,15 @@
                     <div class="col-md-12">
                         <form method="get">
                             <div class="row mb-2">
-                                <div class="col-md-1">
+                                <div class="col-md-2">
+                                    <label class="control-label font-weight-bold">Model</label>
+                                    @Html.DropDownList("ddlModelName", (IEnumerable<SelectListItem>)ViewBag.ddlModelName, "Search By Model", new { @class = "form-control form-control-sm ctrl-changed select2 select2-danger ctrl-changed" })
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="control-label font-weight-bold">IMEI</label>
+                                    <input type="text" id="txtIMEI" name="imei" class="form-control form-control-sm" placeholder="Search By IMEI" />
+                                </div>
+                                <div class="col-md-2">
                                     <label for="rptType">Type</label>
                                     <select name="rptType" id="rptType" class="form-control form-control-sm">
                                         <option value="PDF">PDF</option>
@@ -46,4 +54,35 @@
         </div>
     </div>
 </div>
+@section scripts{
+    <script type="text/javascript">
+        var ddlModelName = $("#ddlModelName");
+        var txtIMEI = $("#txtIMEI");
 
+        ddlModelName.change(function () {
+            LoadDataTable();
+        })
+        txtIMEI.keyup(function () {
+            LoadDataTable();
+        })
+
+        function LoadDataTable() {
+            var data = { flag: "search", modelId: TryParseInt(ddlModelName.val(), 0), imei: txtIMEI.val()};
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/FrontDesk/RequsitionDetailsReport', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                        $('.action').addClass('hide');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+            pageNo = 1;
+        }
+    </script>
+    }

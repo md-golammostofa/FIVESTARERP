@@ -19,6 +19,6 @@ namespace ERPBLL.FrontDesk.Interface
         RequsitionDetailForJobOrder GetDetailsByDetailsId(long detailId, long orgId, long branchId);
 
         IEnumerable<RequsitionDetailForJobOrderDTO> GetRequsitionDetailsData(long reqInfoId, long orgId, long branchId);
-        IEnumerable<RequsitionDetailsReportDTO> GetRequsitionDetailsReport(long orgId, long branchId, long? modelId);
+        IEnumerable<RequsitionDetailsReportDTO> GetRequsitionDetailsReport(long orgId, long branchId, long? modelId,string imei);
     }
 }

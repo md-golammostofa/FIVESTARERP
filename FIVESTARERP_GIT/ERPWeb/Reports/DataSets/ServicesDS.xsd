@@ -204,6 +204,8 @@
               <xs:element name="UserName" msprop:Generator_ColumnVarNameInTable="columnUserName" msprop:Generator_ColumnPropNameInRow="UserName" msprop:Generator_ColumnPropNameInTable="UserNameColumn" msprop:Generator_UserColumnName="UserName" type="xs:string" minOccurs="0" />
               <xs:element name="JobOrderCode" msprop:Generator_ColumnVarNameInTable="columnJobOrderCode" msprop:Generator_ColumnPropNameInRow="JobOrderCode" msprop:Generator_ColumnPropNameInTable="JobOrderCodeColumn" msprop:Generator_UserColumnName="JobOrderCode" type="xs:string" minOccurs="0" />
               <xs:element name="EntryDate" msprop:Generator_ColumnVarNameInTable="columnEntryDate" msprop:Generator_ColumnPropNameInRow="EntryDate" msprop:Generator_ColumnPropNameInTable="EntryDateColumn" msprop:Generator_UserColumnName="EntryDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="CostPrice" msprop:Generator_ColumnVarNameInTable="columnCostPrice" msprop:Generator_ColumnPropNameInRow="CostPrice" msprop:Generator_ColumnPropNameInTable="CostPriceColumn" msprop:Generator_UserColumnName="CostPrice" type="xs:string" minOccurs="0" />
+              <xs:element name="SellPrice" msprop:Generator_ColumnVarNameInTable="columnSellPrice" msprop:Generator_ColumnPropNameInRow="SellPrice" msprop:Generator_ColumnPropNameInTable="SellPriceColumn" msprop:Generator_UserColumnName="SellPrice" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -698,6 +700,19 @@
               <xs:element name="OverHeatProblem" msprop:Generator_ColumnVarNameInTable="columnOverHeatProblem" msprop:Generator_ColumnPropNameInRow="OverHeatProblem" msprop:Generator_ColumnPropNameInTable="OverHeatProblemColumn" msprop:Generator_UserColumnName="OverHeatProblem" type="xs:string" minOccurs="0" />
               <xs:element name="LEDKeyProblem" msprop:Generator_ColumnVarNameInTable="columnLEDKeyProblem" msprop:Generator_ColumnPropNameInRow="LEDKeyProblem" msprop:Generator_ColumnPropNameInTable="LEDKeyProblemColumn" msprop:Generator_UserColumnName="LEDKeyProblem" type="xs:string" minOccurs="0" />
               <xs:element name="LEDKeyMissing" msprop:Generator_ColumnVarNameInTable="columnLEDKeyMissing" msprop:Generator_ColumnPropNameInRow="LEDKeyMissing" msprop:Generator_ColumnPropNameInTable="LEDKeyMissingColumn" msprop:Generator_UserColumnName="LEDKeyMissing" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="UsedParsPercent" msprop:Generator_TableClassName="UsedParsPercentDataTable" msprop:Generator_TableVarName="tableUsedParsPercent" msprop:Generator_TablePropName="UsedParsPercent" msprop:Generator_RowDeletingName="UsedParsPercentRowDeleting" msprop:Generator_RowChangingName="UsedParsPercentRowChanging" msprop:Generator_RowEvHandlerName="UsedParsPercentRowChangeEventHandler" msprop:Generator_RowDeletedName="UsedParsPercentRowDeleted" msprop:Generator_UserTableName="UsedParsPercent" msprop:Generator_RowChangedName="UsedParsPercentRowChanged" msprop:Generator_RowEvArgName="UsedParsPercentRowChangeEvent" msprop:Generator_RowClassName="UsedParsPercentRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="PartsId" msprop:Generator_ColumnVarNameInTable="columnPartsId" msprop:Generator_ColumnPropNameInRow="PartsId" msprop:Generator_ColumnPropNameInTable="PartsIdColumn" msprop:Generator_UserColumnName="PartsId" type="xs:string" minOccurs="0" />
+              <xs:element name="PartsName" msprop:Generator_ColumnVarNameInTable="columnPartsName" msprop:Generator_ColumnPropNameInRow="PartsName" msprop:Generator_ColumnPropNameInTable="PartsNameColumn" msprop:Generator_UserColumnName="PartsName" type="xs:string" minOccurs="0" />
+              <xs:element name="ModelId" msprop:Generator_ColumnVarNameInTable="columnModelId" msprop:Generator_ColumnPropNameInRow="ModelId" msprop:Generator_ColumnPropNameInTable="ModelIdColumn" msprop:Generator_UserColumnName="ModelId" type="xs:string" minOccurs="0" />
+              <xs:element name="ModelName" msprop:Generator_ColumnVarNameInTable="columnModelName" msprop:Generator_ColumnPropNameInRow="ModelName" msprop:Generator_ColumnPropNameInTable="ModelNameColumn" msprop:Generator_UserColumnName="ModelName" type="xs:string" minOccurs="0" />
+              <xs:element name="UsedQty" msprop:Generator_ColumnVarNameInTable="columnUsedQty" msprop:Generator_ColumnPropNameInRow="UsedQty" msprop:Generator_ColumnPropNameInTable="UsedQtyColumn" msprop:Generator_UserColumnName="UsedQty" type="xs:string" minOccurs="0" />
+              <xs:element name="TotalJob" msprop:Generator_ColumnVarNameInTable="columnTotalJob" msprop:Generator_ColumnPropNameInRow="TotalJob" msprop:Generator_ColumnPropNameInTable="TotalJobColumn" msprop:Generator_UserColumnName="TotalJob" type="xs:string" minOccurs="0" />
+              <xs:element name="Percent" msprop:Generator_ColumnVarNameInTable="columnPercent" msprop:Generator_ColumnPropNameInRow="Percent" msprop:Generator_ColumnPropNameInTable="PercentColumn" msprop:Generator_UserColumnName="Percent" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

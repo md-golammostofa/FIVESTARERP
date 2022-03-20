@@ -1,0 +1,166 @@
+﻿@model ERPBO.Configuration.ViewModels.FaultyStockTransferInfoViewModel
+@{
+    ViewBag.Title = "Receive Pending Faulty Parts";
+}
+
+<div class="row" style="margin-top:-15px">
+    <div class="col-md-12">
+        <div class="card card-gray-dark">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-center text-bold">
+                            Receive Pending Faulty Parts 
+                        </h5>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row text-sm">
+    <div class="col-md-12" style="margin-top:-10px">
+        <div class="card card-navy">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6 class="card-title">
+                            Transfer Information
+                        </h6>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <select class="form-control form-control-sm" id="ddlAction">
+                                <option value="Received" selected>Received</option>
+                            </select>
+                            <div class="input-group-append" style="cursor:pointer">
+                                <a id="btnSubmit" href="#" title="Submit Requisition" style="background-color:darkblue" class="input-group-text">
+                                    <i class="fas fa-paper-plane"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" style="margin-top:-15px">
+                    <div class="col-md-12">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="hdfFSRInfoId" value="@Model.FSTInfoId" />
+                        <input type="hidden" id="hdfTransferCode" value="@Model.TransferCode" />
+                        <input type="hidden" id="hdfBranchToId" value="@Model.BranchTo" />
+                        <table class="table table-bordered table-sm table-responsive-lg text-bold text-sm" id="tblInfo">
+                            <tbody>
+                                <tr>
+                                    <td class="alert-primary" style="width:10%">Transfer Code</td>
+                                    <td style="width:15%; background-color:#e1dada">@Model.TransferCode</td>
+                                    <td class="alert-primary" style="width:10%">Branch From</td>
+                                    <td style="width:15%; background-color:#e1dada">@Model.BranchName</td>
+                                    @*<td class="alert-primary" style="width:12%">Model</td>
+                                        <td style="width:16%; background-color:#e1dada">@Model.ModelName</td>*@
+                                    <td class="alert-primary" style="width:10%">StateStatus</td>
+                                    <td style="width:12%; background-color:#e1dada">@Model.StateStatus</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        @{Html.RenderAction("ReceivePendingFaultyDetails", new { @infoId = Model.FSTInfoId });}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top:-10px">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-12">
+
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        var ddlAction = $("#ddlAction");
+        var hdfFSRInfoId = $("#hdfFSRInfoId");
+        var hdfTransferCode = $("#hdfTransferCode");
+
+        function validateSubmit() {
+            var isValid = true;
+            if (ddlAction.val() === "") {
+                isValid = false;
+                bootbox.alert("Please select a Action before submit");
+            }
+            if ($(".tblTransferDataDetail tbody tr").length == 0) {
+                isValid = false;
+                bootbox.alert("Requistion details not found");
+            }
+            return isValid;
+        }
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+
+            if (validateSubmit()) {
+                bootbox.confirm("Are you sure you want to save this Data" + ddlAction.val() + " status", function (result) {
+                    if (result) {
+                        disable("#btnSubmit")
+                        var info = { FSTInfoId: TryParseInt(hdfFSRInfoId.val(), 0), StateStatus: ddlAction.val() };
+                        var details = []; details.length = 0;
+
+                        $.each($(".tblTransferDataDetail tbody tr"), function (index, item) {
+                            var tds = $(this).children('td');
+                            details.push({
+                                FSTDetailsId: tds.eq(2).html(),
+                                ModelId: tds.eq(3).html(),
+                                PartsId: tds.eq(5).html(),
+                                ReceiveQty: tds.eq(9).children('input[type="number"]').val()
+                            })
+                        })
+
+                        info.faultyStockTransferDetails = details;
+
+                        console.log("Requisition Information");
+                        console.log(info);
+                        var data = JSON.stringify({ model: info });
+                        //return console.log(data)
+                        $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/Configuration/SaveFaultyStockReceive', data, getToken())).then(function (res, status) {
+                            console.log(res);
+                            console.log(status);
+                            if (res === true && status === "success") {
+                                $('.toastrDefaultSuccess').trigger('click');
+                                 setTimeout(function () {
+                                    redirectPage('@Url.Action("GetFaultyStockReceiveList")');
+                                }, 1000);
+                            }
+                            else {
+                                $('.toastrDefaultError').trigger('click');
+                            }
+                            enable("#btnSubmit");
+                        }).fail(function (error) {
+                            console.log(error);
+                            enable("#btnSubmit");
+                        })
+
+                    }// confirm
+                })// bootbox
+            }// submit
+        })
+
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+
+    </script>
+    }

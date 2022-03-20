@@ -93,11 +93,11 @@ Where rd.RequsitionInfoForJobOrderId={0} and rd.OrganizationId={1} and rd.Branch
             return data;
         }
 
-        public IEnumerable<RequsitionDetailsReportDTO> GetRequsitionDetailsReport(long orgId, long branchId, long? modelId)
+        public IEnumerable<RequsitionDetailsReportDTO> GetRequsitionDetailsReport(long orgId, long branchId, long? modelId,string imei)
         {
-            return _frontDeskUnitOfWork.Db.Database.SqlQuery<RequsitionDetailsReportDTO>(QueryForRequsitionDetailsReport(orgId, branchId, modelId)).ToList();
+            return _frontDeskUnitOfWork.Db.Database.SqlQuery<RequsitionDetailsReportDTO>(QueryForRequsitionDetailsReport(orgId, branchId, modelId,imei)).ToList();
         }
-        private string QueryForRequsitionDetailsReport(long orgId, long branchId, long? modelId)
+        private string QueryForRequsitionDetailsReport(long orgId, long branchId, long? modelId,string imei)
         {
             string query = string.Empty;
             string param = string.Empty;
@@ -112,6 +112,10 @@ Where rd.RequsitionInfoForJobOrderId={0} and rd.OrganizationId={1} and rd.Branch
             if(modelId != null && modelId > 0)
             {
                 param += string.Format(@"and jo.DescriptionId={0}", modelId);
+            }
+            if (!string.IsNullOrEmpty(imei))
+            {
+                param += string.Format(@"and jo.IMEI LIKE '%{0}%'", imei);
             }
             query = string.Format(@"Select ri.RequsitionCode,jo.JobOrderCode,jo.DescriptionId,m.ModelName,jo.IMEI,jo.CustomerName,
 
