@@ -12,7 +12,7 @@
         <hr />
     </div>
 </div>
-@if (User.RoleName == "User" || User.RoleName == "Care Engineer (All in One)" || User.RoleName == "Administrator")
+@if (User.RoleName == "User" || User.RoleName == "Care Engineer (All in One)" || User.RoleName == "Administrator" || User.RoleName == "HideAdmin")
 {
     <div class="row">
         @Html.AntiForgeryToken()
@@ -2628,7 +2628,7 @@
         //chart
 
         $(document).ready(function () {
-            if ('@User.RoleName' == "Administrator") {
+            if ('@User.RoleName' == "Administrator" || '@User.RoleName'=="HideAdmin") {
                 $.when(postReqWithToken(dataType.applicationJson, dataType.json, type.post, '/User/GetDailySellsChart', null, getToken())).then(function (res, status) {
                     if (status === 'success') {
                         console.log("Daily Sell Data");

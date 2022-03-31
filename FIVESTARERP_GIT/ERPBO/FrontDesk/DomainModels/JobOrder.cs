@@ -92,6 +92,7 @@ namespace ERPBO.FrontDesk.DomainModels
         public Nullable<DateTime> CallCenterAssignDate { get; set; }
         //
         public Nullable<DateTime> JobCreateDateTime { get; set; }
+        public long? MUserId { get; set; }
 
     }
 }

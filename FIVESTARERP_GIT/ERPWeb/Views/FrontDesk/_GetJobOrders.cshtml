@@ -79,7 +79,7 @@
                                 <i class="fas fa-eye"></i>
                             </a>
 
-                            @if ((item.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && item.IsTransfer == null) || (User.RoleName == "Administrator"))
+                            @if ((item.StateStatus == ERPBLL.Common.JobOrderStatus.JobInitiated && item.IsTransfer == null) || (User.RoleName == "HideAdmin"))
                             {
                                 <a href="@Url.Action("CreateJobOrder","FrontDesk",new {@jobOrderId=item.JodOrderId })" class="btn btn-sm btn-outline-success" title="Edit Job Order"><i class="fas fa-pencil-alt"></i> </a>
                             }

@@ -26,5 +26,6 @@ namespace ERPBO.Configuration.ViewModels
         public int Sales { get; set; }
         public int GoodToFaultyTransfer { get; set; }
         public int StockReturnPending { get; set; }
+        public int FaultyTransfer { get; set; }
     }
 }

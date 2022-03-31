@@ -47,6 +47,18 @@ namespace ERPBLL.ControlPanel
             return appUserRepository.GetAll().ToList();
         }
 
+        public IEnumerable<AppUserDTO> GetAllUserList(long orgId)
+        {
+            return this._controlPanelUnitOfWork.Db.Database.SqlQuery<AppUserDTO>(string.Format(@"Select us.EmployeeId,us.FullName,us.Email,us.UserName,us.Password
+,us.IsActive,us.IsRoleActive,org.OrganizationName,br.BranchName,rl.RoleName,usr.UserName 
+From tblApplicationUsers us
+Left Join tblOrganizations org on us.OrganizationId=org.OrganizationId
+Left Join tblBranch br on us.BranchId=br.BranchId
+Left Join tblRoles rl on us.RoleId=rl.RoleId
+Left Join tblApplicationUsers usr on us.EUserId=usr.UserId
+Where us.OrganizationId={0} and RoleName !='HideAdmin'", orgId)).ToList();
+        }
+
         public AppUserDTO GetAppUserInfoById(long id, long orgId,string flag)
         {
             if(flag == "System")

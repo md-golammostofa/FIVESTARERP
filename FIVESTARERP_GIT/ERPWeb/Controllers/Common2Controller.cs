@@ -350,6 +350,12 @@ namespace ERPWeb.Controllers
             return Json(isExist);
         }
         [HttpPost, ValidateJsonAntiForgeryToken]
+        public ActionResult IsDuplicateWarehouseName(string sWarehouseName, long id)
+        {
+            bool isExist = _servicesWarehouseBusiness.IsDuplicateServicesWarehouseName(sWarehouseName, id, User.OrgId,User.BranchId);
+            return Json(isExist);
+        }
+        [HttpPost, ValidateJsonAntiForgeryToken]
         public ActionResult IsDuplicateProblemName(string problemName, long id)
         {
             bool isExist = _clientProblemBusiness.IsDuplicateProblemName(problemName, id, User.OrgId);

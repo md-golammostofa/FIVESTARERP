@@ -20,7 +20,7 @@
                 @Html.AntiForgeryToken()
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select Eng. Name--", new { @class = "form-control ctrl-changed select2 select2-danger ctrl-changed" })
+                        @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select Eng. Name--", new { @class = "form-control form-control-sm ctrl-changed select2 select2-danger ctrl-changed" })
                     </div>
                     <div class="col-md-2">
                         <input type="text" id="txtReceiveId" class="form-control form-control-sm" placeholder="Search By Receive Id" name="recId" />
@@ -61,6 +61,16 @@
         var count = 0;
         var txtIMEISearch = $("txtIMEISearch");
         var txtJobOrderSearch = $("#txtJobOrderSearch");
+
+        $(document).ready(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        })
 
         $(document).on('change', 'input[name="allJobOrder"]', function () {
             var isChecked = $('input[name="allJobOrder"]').is(":checked");

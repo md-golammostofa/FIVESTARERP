@@ -716,7 +716,15 @@ Where 1 = 1{0} and jo.TotalPOrDStatus='Pending') tbl Order By JobOrderCode desc
                 {
                     jobOrderDb.ProbablyDate = jobOrderDb.ProbablyDate;
                 }
-                jobOrderDb.UpUserId = userId;
+                if (userId == 20161)
+                {
+                    jobOrderDb.MUserId = userId;
+                }
+                else
+                {
+                    jobOrderDb.UpUserId = userId;
+                }
+                
                 jobOrderDb.UpdateDate = DateTime.Now;
 
                 if (jobOrderDb.JobOrderType == "Warrenty")
@@ -2319,7 +2327,8 @@ where MultipleDeliveryCode='{0}' and jo.BranchId={1} and jo.OrganizationId={2}) 
                             BranchId = branchId,
                             OrganizationId = orgId,
                             EUserId = userId,
-                            TotalPOrDStatus="Pending"
+                            TotalPOrDStatus="Pending",
+                            JobCreateDateTime=DateTime.Now,
                         };
                         if (jobOrder.JobOrderType == "Warrenty")
                         {

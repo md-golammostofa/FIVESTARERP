@@ -162,7 +162,7 @@
             }
             else {
                 var id = TryParseInt(hdfServicesWarehouseId.val(), 0);
-                if (ajaxBooleanChecker(JSON.stringify({ id: id, sWarehouseName: txtWarehouseName.val().trim() }), '/Common2/IsDuplicateAccessoriesName', getToken()) == true) {
+                if (ajaxBooleanChecker(JSON.stringify({ id: id, sWarehouseName: txtWarehouseName.val().trim() }), '/Common2/IsDuplicateWarehouseName', getToken()) == true) {
                     $(".duplicate-warehouseName").removeClass("hide");
                     isValid = false;
                 }

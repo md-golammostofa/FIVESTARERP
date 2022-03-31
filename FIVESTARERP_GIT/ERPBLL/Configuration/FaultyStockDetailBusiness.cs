@@ -444,7 +444,7 @@ namespace ERPBLL.Configuration
                     BranchId = branchId,
                     CostPrice = item.CostPrice,
                     SellPrice = item.SellPrice,
-                    StateStatus = StockStatus.StockIn,
+                    StateStatus = StockStatus.StockOut,
                     SWarehouseId = item.SWarehouseId,
                     EUserId = userId,
                     OrganizationId = orgId,

@@ -47,5 +47,6 @@ namespace ERPBO.FrontDesk.DTOModels
         public string ModelName { get; set; }
         public int TotalJob { get; set; }
         public decimal Percent { get; set; }
+        public string JobOrderType { get; set; }
     }
 }

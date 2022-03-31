@@ -51,7 +51,7 @@
                                                     <div class="row text-sm">
                                                         <div class="col-md-2">
                                                             <label for="ddlMobileParts" class="control-label font-weight-bold">Parts Name</label>
-                                                            @Html.DropDownList("ddlMobileParts", (IEnumerable<SelectListItem>)ViewBag.ddlMobileParts, "--Select Parts--", new { @class = "form-control form-control-sm" })
+                                                            @Html.DropDownList("ddlMobileParts", (IEnumerable<SelectListItem>)ViewBag.ddlMobileParts, "--Select Parts--", new { @class = "form-control form-control-sm select select2" })
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label class="control-label font-weight-bold">Job Code</label>
@@ -63,7 +63,7 @@
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="ddlTechnicalServicesName" class="control-label font-weight-bold">TS Name</label>
-                                                            @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select TSName--", new { @class = "form-control form-control-sm" })
+                                                            @Html.DropDownList("ddlTechnicalServicesName", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName, "--Select TSName--", new { @class = "form-control form-control-sm select select2" })
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label class="control-label font-weight-bold">From Date</label>
@@ -141,7 +141,7 @@
                                                     <div class="row text-sm">
                                                         <div class="col-md-2">
                                                             <label for="ddlMobileParts2" class="control-label font-weight-bold">Parts Name</label>
-                                                            @Html.DropDownList("ddlMobileParts2", (IEnumerable<SelectListItem>)ViewBag.ddlMobileParts, "--Select Parts--", new { @class = "form-control form-control-sm" })
+                                                            @Html.DropDownList("ddlMobileParts2", (IEnumerable<SelectListItem>)ViewBag.ddlMobileParts, "--Select Parts--", new { @class = "form-control form-control-sm select select2" })
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label class="control-label font-weight-bold">Job Code</label>
@@ -149,7 +149,7 @@
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label for="ddlTechnicalServicesName2" class="control-label font-weight-bold">TS Name</label>
-                                                            @Html.DropDownList("ddlTechnicalServicesName2", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName2, "--Select Parts--", new { @class = "form-control form-control-sm" })
+                                                            @Html.DropDownList("ddlTechnicalServicesName2", (IEnumerable<SelectListItem>)ViewBag.ddlTechnicalServicesName2, "--Select Parts--", new { @class = "form-control form-control-sm select select2" })
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label class="control-label font-weight-bold">From Date</label>
@@ -288,7 +288,7 @@
         var dptToDate2 = $("#dptToDate2");
         var ddlTechnicalServicesName2 = $("#ddlTechnicalServicesName2");
         var txtJobCode2 = $("#txtJobCode2");
-        var 
+        var ddlJobType = $("#ddlJobType");
 
         $(document).ready(function () {
             dptFromDate.prop('readonly', true);
@@ -322,6 +322,13 @@
                 orientation: "bottom auto",
                 todayHighlight: true,
                 autoclose: true
+            });
+
+            $('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
             });
         })
 
@@ -366,8 +373,11 @@
         ddlTechnicalServicesName.change(function () {
             LoadDataTable();
         })
+        ddlJobType.change(function () {
+            LoadDataTable();
+        })
         function LoadDataTable() {
-            var data = { flag: "search", partsId: TryParseInt(ddlMobileParts.val(), 0), tsId: TryParseInt(ddlTechnicalServicesName.val(), 0), jobCode: txtJobCode.val().trim(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), page: pageNo };
+            var data = { flag: "search", partsId: TryParseInt(ddlMobileParts.val(), 0), tsId: TryParseInt(ddlTechnicalServicesName.val(), 0), jobCode: txtJobCode.val().trim(), fromDate: dptFromDate.val(), toDate: dptToDate.val(), jobType: ddlJobType.val(), page: pageNo };
 
             console.log(data);
             $.when(getReqWithData('html', 'GET', '/FrontDesk/GetUsedParts', data)).then(function (res, status) {

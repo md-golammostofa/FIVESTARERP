@@ -23,5 +23,6 @@ namespace ERPBLL.ControlPanel.Interface
         bool ChangePassword(ChangePasswordDTO dto, long userId, long orgId);
         AppUserDTO GetAppUserInfoById(long id, long orgId,string flag);
         ExecutionStateWithText SaveAppUser2(AppUserDTO appUserDTO, long userId, long orgId);
+        IEnumerable<AppUserDTO> GetAllUserList(long orgId);
     }
 }

@@ -413,7 +413,8 @@ namespace ERPWeb.Controllers
             else if (!string.IsNullOrEmpty(flag) && flag == "User")
             {
                 ViewBag.OPFor = "Client";
-                var data = _appUserBusiness.GetAllAppUserByOrgId(User.OrgId);
+                var data = _appUserBusiness.GetAllAppUserByOrgId(User.OrgId).Where(r => r.RoleId != 24);
+                //var data=_appUserBusiness.GetAllUserList(User.OrgId);
                 IEnumerable<AppUserViewModel> appUserViewModels = data.Select(user => new AppUserViewModel
                 {
                     UserId = user.UserId,

@@ -401,11 +401,11 @@ namespace ERPWeb.Controllers
 
         #region UsedPartsReport
         //[HttpPost, ValidateJsonAntiForgeryToken]
-        public ActionResult UsedPartsReport(long? ddlMobileParts, long? ddlTechnicalServicesName, string fromDate, string toDate, string rptType, string jobCode)
+        public ActionResult UsedPartsReport(long? ddlMobileParts, long? ddlTechnicalServicesName, string fromDate, string toDate, string rptType, string jobCode,string jobType)
         {
             bool IsSuccess = false;
 
-            IEnumerable<TechnicalServicesStockDTO> dto = _technicalServicesStockBusiness.GetUsedParts(ddlMobileParts, ddlTechnicalServicesName, User.OrgId, User.BranchId, fromDate, toDate, jobCode);
+            IEnumerable<TechnicalServicesStockDTO> dto = _technicalServicesStockBusiness.GetUsedParts(ddlMobileParts, ddlTechnicalServicesName, User.OrgId, User.BranchId, fromDate, toDate, jobCode,jobType);
 
             ServicesReportHead reportHead = _jobOrderReportBusiness.GetBranchInformation(User.OrgId, User.BranchId);
             reportHead.ReportImage = Utility.GetImageBytes(User.LogoPaths[0]);

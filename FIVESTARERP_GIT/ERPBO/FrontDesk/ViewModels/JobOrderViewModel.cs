@@ -138,5 +138,6 @@ namespace ERPBO.FrontDesk.ViewModels
         //
         public Nullable<DateTime> JobCreateDateTime { get; set; }
         public string PendingPartsName { get; set; }
+        public long? MUserId { get; set; }
     }
 }

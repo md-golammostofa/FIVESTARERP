@@ -521,7 +521,11 @@ namespace ERPBLL.Configuration
                 param += string.Format(@" and st.MobilePartId ={0}", partsId);
             }
 
-            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,PartsCode,((GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales+StockReturnPending)-ReceiveAModel)'ParsesStock',ReceiveAModel,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales+StockReturnPending)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer,TransferAModel,EngPending,Sales,StockReturnPending From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,p.MobilePartCode'PartsCode',
+            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,PartsCode,
+((GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales+StockReturnPending+FaultyTransfer)-ReceiveAModel)'ParsesStock',
+ReceiveAModel,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales+StockReturnPending+FaultyTransfer)'Stock',
+GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer,TransferAModel,EngPending,Sales,StockReturnPending,FaultyTransfer From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',
+st.MobilePartId,p.MobilePartCode'PartsCode',
 
 (Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblMobilePartStockInfo
 Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId=st.BranchId)'GoodStock',
@@ -550,6 +554,9 @@ Where ToDescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=
 (Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.InvoiceDetails
 Where  ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'Sales',
 
+(Select ISNULL(SUM(Quantity),0) From tblFaultyStockTransferDetails
+Where ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'FaultyTransfer',
+
 (Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.tblTsStockReturnInfo i
 Left Join [FrontDesk].dbo.tblTsStockReturnDetails d on i.ModelId=d.ModelId
 Where i.StateStatus='Stock-Return' and i.ReturnInfoId=d.ReturnInfoId and i.BranchId=st.BranchId and d.ModelId=st.DescriptionId and d.PartsId=st.MobilePartId)'StockReturnPending'
@@ -568,39 +575,50 @@ Where 1=1{0}) tbl1
             {
                 branch = 22;
             }
-            var data= _configurationDb.Db.Database.SqlQuery<TotalStockDetailsDTO>(string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,PartsCode,((GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales)-ReceiveAModel)'ParsesStock',ReceiveAModel,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer,TransferAModel,EngPending,Sales From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,p.MobilePartCode'PartsCode',
+            var data= _configurationDb.Db.Database.SqlQuery<TotalStockDetailsDTO>(string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,PartsCode,
+((GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales+StockReturnPending+FaultyTransfer)-ReceiveAModel)'ParsesStock',
+ReceiveAModel,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales+StockReturnPending+FaultyTransfer)'Stock',
+GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer,TransferAModel,EngPending,Sales,StockReturnPending,FaultyTransfer From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',
+st.MobilePartId,p.MobilePartCode'PartsCode',
 
 (Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblMobilePartStockInfo
-Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId={0})'GoodStock',
+Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId=st.BranchId)'GoodStock',
 
 (Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblFaultyStockInfo
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'FaultyStock',
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'FaultyStock',
 
 (Select ISNULL(Sum(ScrapQuantity-ScrapOutQty),0) From tblScrapStockInfo
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'ScrapStock',
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ScrapStock',
 
 (Select ISNULL(SUM(StockInQty),0) From tblDustStockInfo
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'DustStock',
+Where ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'DustStock',
 
 (Select ISNULL(SUM(IssueQty),0) From tblTransferDetails
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo={0})'CareTransfer',
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo=st.BranchId)'CareTransfer',
 
 (Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.tblTechnicalServicesStock
-Where StateStatus='Stock-Open' and ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'EngPending',
+Where StateStatus='Stock-Open' and ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'EngPending',
 
 (Select ISNULL(SUM(Quantity),0) From StockTransferDetailModelToModels
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'TransferAModel',
+Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'TransferAModel',
 
 (Select ISNULL(SUM(Quantity),0) From StockTransferDetailModelToModels
-Where ToDescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'ReceiveAModel',
+Where ToDescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ReceiveAModel',
 
 (Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.InvoiceDetails
-Where  ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId={0})'Sales'
+Where  ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'Sales',
+
+(Select ISNULL(SUM(Quantity),0) From tblFaultyStockTransferDetails
+Where ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'FaultyTransfer',
+
+(Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.tblTsStockReturnInfo i
+Left Join [FrontDesk].dbo.tblTsStockReturnDetails d on i.ModelId=d.ModelId
+Where i.StateStatus='Stock-Return' and i.ReturnInfoId=d.ReturnInfoId and i.BranchId=st.BranchId and d.ModelId=st.DescriptionId and d.PartsId=st.MobilePartId)'StockReturnPending'
 
 From tblMobilePartStockInfo st
 Left Join tblModelSS m on st.DescriptionId=m.ModelId
 Left Join tblMobileParts p on st.MobilePartId=p.MobilePartId
-Where st.BranchId={0} and st.OrganizationId={1}) tbl1", branch,orgId)).ToList();
+Where 1=1 and st.BranchId={0} and st.OrganizationId={1}) tbl1", branch,orgId)).ToList();
             return data;
         }
         private string QueryForAllBranchTotalStock(long? branch, long orgId)
@@ -613,11 +631,15 @@ Where st.BranchId={0} and st.OrganizationId={1}) tbl1", branch,orgId)).ToList();
                 param += string.Format(@" and st.OrganizationId={0}", orgId);
             }
 
-            //if (branch != null && branch > 0)
-            //{
-            //    param += string.Format(@" and BranchId ={0}", branch);
-            //}
-            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,PartsCode,((GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending)-ReceiveAModel)'ParsesStock',ReceiveAModel,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending)'Stock',GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer,TransferAModel,EngPending From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',st.MobilePartId,p.MobilePartCode'PartsCode',
+            if (branch != null && branch > 0)
+            {
+                param += string.Format(@" and BranchId ={0}", branch);
+            }
+            query = string.Format(@"Select ModelName,DescriptionId,PartsName,MobilePartId,PartsCode,
+((GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales+StockReturnPending+FaultyTransfer)-ReceiveAModel)'ParsesStock',
+ReceiveAModel,(GoodStock+FaultyStock+ScrapStock+DustStock+CareTransfer+TransferAModel+EngPending+Sales+StockReturnPending+FaultyTransfer)'Stock',
+GoodStock,FaultyStock,ScrapStock,DustStock,CareTransfer,TransferAModel,EngPending,Sales,StockReturnPending,FaultyTransfer From (Select DISTINCT m.ModelName,st.DescriptionId,p.MobilePartName'PartsName',
+st.MobilePartId,p.MobilePartCode'PartsCode',
 
 (Select ISNULL(Sum(StockInQty-StockOutQty),0) From tblMobilePartStockInfo
 Where DescriptionId=st.DescriptionId and MobilePartId=st.MobilePartId and BranchId=st.BranchId)'GoodStock',
@@ -629,7 +651,7 @@ Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st
 Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ScrapStock',
 
 (Select ISNULL(SUM(StockInQty),0) From tblDustStockInfo
-Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'DustStock',
+Where ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'DustStock',
 
 (Select ISNULL(SUM(IssueQty),0) From tblTransferDetails
 Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchTo=st.BranchId)'CareTransfer',
@@ -641,7 +663,17 @@ Where StateStatus='Stock-Open' and ModelId=st.DescriptionId and PartsId=st.Mobil
 Where DescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'TransferAModel',
 
 (Select ISNULL(SUM(Quantity),0) From StockTransferDetailModelToModels
-Where ToDescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ReceiveAModel'
+Where ToDescriptionId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'ReceiveAModel',
+
+(Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.InvoiceDetails
+Where  ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'Sales',
+
+(Select ISNULL(SUM(Quantity),0) From tblFaultyStockTransferDetails
+Where ModelId=st.DescriptionId and PartsId=st.MobilePartId and BranchId=st.BranchId)'FaultyTransfer',
+
+(Select ISNULL(SUM(Quantity),0) From [FrontDesk].dbo.tblTsStockReturnInfo i
+Left Join [FrontDesk].dbo.tblTsStockReturnDetails d on i.ModelId=d.ModelId
+Where i.StateStatus='Stock-Return' and i.ReturnInfoId=d.ReturnInfoId and i.BranchId=st.BranchId and d.ModelId=st.DescriptionId and d.PartsId=st.MobilePartId)'StockReturnPending'
 
 From tblMobilePartStockInfo st
 Left Join tblModelSS m on st.DescriptionId=m.ModelId

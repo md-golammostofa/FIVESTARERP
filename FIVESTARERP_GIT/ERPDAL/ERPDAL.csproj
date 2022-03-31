@@ -612,6 +612,10 @@
     <Compile Include="FrontDeskContextMigrations\202202120820380_FrontDesk_JobOrder_JobCreateDateTime.Designer.cs">
       <DependentUpon>202202120820380_FrontDesk_JobOrder_JobCreateDateTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrontDeskContextMigrations\202203220449583_FrontDesk_MUserId.cs" />
+    <Compile Include="FrontDeskContextMigrations\202203220449583_FrontDesk_MUserId.Designer.cs">
+      <DependentUpon>202203220449583_FrontDesk_MUserId.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrontDeskContextMigrations\Configuration.cs" />
     <Compile Include="FrontDeskDAL\FrontDeskDbContext.cs" />
     <Compile Include="FrontDeskDAL\FrontDeskRepository.cs" />
@@ -1485,6 +1489,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrontDeskContextMigrations\202202120820380_FrontDesk_JobOrder_JobCreateDateTime.resx">
       <DependentUpon>202202120820380_FrontDesk_JobOrder_JobCreateDateTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrontDeskContextMigrations\202203220449583_FrontDesk_MUserId.resx">
+      <DependentUpon>202203220449583_FrontDesk_MUserId.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InventoryContextMigrations\202008121414323_Inventory_AllEntities_12-Aug-2020.resx">
       <DependentUpon>202008121414323_Inventory_AllEntities_12-Aug-2020.cs</DependentUpon>
